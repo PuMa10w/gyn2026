@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap');
+
+:root {
+  --rose-primary: #e05a78;
+  --rose-dark: #c43b5a;
+  --rose-light: #fce4ec;
+  --rose-deep: #b82845;
+  --lilac-primary: #9b59b6;
+  --lilac-dark: #7d3c98;
+  --lilac-light: #e8d5f5;
+  --gold-accent: #d4a017;
+  --gold-light: #f9f1d8;
+  --bg-cream: #fdf2f5;
+  --bg-card: #ffffff;
+  --text-dark: #2d2d2d;
+  --text-light: #6b6b6b;
+  --text-muted: #999999;
+  --shadow-soft: 0 8px 25px rgba(224, 90, 120, 0.12);
+  --shadow-hover: 0 15px 40px rgba(155, 89, 182, 0.22);
+  --gradient-rose: linear-gradient(135deg, #e05a78, #b82845);
+  --gradient-lilac: linear-gradient(135deg, #9b59b6, #7d3c98);
+  --gradient-gold: linear-gradient(135deg, #d4a017, #b8860b);
+  --gradient-hero: linear-gradient(135deg, #e05a78 0%, #9b59b6 50%, #d4a017 100%);
+}
+
+[data-theme="dark"] {
+  --rose-primary: #e05a78;
+  --rose-dark: #c43b5a;
+  --rose-light: #3d1f2a;
+  --rose-deep: #b82845;
+  --lilac-primary: #bb8dd8;
+  --lilac-dark: #9b59b6;
+  --lilac-light: #2d1f35;
+  --gold-accent: #d4a017;
+  --gold-light: #2d2518;
+  --bg-cream: #0d0d12;
+  --bg-card: #1a1a24;
+  --text-dark: #f0f0f0;
+  --text-light: #b0b0b0;
+  --text-muted: #707070;
+  --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.5);
+  --gradient-rose: linear-gradient(135deg, #e05a78, #8b2942);
+  --gradient-lilac: linear-gradient(135deg, #bb8dd8, #7d3c98);
+  --gradient-gold: linear-gradient(135deg, #d4a017, #8b6b0f);
+  --gradient-hero: linear-gradient(135deg, #e05a78 0%, #7d3c98 50%, #d4a017 100%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: linear-gradient(180deg, var(--bg-cream) 0%, var(--bg-card) 100%);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(224, 90, 120, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(155, 89, 182, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 40% 80%, rgba(212, 160, 23, 0.04) 0%, transparent 50%);
+  animation: bgShift 15s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes bgShift {
+  0% { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+.App {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== BACKGROUND EFFECTS ===== */
+.bg-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.blob > div {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  top: -10%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(224, 90, 120, 0.15), transparent 70%);
+}
+
+.blob-2 {
+  width: 600px;
+  height: 600px;
+  top: 30%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(155, 89, 182, 0.12), transparent 70%);
+}
+
+.blob-3 {
+  width: 400px;
+  height: 400px;
+  bottom: -5%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(212, 160, 23, 0.1), transparent 70%);
+}
+
+.particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.sparkles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 6px 2px rgba(224, 90, 120, 0.4);
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Custom selection */
+::selection {
+  background: rgba(224, 90, 120, 0.2);
+  color: var(--text-dark);
+}
+
+::-moz-selection {
+  background: rgba(224, 90, 120, 0.2);
+  color: var(--text-dark);
+}
+
+/* Animated scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-cream);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-rose);
+  border-radius: 10px;
+  border: 2px solid var(--bg-cream);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--rose-dark), var(--lilac-primary));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== BACKGROUND EFFECTS ===== */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-10px) rotate(120deg); }
+  66% { transform: translateY(5px) rotate(240deg); }
+}
