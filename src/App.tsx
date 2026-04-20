@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import './App.css';
 import Navbar from './components/Navbar';
@@ -17,6 +18,7 @@ import {
   getCategoryCounts,
   getVisibleCategories,
 } from './utils/diseaseCatalog';
+import { enrichDiseases } from './utils/enrichDiseases';
 import type { CategoryId, Disease, TabType } from './types';
 
 const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
@@ -66,6 +68,7 @@ function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
   const [showPharmacology, setShowPharmacology] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const { theme, toggleTheme } = useTheme();
   const { toggleFavorite, isFavorite, favorites } = useFavorites();
@@ -141,6 +144,18 @@ function App() {
     };
   }, [activeTab, gynecologyData, obstetricsData]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleItemClick = (item: Disease) => {
     setSelectedItem(item);
     addToHistory(item);
@@ -148,6 +163,14 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <Helmet>
+        <title>GYN — Акушерство и Гинекология</title>
+        <meta name="description" content="Медицинский справочник по гинекологии и акушерству с поиском нозологий, опросниками и фармакологией" />
+        <meta name="keywords" content="гинекология, акушерство, медицина, справочник, заболевания, лечение" />
+        <meta property="og:title" content="GYN — Акушерство и Гинекология" />
+        <meta property="og:description" content="Медицинский справочник по гинекологии и акушерству" />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <div className="App">
         <BackgroundEffects />
         <Navbar
@@ -176,15 +199,13 @@ function App() {
           visibleCategories={visibleCategories}
         />
 
-        <section aria-live="polite" className="cards-grid">
+<section aria-live="polite" className="cards-grid">
           {isDataLoading && (
-            <motion.div className="empty-state" initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>
-              <div className="empty-icon" aria-hidden="true">
-                ⏳
-              </div>
-              <h3>Загружаем раздел</h3>
-              <p>Подготавливаем карточки и фильтры.</p>
-            </motion.div>
+            <div className="skeleton-grid">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <div key={index} className="skeleton-card" />
+              ))}
+            </div>
           )}
 
           {!isDataLoading &&
@@ -215,6 +236,22 @@ function App() {
           {showQuestionnaire && <Questionnaire onClose={() => setShowQuestionnaire(false)} />}
           {showPharmacology && <PharmacologyModal onClose={() => setShowPharmacology(false)} />}
         </Suspense>
+
+        {showScrollTop && (
+          <motion.button
+            className="scroll-top-btn"
+            onClick={scrollToTop}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Наверх"
+            title="Наверх"
+          >
+            ↑ Наверх
+          </motion.button>
+        )}
       </div>
     </ErrorBoundary>
   );

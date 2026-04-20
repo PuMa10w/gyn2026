@@ -1,5 +1,5 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useId, useRef, useState, useCallback } from 'react';
+import { AnimatePresence, motion, useMotionValue, useTransform } from 'framer-motion';
 import { gynIcons, obsIcons } from './Icons';
 import type { Disease } from '../types';
 
@@ -22,6 +22,17 @@ const guidelineMeta = [
 
 const treatmentBadgePattern = /<span class='badge ([^']+)'>([^<]+)<\/span>/gi;
 const allowedInlineBadgeClasses = new Set(['badge-eau', 'badge-acog', 'badge-ranzcog', 'badge-ru', 'badge-cdc']);
+
+const tabs = [
+  { id: 'overview', label: 'Обзор' },
+  { id: 'diagnostics', label: 'Диагностика' },
+  { id: 'ultrasound', label: 'УЗИ' },
+  { id: 'treatment', label: 'Лечение' },
+  { id: 'management', label: 'Ведение' },
+  { id: 'guidelines', label: 'Клин рекомендации' },
+] as const;
+
+type ModalTab = (typeof tabs)[number]['id'];
 
 function renderSafeTreatmentEntry(entry: string) {
   const nodes: React.ReactNode[] = [];
@@ -62,24 +73,19 @@ function renderSafeTreatmentEntry(entry: string) {
 }
 
 const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'diagnostics' | 'treatment' | 'guidelines'>(
-    'overview',
-  );
+  const [activeTab, setActiveTab] = useState<ModalTab>('overview');
   const [isMobile, setIsMobile] = useState(false);
+  const [touchStart, setTouchStart] = useState<{ y: number; time: number } | null>(null);
   const titleId = useId();
   const descriptionId = useId();
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const previousFocusedElementRef = useRef<HTMLElement | null>(null);
+  const sheetY = useMotionValue(0);
+  const sheetOpacity = useTransform(sheetY, [0, 300], [1, 0]);
+  
   const IconComponent = item.subtitle === 'Гинекология' ? gynIcons[item.icon] : obsIcons[item.icon];
   const icdLabel = item.icdDetail ?? item.icd;
-
-  const tabs = [
-    { id: 'overview', label: 'Обзор' },
-    { id: 'diagnostics', label: 'Диагностика' },
-    { id: 'treatment', label: 'Лечение' },
-    { id: 'guidelines', label: 'Клин рекомендации' },
-  ] as const;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -90,6 +96,24 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
     return () => mediaQuery.removeEventListener('change', updateViewportMode);
   }, []);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStart({ y: touch.clientY, time: Date.now() });
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!touchStart || !isMobile) return;
+    
+    const touch = e.changedTouches[0];
+    const deltaY = touch.clientY - touchStart.y;
+    const deltaTime = Date.now() - touchStart.time;
+    
+    if (deltaY > 100 && deltaTime < 300) {
+      onClose();
+    }
+    setTouchStart(null);
+  }, [touchStart, isMobile, onClose]);
 
   useEffect(() => {
     previousFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -248,6 +272,124 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 диагноза и повторная оценка тактики.
               </p>
             </section>
+
+            {item.diagnostics.imaging && item.diagnostics.imaging.length > 0 && (
+              <section className="content-card">
+                <h3>Визуализация</h3>
+                <ul>
+                  {item.diagnostics.imaging.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {item.diagnostics.differential && item.diagnostics.differential.length > 0 && (
+              <section className="content-card">
+                <h3>Дифференциальный диагноз</h3>
+                <ul>
+                  {item.diagnostics.differential.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </div>
+        );
+      case 'ultrasound':
+        return (
+          <div className="tab-content modal-grid" id={descriptionId}>
+            {item.ultrasound?.protocols && item.ultrasound.protocols.length > 0 && (
+              <section className="content-card content-card-wide">
+                <h3>Протоколы исследования</h3>
+                <div className="structured-list">
+                  {item.ultrasound.protocols.map((protocol, index) => (
+                    <article className="structured-item" key={index}>
+                      <div className="structured-item-title">{protocol.method}</div>
+                      <ul>
+                        {protocol.indications.map((indication, indicationIndex) => (
+                          <li key={indicationIndex}>{indication}</li>
+                        ))}
+                      </ul>
+                      {protocol.preparation && <p className="structured-item-note">Подготовка: {protocol.preparation}</p>}
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {item.ultrasound?.findings && item.ultrasound.findings.length > 0 && (
+              <section className="content-card content-card-wide">
+                <h3>Ультразвуковые признаки</h3>
+                <div className="structured-list">
+                  {item.ultrasound.findings.map((finding, index) => (
+                    <article className="structured-item" key={index}>
+                      <div className="structured-item-title">{finding.location}</div>
+                      <p>{finding.description}</p>
+                      {finding.measurements && (
+                        <dl className="metric-list">
+                          {Object.entries(finding.measurements).map(([key, value]) => (
+                            <div className="metric-item" key={key}>
+                              <dt>{key}</dt>
+                              <dd>{value}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      )}
+                      {finding.normal && <p><strong>Норма:</strong> {finding.normal}</p>}
+                      {finding.pathology && <p><strong>Патология:</strong> {finding.pathology}</p>}
+                      {finding.clinicalSignificance && <p><strong>Клиническое значение:</strong> {finding.clinicalSignificance}</p>}
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {item.ultrasound?.echogenicity && (
+              <section className="content-card">
+                <h3>Эхоструктура</h3>
+                <p>{item.ultrasound.echogenicity}</p>
+              </section>
+            )}
+
+            {item.ultrasound?.vascularization && (
+              <section className="content-card">
+                <h3>Васкуляризация</h3>
+                <p>{item.ultrasound.vascularization}</p>
+              </section>
+            )}
+
+            {item.ultrasound?.dopplerFindings && (
+              <section className="content-card">
+                <h3>Допплер</h3>
+                <p>{item.ultrasound.dopplerFindings}</p>
+              </section>
+            )}
+
+            {item.ultrasound?.normalValues && (
+              <section className="content-card">
+                <h3>Нормальные значения</h3>
+                <dl className="metric-list">
+                  {Object.entries(item.ultrasound.normalValues).map(([key, value]) => (
+                    <div className="metric-item" key={key}>
+                      <dt>{key}</dt>
+                      <dd>{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )}
+
+            {item.ultrasound?.imagingTips && item.ultrasound.imagingTips.length > 0 && (
+              <section className="content-card">
+                <h3>Практические советы</h3>
+                <ul>
+                  {item.ultrasound.imagingTips.map((tip, index) => (
+                    <li key={index}>{tip}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </div>
         );
       case 'treatment':
@@ -272,6 +414,69 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                     <li key={index}>{renderSafeTreatmentEntry(entry)}</li>
                   ))}
                 </ul>
+              </section>
+            )}
+          </div>
+        );
+      case 'management':
+        return (
+          <div className="tab-content modal-grid" id={descriptionId}>
+            {item.recommendations && item.recommendations.length > 0 && (
+              <section className="content-card content-card-wide">
+                <h3>Рекомендации</h3>
+                <ul>
+                  {item.recommendations.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {item.prognosis && (
+              <section className="content-card">
+                <h3>Прогноз</h3>
+                {item.prognosis.general && <p>{item.prognosis.general}</p>}
+                {item.prognosis.factors && item.prognosis.factors.length > 0 && (
+                  <ul>
+                    {item.prognosis.factors.map((factor, index) => (
+                      <li key={index}>{factor}</li>
+                    ))}
+                  </ul>
+                )}
+                {item.prognosis.survival && <p><strong>Исходы:</strong> {item.prognosis.survival}</p>}
+              </section>
+            )}
+
+            {item.followUp && (
+              <section className="content-card">
+                <h3>Наблюдение</h3>
+                {item.followUp.frequency && <p><strong>Частота:</strong> {item.followUp.frequency}</p>}
+                {item.followUp.duration && <p><strong>Длительность:</strong> {item.followUp.duration}</p>}
+                {item.followUp.tests && item.followUp.tests.length > 0 && (
+                  <ul>
+                    {item.followUp.tests.map((test, index) => (
+                      <li key={index}>{test}</li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
+
+            {item.clinicalCases && item.clinicalCases.length > 0 && (
+              <section className="content-card content-card-wide">
+                <h3>Клинические случаи</h3>
+                <div className="structured-list">
+                  {item.clinicalCases.map((clinicalCase, index) => (
+                    <article className="structured-item" key={index}>
+                      <div className="structured-item-title">Случай {index + 1}</div>
+                      <p><strong>Жалобы:</strong> {clinicalCase.presentation}</p>
+                      <p><strong>Данные:</strong> {clinicalCase.findings}</p>
+                      <p><strong>Диагноз:</strong> {clinicalCase.diagnosis}</p>
+                      <p><strong>Лечение:</strong> {clinicalCase.treatment}</p>
+                      <p><strong>Исход:</strong> {clinicalCase.outcome}</p>
+                    </article>
+                  ))}
+                </div>
               </section>
             )}
           </div>
@@ -313,6 +518,8 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
           transition={isMobile ? { type: 'spring', damping: 25, stiffness: 300 } : { duration: 0.3 }}
           onClick={(event) => event.stopPropagation()}
           onKeyDown={handleModalKeyDown}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}

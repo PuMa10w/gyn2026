@@ -300,6 +300,11 @@
   min-width: 0;
 }
 
+.virtualized-grid-container {
+  grid-column: 1 / -1;
+  padding: 0.5rem;
+}
+
 .disease-card {
   appearance: none;
   position: relative;
@@ -327,6 +332,36 @@
   transform: translateY(-3px);
   box-shadow: var(--shadow-hover);
   border-color: var(--border-strong);
+}
+
+.skeleton-grid {
+  display: contents;
+}
+
+.skeleton-card {
+  min-height: 220px;
+  border: 1px solid var(--border-soft);
+  border-radius: 18px;
+  background: var(--surface-strong);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-card::after {
+  content: '';
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .favorite-btn {
@@ -660,6 +695,56 @@
   justify-content: space-between;
   align-items: center;
   gap: 0.8rem;
+}
+
+.structured-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.structured-item {
+  padding: 0.9rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.structured-item-title {
+  margin-bottom: 0.55rem;
+  color: var(--text-dark);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.structured-item-note {
+  margin-top: 0.55rem;
+}
+
+.metric-list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.75rem 0;
+}
+
+.metric-item {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.metric-item dt {
+  color: var(--text-light);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.metric-item dd {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  line-height: 1.55;
 }
 
 .guideline-region {
@@ -1401,4 +1486,53 @@
   .regimen-table td:nth-child(2) {
     width: 100%;
   }
+}
+
+.scroll-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+  padding: 0.75rem 1.25rem;
+  background: var(--gradient-rose);
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(189, 55, 75, 0.3);
+  transition: all 0.2s ease;
+}
+
+.scroll-top-btn:hover {
+  box-shadow: 0 12px 32px rgba(189, 55, 75, 0.4);
+}
+
+.reading-mode {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.reading-mode h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.reading-mode h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.reading-mode p {
+  margin-bottom: 1rem;
+}
+
+.reading-mode li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
 }
