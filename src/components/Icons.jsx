@@ -4,8 +4,8 @@ const IconWrapper = ({ children, color }) => (
   <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor={color || "#e88d9e"} />
-        <stop offset="100%" stopColor={color ? `${color}dd` : "#d46a80"} />
+        <stop offset="0%" stopColor={color || "#d9b2ab"} />
+        <stop offset="100%" stopColor={color ? `${color}dd` : "#a96f7c"} />
       </linearGradient>
     </defs>
     {children}
@@ -428,7 +428,7 @@ export const gynIcons = {
 
 export const obsIcons = {
   preeclampsia: (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M30,15 C15,15 10,25 10,35 C10,45 20,50 30,50 C40,50 50,45 50,35 C50,25 45,15 30,15 Z" fill="url(#grad)" opacity="0.7"/>
       <path d="M30,25 L30,35 M25,30 L35,30" stroke="white" strokeWidth="2" strokeLinecap="round"/>
       <circle cx="20" cy="20" r="2" fill="white"/>
@@ -436,14 +436,14 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "gestational-diabetes": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M30,15 C15,15 10,25 10,35 C10,45 20,50 30,50 C40,50 50,45 50,35 C50,25 45,15 30,15 Z" fill="url(#grad)" opacity="0.7"/>
       <path d="M20,30 L40,30" stroke="white" strokeWidth="2"/>
       <path d="M30,20 L30,40" stroke="white" strokeWidth="2"/>
     </IconWrapper>
   ),
   "placenta-previa": (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M15,20 Q30,10 45,20 Q50,30 45,40 Q30,50 15,40 Q10,30 15,20 Z" fill="url(#grad)" opacity="0.8"/>
       <path d="M15,20 Q30,30 45,20" stroke="white" strokeWidth="2" fill="none"/>
       <path d="M15,40 Q30,30 45,40" stroke="white" strokeWidth="2" fill="none"/>
@@ -451,45 +451,45 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "preterm-labor": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M30,15 C15,15 10,25 10,35 C10,45 20,50 30,50 C40,50 50,45 50,35 C50,25 45,15 30,15 Z" fill="url(#grad)" opacity="0.7"/>
       <path d="M25,25 L35,25 M25,30 L35,30 M25,35 L35,35" stroke="white" strokeWidth="2" strokeLinecap="round"/>
     </IconWrapper>
   ),
   "postpartum-hemorrhage": (
-    <IconWrapper color="#d46a80">
+    <IconWrapper color="#a96f7c">
       <path d="M30,15 C15,15 10,25 10,35 C10,45 20,50 30,50 C40,50 50,45 50,35 C50,25 45,15 30,15 Z" fill="url(#grad)" opacity="0.7"/>
       <path d="M30,25 L30,35 M25,30 L35,30" stroke="white" strokeWidth="3" strokeLinecap="round"/>
     </IconWrapper>
   ),
   "chronic-hypertension": (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M15,35 L22,25 L30,30 L38,18 L45,28" stroke="url(#grad)" strokeWidth="3" fill="none"/>
       <circle cx="15" cy="35" r="3" fill="url(#grad)"/>
       <circle cx="45" cy="28" r="3" fill="url(#grad)"/>
     </IconWrapper>
   ),
   eclampsia: (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <path d="M30,15 L25,28 L32,28 L27,45 L40,25 L33,25 L38,15Z" fill="url(#grad)" opacity="0.8"/>
     </IconWrapper>
   ),
   "hellp-syndrome": (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <path d="M18,20 L18,40 L42,40 L42,20Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M24,25 L36,25 M24,30 L36,30 M24,35 L36,35" stroke="white" strokeWidth="2"/>
       <path d="M20,20 L20,15 C20,10 40,10 40,15 L40,20" stroke="url(#grad)" strokeWidth="2" fill="none"/>
     </IconWrapper>
   ),
   "superimposed-preeclampsia": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <path d="M30,15 C15,15 10,25 10,35 C10,45 20,50 30,50 C40,50 50,45 50,35 C50,25 45,15 30,15Z" fill="url(#grad)" opacity="0.5"/>
       <path d="M30,25 L30,35 M25,30 L35,30" stroke="white" strokeWidth="2"/>
       <path d="M18,22 L42,38" stroke="#c2185b" strokeWidth="2"/>
     </IconWrapper>
   ),
   "type1-diabetes": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M30,15 L30,40" stroke="url(#grad)" strokeWidth="3" strokeLinecap="round"/>
       <path d="M22,22 L30,15 L38,22" stroke="url(#grad)" strokeWidth="2.5" fill="none"/>
       <path d="M22,32 L30,40 L38,32" stroke="url(#grad)" strokeWidth="2.5" fill="none"/>
@@ -497,48 +497,48 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "type2-diabetes": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M22,20 L38,20 L38,40 L22,40Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M30,20 L30,40" stroke="url(#grad)" strokeWidth="2.5"/>
       <path d="M22,30 L38,30" stroke="url(#grad)" strokeWidth="2.5"/>
     </IconWrapper>
   ),
   "threatened-miscarriage": (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M24,20 C24,14 36,14 36,20 L36,32 C36,40 24,40 24,32Z" fill="url(#grad)" opacity="0.4"/>
       <circle cx="30" cy="26" r="4" fill="url(#grad)" opacity="0.6"/>
       <path d="M28,38 L30,44 L32,38" stroke="#e88d9e" strokeWidth="2" fill="none"/>
     </IconWrapper>
   ),
   "missed-abortion": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <path d="M24,18 C24,14 36,14 36,18 L36,30 C36,38 24,38 24,30Z" fill="url(#grad)" opacity="0.3"/>
       <circle cx="30" cy="24" r="3" fill="none" stroke="url(#grad)" strokeWidth="1.5" strokeDasharray="2 2"/>
       <path d="M22,42 L38,42" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   "spontaneous-abortion": (
-    <IconWrapper color="#d46a80">
+    <IconWrapper color="#a96f7c">
       <path d="M24,18 C24,14 36,14 36,18 L36,28 C36,36 24,36 24,28Z" fill="url(#grad)" opacity="0.3"/>
       <path d="M26,38 L28,44 M30,38 L30,44 M34,38 L32,44" stroke="#e88d9e" strokeWidth="2"/>
     </IconWrapper>
   ),
   "recurrent-miscarriage": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <path d="M20,18 C20,14 28,14 28,18 L28,26 C28,32 20,32 20,26Z" fill="url(#grad)" opacity="0.3"/>
       <path d="M32,18 C32,14 40,14 40,18 L40,26 C40,32 32,32 32,26Z" fill="url(#grad)" opacity="0.3"/>
       <path d="M24,36 L26,42 M36,36 L34,42" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   "ectopic-pregnancy": (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <path d="M15,25 C15,18 25,15 30,20 C35,25 30,35 40,32" stroke="url(#grad)" strokeWidth="3" fill="none"/>
       <circle cx="22" cy="22" r="5" fill="url(#grad)" opacity="0.5"/>
       <path d="M38,32 L42,38" stroke="#e88d9e" strokeWidth="2"/>
     </IconWrapper>
   ),
   "hydatidiform-mole": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <circle cx="30" cy="30" r="14" fill="url(#grad)" opacity="0.3"/>
       <circle cx="24" cy="24" r="4" fill="url(#grad)" opacity="0.5"/>
       <circle cx="36" cy="26" r="3" fill="url(#grad)" opacity="0.4"/>
@@ -547,21 +547,21 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "placental-abruption": (
-    <IconWrapper color="#d46a80">
+    <IconWrapper color="#a96f7c">
       <path d="M15,25 Q30,12 45,25 Q48,35 45,38 Q30,30 15,38 Q12,35 15,25Z" fill="url(#grad)" opacity="0.6"/>
       <path d="M22,30 L38,32" stroke="#c2185b" strokeWidth="3"/>
       <path d="M25,35 L35,36" stroke="#e88d9e" strokeWidth="2"/>
     </IconWrapper>
   ),
   "placenta-accreta": (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <path d="M15,22 Q30,12 45,22" stroke="url(#grad)" strokeWidth="3" fill="none"/>
       <path d="M20,22 L20,32 M26,22 L26,34 M32,22 L32,36 M38,22 L38,32" stroke="url(#grad)" strokeWidth="2"/>
       <path d="M15,35 Q30,28 45,35" stroke="url(#grad)" strokeWidth="2" fill="none"/>
     </IconWrapper>
   ),
   "premature-placental-aging": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <path d="M15,25 Q30,15 45,25 Q48,32 45,35 Q30,28 15,35 Q12,32 15,25Z" fill="url(#grad)" opacity="0.4"/>
       <circle cx="24" cy="28" r="2" fill="white" opacity="0.5"/>
       <circle cx="30" cy="26" r="2" fill="white" opacity="0.5"/>
@@ -569,7 +569,7 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "twin-pregnancy": (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <circle cx="24" cy="28" r="10" fill="url(#grad)" opacity="0.3"/>
       <circle cx="36" cy="28" r="10" fill="url(#grad)" opacity="0.3"/>
       <circle cx="24" cy="25" r="3" fill="url(#grad)" opacity="0.5"/>
@@ -578,7 +578,7 @@ export const obsIcons = {
     </IconWrapper>
   ),
   ttts: (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <circle cx="22" cy="28" r="10" fill="url(#grad)" opacity="0.3"/>
       <circle cx="38" cy="28" r="10" fill="url(#grad)" opacity="0.4"/>
       <path d="M28,28 L32,28" stroke="url(#grad)" strokeWidth="2"/>
@@ -586,7 +586,7 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "selective-fgr": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <circle cx="22" cy="28" r="10" fill="url(#grad)" opacity="0.4"/>
       <circle cx="38" cy="28" r="7" fill="url(#grad)" opacity="0.3"/>
       <circle cx="22" cy="25" r="3" fill="url(#grad)" opacity="0.5"/>
@@ -594,35 +594,35 @@ export const obsIcons = {
     </IconWrapper>
   ),
   pprom: (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M22,18 C22,14 38,14 38,18 L38,30 C38,38 22,38 22,30Z" fill="url(#grad)" opacity="0.3"/>
       <circle cx="30" cy="30" r="3" fill="none" stroke="url(#grad)" strokeWidth="1.5" strokeDasharray="2 1"/>
       <path d="M28,34 L30,42 L32,34" stroke="url(#grad)" strokeWidth="2" fill="none"/>
     </IconWrapper>
   ),
   "preterm-birth": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M24,20 C24,14 36,14 36,20 L36,32 C36,40 24,40 24,32Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M20,36 L40,36" stroke="url(#grad)" strokeWidth="2" strokeDasharray="3 2"/>
       <path d="M30,36 L30,44" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   "postterm-pregnancy": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <path d="M24,20 C24,14 36,14 36,20 L36,32 C36,40 24,40 24,32Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M18,42 L42,42" stroke="url(#grad)" strokeWidth="2"/>
       <circle cx="30" cy="26" r="4" fill="url(#grad)" opacity="0.5"/>
     </IconWrapper>
   ),
   "labor-dystocia": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M24,18 C24,14 36,14 36,18 L36,32 C36,40 24,40 24,32Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M26,24 L34,24 M26,28 L34,28 M26,32 L34,32" stroke="white" strokeWidth="1.5" opacity="0.5"/>
       <path d="M30,36 L30,44 M26,44 L34,44" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   polyhydramnios: (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M20,18 C20,12 40,12 40,18 L40,36 C40,44 20,44 20,36Z" fill="url(#grad)" opacity="0.3"/>
       <path d="M24,24 Q30,22 36,24" stroke="url(#grad)" strokeWidth="1.5" fill="none" opacity="0.5"/>
       <path d="M24,30 Q30,28 36,30" stroke="url(#grad)" strokeWidth="1.5" fill="none" opacity="0.5"/>
@@ -630,14 +630,14 @@ export const obsIcons = {
     </IconWrapper>
   ),
   oligohydramnios: (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M20,18 C20,12 40,12 40,18 L40,40 C40,46 20,46 20,40Z" fill="url(#grad)" opacity="0.2"/>
       <circle cx="30" cy="30" r="6" fill="url(#grad)" opacity="0.4"/>
       <path d="M24,40 L36,40" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   fgr: (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <circle cx="30" cy="28" r="12" fill="url(#grad)" opacity="0.3"/>
       <circle cx="30" cy="24" r="4" fill="url(#grad)" opacity="0.5"/>
       <path d="M26,34 L28,42 M32,34 L34,42" stroke="url(#grad)" strokeWidth="2"/>
@@ -645,7 +645,7 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "hemolytic-disease": (
-    <IconWrapper color="#d46a80">
+    <IconWrapper color="#a96f7c">
       <circle cx="30" cy="28" r="12" fill="url(#grad)" opacity="0.4"/>
       <circle cx="30" cy="24" r="4" fill="url(#grad)" opacity="0.6"/>
       <path d="M24,34 L36,34" stroke="white" strokeWidth="2"/>
@@ -653,14 +653,14 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "fetal-distress": (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <circle cx="30" cy="28" r="12" fill="url(#grad)" opacity="0.3"/>
       <path d="M22,28 Q26,24 30,28 Q34,32 38,28" stroke="url(#grad)" strokeWidth="2.5" fill="none"/>
       <path d="M22,34 Q30,30 38,34" stroke="url(#grad)" strokeWidth="1.5" fill="none" opacity="0.5"/>
     </IconWrapper>
   ),
   breech: (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M24,38 C24,32 36,32 36,38" stroke="url(#grad)" strokeWidth="3" fill="none"/>
       <path d="M26,38 L26,22 C26,18 34,18 34,22 L34,38" fill="url(#grad)" opacity="0.4"/>
       <circle cx="30" cy="16" r="4" fill="url(#grad)" opacity="0.5"/>
@@ -668,14 +668,14 @@ export const obsIcons = {
     </IconWrapper>
   ),
   macrosomia: (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M20,20 C20,14 40,14 40,20 L40,36 C40,44 20,44 20,36Z" fill="url(#grad)" opacity="0.4"/>
       <circle cx="30" cy="26" r="5" fill="url(#grad)" opacity="0.6"/>
       <path d="M24,36 L24,44 M36,36 L36,44" stroke="url(#grad)" strokeWidth="2.5"/>
     </IconWrapper>
   ),
   "iu-fetal-death": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <circle cx="30" cy="28" r="12" fill="url(#grad)" opacity="0.2"/>
       <circle cx="30" cy="24" r="4" fill="none" stroke="url(#grad)" strokeWidth="1.5" strokeDasharray="2 2"/>
       <path d="M24,36 L36,36" stroke="url(#grad)" strokeWidth="1.5" opacity="0.4"/>
@@ -683,28 +683,28 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "uti-pregnancy": (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M24,18 L24,36 C24,40 36,40 36,36 L36,18" fill="url(#grad)" opacity="0.3"/>
       <path d="M28,24 L32,24 M28,28 L32,28" stroke="url(#grad)" strokeWidth="1.5"/>
       <circle cx="30" cy="34" r="2" fill="url(#grad)" opacity="0.5"/>
     </IconWrapper>
   ),
   "pyelonephritis-pregnancy": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <path d="M20,20 L20,36 C20,40 28,40 28,36 L28,20" fill="url(#grad)" opacity="0.4"/>
       <path d="M32,20 L32,36 C32,40 40,40 40,36 L40,20" fill="url(#grad)" opacity="0.4"/>
       <path d="M24,28 L24,32 M24,32 L26,30" stroke="white" strokeWidth="1.5"/>
     </IconWrapper>
   ),
   chorioamnionitis: (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <path d="M22,20 C22,14 38,14 38,20 L38,34 C38,40 22,40 22,34Z" fill="url(#grad)" opacity="0.3"/>
       <circle cx="30" cy="28" r="4" fill="url(#grad)" opacity="0.6"/>
       <path d="M26,24 L34,32 M34,24 L26,32" stroke="white" strokeWidth="1.5"/>
     </IconWrapper>
   ),
   "torch-infections": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <circle cx="22" cy="22" r="5" fill="url(#grad)" opacity="0.5"/>
       <circle cx="38" cy="22" r="5" fill="url(#grad)" opacity="0.5"/>
       <circle cx="30" cy="36" r="5" fill="url(#grad)" opacity="0.5"/>
@@ -712,21 +712,21 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "hepatitis-pregnancy": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M22,20 C22,16 38,16 38,20 L38,32 C38,38 22,38 22,32Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M26,26 L34,26 M26,30 L34,30" stroke="white" strokeWidth="2"/>
       <path d="M30,36 L30,44" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   "hiv-pregnancy": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <circle cx="30" cy="28" r="12" fill="url(#grad)" opacity="0.3"/>
       <path d="M26,24 L34,24 M30,24 L30,32" stroke="white" strokeWidth="2.5"/>
       <path d="M24,38 L36,38" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   gbs: (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <circle cx="30" cy="28" r="10" fill="url(#grad)" opacity="0.4"/>
       <path d="M24,28 C26,24 34,24 36,28" stroke="white" strokeWidth="2" fill="none"/>
       <path d="M24,30 C26,34 34,34 36,30" stroke="white" strokeWidth="2" fill="none"/>
@@ -734,7 +734,7 @@ export const obsIcons = {
     </IconWrapper>
   ),
   listeriosis: (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <circle cx="30" cy="28" r="10" fill="url(#grad)" opacity="0.4"/>
       <path d="M24,24 L36,32" stroke="white" strokeWidth="2"/>
       <path d="M24,32 L36,24" stroke="white" strokeWidth="2"/>
@@ -742,35 +742,35 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "uterine-subinvolution": (
-    <IconWrapper color="#b388eb">
+    <IconWrapper color="#c5a298">
       <path d="M22,18 C22,14 38,14 38,18 L38,32 C38,38 22,38 22,32Z" fill="url(#grad)" opacity="0.3"/>
       <path d="M26,22 L34,22 M26,26 L34,26 M26,30 L34,30" stroke="url(#grad)" strokeWidth="1.5" opacity="0.5"/>
       <path d="M30,36 L30,44" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   "postpartum-endometritis": (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <path d="M24,18 L24,38 L36,38 L36,18Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M28,24 L32,24 M28,28 L32,28 M28,32 L32,32" stroke="white" strokeWidth="2"/>
       <path d="M22,42 L38,42" stroke="url(#grad)" strokeWidth="2"/>
     </IconWrapper>
   ),
   mastitis: (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <circle cx="30" cy="30" r="14" fill="url(#grad)" opacity="0.4"/>
       <circle cx="30" cy="26" r="4" fill="url(#grad)" opacity="0.6"/>
       <path d="M24,36 Q30,40 36,36" stroke="url(#grad)" strokeWidth="2" fill="none"/>
     </IconWrapper>
   ),
   "postpartum-dvt": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <path d="M26,16 L26,44" stroke="url(#grad)" strokeWidth="4" strokeLinecap="round"/>
       <circle cx="26" cy="24" r="3" fill="#c2185b" opacity="0.6"/>
       <circle cx="26" cy="34" r="2" fill="#c2185b" opacity="0.4"/>
     </IconWrapper>
   ),
   "postpartum-depression": (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <circle cx="30" cy="28" r="12" fill="url(#grad)" opacity="0.4"/>
       <path d="M24,30 Q30,26 36,30" stroke="white" strokeWidth="2" fill="none"/>
       <circle cx="27" cy="25" r="1.5" fill="white"/>
@@ -779,35 +779,35 @@ export const obsIcons = {
     </IconWrapper>
   ),
   "postpartum-sepsis": (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <circle cx="30" cy="28" r="12" fill="url(#grad)" opacity="0.4"/>
       <path d="M24,22 L36,34 M36,22 L24,34" stroke="white" strokeWidth="2"/>
       <circle cx="30" cy="28" r="4" fill="none" stroke="white" strokeWidth="1.5"/>
     </IconWrapper>
   ),
   "pulmonary-embolism": (
-    <IconWrapper color="#c2185b">
+    <IconWrapper color="#8f5d6c">
       <path d="M20,25 C20,18 40,18 40,25 L40,35 C40,42 20,42 20,35Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M28,22 L32,38" stroke="white" strokeWidth="3"/>
       <path d="M24,28 L36,32" stroke="white" strokeWidth="2"/>
     </IconWrapper>
   ),
   thrombophilia: (
-    <IconWrapper color="#9b59b6">
+    <IconWrapper color="#b4878f">
       <path d="M26,16 L26,44" stroke="url(#grad)" strokeWidth="4" strokeLinecap="round"/>
       <path d="M34,16 L34,44" stroke="url(#grad)" strokeWidth="4" strokeLinecap="round"/>
       <path d="M26,24 L34,26 M26,34 L34,36" stroke="white" strokeWidth="1.5" opacity="0.5"/>
     </IconWrapper>
   ),
   "obstetric-cholestasis": (
-    <IconWrapper color="#e0b06b">
+    <IconWrapper color="#cfb296">
       <path d="M20,22 C20,16 40,16 40,22 L40,34 C40,40 20,40 20,34Z" fill="url(#grad)" opacity="0.4"/>
       <path d="M26,28 Q30,24 34,28" stroke="white" strokeWidth="2" fill="none"/>
       <path d="M26,32 Q30,36 34,32" stroke="white" strokeWidth="2" fill="none"/>
     </IconWrapper>
   ),
   "iron-deficiency-anemia": (
-    <IconWrapper color="#d46a80">
+    <IconWrapper color="#a96f7c">
       <circle cx="30" cy="28" r="12" fill="url(#grad)" opacity="0.3"/>
       <circle cx="30" cy="24" r="4" fill="url(#grad)" opacity="0.5"/>
       <path d="M24,34 L36,34" stroke="url(#grad)" strokeWidth="2"/>

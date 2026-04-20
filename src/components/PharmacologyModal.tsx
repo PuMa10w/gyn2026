@@ -1,20 +1,25 @@
 import React, { useEffect, useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { commonRegimens, medications } from '../data/pharmacology';
+import type { Medication, RegimenData } from '../types';
 
-const PharmacologyModal = ({ onClose }) => {
+interface PharmacologyModalProps {
+  onClose: () => void;
+}
+
+const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
   const titleId = useId();
-  const [activeTab, setActiveTab] = useState('medications');
-  const [selectedMed, setSelectedMed] = useState(null);
+  const [activeTab, setActiveTab] = useState<'medications' | 'interactions' | 'regimens'>('medications');
+  const [selectedMed, setSelectedMed] = useState<Medication | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredMeds = medications.filter((med) =>
+  const filteredMeds: Medication[] = medications.filter((med) =>
     med.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     med.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
     med.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const handleCardKeyDown = (event, onActivate) => {
+  const handleCardKeyDown = (event: React.KeyboardEvent, onActivate: () => void): void => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       onActivate();
@@ -22,7 +27,7 @@ const PharmacologyModal = ({ onClose }) => {
   };
 
   useEffect(() => {
-    const handleEscape = (event) => {
+    const handleEscape = (event: KeyboardEvent): void => {
       if (event.key === 'Escape') {
         onClose();
       }
@@ -186,7 +191,7 @@ const PharmacologyModal = ({ onClose }) => {
           {activeTab === 'regimens' && (
             <div className="pharma-content">
               <div className="regimens-list">
-                {commonRegimens.map((regimen) => (
+                {commonRegimens.map((regimen: RegimenData) => (
                   <motion.div key={regimen.id} className="regimen-card" whileHover={{ scale: 1.01 }}>
                     <div className="regimen-card-header">
                       <h3 className="regimen-title">{regimen.name}</h3>

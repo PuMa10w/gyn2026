@@ -122,7 +122,7 @@ export interface QuestionnaireHistory {
 }
 
 export type CategoryId = 'all' | 'oncology' | 'infection' | 'hormonal' | 'inflammatory' | 'pregnancy';
-export type TabType = 'gynecology' | 'obstetrics';
+export type TabType = 'home' | 'gynecology' | 'obstetrics';
 
 export interface MedicationInteraction {
   drug: string;

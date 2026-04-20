@@ -7,27 +7,27 @@ interface SearchBarProps {
   resultCount?: number;
 }
 
-const SearchBar = ({ searchTerm, setSearchTerm, resultCount }: SearchBarProps) => {
+const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, resultCount }: SearchBarProps) {
   const inputId = useId();
 
   return (
     <motion.form
       className="search-container"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
+      transition={{ delay: 0.15 }}
       role="search"
       onSubmit={(event) => event.preventDefault()}
     >
       <label className="visually-hidden" htmlFor={inputId}>
-        Поиск по заболеваниям и кодам МКБ
+        Поиск по нозологиям, симптомам и кодам МКБ
       </label>
       <div className="search-input-wrapper">
         <input
           id={inputId}
           type="search"
           className="search-input"
-          placeholder="Поиск нозологии, симптома или кода МКБ..."
+          placeholder="Нозология, симптом, код МКБ..."
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
           autoComplete="off"
@@ -42,7 +42,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, resultCount }: SearchBarProps) =
             aria-label="Очистить поиск"
             title="Очистить поиск"
           >
-            ✕
+            ×
           </motion.button>
         )}
         {typeof resultCount === 'number' && (
@@ -58,6 +58,6 @@ const SearchBar = ({ searchTerm, setSearchTerm, resultCount }: SearchBarProps) =
       </div>
     </motion.form>
   );
-};
+});
 
 export default SearchBar;

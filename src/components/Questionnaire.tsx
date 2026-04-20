@@ -1,36 +1,44 @@
 import React, { useEffect, useId, useState } from 'react';
 import { motion } from 'framer-motion';
 import { questionnaires } from '../data/questionnaires';
+import type { QuestionnaireData, ScoringResult, QuestionnaireHistory } from '../types';
 
-const Questionnaire = ({ onClose }) => {
+interface QuestionnaireProps {
+  onClose: () => void;
+}
+
+const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   const titleId = useId();
-  const [selectedQ, setSelectedQ] = useState(null);
-  const [answers, setAnswers] = useState({});
+  const [selectedQ, setSelectedQ] = useState<QuestionnaireData | null>(null);
+  const [answers, setAnswers] = useState<Record<number, number>>({});
   const [currentStep, setCurrentStep] = useState(0);
-  const [result, setResult] = useState(null);
-  const [history, setHistory] = useState(() => {
+  const [result, setResult] = useState<ScoringResult | null>(null);
+  const [history, setHistory] = useState<QuestionnaireHistory[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('questionnaire-history') || '[]');
-    } catch { return []; }
+    } catch {
+      return [];
+    }
   });
 
-  const startQuestionnaire = (q) => {
+  const startQuestionnaire = (q: QuestionnaireData): void => {
     setSelectedQ(q);
     setAnswers({});
     setCurrentStep(0);
     setResult(null);
   };
 
-  const setAnswer = (qIndex, value) => {
-    setAnswers(prev => ({ ...prev, [qIndex]: value }));
+  const setAnswer = (qIndex: number, value: number): void => {
+    setAnswers((prev) => ({ ...prev, [qIndex]: value }));
   };
 
-  const calculateResult = () => {
-    const answerArray = Object.keys(answers).map(k => answers[k]);
-    const scoringResult = selectedQ.scoring(answerArray);
+  const calculateResult = (): void => {
+    if (!selectedQ) return;
+    const answerArray = Object.keys(answers).map((k) => answers[Number(k)]);
+    const scoringResult: ScoringResult = selectedQ.scoring(answerArray);
     setResult(scoringResult);
 
-    const historyEntry = {
+    const historyEntry: QuestionnaireHistory = {
       id: selectedQ.id,
       name: selectedQ.name,
       fullName: selectedQ.fullName,
@@ -38,7 +46,7 @@ const Questionnaire = ({ onClose }) => {
       score: answerArray.reduce((a, b) => a + b, 0),
       level: scoringResult.level,
       severity: scoringResult.severity,
-      color: scoringResult.color
+      color: scoringResult.color,
     };
 
     const updatedHistory = [historyEntry, ...history].slice(0, 20);
@@ -46,21 +54,28 @@ const Questionnaire = ({ onClose }) => {
     localStorage.setItem('questionnaire-history', JSON.stringify(updatedHistory));
   };
 
-  const goBack = () => {
-    if (result) { setResult(null); return; }
-    if (currentStep > 0) { setCurrentStep(prev => prev - 1); return; }
+  const goBack = (): void => {
+    if (result) {
+      setResult(null);
+      return;
+    }
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1);
+      return;
+    }
     setSelectedQ(null);
   };
 
-  const goNext = () => {
+  const goNext = (): void => {
+    if (!selectedQ) return;
     if (currentStep < selectedQ.questions.length - 1) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
     } else {
       calculateResult();
     }
   };
 
-  const handleCardKeyDown = (event, onActivate) => {
+  const handleCardKeyDown = (event: React.KeyboardEvent, onActivate: () => void): void => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       onActivate();
@@ -68,7 +83,7 @@ const Questionnaire = ({ onClose }) => {
   };
 
   useEffect(() => {
-    const handleEscape = (event) => {
+    const handleEscape = (event: KeyboardEvent): void => {
       if (event.key === 'Escape') {
         onClose();
       }
@@ -78,7 +93,6 @@ const Questionnaire = ({ onClose }) => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [onClose]);
 
-  // History view
   if (!selectedQ) {
     return (
       <motion.div
@@ -93,7 +107,7 @@ const Questionnaire = ({ onClose }) => {
           initial={{ scale: 0.9, y: 50 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 50 }}
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -150,9 +164,8 @@ const Questionnaire = ({ onClose }) => {
     );
   }
 
-  // Question view
   if (!result) {
-    const progress = ((Object.keys(answers).length) / selectedQ.questions.length) * 100;
+    const progress = (Object.keys(answers).length / selectedQ.questions.length) * 100;
     return (
       <motion.div
         className="modal-overlay"
@@ -166,7 +179,7 @@ const Questionnaire = ({ onClose }) => {
           initial={{ scale: 0.9, y: 50 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 50 }}
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -184,7 +197,7 @@ const Questionnaire = ({ onClose }) => {
           </div>
 
           <div className="q-steps">
-            {selectedQ.questions.map((q, i) => (
+            {selectedQ.questions.map((_, i) => (
               <div key={i} className={`q-step ${i === currentStep ? 'active' : ''} ${answers[i] !== undefined ? 'done' : ''}`}>
                 {i + 1}
               </div>
@@ -229,7 +242,6 @@ const Questionnaire = ({ onClose }) => {
     );
   }
 
-  // Result view
   return (
     <motion.div
       className="modal-overlay"
@@ -243,7 +255,7 @@ const Questionnaire = ({ onClose }) => {
         initial={{ scale: 0.9, y: 50 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 50 }}
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

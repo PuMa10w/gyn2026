@@ -1,7 +1,8 @@
 {
   "name": "GYN — Акушерство и Гинекология",
   "short_name": "GYN",
-  "description": "Медицинский справочник по акушерству и гинекологии",
+  "description": "Медицинский справочник по акушерству и гинекологии с поиском нозологий, опросниками и фармакологией",
+  "lang": "ru-RU",
   "icons": [
     {
       "src": "favicon.ico",
@@ -22,9 +23,12 @@
     }
   ],
   "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "theme_color": "#e05a78",
   "background_color": "#fdf2f5",
   "orientation": "portrait-primary",
-  "categories": ["medical", "health", "education"]
+  "categories": ["medical", "health", "education"],
+  "iarc_rating_id": "Mature",
+  "prefer_related_applications": false
 }

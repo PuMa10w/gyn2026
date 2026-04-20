@@ -122,7 +122,7 @@ function buildSearchableText(item: Disease) {
     ...item.etiology,
     ...item.symptoms,
     ...(item.classification?.stages ?? []),
-    ...item.diagnostics.steps,
+    ...(item.diagnostics.steps ?? []),
     ...(item.treatment.conservative ?? []),
     ...(item.treatment.surgical ?? []),
     item.treatment.guidelines.eau,
@@ -202,8 +202,19 @@ export function filterDiseases({
   let data = categorizedData;
 
   if (normalizedSearch) {
-    data = data.filter(({ searchTarget }) => {
-      return searchTarget.includes(normalizedSearch);
+    const searchTerms = normalizedSearch.split(' ').filter(Boolean);
+    
+    data = data.filter(({ searchTarget, item }) => {
+      const targetText = searchTarget.toLowerCase();
+      const nameText = item.name.toLowerCase();
+      
+      return searchTerms.every(term => {
+        if (targetText.includes(term)) return true;
+        if (nameText.includes(term)) return true;
+        
+        const fuzzyMatch = getFuzzyMatch(term, targetText);
+        return fuzzyMatch;
+      });
     });
   }
 
@@ -220,4 +231,42 @@ export function filterDiseases({
   }
 
   return data.map(({ item }) => item);
+}
+
+function getFuzzyMatch(term: string, target: string): boolean {
+  if (term.length < 3) return false;
+  
+  const synonyms: Record<string, string[]> = {
+    'миома': ['лейомиома', 'фиброма'],
+    'эрозия': ['эктопия'],
+    'впч': ['папилломавирус', 'hpv'],
+    'вич': ['вирус иммунодефицита', 'hiv'],
+    'кок': ['оральные контрацептивы', 'комбинированные'],
+    'вми': ['инсеминация'],
+    'икси': ['икси'],
+    'эко': ['экстракорпоральное', 'ivf'],
+    'пгд': ['предимплантационная'],
+    'пн': ['недостаточность яичников'],
+    'ибс': ['ишемическая болезнь'],
+  };
+  
+  const lowerTerm = term.toLowerCase();
+  
+  for (const [key, values] of Object.entries(synonyms)) {
+    if (key.includes(lowerTerm) || lowerTerm.includes(key)) {
+      return values.some(v => target.includes(v));
+    }
+    if (values.some(v => v.includes(lowerTerm))) {
+      return true;
+    }
+  }
+  
+  let termIndex = 0;
+  for (let i = 0; i < target.length && termIndex < term.length; i++) {
+    if (target[i] === term[termIndex]) {
+      termIndex++;
+    }
+  }
+  
+  return termIndex >= Math.floor(term.length * 0.7);
 }

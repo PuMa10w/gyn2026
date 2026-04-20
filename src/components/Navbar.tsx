@@ -18,7 +18,7 @@ interface NavbarProps {
   historyCount: number;
 }
 
-const Navbar = ({
+const Navbar = React.memo(function Navbar({
   activeTab,
   setActiveTab,
   onQuestionnaires,
@@ -31,7 +31,7 @@ const Navbar = ({
   setShowHistory,
   favoritesCount,
   historyCount,
-}: NavbarProps) => {
+}: NavbarProps) {
   const handleFavoritesToggle = () => {
     const next = !showFavorites;
     setShowFavorites(next);
@@ -49,25 +49,24 @@ const Navbar = ({
   };
 
   return (
-    <motion.header className="navbar" initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}>
-      <div className="nav-topbar">
-        <div className="nav-logo-block">
-          <strong className="nav-logo">Gyn & Obs</strong>
-          <span className="nav-subtitle">Клинический справочник</span>
-        </div>
-
-        <button
-          type="button"
-          className="theme-toggle"
-          onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
-          title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
+    <motion.header className="navbar" initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }}>
+      <div className="nav-brand">
+        <button type="button" className="home-btn" onClick={() => setActiveTab('home')}>
+          <span className="nav-logo">GYN</span>
+          <span className="nav-subtitle">Clinical Reference</span>
         </button>
       </div>
 
-      <div className="nav-primary" role="tablist" aria-label="Разделы">
+      <div className="nav-primary" role="tablist" aria-label="Основные разделы">
+        <button
+          type="button"
+          className={`nav-item nav-primary-item ${activeTab === 'home' ? 'is-active' : ''}`}
+          onClick={() => setActiveTab('home')}
+          aria-selected={activeTab === 'home'}
+          role="tab"
+        >
+          Главная
+        </button>
         <button
           type="button"
           className={`nav-item nav-primary-item ${activeTab === 'gynecology' ? 'is-active' : ''}`}
@@ -75,37 +74,25 @@ const Navbar = ({
           aria-selected={activeTab === 'gynecology'}
           role="tab"
         >
-          <span className="nav-item-icon" aria-hidden="true">
-            🌸
-          </span>
           Гинекология
         </button>
         <button
           type="button"
-          className={`nav-item nav-primary-item ${activeTab === 'obstetrics' ? 'is-active is-gold' : ''}`}
+          className={`nav-item nav-primary-item ${activeTab === 'obstetrics' ? 'is-active' : ''}`}
           onClick={() => setActiveTab('obstetrics')}
           aria-selected={activeTab === 'obstetrics'}
           role="tab"
         >
-          <span className="nav-item-icon" aria-hidden="true">
-            🤰
-          </span>
           Акушерство
         </button>
       </div>
 
       <div className="nav-utility">
-        <button type="button" className="nav-item nav-utility-item nav-utility-accent" onClick={onQuestionnaires}>
-          <span className="nav-item-icon" aria-hidden="true">
-            📋
-          </span>
+        <button type="button" className="nav-item nav-utility-item" onClick={onQuestionnaires}>
           Опросники
         </button>
 
-        <button type="button" className="nav-item nav-utility-item nav-utility-accent" onClick={onPharmacology}>
-          <span className="nav-item-icon" aria-hidden="true">
-            💊
-          </span>
+        <button type="button" className="nav-item nav-utility-item" onClick={onPharmacology}>
           Фармакология
         </button>
 
@@ -115,9 +102,6 @@ const Navbar = ({
           onClick={handleFavoritesToggle}
           aria-pressed={showFavorites}
         >
-          <span className="nav-item-icon" aria-hidden="true">
-            ⭐
-          </span>
           Избранное
           <span className="nav-pill">{favoritesCount}</span>
         </button>
@@ -128,15 +112,22 @@ const Navbar = ({
           onClick={handleHistoryToggle}
           aria-pressed={showHistory}
         >
-          <span className="nav-item-icon" aria-hidden="true">
-            🕘
-          </span>
           История
           <span className="nav-pill">{historyCount}</span>
+        </button>
+
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на тёмную тему'}
+          title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
+        >
+          <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
         </button>
       </div>
     </motion.header>
   );
-};
+});
 
 export default Navbar;

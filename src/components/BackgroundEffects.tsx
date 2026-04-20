@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const BackgroundEffects = () => {
+const BackgroundEffects: React.FC = () => {
+  const particleColors = ['#e05a78', '#9b59b6', '#d4a017', '#fce4ec', '#e8d5f5'];
+
   return (
     <div className="bg-effects">
-      {/* Animated gradient blobs */}
       <div className="blob blob-1">
         <motion.div
           animate={{
@@ -37,7 +38,6 @@ const BackgroundEffects = () => {
         />
       </div>
 
-      {/* Floating particles */}
       <div className="particles">
         {Array.from({ length: 20 }).map((_, i) => (
           <motion.div
@@ -48,9 +48,7 @@ const BackgroundEffects = () => {
               top: `${Math.random() * 100}%`,
               width: `${Math.random() * 6 + 2}px`,
               height: `${Math.random() * 6 + 2}px`,
-              background: `linear-gradient(135deg, ${
-                ['#e05a78', '#9b59b6', '#d4a017', '#fce4ec', '#e8d5f5'][Math.floor(Math.random() * 5)]
-              }, transparent)`,
+              background: `linear-gradient(135deg, ${particleColors[Math.floor(Math.random() * 5)]}, transparent)`,
             }}
             animate={{
               y: [0, -30 - Math.random() * 40],
@@ -68,7 +66,6 @@ const BackgroundEffects = () => {
         ))}
       </div>
 
-      {/* Sparkle dots */}
       <div className="sparkles">
         {Array.from({ length: 12 }).map((_, i) => (
           <motion.div
