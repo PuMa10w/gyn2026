@@ -20,8 +20,45 @@ const guidelineMeta = [
   { key: 'ru', title: 'Россия', org: 'Минздрав РФ', badgeClass: 'badge-ru' },
 ] as const;
 
-function renderTrustedHtml(text: string) {
-  return { __html: text };
+const treatmentBadgePattern = /<span class='badge ([^']+)'>([^<]+)<\/span>/gi;
+const allowedInlineBadgeClasses = new Set(['badge-eau', 'badge-acog', 'badge-ranzcog', 'badge-ru', 'badge-cdc']);
+
+function renderSafeTreatmentEntry(entry: string) {
+  const nodes: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  treatmentBadgePattern.lastIndex = 0;
+  match = treatmentBadgePattern.exec(entry);
+
+  while (match) {
+    const [fullMatch, classListRaw, badgeText] = match;
+
+    if (match.index > lastIndex) {
+      nodes.push(entry.slice(lastIndex, match.index));
+    }
+
+    const safeBadgeClass =
+      classListRaw
+        .split(/\s+/)
+        .map((token) => token.trim())
+        .find((token) => allowedInlineBadgeClasses.has(token)) ?? 'badge-ru';
+
+    nodes.push(
+      <span className={`inline-guideline-badge ${safeBadgeClass}`} key={`badge-${match.index}`}>
+        {badgeText}
+      </span>,
+    );
+
+    lastIndex = match.index + fullMatch.length;
+    match = treatmentBadgePattern.exec(entry);
+  }
+
+  if (lastIndex < entry.length) {
+    nodes.push(entry.slice(lastIndex));
+  }
+
+  return nodes.length > 0 ? nodes : entry;
 }
 
 const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
@@ -32,7 +69,10 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
   const titleId = useId();
   const descriptionId = useId();
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const previousFocusedElementRef = useRef<HTMLElement | null>(null);
   const IconComponent = item.subtitle === 'Гинекология' ? gynIcons[item.icon] : obsIcons[item.icon];
+  const icdLabel = item.icdDetail ?? item.icd;
 
   const tabs = [
     { id: 'overview', label: 'Обзор' },
@@ -52,7 +92,11 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
   }, []);
 
   useEffect(() => {
+    previousFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     closeButtonRef.current?.focus();
+    return () => {
+      previousFocusedElementRef.current?.focus();
+    };
   }, []);
 
   useEffect(() => {
@@ -87,6 +131,41 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
       window.scrollTo(0, scrollY);
     };
   }, []);
+
+  const handleModalKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Tab' || !modalRef.current) {
+      return;
+    }
+
+    const focusableSelector =
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusableElements = Array.from(modalRef.current.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+      (element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true',
+    );
+
+    if (focusableElements.length === 0) {
+      event.preventDefault();
+      return;
+    }
+
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+    const activeElement = document.activeElement as HTMLElement | null;
+    const isFocusInsideModal = activeElement ? modalRef.current.contains(activeElement) : false;
+
+    if (event.shiftKey) {
+      if (!isFocusInsideModal || activeElement === firstFocusable) {
+        event.preventDefault();
+        lastFocusable.focus();
+      }
+      return;
+    }
+
+    if (!isFocusInsideModal || activeElement === lastFocusable) {
+      event.preventDefault();
+      firstFocusable.focus();
+    }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -179,7 +258,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 <h3>Консервативная терапия</h3>
                 <ul>
                   {item.treatment.conservative.map((entry, index) => (
-                    <li key={index} dangerouslySetInnerHTML={renderTrustedHtml(entry)} />
+                    <li key={index}>{renderSafeTreatmentEntry(entry)}</li>
                   ))}
                 </ul>
               </section>
@@ -190,7 +269,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 <h3>Хирургическая тактика</h3>
                 <ul>
                   {item.treatment.surgical.map((entry, index) => (
-                    <li key={index} dangerouslySetInnerHTML={renderTrustedHtml(entry)} />
+                    <li key={index}>{renderSafeTreatmentEntry(entry)}</li>
                   ))}
                 </ul>
               </section>
@@ -226,12 +305,14 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
         onClick={onClose}
       >
         <motion.div
+          ref={modalRef}
           className={`modal-content ${isMobile ? 'mobile-sheet' : ''}`}
           initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
           animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
           exit={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
           transition={isMobile ? { type: 'spring', damping: 25, stiffness: 300 } : { duration: 0.3 }}
           onClick={(event) => event.stopPropagation()}
+          onKeyDown={handleModalKeyDown}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -249,7 +330,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                   {item.name}
                 </h2>
                 <div className="modal-icd">
-                  {item.icd} • {item.subtitle}
+                  {icdLabel} • {item.subtitle}
                 </div>
               </div>
             </div>

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { motion } from 'framer-motion';
 import { questionnaires } from '../data/questionnaires';
 
 const Questionnaire = ({ onClose }) => {
+  const titleId = useId();
   const [selectedQ, setSelectedQ] = useState(null);
   const [answers, setAnswers] = useState({});
   const [currentStep, setCurrentStep] = useState(0);
@@ -59,6 +60,24 @@ const Questionnaire = ({ onClose }) => {
     }
   };
 
+  const handleCardKeyDown = (event, onActivate) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onActivate();
+    }
+  };
+
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
   // History view
   if (!selectedQ) {
     return (
@@ -75,18 +94,21 @@ const Questionnaire = ({ onClose }) => {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 50 }}
           onClick={e => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
         >
           <div className="modal-header">
             <div>
-              <h2 className="modal-title">📋 Тест-опросники</h2>
+              <h2 className="modal-title" id={titleId}>📋 Тест-опросники</h2>
               <div className="modal-icd">Международные скрининговые шкалы</div>
             </div>
-            <button className="modal-close" onClick={onClose}>×</button>
+            <button type="button" className="modal-close" onClick={onClose} aria-label="Закрыть опросники">×</button>
           </div>
 
           <div className="q-grid">
             {questionnaires.map((q, idx) => (
-              <motion.div
+              <motion.article
                 key={q.id}
                 className="q-card"
                 initial={{ opacity: 0, y: 20 }}
@@ -94,6 +116,10 @@ const Questionnaire = ({ onClose }) => {
                 transition={{ delay: idx * 0.05 }}
                 whileHover={{ y: -5, boxShadow: '0 12px 35px rgba(224,90,120,0.15)' }}
                 onClick={() => startQuestionnaire(q)}
+                onKeyDown={(event) => handleCardKeyDown(event, () => startQuestionnaire(q))}
+                role="button"
+                tabIndex={0}
+                aria-label={`Открыть опросник: ${q.name}`}
               >
                 <div className="q-icon">{q.icon}</div>
                 <div className="q-name">{q.name}</div>
@@ -101,7 +127,7 @@ const Questionnaire = ({ onClose }) => {
                 <div className="q-cat">{q.category}</div>
                 <div className="q-desc">{q.description}</div>
                 <div className="q-count">{q.questions.length} вопросов</div>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
 
@@ -141,13 +167,16 @@ const Questionnaire = ({ onClose }) => {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 50 }}
           onClick={e => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
         >
           <div className="modal-header">
             <div>
-              <h2 className="modal-title">{selectedQ.icon} {selectedQ.name}</h2>
+              <h2 className="modal-title" id={titleId}>{selectedQ.icon} {selectedQ.name}</h2>
               <div className="modal-icd">{selectedQ.fullName}</div>
             </div>
-            <button className="modal-close" onClick={goBack}>×</button>
+            <button type="button" className="modal-close" onClick={goBack} aria-label="Закрыть опросник">×</button>
           </div>
 
           <div className="q-progress-bar">
@@ -171,6 +200,7 @@ const Questionnaire = ({ onClose }) => {
             {selectedQ.options.map((opt, i) => (
               <motion.button
                 key={i}
+                type="button"
                 className={`q-option ${answers[currentStep] === i ? 'selected' : ''}`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -182,10 +212,11 @@ const Questionnaire = ({ onClose }) => {
           </div>
 
           <div className="q-nav">
-            <button className="q-btn q-btn-secondary" onClick={goBack} disabled={currentStep === 0}>
+            <button type="button" className="q-btn q-btn-secondary" onClick={goBack} disabled={currentStep === 0}>
               ← Назад
             </button>
             <button
+              type="button"
               className="q-btn q-btn-primary"
               onClick={goNext}
               disabled={answers[currentStep] === undefined}
@@ -213,13 +244,16 @@ const Questionnaire = ({ onClose }) => {
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 50 }}
         onClick={e => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
       >
         <div className="modal-header">
           <div>
-            <h2 className="modal-title">📊 Результат</h2>
+            <h2 className="modal-title" id={titleId}>📊 Результат</h2>
             <div className="modal-icd">{selectedQ.name} — {selectedQ.fullName}</div>
           </div>
-          <button className="modal-close" onClick={() => { setSelectedQ(null); }}>×</button>
+          <button type="button" className="modal-close" onClick={() => { setSelectedQ(null); }} aria-label="Закрыть результат">×</button>
         </div>
 
         <div className="q-result">
@@ -263,10 +297,10 @@ const Questionnaire = ({ onClose }) => {
           </div>
 
           <div className="q-nav">
-            <button className="q-btn q-btn-secondary" onClick={() => startQuestionnaire(selectedQ)}>
+            <button type="button" className="q-btn q-btn-secondary" onClick={() => startQuestionnaire(selectedQ)}>
               🔄 Пройти заново
             </button>
-            <button className="q-btn q-btn-primary" onClick={() => { setSelectedQ(null); }}>
+            <button type="button" className="q-btn q-btn-primary" onClick={() => { setSelectedQ(null); }}>
               ← К списку тестов
             </button>
           </div>

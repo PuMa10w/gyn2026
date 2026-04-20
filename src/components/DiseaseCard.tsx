@@ -34,6 +34,7 @@ const cardVariants = {
 
 const DiseaseCard = ({ item, onClick, index, isFavorite, onToggleFavorite }: DiseaseCardProps) => {
   const IconComponent = item.subtitle === 'Гинекология' ? gynIcons[item.icon] : obsIcons[item.icon];
+  const icdLabel = item.icdDetail ?? item.icd;
 
   const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -64,7 +65,7 @@ const DiseaseCard = ({ item, onClick, index, isFavorite, onToggleFavorite }: Dis
       style={{ perspective: '1000px' }}
       role="button"
       tabIndex={0}
-      aria-label={`${item.name}, код ${item.icd}. Открыть подробности.`}
+      aria-label={`${item.name}, код ${icdLabel}. Открыть подробности.`}
     >
       <motion.button
         type="button"
@@ -90,7 +91,7 @@ const DiseaseCard = ({ item, onClick, index, isFavorite, onToggleFavorite }: Dis
       </span>
       <div className="card-subtitle">{item.subtitle}</div>
       <h3 className="card-title">{item.name}</h3>
-      <div className="card-icd-badge">{item.icd}</div>
+      <div className="card-icd-badge">{icdLabel}</div>
       <p className="card-desc">{item.description}</p>
 
       <span

@@ -25,13 +25,14 @@ describe('App', () => {
     localStorage.clear();
   });
 
-  test('renders main navigation and search', () => {
+  test('renders main navigation and search', async () => {
     render(<App />);
 
     expect(screen.getByText('Gyn & Obs')).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/поиск нозологии/i)).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /гинекология/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /акушерство/i })).toBeInTheDocument();
+    await screen.findByText('Эндометриоз');
   });
 
   test('filters cards by search query', async () => {
@@ -61,7 +62,7 @@ describe('App', () => {
   test('opens modal and stores viewed item in history', async () => {
     render(<App />);
 
-    fireEvent.click(screen.getByText('Эндометриоз'));
+    fireEvent.click(await screen.findByText('Эндометриоз'));
 
     await waitFor(() => {
       expect(screen.getByTestId('disease-modal')).toBeInTheDocument();
@@ -78,6 +79,7 @@ describe('App', () => {
   test('filters diseases by category', async () => {
     render(<App />);
 
+    await screen.findByText('Эндометриоз');
     fireEvent.click(screen.getByRole('button', { name: /воспалительные/i }));
 
     await waitFor(() => {

@@ -2,6 +2,7 @@ export interface Disease {
   id: string;
   name: string;
   icd: string;
+  icdDetail?: string;
   subtitle: 'Гинекология' | 'Акушерство';
   description: string;
   icon: string;

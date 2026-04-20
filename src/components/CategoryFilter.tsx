@@ -15,9 +15,15 @@ interface CategoryFilterProps {
   activeCategory: CategoryId;
   setActiveCategory: (value: CategoryId) => void;
   categoryCounts: Record<Exclude<CategoryId, 'all'>, number>;
+  visibleCategories: CategoryId[];
 }
 
-const CategoryFilter = ({ activeCategory, setActiveCategory, categoryCounts }: CategoryFilterProps) => (
+const CategoryFilter = ({
+  activeCategory,
+  setActiveCategory,
+  categoryCounts,
+  visibleCategories,
+}: CategoryFilterProps) => (
   <motion.div
     className="category-filter"
     initial={{ opacity: 0, y: 10 }}
@@ -25,23 +31,25 @@ const CategoryFilter = ({ activeCategory, setActiveCategory, categoryCounts }: C
     transition={{ delay: 0.3 }}
   >
     <div className="category-chips" role="tablist" aria-label="Фильтр по категориям">
-      {categories.map((category) => (
-        <motion.button
-          key={category.id}
-          type="button"
-          className={`category-chip ${activeCategory === category.id ? 'active' : ''}`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setActiveCategory(category.id)}
-          aria-pressed={activeCategory === category.id}
-        >
-          <span className="chip-icon" aria-hidden="true">
-            {category.icon}
-          </span>
-          <span className="chip-label">{category.label}</span>
-          {category.id !== 'all' && <span className="chip-count">{categoryCounts[category.id]}</span>}
-        </motion.button>
-      ))}
+      {categories
+        .filter((category) => visibleCategories.includes(category.id))
+        .map((category) => (
+          <motion.button
+            key={category.id}
+            type="button"
+            className={`category-chip ${activeCategory === category.id ? 'active' : ''}`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setActiveCategory(category.id)}
+            aria-pressed={activeCategory === category.id}
+          >
+            <span className="chip-icon" aria-hidden="true">
+              {category.icon}
+            </span>
+            <span className="chip-label">{category.label}</span>
+            {category.id !== 'all' && <span className="chip-count">{categoryCounts[category.id]}</span>}
+          </motion.button>
+        ))}
     </div>
   </motion.div>
 );

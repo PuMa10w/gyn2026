@@ -1,27 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { TabType } from '../types';
 import type { ThemeMode } from '../hooks/useTheme';
+import type { TabType } from '../types';
 
 interface NavbarProps {
   activeTab: TabType;
-  setActiveTab: (value: TabType) => void;
+  setActiveTab: (tab: TabType) => void;
   onQuestionnaires: () => void;
   onPharmacology: () => void;
   theme: ThemeMode;
   toggleTheme: () => void;
   showFavorites: boolean;
-  setShowFavorites: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowFavorites: (value: boolean) => void;
   showHistory: boolean;
-  setShowHistory: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowHistory: (value: boolean) => void;
   favoritesCount: number;
   historyCount: number;
 }
-
-const interactiveMotion = {
-  whileHover: { scale: 1.03 },
-  whileTap: { scale: 0.97 },
-};
 
 const Navbar = ({
   activeTab,
@@ -37,128 +32,110 @@ const Navbar = ({
   favoritesCount,
   historyCount,
 }: NavbarProps) => {
-  const isGynActive = activeTab === 'gynecology' && !showFavorites && !showHistory;
-  const isObsActive = activeTab === 'obstetrics' && !showFavorites && !showHistory;
+  const handleFavoritesToggle = () => {
+    const next = !showFavorites;
+    setShowFavorites(next);
+    if (next) {
+      setShowHistory(false);
+    }
+  };
 
-  const handleTabChange = (tab: TabType) => {
-    setActiveTab(tab);
-    setShowFavorites(false);
-    setShowHistory(false);
+  const handleHistoryToggle = () => {
+    const next = !showHistory;
+    setShowHistory(next);
+    if (next) {
+      setShowFavorites(false);
+    }
   };
 
   return (
-    <nav className="navbar" aria-label="Главная навигация">
+    <motion.header className="navbar" initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}>
       <div className="nav-topbar">
         <div className="nav-logo-block">
-          <div className="nav-logo">Gyn &amp; Obs</div>
-          <div className="nav-subtitle">Карманный справочник</div>
+          <strong className="nav-logo">Gyn & Obs</strong>
+          <span className="nav-subtitle">Клинический справочник</span>
         </div>
 
-        <motion.button
+        <button
           type="button"
           className="theme-toggle"
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.94 }}
           onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на тёмную тему'}
+          aria-label={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
           title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
         >
           {theme === 'dark' ? '☀️' : '🌙'}
-        </motion.button>
+        </button>
       </div>
 
-      <div className="nav-primary" role="tablist" aria-label="Основные разделы">
-        <motion.button
-          {...interactiveMotion}
+      <div className="nav-primary" role="tablist" aria-label="Разделы">
+        <button
           type="button"
-          className={`nav-item nav-primary-item ${isGynActive ? 'is-active' : ''}`}
-          onClick={() => handleTabChange('gynecology')}
+          className={`nav-item nav-primary-item ${activeTab === 'gynecology' ? 'is-active' : ''}`}
+          onClick={() => setActiveTab('gynecology')}
+          aria-selected={activeTab === 'gynecology'}
           role="tab"
-          aria-selected={isGynActive}
         >
           <span className="nav-item-icon" aria-hidden="true">
             🌸
           </span>
-          <span>Гинекология</span>
-        </motion.button>
-
-        <motion.button
-          {...interactiveMotion}
+          Гинекология
+        </button>
+        <button
           type="button"
-          className={`nav-item nav-primary-item ${isObsActive ? 'is-active' : ''}`}
-          onClick={() => handleTabChange('obstetrics')}
+          className={`nav-item nav-primary-item ${activeTab === 'obstetrics' ? 'is-active is-gold' : ''}`}
+          onClick={() => setActiveTab('obstetrics')}
+          aria-selected={activeTab === 'obstetrics'}
           role="tab"
-          aria-selected={isObsActive}
         >
           <span className="nav-item-icon" aria-hidden="true">
             🤰
           </span>
-          <span>Акушерство</span>
-        </motion.button>
+          Акушерство
+        </button>
       </div>
 
-      <div className="nav-utility" aria-label="Дополнительные разделы">
-        <motion.button
-          {...interactiveMotion}
-          type="button"
-          className={`nav-item nav-utility-item ${showHistory ? 'is-active is-gold' : ''}`}
-          onClick={() => {
-            setShowHistory((current) => !current);
-            setShowFavorites(false);
-          }}
-          aria-pressed={showHistory}
-          aria-label={`История, элементов: ${historyCount}`}
-        >
+      <div className="nav-utility">
+        <button type="button" className="nav-item nav-utility-item nav-utility-accent" onClick={onQuestionnaires}>
           <span className="nav-item-icon" aria-hidden="true">
-            🕘
+            📋
           </span>
-          <span>История</span>
-          {historyCount > 0 && <span className="nav-pill">{historyCount}</span>}
-        </motion.button>
+          Опросники
+        </button>
 
-        <motion.button
-          {...interactiveMotion}
+        <button type="button" className="nav-item nav-utility-item nav-utility-accent" onClick={onPharmacology}>
+          <span className="nav-item-icon" aria-hidden="true">
+            💊
+          </span>
+          Фармакология
+        </button>
+
+        <button
           type="button"
-          className={`nav-item nav-utility-item ${showFavorites ? 'is-active is-gold' : ''}`}
-          onClick={() => {
-            setShowFavorites((current) => !current);
-            setShowHistory(false);
-          }}
+          className={`nav-item nav-utility-item ${showFavorites ? 'is-active' : ''}`}
+          onClick={handleFavoritesToggle}
           aria-pressed={showFavorites}
-          aria-label={`Избранное, элементов: ${favoritesCount}`}
         >
           <span className="nav-item-icon" aria-hidden="true">
             ⭐
           </span>
-          <span>Избранное</span>
-          {favoritesCount > 0 && <span className="nav-pill">{favoritesCount}</span>}
-        </motion.button>
+          Избранное
+          <span className="nav-pill">{favoritesCount}</span>
+        </button>
 
-        <motion.button
-          {...interactiveMotion}
+        <button
           type="button"
-          className="nav-item nav-utility-item nav-utility-accent"
-          onClick={onQuestionnaires}
+          className={`nav-item nav-utility-item ${showHistory ? 'is-active' : ''}`}
+          onClick={handleHistoryToggle}
+          aria-pressed={showHistory}
         >
           <span className="nav-item-icon" aria-hidden="true">
-            📋
+            🕘
           </span>
-          <span>Опросники</span>
-        </motion.button>
-
-        <motion.button
-          {...interactiveMotion}
-          type="button"
-          className="nav-item nav-utility-item nav-utility-accent"
-          onClick={onPharmacology}
-        >
-          <span className="nav-item-icon" aria-hidden="true">
-            💊
-          </span>
-          <span>Препараты</span>
-        </motion.button>
+          История
+          <span className="nav-pill">{historyCount}</span>
+        </button>
       </div>
-    </nav>
+    </motion.header>
   );
 };
 

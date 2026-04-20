@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { commonRegimens, medications } from '../data/pharmacology';
 
 const PharmacologyModal = ({ onClose }) => {
+  const titleId = useId();
   const [activeTab, setActiveTab] = useState('medications');
   const [selectedMed, setSelectedMed] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,6 +13,24 @@ const PharmacologyModal = ({ onClose }) => {
     med.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
     med.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  const handleCardKeyDown = (event, onActivate) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onActivate();
+    }
+  };
+
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
 
   return (
     <AnimatePresence>
@@ -28,32 +47,38 @@ const PharmacologyModal = ({ onClose }) => {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.96, opacity: 0 }}
           onClick={(event) => event.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
         >
-          <button className="modal-close" onClick={onClose} aria-label="Закрыть фармакологию">
+          <button type="button" className="modal-close" onClick={onClose} aria-label="Закрыть фармакологию">
             ✕
           </button>
 
           <div className="modal-header">
             <div>
-              <h2 className="modal-title">Фармакология</h2>
+              <h2 className="modal-title" id={titleId}>Фармакология</h2>
               <div className="modal-icd">Препараты, взаимодействия и готовые схемы</div>
             </div>
           </div>
 
           <div className="pharma-tabs">
             <button
+              type="button"
               className={`pharma-tab ${activeTab === 'medications' ? 'active' : ''}`}
               onClick={() => setActiveTab('medications')}
             >
               Препараты
             </button>
             <button
+              type="button"
               className={`pharma-tab ${activeTab === 'interactions' ? 'active' : ''}`}
               onClick={() => setActiveTab('interactions')}
             >
               Взаимодействия
             </button>
             <button
+              type="button"
               className={`pharma-tab ${activeTab === 'regimens' ? 'active' : ''}`}
               onClick={() => setActiveTab('regimens')}
             >
@@ -73,17 +98,25 @@ const PharmacologyModal = ({ onClose }) => {
 
               <div className="medications-grid">
                 {filteredMeds.map((med) => (
-                  <motion.div
+                  <motion.article
                     key={med.id}
                     className="medication-card"
                     whileHover={{ scale: 1.01 }}
                     onClick={() => setSelectedMed(selectedMed?.id === med.id ? null : med)}
+                    onKeyDown={(event) =>
+                      handleCardKeyDown(event, () => setSelectedMed(selectedMed?.id === med.id ? null : med))
+                    }
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={selectedMed?.id === med.id}
+                    aria-label={`Открыть детали препарата: ${med.name}`}
                   >
                     <div className="med-name">{med.name}</div>
                     <div className="med-category">{med.category}</div>
 
                     {selectedMed?.id === med.id && (
                       <motion.div
+                        id={`med-details-${med.id}`}
                         className="med-details"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
@@ -130,7 +163,7 @@ const PharmacologyModal = ({ onClose }) => {
                         </ul>
                       </motion.div>
                     )}
-                  </motion.div>
+                  </motion.article>
                 ))}
               </div>
             </div>

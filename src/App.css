@@ -168,7 +168,7 @@
 
 .search-container {
   max-width: 760px;
-  margin: 104px auto 1rem;
+  margin: 180px auto 1rem;
   padding: 0 1rem;
   position: relative;
   z-index: 10;
@@ -697,6 +697,23 @@
   color: #7550bc;
 }
 
+.badge-cdc {
+  background: #e8f1fb;
+  color: #245e9e;
+}
+
+.inline-guideline-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.14rem 0.48rem;
+  margin-left: 0.35rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.1;
+  vertical-align: baseline;
+}
+
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -1161,7 +1178,7 @@
   }
 
   .search-container {
-    margin-top: 150px;
+    margin-top: 220px;
     padding: 0 0.75rem;
   }
 
