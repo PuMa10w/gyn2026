@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { medications, drugInteractions, commonRegimens } from '../data/pharmacology';
+import { AnimatePresence, motion } from 'framer-motion';
+import { commonRegimens, medications } from '../data/pharmacology';
 
 const PharmacologyModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState('medications');
   const [selectedMed, setSelectedMed] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredMeds = medications.filter(med =>
+  const filteredMeds = medications.filter((med) =>
     med.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     med.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    med.category.toLowerCase().includes(searchTerm.toLowerCase())
+    med.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -24,29 +24,36 @@ const PharmacologyModal = ({ onClose }) => {
       >
         <motion.div
           className="modal-content pharmacology-modal"
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          onClick={(e) => e.stopPropagation()}
+          exit={{ scale: 0.96, opacity: 0 }}
+          onClick={(event) => event.stopPropagation()}
         >
-          <button className="modal-close" onClick={onClose}>✕</button>
-          
-          <h2 className="modal-title">💊 Фармакология</h2>
+          <button className="modal-close" onClick={onClose} aria-label="Закрыть фармакологию">
+            ✕
+          </button>
+
+          <div className="modal-header">
+            <div>
+              <h2 className="modal-title">Фармакология</h2>
+              <div className="modal-icd">Препараты, взаимодействия и готовые схемы</div>
+            </div>
+          </div>
 
           <div className="pharma-tabs">
-            <button 
+            <button
               className={`pharma-tab ${activeTab === 'medications' ? 'active' : ''}`}
               onClick={() => setActiveTab('medications')}
             >
               Препараты
             </button>
-            <button 
+            <button
               className={`pharma-tab ${activeTab === 'interactions' ? 'active' : ''}`}
               onClick={() => setActiveTab('interactions')}
             >
               Взаимодействия
             </button>
-            <button 
+            <button
               className={`pharma-tab ${activeTab === 'regimens' ? 'active' : ''}`}
               onClick={() => setActiveTab('regimens')}
             >
@@ -61,45 +68,65 @@ const PharmacologyModal = ({ onClose }) => {
                 className="search-input"
                 placeholder="Поиск препарата..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(event) => setSearchTerm(event.target.value)}
               />
-              
+
               <div className="medications-grid">
                 {filteredMeds.map((med) => (
                   <motion.div
                     key={med.id}
                     className="medication-card"
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.01 }}
                     onClick={() => setSelectedMed(selectedMed?.id === med.id ? null : med)}
                   >
                     <div className="med-name">{med.name}</div>
                     <div className="med-category">{med.category}</div>
-                    
+
                     {selectedMed?.id === med.id && (
-                      <motion.div 
+                      <motion.div
                         className="med-details"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                       >
-                        <p><strong>ENG:</strong> {med.nameEn}</p>
-                        <p><strong>Формы:</strong> {med.forms.join(', ')}</p>
-                        <p><strong>Дозировки:</strong></p>
+                        <p>
+                          <strong>ENG:</strong> {med.nameEn}
+                        </p>
+                        <p>
+                          <strong>Формы:</strong> {med.forms.join(', ')}
+                        </p>
+                        <p>
+                          <strong>Дозировки:</strong>
+                        </p>
                         <ul>
-                          {Object.entries(med.dosage).map(([key, val]) => (
-                            <li key={key}>{key}: {val}</li>
+                          {Object.entries(med.dosage).map(([key, value]) => (
+                            <li key={key}>
+                              {key}: {value}
+                            </li>
                           ))}
                         </ul>
-                        <p><strong>Показания:</strong></p>
+                        <p>
+                          <strong>Показания:</strong>
+                        </p>
                         <ul>
-                          {med.indications.map((ind, i) => <li key={i}>{ind}</li>)}
+                          {med.indications.map((indication, index) => (
+                            <li key={index}>{indication}</li>
+                          ))}
                         </ul>
-                        <p className="contraindications"><strong>Противопоказания:</strong></p>
+                        <p className="contraindications">
+                          <strong>Противопоказания:</strong>
+                        </p>
                         <ul>
-                          {med.contraindications.map((c, i) => <li key={i}>{c}</li>)}
+                          {med.contraindications.map((entry, index) => (
+                            <li key={index}>{entry}</li>
+                          ))}
                         </ul>
-                        <p className="side-effects"><strong>Побочные эффекты:</strong></p>
+                        <p className="side-effects">
+                          <strong>Побочные эффекты:</strong>
+                        </p>
                         <ul>
-                          {med.sideEffects.map((se, i) => <li key={i}>{se}</li>)}
+                          {med.sideEffects.map((entry, index) => (
+                            <li key={index}>{entry}</li>
+                          ))}
                         </ul>
                       </motion.div>
                     )}
@@ -117,7 +144,8 @@ const PharmacologyModal = ({ onClose }) => {
                 <span className="legend-item low">● Низкий риск</span>
               </div>
               <p className="interactions-note">
-                Выберите препараты из вкладки "Препараты" для проверки взаимодействий
+                Блок взаимодействий пока показан как справочный раздел. При необходимости я могу
+                следующим проходом сделать полноценную проверку сочетаний прямо в интерфейсе.
               </p>
             </div>
           )}
@@ -126,26 +154,26 @@ const PharmacologyModal = ({ onClose }) => {
             <div className="pharma-content">
               <div className="regimens-list">
                 {commonRegimens.map((regimen) => (
-                  <motion.div
-                    key={regimen.id}
-                    className="regimen-card"
-                    whileHover={{ scale: 1.01 }}
-                  >
-                    <h3>{regimen.name}</h3>
+                  <motion.div key={regimen.id} className="regimen-card" whileHover={{ scale: 1.01 }}>
+                    <div className="regimen-card-header">
+                      <h3 className="regimen-title">{regimen.name}</h3>
+                      <div className="regimen-steps-count">{regimen.steps.length} шага</div>
+                    </div>
+
                     <table className="regimen-table">
                       <thead>
                         <tr>
                           <th>День</th>
                           <th>Препарат</th>
-                          <th>Доза/Заметки</th>
+                          <th>Доза / заметки</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {regimen.steps.map((step, i) => (
-                          <tr key={i}>
-                            <td>{step.day}</td>
-                            <td>{step.drug}</td>
-                            <td>{step.dose || step.note || '-'}</td>
+                        {regimen.steps.map((step, index) => (
+                          <tr key={index}>
+                            <td data-label="День">{step.day}</td>
+                            <td data-label="Препарат">{step.drug}</td>
+                            <td data-label="Доза / заметки">{step.dose || step.note || '-'}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -59,4 +59,5 @@ export interface QuestionnaireHistory {
   color: string;
 }
 
+export type CategoryId = 'all' | 'oncology' | 'infection' | 'hormonal' | 'inflammatory' | 'pregnancy';
 export type TabType = 'gynecology' | 'obstetrics';

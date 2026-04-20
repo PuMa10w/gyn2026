@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import App from './App';
 
 jest.mock('./components/BackgroundEffects', () => () => <div data-testid="bg-effects" />);
@@ -38,7 +38,7 @@ describe('App', () => {
     render(<App />);
 
     const searchInput = screen.getByPlaceholderText(/поиск нозологии/i);
-    fireEvent.change(searchInput, { target: { value: 'эндометриоз' } });
+    fireEvent.change(searchInput, { target: { value: 'Эндометриоз' } });
 
     await waitFor(() => {
       expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('App', () => {
     const favoriteButton = await screen.findByLabelText(/добавить эндометриоз в избранное/i);
     fireEvent.click(favoriteButton);
 
-    fireEvent.click(screen.getByText(/Избранное/i));
+    fireEvent.click(screen.getByText(/избранное/i));
 
     await waitFor(() => {
       expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
@@ -67,11 +67,27 @@ describe('App', () => {
       expect(screen.getByTestId('disease-modal')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText(/История/i));
+    fireEvent.click(screen.getByText(/история/i));
 
     await waitFor(() => {
       expect(screen.getByTestId('disease-modal')).toBeInTheDocument();
       expect(screen.getAllByText('Эндометриоз').length).toBeGreaterThan(1);
+    });
+  });
+
+  test('filters diseases by category', async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /воспалительные/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /онкология/i }));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Эндометриоз')).not.toBeInTheDocument();
     });
   });
 });
