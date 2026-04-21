@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { questionnaires } from '../data/questionnaires';
 import type { QuestionnaireData, ScoringResult, QuestionnaireHistory } from '../types';
@@ -9,6 +9,12 @@ interface QuestionnaireProps {
 
 const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   const titleId = useId();
+  const subtitleId = useId();
+  const questionId = useId();
+  const optionsId = useId();
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previousFocusedElementRef = useRef<HTMLElement | null>(null);
   const [selectedQ, setSelectedQ] = useState<QuestionnaireData | null>(null);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [currentStep, setCurrentStep] = useState(0);
@@ -83,6 +89,15 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   };
 
   useEffect(() => {
+    previousFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeButtonRef.current?.focus();
+
+    return () => {
+      previousFocusedElementRef.current?.focus();
+    };
+  }, []);
+
+  useEffect(() => {
     const handleEscape = (event: KeyboardEvent): void => {
       if (event.key === 'Escape') {
         onClose();
@@ -92,6 +107,41 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
   }, [onClose]);
+
+  const handleModalKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key !== 'Tab' || !modalRef.current) {
+      return;
+    }
+
+    const focusableSelector =
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusableElements = Array.from(modalRef.current.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+      (element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true',
+    );
+
+    if (focusableElements.length === 0) {
+      event.preventDefault();
+      return;
+    }
+
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+    const activeElement = document.activeElement as HTMLElement | null;
+    const isFocusInsideModal = activeElement ? modalRef.current.contains(activeElement) : false;
+
+    if (event.shiftKey) {
+      if (!isFocusInsideModal || activeElement === firstFocusable) {
+        event.preventDefault();
+        lastFocusable.focus();
+      }
+      return;
+    }
+
+    if (!isFocusInsideModal || activeElement === lastFocusable) {
+      event.preventDefault();
+      firstFocusable.focus();
+    }
+  };
 
   if (!selectedQ) {
     return (
@@ -107,17 +157,20 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           initial={{ scale: 0.9, y: 50 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 50 }}
+          ref={modalRef}
           onClick={(e) => e.stopPropagation()}
+          onKeyDown={handleModalKeyDown}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
+          aria-describedby={subtitleId}
         >
           <div className="modal-header">
             <div>
               <h2 className="modal-title" id={titleId}>📋 Тест-опросники</h2>
-              <div className="modal-icd">Международные скрининговые шкалы</div>
+              <div className="modal-icd" id={subtitleId}>Международные скрининговые шкалы</div>
             </div>
-            <button type="button" className="modal-close" onClick={onClose} aria-label="Закрыть опросники">×</button>
+            <button ref={closeButtonRef} type="button" className="modal-close" onClick={onClose} aria-label="Закрыть опросники">×</button>
           </div>
 
           <div className="q-grid">
@@ -179,37 +232,53 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           initial={{ scale: 0.9, y: 50 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 50 }}
+          ref={modalRef}
           onClick={(e) => e.stopPropagation()}
+          onKeyDown={handleModalKeyDown}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
+          aria-describedby={subtitleId}
         >
           <div className="modal-header">
             <div>
               <h2 className="modal-title" id={titleId}>{selectedQ.icon} {selectedQ.name}</h2>
-              <div className="modal-icd">{selectedQ.fullName}</div>
+              <div className="modal-icd" id={subtitleId}>{selectedQ.fullName}</div>
             </div>
-            <button type="button" className="modal-close" onClick={goBack} aria-label="Закрыть опросник">×</button>
+            <button ref={closeButtonRef} type="button" className="modal-close" onClick={goBack} aria-label="Закрыть опросник">×</button>
           </div>
 
           <div className="q-progress-bar">
-            <div className="q-progress-fill" style={{ width: `${progress}%`, background: 'var(--gradient-rose)' }} />
+            <div
+              className="q-progress-fill"
+              style={{ width: `${progress}%`, background: 'var(--gradient-rose)' }}
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(progress)}
+              aria-label="Прогресс прохождения опросника"
+            />
           </div>
 
-          <div className="q-steps">
+          <div className="q-steps" aria-label="Шаги опросника">
             {selectedQ.questions.map((_, i) => (
-              <div key={i} className={`q-step ${i === currentStep ? 'active' : ''} ${answers[i] !== undefined ? 'done' : ''}`}>
+              <div
+                key={i}
+                className={`q-step ${i === currentStep ? 'active' : ''} ${answers[i] !== undefined ? 'done' : ''}`}
+                aria-current={i === currentStep ? 'step' : undefined}
+                aria-label={`Шаг ${i + 1}${answers[i] !== undefined ? ', заполнен' : ''}`}
+              >
                 {i + 1}
               </div>
             ))}
           </div>
 
           <div className="q-question">
-            <h3>Вопрос {currentStep + 1} из {selectedQ.questions.length}</h3>
+            <h3 id={questionId}>Вопрос {currentStep + 1} из {selectedQ.questions.length}</h3>
             <p>{selectedQ.questions[currentStep]}</p>
           </div>
 
-          <div className="q-options">
+          <div className="q-options" id={optionsId} role="radiogroup" aria-labelledby={questionId}>
             {selectedQ.options.map((opt, i) => (
               <motion.button
                 key={i}
@@ -218,6 +287,8 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setAnswer(currentStep, i)}
+                role="radio"
+                aria-checked={answers[currentStep] === i}
               >
                 {opt}
               </motion.button>
@@ -250,75 +321,78 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
       exit={{ opacity: 0 }}
       onClick={onClose}
     >
-      <motion.div
-        className="modal-content questionnaire-modal"
-        initial={{ scale: 0.9, y: 50 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 50 }}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-      >
-        <div className="modal-header">
-          <div>
-            <h2 className="modal-title" id={titleId}>📊 Результат</h2>
-            <div className="modal-icd">{selectedQ.name} — {selectedQ.fullName}</div>
+        <motion.div
+          className="modal-content questionnaire-modal"
+          initial={{ scale: 0.9, y: 50 }}
+          animate={{ scale: 1, y: 0 }}
+          exit={{ scale: 0.9, y: 50 }}
+          ref={modalRef}
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={handleModalKeyDown}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={subtitleId}
+        >
+          <div className="modal-header">
+            <div>
+              <h2 className="modal-title" id={titleId}>📊 Результат</h2>
+              <div className="modal-icd" id={subtitleId}>{selectedQ.name} — {selectedQ.fullName}</div>
+            </div>
+            <button ref={closeButtonRef} type="button" className="modal-close" onClick={() => { setSelectedQ(null); }} aria-label="Закрыть результат">×</button>
           </div>
-          <button type="button" className="modal-close" onClick={() => { setSelectedQ(null); }} aria-label="Закрыть результат">×</button>
-        </div>
 
-        <div className="q-result">
-          <div className="q-result-badge" style={{ background: result.color }}>
-            <div className="q-result-level">{result.level}</div>
-            <div className="q-result-score">
-              Балл: {Object.values(answers).reduce((a, b) => a + b, 0)} из {selectedQ.questions.length * (selectedQ.options.length - 1)}
+          <div className="q-result">
+            <div className="q-result-badge" style={{ background: result.color }}>
+              <div className="q-result-level">{result.level}</div>
+              <div className="q-result-score">
+                Балл: {Object.values(answers).reduce((a, b) => a + b, 0)} из {selectedQ.questions.length * (selectedQ.options.length - 1)}
+              </div>
+            </div>
+
+            <div className="q-severity-bar">
+              {['normal', 'mild', 'moderate', 'severe', 'critical'].map((sev, i) => {
+                const labels = ['Норма', 'Лёгкая', 'Умеренная', 'Тяжёлая', 'Критическая'];
+                const colors = ['#27ae60', '#f39c12', '#e67e22', '#e74c3c', '#c0392b'];
+                return (
+                  <div
+                    key={sev}
+                    className={`q-seg ${result.severity === sev ? 'active' : ''}`}
+                    style={{ background: result.severity === sev ? colors[i] : '#eee' }}
+                  >
+                    {labels[i]}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="q-recommendation">
+              <h4>💡 Рекомендация</h4>
+              <p>{result.recommendation}</p>
+            </div>
+
+            <div className="q-answers-summary">
+              <h4>Ваши ответы</h4>
+              {selectedQ.questions.map((q, i) => (
+                <div key={i} className="q-answer-row">
+                  <span className="q-a-idx">{i + 1}</span>
+                  <span className="q-a-text">{q}</span>
+                  <span className="q-a-val" style={{ color: result.color }}>{selectedQ.options[answers[i]]}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="q-nav">
+              <button type="button" className="q-btn q-btn-secondary" onClick={() => startQuestionnaire(selectedQ)}>
+                🔄 Пройти заново
+              </button>
+              <button type="button" className="q-btn q-btn-primary" onClick={() => { setSelectedQ(null); }}>
+                ← К списку тестов
+              </button>
             </div>
           </div>
-
-          <div className="q-severity-bar">
-            {['normal', 'mild', 'moderate', 'severe', 'critical'].map((sev, i) => {
-              const labels = ['Норма', 'Лёгкая', 'Умеренная', 'Тяжёлая', 'Критическая'];
-              const colors = ['#27ae60', '#f39c12', '#e67e22', '#e74c3c', '#c0392b'];
-              return (
-                <div
-                  key={sev}
-                  className={`q-seg ${result.severity === sev ? 'active' : ''}`}
-                  style={{ background: result.severity === sev ? colors[i] : '#eee' }}
-                >
-                  {labels[i]}
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="q-recommendation">
-            <h4>💡 Рекомендация</h4>
-            <p>{result.recommendation}</p>
-          </div>
-
-          <div className="q-answers-summary">
-            <h4>Ваши ответы</h4>
-            {selectedQ.questions.map((q, i) => (
-              <div key={i} className="q-answer-row">
-                <span className="q-a-idx">{i + 1}</span>
-                <span className="q-a-text">{q}</span>
-                <span className="q-a-val" style={{ color: result.color }}>{selectedQ.options[answers[i]]}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="q-nav">
-            <button type="button" className="q-btn q-btn-secondary" onClick={() => startQuestionnaire(selectedQ)}>
-              🔄 Пройти заново
-            </button>
-            <button type="button" className="q-btn q-btn-primary" onClick={() => { setSelectedQ(null); }}>
-              ← К списку тестов
-            </button>
-          </div>
-        </div>
+        </motion.div>
       </motion.div>
-    </motion.div>
   );
 };
 

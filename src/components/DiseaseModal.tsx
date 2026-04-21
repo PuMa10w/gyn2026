@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useRef, useState, useCallback } from 'react';
-import { AnimatePresence, motion, useMotionValue, useTransform } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { gynIcons, obsIcons } from './Icons';
 import type { Disease } from '../types';
 
@@ -78,13 +78,14 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
   const [touchStart, setTouchStart] = useState<{ y: number; time: number } | null>(null);
   const titleId = useId();
   const descriptionId = useId();
+  const panelId = `${titleId}-${activeTab}-panel`;
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const previousFocusedElementRef = useRef<HTMLElement | null>(null);
-  const sheetY = useMotionValue(0);
-  const sheetOpacity = useTransform(sheetY, [0, 300], [1, 0]);
   
-  const IconComponent = item.subtitle === 'Гинекология' ? gynIcons[item.icon] : obsIcons[item.icon];
+  const IconComponent = item.subtitle === 'Гинекология' 
+    ? (gynIcons as Record<string, React.ReactNode>)[item.icon] 
+    : (obsIcons as Record<string, React.ReactNode>)[item.icon];
   const icdLabel = item.icdDetail ?? item.icd;
 
   useEffect(() => {
@@ -561,13 +562,18 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 onClick={() => setActiveTab(tab.id)}
                 role="tab"
                 aria-selected={activeTab === tab.id}
+                id={`${titleId}-${tab.id}-tab`}
+                aria-controls={tab.id === activeTab ? panelId : undefined}
+                tabIndex={activeTab === tab.id ? 0 : -1}
               >
                 {tab.label}
               </button>
             ))}
           </div>
 
-          <div className="modal-body">{renderContent()}</div>
+          <div className="modal-body" id={panelId} role="tabpanel" aria-labelledby={`${titleId}-${activeTab}-tab`}>
+            {renderContent()}
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>

@@ -26,7 +26,7 @@ const cardVariants = {
 };
 
 const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFavorite, onToggleFavorite }: DiseaseCardProps) {
-  const IconComponent = gynIcons[item.icon] ?? obsIcons[item.icon];
+  const IconComponent = (gynIcons as Record<string, React.ReactNode>)[item.icon] ?? (obsIcons as Record<string, React.ReactNode>)[item.icon];
   const icdLabel = item.icdDetail ?? item.icd;
 
   const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {

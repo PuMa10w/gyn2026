@@ -342,7 +342,6 @@ export const questionnaires = [
       const painScore = answers.slice(14, 17).reduce((a, b) => a + b, 0);
       
       const total = desireScore + arousalScore + lubricationScore + orgasmScore + satisfactionScore + painScore;
-      const maxScore = 36;
       
       if (total <= 15) return { level: "Выраженная дисфункция", severity: "severe", color: "#e74c3c", recommendation: "Направление к сексологу. Исключить органические причины. Комплексная терапия." };
       if (total <= 25) return { level: "Умеренная дисфункция", severity: "moderate", color: "#e67e22", recommendation: "Консультация сексолога. Рассмотреть гормональную терапию при СИМ." };

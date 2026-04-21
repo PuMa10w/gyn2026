@@ -1263,11 +1263,6 @@ const buildGynecologyCases = (cluster: GynecologyCluster, disease: Disease) => {
   }
 };
 
-const buildObstetricImaging = () => [
-  'УЗИ плода и плаценты по акушерским показаниям.',
-  'Допплерометрия при подозрении на нарушение маточно-плацентарного или фетоплацентарного кровотока.',
-];
-
 const buildImaging = (disease: Disease) => {
   const derived = disease.diagnostics.steps.filter((step) => /УЗИ|МРТ|КТ|допплер|КТГ|биометр/i.test(step));
 
