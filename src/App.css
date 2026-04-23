@@ -549,8 +549,8 @@
 
 .card-subtitle {
   color: var(--text-muted);
-  font-size: 0.72rem;
-  font-weight: 800;
+  font-size: 0.62rem;
+  font-weight: 700;
 }
 
 .card-icd-badge {
@@ -564,12 +564,6 @@
   font-weight: 800;
   border: 1px solid rgba(168, 115, 126, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-.card-subtitle {
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  font-weight: 800;
 }
 
 .card-icon {
@@ -668,8 +662,9 @@
 .card-title {
   margin-bottom: 0.28rem;
   color: var(--text-primary);
-  font-size: 0.98rem;
-  line-height: 1.05;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.15;
   transition: color 0.2s ease;
 }
 
@@ -1819,6 +1814,8 @@
   .page-content {
     padding-top: calc(var(--safe-top) + var(--header-height) + 1rem);
     padding-bottom: calc(1rem + var(--safe-bottom));
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .search-container {
@@ -1841,16 +1838,25 @@
     padding-right: 0.7rem;
   }
 
+  .catalog-shell,
   .catalog-header,
   .catalog-status {
     padding-left: 0.7rem;
     padding-right: 0.7rem;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .home-grid,
   .home-secondary-grid {
     grid-template-columns: 1fr;
     gap: 0.65rem;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .cards-grid {
@@ -1860,6 +1866,8 @@
     padding: 0 0.7rem 1rem;
     width: 100%;
     max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     box-sizing: border-box;
   }
 
@@ -1877,24 +1885,43 @@
     padding: 0.58rem 0.64rem 0.54rem;
   }
 
+  .card-top-row {
+    margin-top: 0.08rem;
+  }
+
   .card-icon {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 14px;
   }
 
   .card-icon svg {
-    width: 23px;
-    height: 23px;
+    width: 22px;
+    height: 22px;
   }
 
   .card-title {
-    font-size: 0.9rem;
+    font-size: 0.94rem;
+    font-weight: 600;
+  }
+
+  .card-meta-row {
+    gap: 0.5rem;
+  }
+
+  .card-subtitle,
+  .card-icd-badge {
+    font-size: 0.58rem;
+    padding: 0.28rem 0.48rem;
+  }
+
+  .card-icd-badge {
+    padding: 0.24rem 0.44rem;
   }
 
   .card-desc {
-    font-size: 0.78rem;
-    -webkit-line-clamp: 3;
+    font-size: 0.76rem;
+    -webkit-line-clamp: 2;
   }
 
   .home-card {

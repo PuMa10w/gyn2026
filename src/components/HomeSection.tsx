@@ -53,9 +53,9 @@ const HomeSection = React.memo(function HomeSection({
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
         <span className="home-eyebrow">Premium Clinical Reference</span>
-        <h2 className="home-hero-title">Быстрый доступ к нозологиям, схемам и недавним клиническим материалам.</h2>
+        <h2 className="home-hero-title">Гинекология и акушерство</h2>
         <p className="home-hero-description">
-          Стартовый экран собран как мобильный clinical launchpad: минимум шума, крупные точки входа и мгновенное возвращение к последним просмотрам.
+          Клинический справочник с нозологиями, диагностикой, лечением и быстрым доступом к карточкам.
         </p>
       </section>
 
