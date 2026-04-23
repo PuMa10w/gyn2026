@@ -101,10 +101,15 @@
 }
 
 .nav-item.is-active {
-  background: var(--gradient-accent);
-  color: var(--text-inverse);
-  border-color: transparent;
-  box-shadow: 0 14px 28px rgba(127, 85, 96, 0.18);
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  box-shadow: none;
+}
+
+.nav-item.is-active:hover {
+  background: var(--bg-muted);
+  transform: none;
 }
 
 .nav-primary-item {
