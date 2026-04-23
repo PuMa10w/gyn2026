@@ -817,3 +817,70 @@ export const obsIcons = {
 };
 
 export default { ...gynIcons, ...obsIcons };
+
+export const navIcons = {
+  home: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M9 22V12H15V22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  gynecology: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
+      <path d="M12 12V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M8 22H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M12 16C14.2091 16 16 14.2091 16 12" stroke="currentColor" strokeWidth="2"/>
+    </svg>
+  ),
+  obstetrics: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 6C12 6 8 10 8 14C8 17.3137 10.134 20 12 20C13.866 20 16 17.3137 16 14C16 10 12 6 12 6Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12 6V2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M8 10H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  questionnaires: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 11L12 14L22 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16L21 8V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  pharmacology: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 2H14L18 6V22H6V2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M14 2V6H18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M9 10H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M9 14H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M9 18H12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  favorites: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.84 4.61C20.3292 4.09924 19.7228 3.69397 19.0554 3.41708C18.3879 3.14019 17.6725 2.99725 16.95 2.99725C16.2275 2.99725 15.5121 3.14019 14.8446 3.41708C14.1772 3.69397 13.5708 4.09924 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.57831 8.53003 2.99824 7.05 2.99824C5.56997 2.99824 4.1917 3.57831 3.16 4.61C2.1283 5.64169 1.54824 7.01997 1.54824 8.5C1.54824 9.98003 2.1283 11.3583 3.16 12.39L12 21.24L20.84 12.39C21.3508 11.8789 21.756 11.2726 22.0329 10.6052C22.3098 9.93775 22.4527 9.22231 22.4527 8.5C22.4527 7.77769 22.3098 7.06225 22.0329 6.39481C21.756 5.72737 21.3508 5.12108 20.84 4.61Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  history: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+      <path d="M3.51 4.47C3.31186 4.6731 3.16922 4.92982 3.09815 5.21082C3.02709 5.49181 3.02988 5.78809 3.10626 6.06951C3.18264 6.35093 3.32979 6.60813 3.53167 6.81514C3.73355 7.02215 3.9834 7.17231 4.25739 7.25026C4.53138 7.32821 4.82023 7.33138 5.09998 7.25999L5.09998 4.75999" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  heart: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.84 4.61C20.3292 4.09924 19.7228 3.69397 19.0554 3.41708C18.3879 3.14019 17.6725 2.99725 16.95 2.99725C16.2275 2.99725 15.5121 3.14019 14.8446 3.41708C14.1772 3.69397 13.5708 4.09924 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.57831 8.53003 2.99824 7.05 2.99824C5.56997 2.99824 4.1917 3.57831 3.16 4.61C2.1283 5.64169 1.54824 7.01997 1.54824 8.5C1.54824 9.98003 2.1283 11.3583 3.16 12.39L12 21.24L20.84 12.39C21.3508 11.8789 21.756 11.2726 22.0329 10.6052C22.3098 9.93775 22.4527 9.22231 22.4527 8.5C22.4527 7.77769 22.3098 7.06225 22.0329 6.39481C21.756 5.72737 21.3508 5.12108 20.84 4.61Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  star: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  clock: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+      <path d="M12 7V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+};
