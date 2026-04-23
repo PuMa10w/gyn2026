@@ -2,6 +2,7 @@ import React, { useId } from 'react';
 import { motion } from 'framer-motion';
 import type { HistoryItem } from '../hooks/useHistory';
 import type { TabType } from '../types';
+import { useParallax } from '../hooks/useParallax';
 
 export type HomeAction = {
   title: string;
@@ -34,6 +35,7 @@ const HomeSection = React.memo(function HomeSection({
   favoriteCount,
 }: HomeSectionProps) {
   const titleId = useId();
+  const parallaxOffset = useParallax(0.05);
 
   return (
     <motion.section
@@ -45,7 +47,11 @@ const HomeSection = React.memo(function HomeSection({
       aria-labelledby={titleId}
     >
       <h1 className="visually-hidden" id={titleId}>Главная страница</h1>
-      <section className="home-hero" aria-label="Стартовая панель">
+      <section
+        className="home-hero"
+        aria-label="Стартовая панель"
+        style={{ transform: `translateY(${parallaxOffset}px)` }}
+      >
         <span className="home-eyebrow">Premium Clinical Reference</span>
         <h2 className="home-hero-title">Быстрый доступ к нозологиям, схемам и недавним клиническим материалам.</h2>
         <p className="home-hero-description">

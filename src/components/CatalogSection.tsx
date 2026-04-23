@@ -54,13 +54,15 @@ const CatalogSection = React.memo(function CatalogSection({
   emptyState,
 }: CatalogSectionProps) {
   const titleId = useId();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const animDuration = isMobile ? 0.14 : 0.22;
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.22, ease: 'easeOut' }}
+      exit={{ opacity: 0, y: -6 }}
+      transition={{ duration: animDuration, ease: 'easeOut' }}
       aria-labelledby={titleId}
     >
       <section className="catalog-shell" aria-busy={isDataLoading}>

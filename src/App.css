@@ -1,5 +1,5 @@
 .App {
-  --header-height: 132px;
+  --header-height: 140px;
 }
 
 .navbar {
@@ -10,12 +10,13 @@
   margin: 0 auto;
   width: auto;
   max-width: 1240px;
-  z-index: 1000;
+  z-index: 9999;
   border: 1px solid var(--border-soft);
   border-radius: 24px;
   background: var(--bg-elevated);
-  backdrop-filter: blur(14px);
-  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: var(--shadow-soft), 0 0 1px rgba(168, 115, 126, 0.08);
 }
 
 .navbar-inner {
@@ -53,6 +54,8 @@
 .nav-row-utility {
   overflow-x: auto;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .nav-row-utility::-webkit-scrollbar,
@@ -127,6 +130,14 @@
   min-height: 100vh;
   padding-top: calc(var(--safe-top) + var(--header-height) + 1.25rem);
   padding-bottom: calc(1rem + var(--safe-bottom));
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  overflow-x: hidden;
+}
+
+.page-content > * {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 .skip-link {
@@ -322,6 +333,13 @@
   max-width: 1120px;
   margin: 0 auto;
   padding: 0 1rem 2.4rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cards-grid > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .skeleton-grid {
@@ -379,7 +397,10 @@
   padding: 0.62rem 0.68rem 0.56rem;
   overflow: hidden;
   text-align: left;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.22s ease, background 0.22s ease;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
 }
 
 .disease-card::before {
@@ -391,11 +412,33 @@
     radial-gradient(circle at top right, rgba(207, 178, 150, 0.08), transparent 28%),
     linear-gradient(180deg, rgba(25, 20, 24, 0.08), transparent 72%);
   pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.28s ease;
+}
+
+.disease-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(207, 178, 150, 0.12), transparent 50%),
+    radial-gradient(circle at 60% 30%, rgba(184, 115, 51, 0.06), transparent 40%);
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 .disease-card:hover {
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-rose);
+  box-shadow: var(--shadow-hover), 0 0 24px rgba(168, 115, 126, 0.16);
+  transform: translateY(-4px);
+  background: var(--bg-panel-solid);
+}
+
+.disease-card:hover::before {
+  opacity: 0.7;
 }
 
 .favorite-btn {
@@ -439,6 +482,59 @@
   justify-content: space-between;
   gap: 0.75rem;
   margin-top: 0.12rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.card-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 24% 22%, rgba(255, 255, 255, 0.06), transparent 34%),
+    linear-gradient(180deg, rgba(76, 58, 65, 0.94), rgba(42, 31, 37, 0.98));
+  border: 1px solid rgba(223, 194, 185, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 18px rgba(12, 9, 11, 0.24);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.card-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 80% 80%, rgba(184, 115, 51, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 60%);
+  pointer-events: none;
+}
+
+.card-icon::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gradient-copper);
+  opacity: 0.6;
+  box-shadow: 0 0 6px rgba(184, 115, 51, 0.4);
+  flex-shrink: 0;
+}
+
+.card-icon svg {
+  position: relative;
+  z-index: 1;
+  width: 26px;
+  height: 26px;
 }
 
 .card-subtitle,
@@ -466,6 +562,14 @@
   color: var(--accent-rose-strong);
   font-size: 0.72rem;
   font-weight: 800;
+  border: 1px solid rgba(168, 115, 126, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.card-subtitle {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
 }
 
 .card-icon {
@@ -485,6 +589,61 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
     0 10px 18px rgba(12, 9, 11, 0.24);
   overflow: hidden;
+}
+
+.card-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 80% 80%, rgba(184, 115, 51, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 60%);
+  pointer-events: none;
+}
+
+.card-icon::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gradient-copper);
+  opacity: 0.6;
+  box-shadow: 0 0 6px rgba(184, 115, 51, 0.4);
+}
+
+.card-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 24% 22%, rgba(255, 255, 255, 0.06), transparent 34%),
+    linear-gradient(180deg, rgba(76, 58, 65, 0.94), rgba(42, 31, 37, 0.98));
+  border: 1px solid rgba(223, 194, 185, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 18px rgba(12, 9, 11, 0.24);
+  overflow: hidden;
+}
+
+.card-icon::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gradient-copper);
+  opacity: 0.5;
+  box-shadow: 0 0 6px rgba(184, 115, 51, 0.3);
 }
 
 .card-icon-art {
@@ -511,6 +670,11 @@
   color: var(--text-primary);
   font-size: 0.98rem;
   line-height: 1.05;
+  transition: color 0.2s ease;
+}
+
+.disease-card:hover .card-title {
+  color: var(--accent-rose-strong);
 }
 
 .card-desc {
@@ -529,6 +693,12 @@
   color: var(--accent-rose-strong);
   font-size: 0.72rem;
   font-weight: 800;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.disease-card:hover .card-link {
+  color: var(--accent-rose);
+  transform: translateX(4px);
 }
 
 .empty-state {
@@ -579,6 +749,33 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 48%),
     var(--bg-panel);
   box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.home-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background:
+    radial-gradient(circle at 70% 30%, rgba(184, 115, 51, 0.06), transparent 50%),
+    radial-gradient(circle at 30% 60%, rgba(207, 178, 150, 0.1), transparent 40%);
+  pointer-events: none;
+}
+
+.home-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 160px;
+  height: 160px;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(168, 115, 126, 0.08), transparent 50%);
+  pointer-events: none;
 }
 
 .home-eyebrow,
@@ -597,6 +794,23 @@
   margin-bottom: 0.45rem;
   font-size: clamp(2.3rem, 5vw, 3.35rem);
   line-height: 0.96;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.home-hero-title::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--gradient-copper);
+  border-radius: 999px;
+  opacity: 0.3;
 }
 
 .home-hero-description {
@@ -621,19 +835,37 @@
   border: 1px solid var(--border-soft);
   border-radius: 28px;
   background:
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.08), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 44%),
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 44%),
     var(--bg-panel);
   box-shadow: var(--shadow-soft);
   text-align: left;
   cursor: pointer;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.22s ease, background 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  background:
+    radial-gradient(circle at 70% 30%, rgba(184, 115, 51, 0.08), transparent 50%);
+  pointer-events: none;
 }
 
 .home-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-hover);
+  transform: translateY(-6px);
+  border-color: var(--accent-rose);
+  box-shadow: var(--shadow-hover), 0 0 32px rgba(168, 115, 126, 0.18);
+  background:
+    radial-gradient(circle at top right, rgba(168, 115, 126, 0.1), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 48%),
+    var(--bg-panel-solid);
 }
 
 .home-card-badge {
@@ -643,25 +875,25 @@
   width: fit-content;
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.45);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(231, 220, 212, 0.58));
   color: var(--accent-rose-strong);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .home-card-title {
   margin: 0;
   font-size: clamp(2rem, 4vw, 2.8rem);
   line-height: 0.98;
+  transition: color 0.2s ease;
 }
 
-.home-card-description {
-  max-width: 28rem;
-  color: var(--text-secondary);
-  font-size: 0.98rem;
-  line-height: 1.7;
+.home-card:hover .home-card-title {
+  color: var(--accent-rose-strong);
 }
 
 .home-secondary-grid {
@@ -676,6 +908,8 @@
   border: 1px solid var(--border-soft);
   border-radius: 28px;
   background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-soft);
 }
 
@@ -776,7 +1010,9 @@
   justify-content: center;
   padding: max(1rem, var(--safe-top)) max(1rem, var(--safe-right)) max(1rem, var(--safe-bottom)) max(1rem, var(--safe-left));
   background: var(--overlay-backdrop);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  animation: fadeIn 0.25s ease-out forwards;
 }
 
 .modal-content {
@@ -787,7 +1023,19 @@
   border: 1px solid var(--border-soft);
   border-radius: 34px;
   background: var(--bg-panel-solid);
-  box-shadow: var(--shadow-modal);
+  box-shadow: var(--shadow-modal), 0 0 60px rgba(168, 115, 126, 0.08);
+  animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .modal-header {
@@ -799,9 +1047,10 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1.2rem 1.2rem 1rem;
-  background: color-mix(in srgb, var(--bg-panel-solid) 88%, transparent);
+  background: var(--bg-panel-solid);
   border-bottom: 1px solid var(--border-soft);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 .modal-title-group {
@@ -1521,6 +1770,381 @@
   }
 
   .navbar {
+    position: fixed;
+    top: calc(var(--safe-top) + 0.35rem);
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    max-width: calc(100% - 1rem);
+    border-radius: 20px;
+    z-index: 1000;
+  }
+
+  .navbar-inner {
+    gap: 0.45rem;
+    padding: 0.55rem;
+  }
+
+  .nav-row {
+    justify-content: center;
+  }
+
+  .nav-row-primary,
+  .nav-row-utility {
+    overflow-x: auto;
+    justify-content: center;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-scroll {
+    justify-content: center;
+    padding: 0 0.15rem;
+  }
+
+  .nav-primary-item {
+    flex: 0 0 auto;
+    min-width: 132px;
+  }
+
+  .nav-item,
+  .theme-toggle {
+    min-height: 46px;
+    padding: 0.78rem 0.92rem;
+    font-size: 0.82rem;
+    scroll-snap-align: center;
+  }
+
+  .page-content {
+    padding-top: calc(var(--safe-top) + var(--header-height) + 1rem);
+    padding-bottom: calc(1rem + var(--safe-bottom));
+  }
+
+  .search-container {
+    padding: 0 0.7rem;
+  }
+
+  .search-input {
+    min-height: 56px;
+    padding-right: 6.2rem;
+    font-size: 16px;
+  }
+
+  .search-clear-btn {
+    right: 3.8rem;
+  }
+
+  .category-filter,
+  .home-shell {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+
+  .catalog-header,
+  .catalog-status {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+
+  .home-grid,
+  .home-secondary-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    padding: 0 0.7rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .cards-grid > * {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .disease-card,
+  .home-card {
+    min-height: unset;
+  }
+
+  .disease-card {
+    padding: 0.58rem 0.64rem 0.54rem;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+  }
+
+  .card-icon svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .card-title {
+    font-size: 0.9rem;
+  }
+
+  .card-desc {
+    font-size: 0.78rem;
+    -webkit-line-clamp: 3;
+  }
+
+  .home-card {
+    padding: 1.2rem;
+    border-radius: 24px;
+  }
+
+  .home-hero,
+  .home-panel {
+    border-radius: 24px;
+  }
+
+  .home-hero {
+    padding: 1.15rem;
+  }
+
+  .home-hero-title {
+    font-size: clamp(1.9rem, 10vw, 2.6rem);
+  }
+
+  .home-hero-description {
+    font-size: 0.92rem;
+  }
+
+  .home-panel-header {
+    flex-direction: column;
+  }
+
+  .home-card-title {
+    font-size: clamp(1.8rem, 11vw, 2.4rem);
+  }
+
+  .home-card-description {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .catalog-title {
+    font-size: 1.7rem;
+  }
+
+  .catalog-description,
+  .catalog-status p {
+    font-size: 0.9rem;
+    line-height: 1.58;
+  }
+
+  .catalog-status {
+    padding: 0.95rem;
+    border-radius: 22px;
+  }
+
+  .catalog-status h2 {
+    font-size: 1.08rem;
+  }
+
+  .modal-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .modal-content,
+  .modal-content.mobile-sheet {
+    max-width: 100%;
+    max-height: 100dvh;
+    height: 100dvh;
+    padding-bottom: var(--safe-bottom);
+    border-radius: 28px 28px 0 0;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  .modal-drag-indicator {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 34px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--text-muted);
+    opacity: 0.7;
+    z-index: 9;
+  }
+
+  .modal-header {
+    padding: 0.95rem 0.82rem 0.74rem;
+    margin-top: 8px;
+  }
+
+  .modal-icon-wrapper {
+    width: 48px;
+    height: 48px;
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+  }
+
+  .modal-tabs {
+    padding: 0.2rem 0.5rem 0.5rem;
+  }
+
+  .modal-quick-strip {
+    padding: 0.75rem 0.8rem;
+  }
+
+  .modal-quick-summary {
+    font-size: 0.92rem;
+    line-height: 1.62;
+  }
+
+  .tab-btn {
+    padding: 0.68rem 0.82rem;
+    font-size: 0.82rem;
+  }
+
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem 0.75rem calc(0.9rem + env(safe-area-inset-bottom));
+  }
+
+  .content-card,
+  .q-card,
+  .medication-card,
+  .regimen-card,
+  .q-history-item,
+  .q-answer-row,
+  .structured-item {
+    border-radius: 20px;
+    padding: 0.85rem;
+  }
+
+  .tab-content h3 {
+    font-size: 0.95rem;
+  }
+
+  .q-grid,
+  .medications-grid,
+  .regimens-list,
+  .q-history,
+  .pharma-content,
+  .q-question,
+  .q-result,
+  .q-recommendation,
+  .q-answers-summary,
+  .q-steps,
+  .q-options,
+  .q-nav,
+  .interactions-legend,
+  .pharma-tabs {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+  }
+
+  .q-grid,
+  .medications-grid,
+  .regimens-list {
+    grid-template-columns: 1fr;
+    gap: 0.72rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .interaction-checker-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .regimen-card-header,
+  .guideline-card-header,
+  .interaction-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .regimen-table,
+  .regimen-table thead,
+  .regimen-table tbody,
+  .regimen-table tr,
+  .regimen-table th,
+  .regimen-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .regimen-table thead {
+    display: none;
+  }
+
+  .regimen-table tr {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .regimen-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .regimen-table td {
+    padding: 0.18rem 0;
+    border: none;
+  }
+
+  .regimen-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.12rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .scroll-top-btn {
+    right: calc(0.8rem + var(--safe-right));
+    bottom: calc(1rem + var(--safe-bottom));
+  }
+}
+
+  .cards-grid {
+    max-width: 920px;
+    gap: 0.7rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .App {
+    --header-height: 144px;
+  }
+
+  .home-grid,
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .App {
+    --header-height: 154px;
+  }
+
+  .navbar {
     top: calc(var(--safe-top) + 0.35rem);
     border-radius: 20px;
   }
@@ -1852,11 +2476,122 @@
     right: calc(0.8rem + var(--safe-right));
     bottom: calc(1rem + var(--safe-bottom));
   }
+
+  .home-shell {
+    padding: 0 0.65rem 0.75rem;
+  }
+
+  .home-hero {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .home-eyebrow {
+    font-size: 0.66rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .home-hero-title {
+    font-size: clamp(1.7rem, 9vw, 2.2rem);
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+
+  .home-hero-description {
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  .home-grid {
+    gap: 0.65rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .home-card {
+    padding: 1rem;
+    border-radius: 20px;
+    min-height: 140px;
+  }
+
+  .home-card-badge {
+    font-size: 0.64rem;
+    padding: 0.28rem 0.55rem;
+  }
+
+  .home-card-title {
+    font-size: clamp(1.5rem, 8vw, 1.9rem);
+    line-height: 1.05;
+  }
+
+  .home-card-description {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .home-secondary-grid {
+    gap: 0.65rem;
+  }
+
+  .home-panel {
+    padding: 0.95rem;
+    border-radius: 20px;
+  }
+
+  .home-panel-eyebrow {
+    font-size: 0.64rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .home-panel-title {
+    font-size: clamp(1.3rem, 5vw, 1.6rem);
+    line-height: 1.1;
+    margin-bottom: 0.65rem;
+  }
+
+  .home-panel-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .home-link-btn {
+    font-size: 0.78rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .home-recent-list,
+  .home-quick-actions {
+    gap: 0.55rem;
+  }
+
+  .home-recent-item,
+  .home-quick-card {
+    padding: 0.75rem;
+    border-radius: 16px;
+  }
+
+  .home-recent-name,
+  .home-quick-card strong {
+    font-size: 0.88rem;
+  }
+
+  .home-recent-meta,
+  .home-quick-card span {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .home-quick-badge {
+    font-size: 0.66rem;
+    margin-bottom: 0.2rem;
+  }
 }
 
 @media (max-width: 480px) {
   .App {
     --header-height: 162px;
+  }
+
+  body {
+    -webkit-font-smoothing: subpixel-antialiased;
   }
 
   .navbar {
@@ -1926,5 +2661,424 @@
 
   .empty-state h3 {
     font-size: 1.6rem;
+  }
+
+  .home-shell {
+    padding: 0 0.5rem 0.6rem;
+  }
+
+  .home-hero {
+    padding: 0.85rem;
+    margin-bottom: 0.6rem;
+    border-radius: 24px;
+  }
+
+  .home-eyebrow {
+    font-size: 0.6rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .home-hero-title {
+    font-size: clamp(1.5rem, 8vw, 1.9rem);
+    line-height: 1.02;
+    margin-bottom: 0.3rem;
+  }
+
+  .home-hero-title::after {
+    height: 2px;
+  }
+
+  .home-hero-description {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .home-grid {
+    gap: 0.55rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .home-card {
+    padding: 0.85rem;
+    border-radius: 18px;
+    min-height: 120px;
+  }
+
+  .home-card-badge {
+    font-size: 0.58rem;
+    padding: 0.24rem 0.48rem;
+  }
+
+  .home-card-title {
+    font-size: clamp(1.35rem, 7vw, 1.7rem);
+    line-height: 1.05;
+    margin-bottom: 0.2rem;
+  }
+
+  .home-card-description {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .home-secondary-grid {
+    gap: 0.55rem;
+  }
+
+  .home-panel {
+    padding: 0.8rem;
+    border-radius: 18px;
+  }
+
+  .home-panel-eyebrow {
+    font-size: 0.58rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .home-panel-title {
+    font-size: clamp(1.15rem, 4.5vw, 1.4rem);
+    margin-bottom: 0.55rem;
+  }
+
+  .home-panel-header {
+    margin-bottom: 0.6rem;
+    gap: 0.55rem;
+  }
+
+  .home-link-btn {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.55rem;
+  }
+
+  .home-recent-list,
+  .home-quick-actions {
+    gap: 0.48rem;
+  }
+
+  .home-recent-item,
+  .home-quick-card {
+    padding: 0.65rem;
+    border-radius: 14px;
+  }
+
+  .home-recent-name,
+  .home-quick-card strong {
+    font-size: 0.82rem;
+  }
+
+  .home-recent-meta,
+  .home-quick-card span {
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .home-quick-badge {
+    font-size: 0.6rem;
+    margin-bottom: 0.18rem;
+  }
+
+  .catalog-header {
+    margin-bottom: 0.7rem;
+    padding: 0 0.55rem;
+  }
+
+  .catalog-eyebrow {
+    font-size: 0.64rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .catalog-title {
+    font-size: clamp(1.5rem, 6vw, 1.8rem);
+    margin-bottom: 0.25rem;
+  }
+
+  .catalog-description {
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .search-container {
+    margin-bottom: 0.75rem;
+    padding: 0 0.55rem;
+  }
+
+  .search-input {
+    min-height: 52px;
+    padding: 0.9rem 5.5rem 0.9rem 1rem;
+    font-size: 15px;
+    border-radius: 20px;
+  }
+
+  .search-clear-btn {
+    right: 3.2rem;
+    width: 28px;
+    height: 28px;
+  }
+
+  .search-result-count {
+    font-size: 0.7rem;
+    min-width: 1.9rem;
+  }
+
+  .category-filter {
+    margin-bottom: 0.9rem;
+  }
+
+  .category-chip {
+    padding: 0.62rem 0.82rem;
+    border-radius: 999px;
+  }
+
+  .chip-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 0.64rem;
+  }
+
+  .chip-label {
+    font-size: 0.8rem;
+  }
+
+  .chip-count {
+    min-width: 1.4rem;
+    font-size: 0.66rem;
+  }
+
+  .cards-grid {
+    max-width: 340px;
+    gap: 0.48rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .disease-card {
+    padding: 0.45rem 0.5rem 0.42rem;
+    border-radius: 18px;
+  }
+
+  .card-meta-row {
+    gap: 0.45rem;
+    margin-top: 0.02rem;
+  }
+
+  .card-subtitle {
+    font-size: 0.64rem;
+  }
+
+  .card-icd-badge {
+    font-size: 0.64rem;
+    padding: 0.28rem 0.5rem;
+  }
+
+  .card-top-row {
+    margin-top: 0.08rem;
+    gap: 0.5rem;
+  }
+
+  .card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+  }
+
+  .card-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .card-icon::after {
+    width: 8px;
+    height: 8px;
+  }
+
+  .favorite-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .favorite-icon {
+    font-size: 0.95rem;
+  }
+
+  .card-content {
+    padding-top: 0.32rem;
+  }
+
+  .card-title {
+    font-size: 0.8rem;
+    line-height: 1.1;
+    margin-bottom: 0.2rem;
+  }
+
+  .card-desc {
+    font-size: 0.72rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .card-link {
+    font-size: 0.66rem;
+    padding-top: 0.65rem;
+  }
+
+  .catalog-status {
+    padding: 0.8rem;
+    border-radius: 18px;
+    margin-bottom: 0.3rem;
+  }
+
+  .catalog-status-eyebrow {
+    font-size: 0.62rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .catalog-status h2 {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .catalog-status p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .empty-state {
+    padding: 2.5rem 0.9rem;
+    border-radius: 22px;
+  }
+
+  .empty-eyebrow {
+    font-size: 0.66rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .empty-state p {
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+
+  .modal-content {
+    border-radius: 24px 24px 0 0;
+  }
+
+  .modal-header {
+    padding: 0.8rem 0.7rem 0.65rem;
+  }
+
+  .modal-icon-wrapper {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+  }
+
+  .modal-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .modal-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.18rem;
+  }
+
+  .modal-icd {
+    font-size: 0.8rem;
+  }
+
+  .modal-close {
+    width: 36px;
+    height: 36px;
+  }
+
+  .modal-quick-strip {
+    padding: 0.65rem 0.7rem;
+  }
+
+  .modal-quick-chip {
+    font-size: 0.72rem;
+    padding: 0.35rem 0.58rem;
+  }
+
+  .modal-quick-summary {
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  .modal-tabs {
+    padding: 0.18rem 0.45rem 0.45rem;
+    gap: 0.35rem;
+  }
+
+  .tab-btn {
+    padding: 0.58rem 0.75rem;
+    font-size: 0.76rem;
+    border-radius: 999px;
+  }
+
+  .modal-body {
+    padding: 0.65rem 0.65rem calc(0.75rem + env(safe-area-inset-bottom));
+  }
+
+  .tab-content h3 {
+    font-size: 0.88rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .modal-grid {
+    gap: 0.7rem;
+  }
+
+  .content-card,
+  .q-card,
+  .medication-card,
+  .regimen-card,
+  .q-history-item,
+  .q-answer-row,
+  .structured-item {
+    padding: 0.75rem;
+    border-radius: 18px;
+  }
+
+  .quick-summary-eyebrow {
+    font-size: 0.64rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .content-card h3 {
+    margin-bottom: 0.55rem;
+  }
+
+  .diagnostics-step-index,
+  .q-a-idx {
+    width: 1.7rem;
+    height: 1.7rem;
+    font-size: 0.72rem;
+  }
+
+  .structured-item-title,
+  .metric-item dt {
+    font-size: 0.74rem;
+  }
+
+  .guideline-badge,
+  .inline-guideline-badge,
+  .regimen-steps-count {
+    font-size: 0.66rem;
+    padding: 0.22rem 0.52rem;
+  }
+
+  .scroll-top-btn {
+    right: calc(0.65rem + var(--safe-right));
+    bottom: calc(0.8rem + var(--safe-bottom));
+    padding: 0.7rem 0.95rem;
+    font-size: 0.78rem;
+    border-radius: 999px;
+  }
+
+  .site-footer {
+    padding: 1.1rem 0.75rem calc(0.8rem + var(--safe-bottom));
+    font-size: 0.82rem;
   }
 }
