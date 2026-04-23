@@ -1766,7 +1766,7 @@
 
 @media (max-width: 768px) {
   .App {
-    --header-height: 154px;
+    --header-height: 160px;
   }
 
   .navbar {
@@ -1786,33 +1786,38 @@
   }
 
   .nav-row {
-    justify-content: center;
+    display: flex;
+    width: 100%;
   }
 
   .nav-row-primary,
   .nav-row-utility {
     overflow-x: auto;
-    justify-content: center;
+    overflow-y: hidden;
+    justify-content: flex-start;
     scroll-snap-type: x proximity;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
   }
 
   .nav-scroll {
-    justify-content: center;
-    padding: 0 0.15rem;
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.5rem;
   }
 
   .nav-primary-item {
     flex: 0 0 auto;
-    min-width: 132px;
+    min-width: 80px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.78rem;
   }
 
-  .nav-item,
-  .theme-toggle {
-    min-height: 46px;
-    padding: 0.78rem 0.92rem;
-    font-size: 0.82rem;
+  .nav-item {
+    min-height: 44px;
+    padding: 0.7rem 0.85rem;
+    font-size: 0.8rem;
     scroll-snap-align: center;
   }
 
@@ -1826,22 +1831,212 @@
   }
 
   .search-input {
-    min-height: 56px;
-    padding-right: 6.2rem;
+    min-height: 54px;
+    padding-right: 5.5rem;
     font-size: 16px;
   }
 
   .search-clear-btn {
-    right: 3.8rem;
+    right: 3.4rem;
   }
 
-  .category-filter,
+  .category-filter {
+    padding: 0 0.5rem 0.7rem;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+
+  .category-chips {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 0.5rem 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+
+  .category-chip {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    scroll-snap-align: center;
+  }
+
   .home-shell {
     padding-left: 0.7rem;
     padding-right: 0.7rem;
   }
 
-  .catalog-header,
+  .catalog-header {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+
+  .home-grid,
+  .home-secondary-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+
+  .cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0 0.6rem 1.2rem;
+    width: 100%;
+  }
+
+  .cards-grid > * {
+    width: 100%;
+  }
+
+  .disease-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.7rem 0.8rem;
+    min-height: 72px;
+    border-radius: 16px;
+    gap: 0.75rem;
+  }
+
+  .card-top-row {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    gap: 0.65rem;
+    margin-top: 0;
+  }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .card-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .card-subtitle {
+    font-size: 0.62rem;
+  }
+
+  .card-desc {
+    font-size: 0.76rem;
+    line-height: 1.4;
+    display: block;
+    -webkit-line-clamp: 2;
+  }
+
+  .card-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .favorite-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .home-card {
+    padding: 1.1rem;
+    border-radius: 20px;
+  }
+
+  .home-hero,
+  .home-panel {
+    border-radius: 20px;
+  }
+
+  .home-hero {
+    padding: 1rem;
+  }
+
+  .home-hero-title {
+    font-size: clamp(1.8rem, 10vw, 2.4rem);
+  }
+
+  .home-hero-description {
+    font-size: 0.9rem;
+  }
+
+  .home-panel-header {
+    flex-direction: column;
+  }
+
+  .home-card-title {
+    font-size: clamp(1.6rem, 10vw, 2.2rem);
+  }
+
+  .home-card-description {
+    font-size: 0.85rem;
+  }
+
+  .catalog-title {
+    font-size: 1.65rem;
+  }
+
+  .catalog-description,
+  .catalog-status p {
+    font-size: 0.85rem;
+  }
+
+  .catalog-status {
+    padding: 0.85rem;
+    border-radius: 18px;
+  }
+
+  .catalog-status h2 {
+    font-size: 1rem;
+  }
+
+  .modal-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .modal-content,
+  .modal-content.mobile-sheet {
+    max-width: 100%;
+    max-height: 100vh;
+    height: 100vh;
+    padding-bottom: var(--safe-bottom);
+    border-radius: 20px 20px 0 0;
+  }
+
+  .modal-header {
+    padding: 0.85rem 0.75rem 0.65rem;
+    margin-top: 6px;
+  }
+
+  .modal-title {
+    font-size: 1.6rem;
+  }
+
+  .scroll-top-btn {
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.7rem 1rem;
+  }
+}
   .catalog-status {
     padding-left: 0.7rem;
     padding-right: 0.7rem;
