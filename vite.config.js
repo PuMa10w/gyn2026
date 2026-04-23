@@ -9,15 +9,18 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'logo192.png', 'logo512.png'],
       manifest: {
-        name: 'GYN — Акушерство и Гинекология',
+        name: 'GYN — Клинический справочник',
         short_name: 'GYN',
-        description: 'Медицинский справочник по акушерству и гинекологии',
-        theme_color: '#e05a78',
+        description: 'Премиальный клинический справочник по гинекологии и акушерству',
+        theme_color: '#8d616c',
         background_color: '#fdf2f5',
         display: 'standalone',
         orientation: 'portrait-primary',
         scope: '.',
         start_url: '.',
+        prefer_related_applications: false,
+        categories: ['medical', 'health', 'fitness'],
+        lang: 'ru',
         icons: [
           {
             src: 'favicon.ico',
