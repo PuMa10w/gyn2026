@@ -715,12 +715,6 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                       {guideline.documentType && <p><strong>Тип:</strong> {guideline.documentType}</p>}
                       {guideline.status && <p><strong>Статус:</strong> {guideline.status}</p>}
                       {guideline.scope && <p>{guideline.scope}</p>}
-                      {guideline.usedFor?.length ? (
-                        <>
-                          <p><strong>Использовано для:</strong></p>
-                          {renderList(guideline.usedFor)}
-                        </>
-                      ) : null}
                     </article>
                   ))}
                 </div>
