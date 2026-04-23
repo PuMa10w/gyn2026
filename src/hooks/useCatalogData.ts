@@ -20,7 +20,19 @@ interface UseCatalogDataOptions {
   onInvalidCategory: () => void;
 }
 
+type SectionErrorState = {
+  gynecology: string | null;
+  obstetrics: string | null;
+};
+
 function getSectionData(activeTab: TabType, gynecologyData: Disease[] | null, obstetricsData: Disease[] | null) {
+  if (activeTab === 'home') {
+    return {
+      currentData: [],
+      isDataLoading: false,
+    };
+  }
+
   if (activeTab === 'gynecology') {
     return {
       currentData: gynecologyData ?? [],
@@ -46,9 +58,12 @@ export function useCatalogData({
 }: UseCatalogDataOptions) {
   const [gynecologyData, setGynecologyData] = useState<Disease[] | null>(null);
   const [obstetricsData, setObstetricsData] = useState<Disease[] | null>(null);
+  const [errors, setErrors] = useState<SectionErrorState>({ gynecology: null, obstetrics: null });
+  const [reloadKey, setReloadKey] = useState(0);
 
   const { currentData, isDataLoading } = getSectionData(activeTab, gynecologyData, obstetricsData);
   const visibleCategories = activeTab === 'home' ? (['all'] as CategoryId[]) : getVisibleCategories(activeTab);
+  const error = activeTab === 'gynecology' ? errors.gynecology : activeTab === 'obstetrics' ? errors.obstetrics : null;
 
   const categorizedData = useMemo(() => categorizeDiseases(currentData), [currentData]);
   const categoryCounts = useMemo(() => getCategoryCounts(categorizedData), [categorizedData]);
@@ -87,10 +102,9 @@ export function useCatalogData({
             return;
           }
 
-          console.log('[useCatalogData] Loading gynecology data...');
           const data = await loadGynData();
-          console.log('[useCatalogData] Loaded gynecology:', data.length, 'items');
           if (!isCancelled) {
+            setErrors((prev) => ({ ...prev, gynecology: null }));
             setGynecologyData(data);
           }
           return;
@@ -100,13 +114,19 @@ export function useCatalogData({
           return;
         }
 
-        console.log('[useCatalogData] Loading obstetrics data...');
         const data = await loadObsData();
-        console.log('[useCatalogData] Loaded obstetrics:', data.length, 'items');
         if (!isCancelled) {
+          setErrors((prev) => ({ ...prev, obstetrics: null }));
           setObstetricsData(data);
         }
       } catch (error) {
+        if (!isCancelled) {
+          setErrors((prev) => ({
+            ...prev,
+            [activeTab]: 'Не удалось загрузить материалы раздела. Проверьте соединение и попробуйте еще раз.',
+          }));
+        }
+
         console.error('[useCatalogData] Error loading data:', error);
       }
     };
@@ -116,12 +136,28 @@ export function useCatalogData({
     return () => {
       isCancelled = true;
     };
-  }, [activeTab, gynecologyData, obstetricsData]);
+  }, [activeTab, gynecologyData, obstetricsData, reloadKey]);
+
+  const retry = () => {
+    if (activeTab === 'gynecology') {
+      setGynecologyData(null);
+      setErrors((prev) => ({ ...prev, gynecology: null }));
+    }
+
+    if (activeTab === 'obstetrics') {
+      setObstetricsData(null);
+      setErrors((prev) => ({ ...prev, obstetrics: null }));
+    }
+
+    setReloadKey((prev) => prev + 1);
+  };
 
   return {
     isDataLoading,
     visibleCategories,
     categoryCounts,
     filteredData,
+    error,
+    retry,
   };
 }

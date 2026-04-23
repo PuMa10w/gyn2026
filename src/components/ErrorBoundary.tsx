@@ -10,6 +10,19 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
+function isChunkLoadError(error: Error | null) {
+  if (!error) {
+    return false;
+  }
+
+  const message = error.message.toLowerCase();
+  return (
+    message.includes('loading chunk') ||
+    message.includes('failed to fetch dynamically imported module') ||
+    message.includes('importing a module script failed')
+  );
+}
+
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
@@ -25,11 +38,18 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 
   handleReset = (): void => {
+    if (isChunkLoadError(this.state.error)) {
+      window.location.reload();
+      return;
+    }
+
     this.setState({ hasError: false, error: null });
   };
 
   render() {
     if (this.state.hasError) {
+      const chunkLoadError = isChunkLoadError(this.state.error);
+
       return (
         <motion.div
           className="error-container"
@@ -55,10 +75,12 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
             ⚠️
           </motion.div>
           <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>
-            Что-то пошло не так
+            {chunkLoadError ? 'Приложение обновилось' : 'Что-то пошло не так'}
           </h1>
           <p style={{ fontSize: '1.1rem', marginBottom: '2rem', opacity: 0.9 }}>
-            При загрузке приложения произошла ошибка. Попробуйте обновить страницу.
+            {chunkLoadError
+              ? 'Некоторые файлы приложения устарели. Перезагрузите страницу, чтобы получить актуальную версию.'
+              : 'При загрузке приложения произошла ошибка. Попробуйте обновить страницу.'}
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -76,7 +98,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
               boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
             }}
           >
-            Попробовать снова
+            {chunkLoadError ? 'Перезагрузить страницу' : 'Попробовать снова'}
           </motion.button>
           {this.state.error && (
             <details style={{ marginTop: '2rem', textAlign: 'left', maxWidth: '600px' }}>

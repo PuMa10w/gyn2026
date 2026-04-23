@@ -5,57 +5,29 @@ import type { TabType } from '../types';
 
 interface NavbarProps {
   activeTab: TabType;
-  setActiveTab: (tab: TabType) => void;
+  onTabChange: (tab: TabType) => void;
   onQuestionnaires: () => void;
   onPharmacology: () => void;
   theme: ThemeMode;
   toggleTheme: () => void;
   showFavorites: boolean;
-  setShowFavorites: (value: boolean) => void;
+  onFavoritesToggle: () => void;
   showHistory: boolean;
-  setShowHistory: (value: boolean) => void;
+  onHistoryToggle: () => void;
 }
 
 const Navbar = React.memo(function Navbar({
   activeTab,
-  setActiveTab,
+  onTabChange,
   onQuestionnaires,
   onPharmacology,
   theme,
   toggleTheme,
   showFavorites,
-  setShowFavorites,
+  onFavoritesToggle,
   showHistory,
-  setShowHistory,
+  onHistoryToggle,
 }: NavbarProps) {
-  const handleSectionChange = (tab: TabType) => {
-    setActiveTab(tab);
-    setShowFavorites(false);
-    setShowHistory(false);
-  };
-
-  const handleFavoritesToggle = () => {
-    const next = !showFavorites;
-    if (activeTab === 'home') {
-      setActiveTab('gynecology');
-    }
-    setShowFavorites(next);
-    if (next) {
-      setShowHistory(false);
-    }
-  };
-
-  const handleHistoryToggle = () => {
-    const next = !showHistory;
-    if (activeTab === 'home') {
-      setActiveTab('gynecology');
-    }
-    setShowHistory(next);
-    if (next) {
-      setShowFavorites(false);
-    }
-  };
-
   return (
     <motion.nav className="navbar" initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} aria-label="Основная навигация">
       <div className="navbar-inner">
@@ -64,7 +36,7 @@ const Navbar = React.memo(function Navbar({
             <button
               type="button"
               className={`nav-item nav-primary-item ${activeTab === 'home' ? 'is-active' : ''}`}
-              onClick={() => handleSectionChange('home')}
+              onClick={() => onTabChange('home')}
               aria-current={activeTab === 'home' ? 'page' : undefined}
             >
               Главная
@@ -72,7 +44,7 @@ const Navbar = React.memo(function Navbar({
             <button
               type="button"
               className={`nav-item nav-primary-item ${activeTab === 'gynecology' ? 'is-active' : ''}`}
-              onClick={() => handleSectionChange('gynecology')}
+              onClick={() => onTabChange('gynecology')}
               aria-current={activeTab === 'gynecology' ? 'page' : undefined}
             >
               Гинекология
@@ -80,7 +52,7 @@ const Navbar = React.memo(function Navbar({
             <button
               type="button"
               className={`nav-item nav-primary-item ${activeTab === 'obstetrics' ? 'is-active' : ''}`}
-              onClick={() => handleSectionChange('obstetrics')}
+              onClick={() => onTabChange('obstetrics')}
               aria-current={activeTab === 'obstetrics' ? 'page' : undefined}
             >
               Акушерство
@@ -99,7 +71,7 @@ const Navbar = React.memo(function Navbar({
             <button
               type="button"
               className={`nav-item nav-utility-item ${showFavorites ? 'is-active' : ''}`}
-              onClick={handleFavoritesToggle}
+              onClick={onFavoritesToggle}
               aria-pressed={showFavorites}
             >
               Избранное
@@ -107,7 +79,7 @@ const Navbar = React.memo(function Navbar({
             <button
               type="button"
               className={`nav-item nav-utility-item ${showHistory ? 'is-active' : ''}`}
-              onClick={handleHistoryToggle}
+              onClick={onHistoryToggle}
               aria-pressed={showHistory}
             >
               История

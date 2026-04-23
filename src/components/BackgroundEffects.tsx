@@ -1,8 +1,42 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
+const particleColors = ['#e05a78', '#9b59b6', '#d4a017', '#fce4ec', '#e8d5f5'];
+
+function createParticleConfig(count: number) {
+  return Array.from({ length: count }, (_, index) => ({
+    key: `particle-${index}`,
+    left: `${(index * 17) % 100}%`,
+    top: `${(index * 29) % 100}%`,
+    width: `${(index % 5) + 2}px`,
+    height: `${(index % 5) + 2}px`,
+    color: particleColors[index % particleColors.length],
+    y: -30 - (index % 6) * 8,
+    x: ((index % 7) - 3) * 6,
+    duration: 4 + (index % 5),
+    delay: (index % 5) * 0.6,
+  }));
+}
+
+function createSparkleConfig(count: number) {
+  return Array.from({ length: count }, (_, index) => ({
+    key: `sparkle-${index}`,
+    left: `${(index * 19) % 100}%`,
+    top: `${(index * 31) % 100}%`,
+    duration: 2 + (index % 3),
+    delay: (index % 4) * 0.5,
+  }));
+}
+
 const BackgroundEffects: React.FC = () => {
-  const particleColors = ['#e05a78', '#9b59b6', '#d4a017', '#fce4ec', '#e8d5f5'];
+  const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+  const particleConfig = useMemo(() => createParticleConfig(isMobile ? 10 : 20), [isMobile]);
+  const sparkleConfig = useMemo(() => createSparkleConfig(isMobile ? 6 : 12), [isMobile]);
+
+  if (isReducedMotion) {
+    return <div className="bg-effects" aria-hidden="true" />;
+  }
 
   return (
     <div className="bg-effects">
@@ -39,51 +73,51 @@ const BackgroundEffects: React.FC = () => {
       </div>
 
       <div className="particles">
-        {Array.from({ length: 20 }).map((_, i) => (
+        {particleConfig.map((particle) => (
           <motion.div
-            key={i}
+            key={particle.key}
             className="particle"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${Math.random() * 6 + 2}px`,
-              height: `${Math.random() * 6 + 2}px`,
-              background: `linear-gradient(135deg, ${particleColors[Math.floor(Math.random() * 5)]}, transparent)`,
+              left: particle.left,
+              top: particle.top,
+              width: particle.width,
+              height: particle.height,
+              background: `linear-gradient(135deg, ${particle.color}, transparent)`,
             }}
             animate={{
-              y: [0, -30 - Math.random() * 40],
-              x: [0, (Math.random() - 0.5) * 40],
+              y: [0, particle.y],
+              x: [0, particle.x],
               opacity: [0, 0.6, 0],
               scale: [0, 1, 0],
             }}
             transition={{
-              duration: 4 + Math.random() * 6,
+              duration: particle.duration,
               repeat: Infinity,
-              delay: Math.random() * 5,
-              ease: "easeInOut"
+              delay: particle.delay,
+              ease: 'easeInOut'
             }}
           />
         ))}
       </div>
 
       <div className="sparkles">
-        {Array.from({ length: 12 }).map((_, i) => (
+        {sparkleConfig.map((sparkle) => (
           <motion.div
-            key={`sparkle-${i}`}
+            key={sparkle.key}
             className="sparkle"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: sparkle.left,
+              top: sparkle.top,
             }}
             animate={{
               opacity: [0, 1, 0],
               scale: [0, 1.5, 0],
             }}
             transition={{
-              duration: 2 + Math.random() * 3,
+              duration: sparkle.duration,
               repeat: Infinity,
-              delay: Math.random() * 4,
-              ease: "easeInOut"
+              delay: sparkle.delay,
+              ease: 'easeInOut'
             }}
           />
         ))}

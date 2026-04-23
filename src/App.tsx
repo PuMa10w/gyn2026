@@ -14,6 +14,7 @@ import { useFavorites } from './hooks/useFavorites';
 import { useHistory } from './hooks/useHistory';
 import { emptyStateContent, homeActions, sectionMeta } from './config/appContent';
 import type { CategoryId, Disease, TabType } from './types';
+import type { HistoryItem } from './hooks/useHistory';
 
 const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
 const Questionnaire = lazy(() => import('./components/Questionnaire'));
@@ -53,7 +54,7 @@ function App() {
   const favoriteIds = useMemo(() => new Set(favorites), [favorites]);
   const historyIds = useMemo(() => new Set(history.map((item) => item.id)), [history]);
 
-  const { isDataLoading, visibleCategories, categoryCounts, filteredData } = useCatalogData({
+  const { isDataLoading, visibleCategories, categoryCounts, filteredData, error, retry } = useCatalogData({
     activeTab,
     activeCategory,
     favoriteIds,
@@ -83,6 +84,51 @@ function App() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const recentItems = useMemo(() => history.slice(0, 4), [history]);
+
+  const resetCatalogState = () => {
+    setSearchTerm('');
+    setActiveCategory('all');
+  };
+
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab);
+    setShowFavorites(false);
+    setShowHistory(false);
+    resetCatalogState();
+  };
+
+  const handleFavoritesToggle = () => {
+    const nextValue = !showFavorites;
+
+    if (activeTab === 'home') {
+      setActiveTab('gynecology');
+    }
+
+    setShowFavorites(nextValue);
+    setShowHistory(false);
+    resetCatalogState();
+  };
+
+  const handleHistoryToggle = () => {
+    const nextValue = !showHistory;
+
+    if (activeTab === 'home') {
+      setActiveTab('gynecology');
+    }
+
+    setShowHistory(nextValue);
+    setShowFavorites(false);
+    resetCatalogState();
+  };
+
+  const handleRecentItemOpen = (item: HistoryItem) => {
+    const nextTab = item.subtitle === 'Акушерство' ? 'obstetrics' : 'gynecology';
+
+    handleTabChange(nextTab);
+    setSearchTerm(item.name);
   };
 
   const handleItemClick = (item: Disease) => {
@@ -119,15 +165,15 @@ function App() {
         <BackgroundEffects />
         <Navbar
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          onTabChange={handleTabChange}
           onQuestionnaires={openQuestionnaire}
           onPharmacology={openPharmacology}
           theme={theme}
           toggleTheme={toggleTheme}
           showFavorites={showFavorites}
-          setShowFavorites={setShowFavorites}
+          onFavoritesToggle={handleFavoritesToggle}
           showHistory={showHistory}
-          setShowHistory={setShowHistory}
+          onHistoryToggle={handleHistoryToggle}
         />
 
         <main className="page-content" id="main-content" tabIndex={-1}>
@@ -136,15 +182,22 @@ function App() {
               <HomeSection
                 key="home"
                 actions={homeActions}
-                setActiveTab={setActiveTab}
+                setActiveTab={handleTabChange}
                 openQuestionnaire={openQuestionnaire}
                 openPharmacology={openPharmacology}
+                recentItems={recentItems}
+                onRecentOpen={handleRecentItemOpen}
+                onFavoritesOpen={handleFavoritesToggle}
+                onHistoryOpen={handleHistoryToggle}
+                favoriteCount={favorites.length}
               />
             ) : (
               <CatalogSection
                 key={activeTab}
                 activeSectionMeta={activeSectionMeta!}
                 isDataLoading={isDataLoading}
+                error={error}
+                onRetry={retry}
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 filteredData={filteredData}

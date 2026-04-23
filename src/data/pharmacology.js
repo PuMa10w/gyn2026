@@ -1,4 +1,4 @@
-export const medications = [
+const baseMedications = [
   {
     id: "progesterone",
     name: "Прогестерон",
@@ -16,6 +16,43 @@ export const medications = [
     interactions: [
       { drug: "Эстрогены", effect: "Усиление эффекта", level: "medium" },
       { drug: "Барбитураты", effect: "Снижение эффекта", level: "medium" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Угроза выкидыша", "Лютеиновая недостаточность", "Поддержка лютеиновой фазы при ЭКО"],
+      notFirstLineWhen: ["Тромбоз в анамнезе", "Тяжелые заболевания печени"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Безопасность подтверждена при угрозе выкидыша", "Не имеет андрогенных свойств"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Проникает в грудное молоко в минимальных количествах"]
+    },
+    monitoring: {
+      beforeStart: ["Печеночные тесты", "УЗИ органов малого таза"],
+      duringTreatment: ["Уровень прогестерона", "УЗИ для оценки эндометрия"],
+      stopOrReviewIf: ["Тромбоз", "Тяжелая головная боль", "Нарушения зрения"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Угроза выкидыша до 12 недель",
+        whyChosen: "Прогестерон — основной гормон для сохранения беременности, поддерживает эндометрий",
+        importantNotes: ["До 12 недель плацента не функционирует", "Эффективен при подтвержденной лютеиновой недостаточности"]
+      },
+      {
+        scenario: "Поддержка лютеиновой фазы при ЭКО",
+        whyChosen: "Обеспечивает имплантацию эмбриона",
+        importantNotes: ["Начинать после пункции/переноса", "Продолжать до 10-12 недель беременности"]
+      }
+    ],
+    majorPracticePoints: ["Вводить вагинально для лучшей абсорбции", "Принимать вечером для минимизации седации"],
+    comparativeRole: {
+      preferredOver: "Синтетические прогестины — при планировании беременности",
+      lessUsefulThan: "Дидрогестерон — при выраженных перепадах настроения",
+      chooseWhen: ["Необходима естественная форма гормона", "Планирование беременности"]
+    },
+    guidelineBasis: [
+      { organization: "ACOG", title: "Progesterone in pregnancy guidance", documentType: "Practice Bulletin", scope: "Угроза выкидыша, поддержка лютеиновой фазы", status: "latest available" }
     ]
   },
   {
@@ -32,6 +69,33 @@ export const medications = [
     sideEffects: ["Приливы", "Тошнота", "Головная боль", "Нарушения зрения", "Киста яичника"],
     interactions: [
       { drug: "Тамоксифен", effect: "Антагонизм", level: "low" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["СПКЯ", "Ановуляторное бесплодие"],
+      notFirstLineWhen: ["Ожирение с ИМТ > 30", "Кисты яичников"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Противопоказан",
+      pregnancyNotes: ["Не использовать при беременности", "Тератогенен при случайном приеме"],
+      lactationStatus: "Противопоказан",
+      lactationNotes: ["Проникает в грудное молоко"]
+    },
+    monitoring: {
+      beforeStart: ["ФСГ, ЛГ, пролактин", "УЗИ органов малого таза", "Оценка овариального резерва"],
+      duringTreatment: ["УЗИ для мониторинга фолликулов", "Уровень эстрогенов"],
+      stopOrReviewIf: ["Киста яичника > 4 см", "3-6 неудачных циклов", "Нарушения зрения"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "СПКЯ с ановуляцией",
+        whyChosen: "Стимулирует овуляцию через блокаду эстрогенных рецепторов",
+        importantNotes: ["50 мг — стартовая доза", "Максимум 6 циклов из-за риска рака яичника"]
+      }
+    ],
+    majorPracticePoints: ["Начинать с 50 мг со 2-5 дня цикла", "УЗИ-мониторинг обязателен", "Не более 6 курсов"],
+    guidelineBasis: [
+      { organization: "ASRM", title: "Clomiphene for ovulation induction", documentType: "Practice Committee Opinion", scope: "СПКЯ, ановуляция", status: "latest available" }
     ]
   },
   {
@@ -48,6 +112,32 @@ export const medications = [
     sideEffects: ["Приливы", "Артралгия", "Усталость", "Остеопороз"],
     interactions: [
       { drug: "Эстрогены", effect: "Снижение эффекта", level: "medium" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["СПКЯ", "Бесплодие при ожирении"],
+      notFirstLineWhen: ["Беременность", "Детородный возраст без контрацепции"]
+    },
+    monitoring: {
+      beforeStart: ["Функциональные пробы печени", "УЗИ органов малого таза"],
+      duringTreatment: ["УЗИ для мониторинга овуляции"],
+      stopOrReviewIf: ["Беременность", "Тяжелая гепатотоксичность"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "СПКЯ с ожирением (ИМТ > 30)",
+        whyChosen: "Лучше кломифена при ожирении, не имеет эстроген-блокирующего эффекта",
+        importantNotes: ["2.5-5 мг со 2-5 дня цикла", "Мониторинг овуляции обязателен"]
+      }
+    ],
+    majorPracticePoints: ["Лучше переносится при ожирении", "Короткий период полувыведения", "Стимулирует овуляцию через повышение ФСГ"],
+    comparativeRole: {
+      preferredOver: "Кломифен — при ожирении и резистентности к кломифену",
+      lessUsefulThan: "Кломифен — при нормальном ИМТ",
+      chooseWhen: ["СПКЯ + ожирение", "Резистентность к кломифену"]
+    },
+    guidelineBasis: [
+      { organization: "ASRM", title: "Letrozole for ovulation induction", documentType: "Practice Committee Opinion", scope: "СПКЯ, бесплодие", status: "latest available" }
     ]
   },
   {
@@ -81,7 +171,36 @@ export const medications = [
     sideEffects: ["Тошнота", "Диарея", "Металлический привкус", "Дефицит B12"],
     interactions: [
       { drug: "Алкоголь", effect: "Риск лактатацидоза", level: "high" }
-    ]
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["СПКЯ с инсулинорезистентностью"],
+      notFirstLineWhen: ["Почечная недостаточность", "Печеночная недостаточность"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Осторожно",
+      pregnancyNotes: ["При СПКЯ может использоваться до беременности", "При беременности — инсулин"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Проникает в молоко, но безопасен"]
+    },
+    monitoring: {
+      beforeStart: ["Креатинин", "Печеночные ферменты", "HbA1c"],
+      duringTreatment: ["HbA1c каждые 3 месяца", "Функция почек"],
+      stopOrReviewIf: ["Лактатацидоз", "Снижение функции почек"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "СПКЯ с ожирением и инсулинорезистентностью",
+        whyChosen: "Снижает инсулинорезистентность, улучшает овуляцию",
+        importantNotes: ["500 мг x 2, титровать по переносимости", "Снижает риск диабета 2 типа"]
+      }
+    ],
+    majorPracticePoints: ["Принимать с едой для снижения GI-побочек", "Титровать с 500 мг", "Улучшает чувствительность к инсулину"],
+    comparativeRole: {
+      preferredOver: "Кломифен — при ожирении (комбо)",
+      lessUsefulThan: "Кломифен — при нормальном весе без инсулинорезистентности",
+      chooseWhen: "СПКЯ + ожирение + инсулинорезистентность"
+    }
   },
   {
     id: "tranexamic-acid",
@@ -98,6 +217,33 @@ export const medications = [
     sideEffects: ["Тошнота", "Диарея", "Головная боль", "Тромбоз"],
     interactions: [
       { drug: "Эстрогены", effect: "Риск тромбоза", level: "high" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Обильные менструации", "Послеродовое кровотечение"],
+      notFirstLineWhen: ["Тромбоз", "Почечная недостаточность"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Безопасен при беременности", "Используется при ППК"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Проникает в молоко, безопасен"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Обильные менструации",
+        whyChosen: "Ингибитор фибринолизина, снижает кровопотерю",
+        importantNotes: ["1000-1500 мг x 3-4 раза в день"]
+      },
+      {
+        scenario: "Послеродовое кровотечение",
+        whyChosen: "Снижает фибринолиз, эффективен при коагулопатии",
+        importantNotes: ["1 г в/в в первые 3 часа после родов"]
+      }
+    ],
+    majorPracticePoints: ["Раннее применение важно", "Максимум 8 г/сутки"],
+    guidelineBasis: [
+      { organization: "WHO", title: "Tranexamic acid in postpartum hemorrhage", documentType: "Guideline", scope: "ППК", status: "latest available" }
     ]
   },
   {
@@ -112,7 +258,34 @@ export const medications = [
     indications: ["Хламидиоз", "Микоплазмоз", "Бактериальный вагиноз", "ВЗОМТ"],
     contraindications: ["Печеночная недостаточность", "Аритмии"],
     sideEffects: ["Тошнота", "Диарея", "Боли в животе", "Головная боль"],
-    interactions: []
+    interactions: [],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Хламидиоз", "Микоплазмоз", "ВЗОМТ"],
+      notFirstLineWhen: ["Печеночная недостаточность", "Аритмии"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Осторожно",
+      pregnancyNotes: ["Категория B, используется при хламидиозе", "Предпочтительнее амоксициллина при хламидиозе"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Проникает в молоко, безопасен"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Хламидиоз (неосложненный)",
+        whyChosen: "Однократный прием, высокая эффективность",
+        importantNotes: ["1 г однократно или 500 мг x 3 дня", "Лечение партнера обязательно"]
+      },
+      {
+        scenario: "ВЗОМТ",
+        whyChosen: "Покрытие хламидии и анаэробов",
+        importantNotes: ["В комбинации с цефтриаксоном", "500 мг x 3 дня"]
+      }
+    ],
+    majorPracticePoints: ["Однократный прием при неосложненном хламидиозе", "Лечение партнеров обязательно", "Не использовать при гонорее"],
+    guidelineBasis: [
+      { organization: "CDC", title: "STI treatment guidelines", documentType: "Guideline", scope: "Хламидиоз, ВЗОМТ", status: "latest available" }
+    ]
   },
   {
     id: "doxycycline",
@@ -126,7 +299,34 @@ export const medications = [
     indications: ["Хламидиоз", "Микоплазмоз", "Уреаплазмоз", "Акне"],
     contraindications: ["Беременность", "Дети до 8 лет", "Печеночная недостаточность"],
     sideEffects: ["Тошнота", "Фотосенсибилизация", "Эзофагит", "Кандидоз"],
-    interactions: []
+    interactions: [],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Хламидиоз", "Микоплазмоз", "Уреаплазмоз"],
+      notFirstLineWhen: ["Беременность", "Дети до 8 лет"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Противопоказан",
+      pregnancyNotes: ["Проникает через плаценту, риск для плода", "Категория D"],
+      lactationStatus: "Противопоказан",
+      lactationNotes: ["Проникает в молоко, не использовать"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Хламидиоз",
+        whyChosen: "Высокая эффективность против Chlamydia trachomatis",
+        importantNotes: ["100 мг x 2, 7-10 дней", "Лечение партнера обязательно"]
+      },
+      {
+        scenario: "ВЗОМТ",
+        whyChosen: "Покрытие хламидии + анаэробы",
+        importantNotes: ["100 мг x 2, 14 дней в комбинации"]
+      }
+    ],
+    majorPracticePoints: ["Принимать с едой", "Не ложиться 30 мин после приема", "Избегать солнца"],
+    guidelineBasis: [
+      { organization: "CDC", title: "STI treatment guidelines", documentType: "Guideline", scope: "Хламидиоз, ВЗОМТ", status: "latest available" }
+    ]
   },
   {
     id: "cabergoline",
@@ -142,7 +342,31 @@ export const medications = [
     sideEffects: ["Тошнота", "Головная боль", "Головокружение", "Ортостатическая гипотензия"],
     interactions: [
       { drug: "Антипсихотики", effect: "Снижение эффективности", level: "medium" }
-    ]
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Гиперпролактинемия", "Пролактинома"],
+      notFirstLineWhen: ["Тяжелая почечная недостаточность", "Пороки сердца"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Безопасен при гиперпролактинемии", "Можно использовать при планировании беременности"],
+      lactationStatus: "Противопоказан",
+      lactationNotes: ["Подавляет лактацию"]
+    },
+    monitoring: {
+      beforeStart: ["Уровень пролактина", "МРТ гипофиза при пролактиноме"],
+      duringTreatment: ["Пролактин каждые 4-6 недель", "Беременность"],
+      stopOrReviewIf: ["Беременность", "Тяжелая гипотензия"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Гиперпролактинемия с бесплодием",
+        whyChosen: "Эффективно снижает пролактин, восстанавливает овуляцию",
+        importantNotes: ["0.5 мг x 2 в неделю", "Нормализация пролактина через 2-4 недели"]
+      }
+    ],
+    majorPracticePoints: ["Принимать с едой", "Избегать алкоголя", "Контролировать АД"]
   },
   {
     id: "magnesium-sulfate",
@@ -160,6 +384,43 @@ export const medications = [
     interactions: [
       { drug: "Блокаторы кальциевых каналов", effect: "Усиление гипотензии", level: "high" },
       { drug: "Аминогликозиды", effect: "Нейромышечная блокада", level: "high" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Преэклампсия", "Эклампсия", "Профилактика судорог"],
+      notFirstLineWhen: ["Почечная недостаточность", "Миастения"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Золотой стандарт профилактики эклампсии", "Не влияет на плод при правильном дозировании"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Проникает в молоко, безопасен"]
+    },
+    monitoring: {
+      beforeStart: ["Суточный диурез", "Креатинин", "Рефлексы"],
+      duringTreatment: ["Рефлексы (снижение — признак передозировки)", "Частота дыхания", "Диурез"],
+      stopOrReviewIf: ["Частота дыхания < 12/мин", "Отсутствие рефлексов", "Диурез < 30 мл/ч"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Преэклампсия с тяжелыми признаками",
+        whyChosen: "Профилактика судорог, нейропротекция",
+        importantNotes: ["4 г болюсно, затем 1-2 г/час", "Контролировать рефлексы"]
+      },
+      {
+        scenario: "Эклампсия — лечение судорог",
+        whyChosen: "Снижает возбудимость нейронов, противосудорожный эффект",
+        importantNotes: ["4-6 г болюсно", "Поддерживать 24 часа после родов"]
+      }
+    ],
+    majorPracticePoints: ["Мониторить рефлексы каждые 4 часа", "При олигурии — снизить дозу", "Антидот — глюконат кальция"],
+    routeAndSetting: {
+      route: ["внутривенно"],
+      setting: ["стационар", "реанимация"],
+      prescriberLevel: ["акушер-гинеколог", "реаниматолог"]
+    },
+    guidelineBasis: [
+      { organization: "ACOG", title: "Magnesium sulfate in preeclampsia", documentType: "Practice Bulletin", scope: "Преэклампсия, эклампсия", status: "latest available" }
     ]
   },
   {
@@ -178,7 +439,41 @@ export const medications = [
     sideEffects: ["Головная боль", "Гипотензия", "Тахикардия", "Отёки"],
     interactions: [
       { drug: "Магния сульфат", effect: "Усиление гипотензии", level: "high" }
-    ]
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Хроническая гипертензия", "Преэклампсия", "Токолиз"],
+      notFirstLineWhen: ["Гипотензия", "Тяжелый аортальный стеноз"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Безопасен при беременности", "Не оказывает тератогенного эффекта"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Минимально проникает в молоко"]
+    },
+    monitoring: {
+      beforeStart: ["АД", "Пульс"],
+      duringTreatment: ["Мониторинг АД каждые 15 минут при острой гипертензии"],
+      stopOrReviewIf: ["Систолическое АД < 90 мм рт.ст.", "Тахикардия > 120/мин"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Острая гипертензия при преэклампсии",
+        whyChosen: "Быстрое снижение АД",
+        importantNotes: ["10 мг сублингвально, повторить через 20 минут при необходимости"]
+      },
+      {
+        scenario: "Токолиз",
+        whyChosen: "Расслабление матки",
+        importantNotes: ["10 мг x 4 раза в день"]
+      }
+    ],
+    majorPracticePoints: ["Не использовать при экстренном родоразрешении", "Комбинировать с магния сульфатом осторожно"],
+    routeAndSetting: {
+      route: ["per os", "сублингвально"],
+      setting: ["амбулаторно", "стационар"],
+      prescriberLevel: ["акушер-гинеколог"]
+    }
   },
   {
     id: "oxytocin",
@@ -195,6 +490,43 @@ export const medications = [
     sideEffects: ["Тахикардия", "Гипотензия", "Тошнота", "Гиперстимуляция матки"],
     interactions: [
       { drug: "Простагландины", effect: "Усиление сокращений", level: "high" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Индукция родов", "Профилактика ППК"],
+      notFirstLineWhen: ["Несоответствие таза и плода", "Поперечное предлежание"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Противопоказан",
+      pregnancyNotes: ["Не использовать при беременности", "Только в послеродовом периоде"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Не влияет на лактацию"]
+    },
+    monitoring: {
+      beforeStart: ["Оценка состояния шейки", "КТГ плода"],
+      duringTreatment: ["Мониторинг сокращений", "ЧСС плода", "Динамика раскрытия"],
+      stopOrReviewIf: ["Гиперстимуляция (> 5 сокращений/10 мин)", "Дистресс плода", "Отсутствие прогресса > 4 часа"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Индукция родов",
+        whyChosen: "Стимуляция маточных сокращений",
+        importantNotes: ["2.5-5 ЕД в/в, титровать по эффекту", "Максимум 20 ЕД/сутки"]
+      },
+      {
+        scenario: "Профилактика ППК",
+        whyChosen: "Сокращение матки после рождения плаценты",
+        importantNotes: ["10 ЕД в/м после рождения плаценты", "Массаж матки обязателен"]
+      }
+    ],
+    majorPracticePoints: ["Титровать по сокращениям", "Не превышать дозу при гипоксии плода", "Комбинировать с простагландинами осторожно"],
+    routeAndSetting: {
+      route: ["внутривенно", "внутримышечно"],
+      setting: ["роддом", "операционная"],
+      prescriberLevel: ["акушер-гинеколог", "акушерка"]
+    },
+    guidelineBasis: [
+      { organization: "WHO", title: "Oxytocin for labor induction", documentType: "Guideline", scope: "Индукция родов, ППК", status: "latest available" }
     ]
   },
   {
@@ -315,6 +647,33 @@ export const medications = [
     sideEffects: ["Тошнота", "Рвота", "Диарея", "Лихорадка", "Озноб"],
     interactions: [
       { drug: "Окситоцин", effect: "Усиление сокращений", level: "medium" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Индукция родов", "ППК"],
+      notFirstLineWhen: ["Астма", "Беременность (кроме индукции)"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Только по показаниям",
+      pregnancyNotes: ["Используется для индукции родов", "Профилактика ППК"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Минимально проникает в молоко"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Профилактика ППК",
+        whyChosen: "Сильный утеротоник, стабилизирует матку",
+        importantNotes: ["400-600 мкг вагинально/буккально после рождения плаценты"]
+      },
+      {
+        scenario: "Индукция родов",
+        whyChosen: "Созревание шейки + сокращения матки",
+        importantNotes: ["25 мкг вагинально каждые 4-6 часов"]
+      }
+    ],
+    majorPracticePoints: ["Не использовать при астме", "Комбинировать с окситоцином осторожно"],
+    guidelineBasis: [
+      { organization: "WHO", title: "Misoprostol for labor induction", documentType: "Guideline", scope: "Индукция родов, ППК", status: "latest available" }
     ]
   },
   {
@@ -362,7 +721,34 @@ export const medications = [
     indications: ["Гонорея", "ВЗОМТ", "Сальпингит", "Эндометрит"],
     contraindications: ["Аллергия на цефалоспорины"],
     sideEffects: ["Диарея", "Тошнота", "Сыпь", "Флебит", "Кандидоз"],
-    interactions: []
+    interactions: [],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Гонорея", "ВЗОМТ", "Эндометрит"],
+      notFirstLineWhen: ["Аллергия на цефалоспорины"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Категория B", "Безопасен при беременности"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Минимально проникает в молоко"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Гонорея",
+        whyChosen: "Однократная инъекция, высокая эффективность",
+        importantNotes: ["500 мг в/м однократно + азитромицин 1 г"]
+      },
+      {
+        scenario: "ВЗОМТ",
+        whyChosen: "Покрытие N. gonorrhoeae + анаэробы",
+        importantNotes: ["1 г/сут в/в или в/м + доксициклин + метронидазол"]
+      }
+    ],
+    majorPracticePoints: ["Не смешивать с кальцийсодержащими растворами", "Дозировка 1 г при тяжелом течении"],
+    guidelineBasis: [
+      { organization: "CDC", title: "STI treatment guidelines", documentType: "Guideline", scope: "Гонорея, ВЗОМТ", status: "latest available" }
+    ]
   },
   {
     id: "clindamycin",
@@ -396,6 +782,38 @@ export const medications = [
     interactions: [
       { drug: "Алкоголь", effect: "Дисульфирамоподобная реакция", level: "high" },
       { drug: "Варфарин", effect: "Усиление антикоагуляции", level: "high" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Бактериальный вагиноз", "Трихомониаз", "ВЗОМТ"],
+      notFirstLineWhen: ["Первый триместр беременности"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Осторожно",
+      pregnancyNotes: ["Избегать в первом триместре", "Безопасен во 2-3 триместрах"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Проникает в молоко — избегать при грудном вскармливании"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Бактериальный вагиноз",
+        whyChosen: "Элиминирует анаэробную флору",
+        importantNotes: ["500 мг x 2 раза/день, 7 дней", "Вагинальная форма — приоритет"]
+      },
+      {
+        scenario: "Трихомониаз",
+        whyChosen: "Эффективен против Trichomonas vaginalis",
+        importantNotes: ["2 г однократно или 500 мг x 2 раза/день, 5 дней", "Лечение партнера"]
+      },
+      {
+        scenario: "ВЗОМТ (в комбинации)",
+        whyChosen: "Покрытие анаэробов",
+        importantNotes: ["500 мг x 2 раза/день, 14 дней с цефтриаксоном"]
+      }
+    ],
+    majorPracticePoints: ["Не принимать с алкоголем", "Курс не менее 7 дней при БВ"],
+    guidelineBasis: [
+      { organization: "CDC", title: "STI/BV treatment guidelines", documentType: "Guideline", scope: "Бактериальный вагиноз, трихомониаз", status: "latest available" }
     ]
   },
   {
@@ -707,6 +1125,38 @@ export const medications = [
     sideEffects: ["Гипотензия", "Бронхоспазм", "Усталость", "Головная боль"],
     interactions: [
       { drug: "Магния сульфат", effect: "Усиление гипотензии", level: "high" }
+    ],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Гипертензия при беременности", "Преэклампсия"],
+      notFirstLineWhen: ["Бронхиальная астма", "Сердечная недостаточность"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Безопасен при беременности", "Не имеет тератогенного эффекта"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Проникает в молоко, безопасен"]
+    },
+    monitoring: {
+      beforeStart: ["АД", "ЧСС", "аускультация легких"],
+      duringTreatment: ["Мониторинг АД каждые 15 минут при в/в"],
+      stopOrReviewIf: ["Систолическое АД < 90", "Бронхоспазм"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Острая гипертензия при преэклампсии",
+        whyChosen: "Быстрый контроль АД при преэклампсии",
+        importantNotes: ["20 мг в/в, повторить через 10 минут", "Максимум 80 мг"]
+      },
+      {
+        scenario: "Хроническая гипертензия при беременности",
+        whyChosen: "Комбинированный эффект (альфа + бета-блокада)",
+        importantNotes: ["100-200 мг x 2"]
+      }
+    ],
+    majorPracticePoints: ["Вводить медленно при в/в", "Не использовать при бронхиальной астме"],
+    guidelineBasis: [
+      { organization: "ACOG", title: "Hypertensive disorders in pregnancy", documentType: "Practice Bulletin", scope: "Гипертензия при беременности", status: "latest available" }
     ]
   },
   {
@@ -751,7 +1201,44 @@ export const medications = [
     indications: ["Созревание лёгких плода", "Преждевременные роды", "Воспаление", "Тошнота"],
     contraindications: ["Системные инфекции"],
     sideEffects: ["Гипергликемия", "Остеопороз", "Катаракта", "Задержка жидкости"],
-    interactions: []
+    interactions: [],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Созревание лёгких плода", "Преждевременные роды"],
+      notFirstLineWhen: ["Системные инфекции", "Сахарный диабет (относительно)"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Ускоряет созревание лёгких плода", "Снижает перинатальную смертность"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Минимально проникает в молоко"]
+    },
+    monitoring: {
+      beforeStart: ["Глюкоза крови", "Срок беременности"],
+      duringTreatment: ["Глюкоза каждые 6 часов", "Признаки инфекции"],
+      stopOrReviewIf: ["Тяжелая гипергликемия", "Признаки инфекции"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Преждевременные роды < 34 недель",
+        whyChosen: "Созревание сурфактанта лёгких плода",
+        importantNotes: ["6 мг в/м x 2 с интервалом 24 часа", "Эффект через 24-48 часов"]
+      },
+      {
+        scenario: "HELLP-синдром",
+        whyChosen: "Улучшение тромбоцитов и печеночных ферментов",
+        importantNotes: ["10 мг в/в x 2", "Улучшение временное"]
+      }
+    ],
+    majorPracticePoints: [" two doses = полный курс", "Повторный курс не рекомендуется", "Эффект развивается 24-48 часов"],
+    routeAndSetting: {
+      route: ["внутримышечно", "внутривенно"],
+      setting: ["роддом", "стационар"],
+      prescriberLevel: ["акушер-гинеколог"]
+    },
+    guidelineBasis: [
+      { organization: "ACOG", title: "Antenatal corticosteroids", documentType: "Practice Bulletin", scope: "Созревание лёгких плода", status: "latest available" }
+    ]
   },
   {
     id: "carboprost",
@@ -765,7 +1252,31 @@ export const medications = [
     indications: ["Послеродовое кровотечение", "Атонрия матки"],
     contraindications: ["Беременность (до родов)", "Астма", "Активное заболевание лёгких"],
     sideEffects: ["Тошнота", "Рвота", "Диарея", "Лихорадка", "Бронхоспазм"],
-    interactions: []
+    interactions: [],
+    firstLineStatus: {
+      role: "second-line",
+      forConditions: ["Послеродовое кровотечение", "Атония матки"],
+      notFirstLineWhen: ["Беременность (до родов)", "Астма"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Только послеродовый период",
+      pregnancyNotes: ["Используется только при ППК"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Минимально проникает в молоко"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Атония матки при ППК",
+        whyChosen: "Сильный утеротоник при неэффективности окситоцина",
+        importantNotes: ["250 мкг в/м, повторить каждые 15-90 мин", "Максимум 8 доз"]
+      }
+    ],
+    majorPracticePoints: ["Антидот — немедленная лапаротомия при неэффективности", "Бронхоспазм — остановить"],
+    routeAndSetting: {
+      route: ["внутримышечно"],
+      setting: ["роддом", "операционная"],
+      prescriberLevel: ["акушер-гинеколог"]
+    }
   },
   {
     id: "atosiban",
@@ -780,7 +1291,29 @@ export const medications = [
     indications: ["Угроза преждевременных родов"],
     contraindications: ["Беременность > 33 недель", "Внутриматочная инфекция", "Отслойка плаценты"],
     sideEffects: ["Тошнота", "Головная боль", "Гипотензия", "Тахикардия"],
-    interactions: []
+    interactions: [],
+    firstLineStatus: {
+      role: "first-line",
+      forConditions: ["Угроза преждевременных родов"],
+      notFirstLineWhen: ["Беременность > 33 недель", "Внутриматочная инфекция"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Специфический блокатор окситоцина", "Эффективен до 33 недель"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Минимально проникает в молоко"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Угроза преждевременных родов < 33 недель",
+        whyChosen: "Специфический токолитик — блокирует окситоциновые рецепторы",
+        importantNotes: ["6.75 мг болюсно + 300 мкг/час до 48 часов", "Эффект сохраняется после отмены"]
+      }
+    ],
+    majorPracticePoints: ["Дороже нифедипина", "Менее побочных эффектов на сердечно-сосудистую систему"],
+    guidelineBasis: [
+      { organization: "ACOG", title: "Preterm labor guidelines", documentType: "Guideline", scope: "Токолиз", status: "latest available" }
+    ]
   },
   {
     id: "terbutaline",
@@ -797,7 +1330,26 @@ export const medications = [
     sideEffects: ["Тахикардия", "Тремор", "Гипотензия", "Гипергликемия", "Олоз"],
     interactions: [
       { drug: "Бета-блокаторы", effect: "Антагонизм", level: "medium" }
-    ]
+    ],
+    firstLineStatus: {
+      role: "second-line",
+      forConditions: ["Угроза преждевременных родов"],
+      notFirstLineWhen: ["Сердечные заболевания", "Диабет", "Тиреотоксикоз"]
+    },
+    pregnancyLactation: {
+      pregnancyStatus: "Разрешен",
+      pregnancyNotes: ["Рекомендован при бронхиальной астме", "Бета-2-агонист"],
+      lactationStatus: "Разрешен",
+      lactationNotes: ["Проникает в молоко"]
+    },
+    clinicalUseCases: [
+      {
+        scenario: "Угроза преждевременных родов при бронхиальной астме",
+        whyChosen: "Безопасен при бронхиальной астме, эффективный токолитик",
+        importantNotes: ["0.25 мг п/к, повторить через 20-30 мин", "Максимум 4 дозы"]
+      }
+    ],
+    majorPracticePoints: ["Приоритет при бронхиальной астме", "Мониторить ЧСС и глюкозу"]
   },
   {
     id: "indomethacin",
@@ -1122,7 +1674,7 @@ export const drugInteractions = {
   }
 };
 
-export const commonRegimens = [
+const rawCommonRegimens = [
   {
     id: "pcos-ovulation",
     name: "Стимуляция овуляции при СПКЯ",
@@ -1482,3 +2034,22 @@ export const commonRegimens = [
     ]
   }
 ];
+
+const isRegimenEntry = (entry) => Array.isArray(entry?.steps);
+
+const dedupeById = (items) => {
+  const seen = new Set();
+
+  return items.filter((item) => {
+    if (!item?.id || seen.has(item.id)) {
+      return false;
+    }
+
+    seen.add(item.id);
+    return true;
+  });
+};
+
+export const medications = dedupeById([...baseMedications, ...rawCommonRegimens.filter((entry) => !isRegimenEntry(entry))]);
+
+export const commonRegimens = dedupeById(rawCommonRegimens.filter(isRegimenEntry));

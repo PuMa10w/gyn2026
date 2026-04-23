@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const rootElement = document.getElementById('root');
 
@@ -20,7 +19,3 @@ root.render(
     </HelmetProvider>
   </React.StrictMode>
 );
-
-if (import.meta.env.PROD) {
-  serviceWorkerRegistration.register();
-}

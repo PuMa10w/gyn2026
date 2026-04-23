@@ -148,6 +148,22 @@ describe('App', () => {
     });
   });
 
+  it('resets search when switching sections', async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getAllByRole('button', { name: /гинекология/i })[0]);
+    await screen.findByText('Эндометриоз');
+
+    const searchInput = screen.getByPlaceholderText(/нозология, симптом, код мкб/i) as HTMLInputElement;
+    fireEvent.change(searchInput, { target: { value: 'не найдено' } });
+
+    fireEvent.click(screen.getAllByRole('button', { name: /акушерство/i })[0]);
+
+    await waitFor(() => {
+      expect((screen.getByPlaceholderText(/нозология, симптом, код мкб/i) as HTMLInputElement).value).toBe('');
+    });
+  });
+
   it('shows saved item in favorites mode', async () => {
     render(<App />);
 
@@ -158,6 +174,19 @@ describe('App', () => {
     fireEvent.click(screen.getByRole('button', { name: /^избранное$/i }));
 
     await waitFor(() => {
+      expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
+    });
+  });
+
+  it('opens favorites from home inside catalog mode', async () => {
+    localStorage.setItem('disease-favorites', JSON.stringify(['endometriosis']));
+
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^избранное$/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /гинекология/i })).toBeInTheDocument();
       expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
     });
   });

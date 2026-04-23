@@ -1,7 +1,10 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useId, useState } from 'react';
 import { motion } from 'framer-motion';
 import { questionnaires } from '../data/questionnaires';
+import { useModalBehavior } from '../hooks/useModalBehavior';
 import type { QuestionnaireData, ScoringResult, QuestionnaireHistory } from '../types';
+
+const QUESTIONNAIRE_HISTORY_KEY = 'questionnaire-history';
 
 interface QuestionnaireProps {
   onClose: () => void;
@@ -12,16 +15,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   const subtitleId = useId();
   const questionId = useId();
   const optionsId = useId();
-  const modalRef = useRef<HTMLDivElement | null>(null);
-  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
-  const previousFocusedElementRef = useRef<HTMLElement | null>(null);
+  const { modalRef, closeButtonRef, handleModalKeyDown } = useModalBehavior(onClose);
   const [selectedQ, setSelectedQ] = useState<QuestionnaireData | null>(null);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [result, setResult] = useState<ScoringResult | null>(null);
   const [history, setHistory] = useState<QuestionnaireHistory[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem('questionnaire-history') || '[]');
+      return JSON.parse(localStorage.getItem(QUESTIONNAIRE_HISTORY_KEY) || '[]');
     } catch {
       return [];
     }
@@ -40,7 +41,8 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
   const calculateResult = (): void => {
     if (!selectedQ) return;
-    const answerArray = Object.keys(answers).map((k) => answers[Number(k)]);
+
+    const answerArray = selectedQ.questions.map((_, index) => answers[index] ?? 0);
     const scoringResult: ScoringResult = selectedQ.scoring(answerArray);
     setResult(scoringResult);
 
@@ -57,7 +59,19 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
     const updatedHistory = [historyEntry, ...history].slice(0, 20);
     setHistory(updatedHistory);
-    localStorage.setItem('questionnaire-history', JSON.stringify(updatedHistory));
+    localStorage.setItem(QUESTIONNAIRE_HISTORY_KEY, JSON.stringify(updatedHistory));
+  };
+
+  const clearHistory = (): void => {
+    setHistory([]);
+    localStorage.removeItem(QUESTIONNAIRE_HISTORY_KEY);
+  };
+
+  const closeResults = (): void => {
+    setResult(null);
+    setSelectedQ(null);
+    setAnswers({});
+    setCurrentStep(0);
   };
 
   const goBack = (): void => {
@@ -85,61 +99,6 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       onActivate();
-    }
-  };
-
-  useEffect(() => {
-    previousFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    closeButtonRef.current?.focus();
-
-    return () => {
-      previousFocusedElementRef.current?.focus();
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
-
-  const handleModalKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (event.key !== 'Tab' || !modalRef.current) {
-      return;
-    }
-
-    const focusableSelector =
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-    const focusableElements = Array.from(modalRef.current.querySelectorAll<HTMLElement>(focusableSelector)).filter(
-      (element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true',
-    );
-
-    if (focusableElements.length === 0) {
-      event.preventDefault();
-      return;
-    }
-
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-    const activeElement = document.activeElement as HTMLElement | null;
-    const isFocusInsideModal = activeElement ? modalRef.current.contains(activeElement) : false;
-
-    if (event.shiftKey) {
-      if (!isFocusInsideModal || activeElement === firstFocusable) {
-        event.preventDefault();
-        lastFocusable.focus();
-      }
-      return;
-    }
-
-    if (!isFocusInsideModal || activeElement === lastFocusable) {
-      event.preventDefault();
-      firstFocusable.focus();
     }
   };
 
@@ -198,9 +157,17 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
             ))}
           </div>
 
-          {history.length > 0 && (
-            <div className="q-history">
+          <div className="q-history">
+            <div className="q-history-header">
               <h3>📊 История прохождений</h3>
+              {history.length > 0 && (
+                <button type="button" className="q-btn q-btn-secondary" onClick={clearHistory}>
+                  Очистить историю
+                </button>
+              )}
+            </div>
+
+            {history.length > 0 ? (
               <div className="q-history-list">
                 {history.map((h, i) => (
                   <div key={i} className="q-history-item" style={{ borderLeftColor: h.color }}>
@@ -210,8 +177,10 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <p className="q-history-empty">История пока пуста. После первого прохождения результаты появятся здесь.</p>
+            )}
+          </div>
         </motion.div>
       </motion.div>
     );
@@ -339,7 +308,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               <h2 className="modal-title" id={titleId}>📊 Результат</h2>
               <div className="modal-icd" id={subtitleId}>{selectedQ.name} — {selectedQ.fullName}</div>
             </div>
-            <button ref={closeButtonRef} type="button" className="modal-close" onClick={() => { setSelectedQ(null); }} aria-label="Закрыть результат">×</button>
+            <button ref={closeButtonRef} type="button" className="modal-close" onClick={closeResults} aria-label="Закрыть результат">×</button>
           </div>
 
           <div className="q-result">
@@ -386,7 +355,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               <button type="button" className="q-btn q-btn-secondary" onClick={() => startQuestionnaire(selectedQ)}>
                 🔄 Пройти заново
               </button>
-              <button type="button" className="q-btn q-btn-primary" onClick={() => { setSelectedQ(null); }}>
+              <button type="button" className="q-btn q-btn-primary" onClick={closeResults}>
                 ← К списку тестов
               </button>
             </div>

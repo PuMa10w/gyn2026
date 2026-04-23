@@ -10,6 +10,64 @@ type CategorizedDisease = {
 
 const weightedKeywords = new Set(['спкя', 'впч', 'вич', 'cin']);
 
+const categoryOverrides: Record<string, NonAllCategory> = {
+  // Gynecology: oncology
+  'breast-cancer': 'oncology',
+  'cervical-cancer': 'oncology',
+  'endometrial-cancer': 'oncology',
+  'ovarian-cancer': 'oncology',
+  'uterine-sarcoma': 'oncology',
+  'vaginal-cancer': 'oncology',
+  'vulvar-cancer': 'oncology',
+  vin: 'oncology',
+  vain: 'oncology',
+  // Gynecology: infection
+  'pelvic-inflammatory-disease': 'infection',
+  endometritis: 'infection',
+  salpingitis: 'infection',
+  'genital-tuberculosis': 'infection',
+  syphilis: 'infection',
+  gonorrhea: 'infection',
+  'genital-herpes': 'infection',
+  'genital-warts': 'infection',
+  'chlamydial-cervicitis': 'infection',
+  'urogenital-trichomoniasis': 'infection',
+  'urinary-tract-infection': 'infection',
+  'recurrent-cystitis': 'infection',
+  'recurrent-bv': 'infection',
+  'recurrent-candidiasis': 'infection',
+  mastitis: 'infection',
+  // Gynecology: hormonal / reproductive endocrinology
+  amenorrhea: 'hormonal',
+  anovulation: 'hormonal',
+  'female-infertility': 'hormonal',
+  'tubal-factor-infertility': 'hormonal',
+  'endometriosis-infertility': 'hormonal',
+  ivf: 'hormonal',
+  iui: 'hormonal',
+  icsi: 'hormonal',
+  pgd: 'hormonal',
+  'donor-programs': 'hormonal',
+  menopause: 'hormonal',
+  hrt: 'hormonal',
+  hypothyroidism: 'hormonal',
+  'premature-ovarian-failure': 'hormonal',
+  'diminished-ovarian-reserve': 'hormonal',
+  'menopausal-syndrome': 'hormonal',
+  'genitourinary-syndrome-menopause': 'hormonal',
+  // Obstetrics: infection overrides
+  chorioamnionitis: 'infection',
+  'torch-infections': 'infection',
+  'hiv-pregnancy': 'infection',
+  listeriosis: 'infection',
+  'postpartum-endometritis': 'infection',
+  'postpartum-sepsis': 'infection',
+  'postpartum-infection': 'infection',
+  'pyelonephritis-pregnancy': 'infection',
+  gbs: 'infection',
+  torch: 'infection',
+};
+
 const categoryKeywords: Record<NonAllCategory, string[]> = {
   oncology: [
     'рак',
@@ -109,6 +167,20 @@ export function getVisibleCategories(activeTab: TabType): CategoryId[] {
 }
 
 function buildSearchableText(item: Disease) {
+  const structuredDifferential = item.differentialDiagnosis?.flatMap((entry) => [
+    entry.condition,
+    entry.whyConfused ?? '',
+    entry.howToDistinguish ?? '',
+    ...(entry.testsIfNeeded ?? []),
+  ]) ?? [];
+  const guidelineBasis = item.guidelineBasis?.flatMap((entry) => [
+    entry.organization,
+    entry.title ?? '',
+    entry.documentType ?? '',
+    entry.scope ?? '',
+    ...(entry.usedFor ?? []),
+  ]) ?? [];
+
   return [
     item.name,
     item.icd,
@@ -116,15 +188,32 @@ function buildSearchableText(item: Disease) {
     item.subtitle,
     item.description,
     item.definition,
+    item.overview?.quickTake ?? '',
+    item.overview?.prevalence ?? '',
+    item.overview?.practiceFocus ?? '',
     item.epidemiology,
     item.classification?.title ?? '',
     item.diagnostics.markers,
+    ...(item.diagnosticCriteria?.clinical ?? []),
+    ...(item.diagnosticCriteria?.laboratory ?? []),
+    ...(item.diagnosticCriteria?.imaging ?? []),
+    ...(item.diagnosticCriteria?.diagnosisConfirmedWhen ?? []),
+    ...(item.diagnosticCriteria?.diagnosisExcludedWhen ?? []),
     ...item.etiology,
     ...item.symptoms,
+    ...(item.symptomGroups?.typical ?? []),
+    ...(item.symptomGroups?.alarm ?? []),
     ...(item.classification?.stages ?? []),
     ...(item.diagnostics.steps ?? []),
+    ...(item.managementAlgorithm?.initialAssessment ?? []),
+    ...(item.managementAlgorithm?.startTreatment ?? []),
+    ...(item.managementAlgorithm?.escalateWhen ?? []),
     ...(item.treatment.conservative ?? []),
     ...(item.treatment.surgical ?? []),
+    ...(item.contraindicatedOrAvoid ?? []),
+    ...(item.patientCounseling ?? []),
+    ...structuredDifferential,
+    ...guidelineBasis,
     item.treatment.guidelines.eau,
     item.treatment.guidelines.acog,
     item.treatment.guidelines.ranzcog,
@@ -145,6 +234,12 @@ function getCategoryScore(text: string, category: NonAllCategory) {
 }
 
 function resolveDiseaseCategory(item: Disease, searchableText: string): NonAllCategory {
+  const overriddenCategory = categoryOverrides[item.id.trim().toLowerCase()];
+
+  if (overriddenCategory) {
+    return overriddenCategory;
+  }
+
   const scores = categoryPriority.map((category) => ({
     category,
     score: getCategoryScore(searchableText, category),

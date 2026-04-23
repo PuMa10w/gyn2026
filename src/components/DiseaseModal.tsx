@@ -1,6 +1,7 @@
-import React, { useEffect, useId, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useId, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { gynIcons, obsIcons } from './Icons';
+import { useModalBehavior } from '../hooks/useModalBehavior';
 import type { Disease } from '../types';
 
 interface DiseaseModalProps {
@@ -24,6 +25,7 @@ const treatmentBadgePattern = /<span class='badge ([^']+)'>([^<]+)<\/span>/gi;
 const allowedInlineBadgeClasses = new Set(['badge-eau', 'badge-acog', 'badge-ranzcog', 'badge-ru', 'badge-cdc']);
 
 const tabs = [
+  { id: 'quick', label: 'Быстро' },
   { id: 'overview', label: 'Обзор' },
   { id: 'diagnostics', label: 'Диагностика' },
   { id: 'ultrasound', label: 'УЗИ' },
@@ -33,6 +35,20 @@ const tabs = [
 ] as const;
 
 type ModalTab = (typeof tabs)[number]['id'];
+
+function renderList(items: string[]) {
+  return (
+    <ul>
+      {items.map((entry, index) => (
+        <li key={index}>{entry}</li>
+      ))}
+    </ul>
+  );
+}
+
+function hasAnyValues(sections: Array<string[] | undefined>) {
+  return sections.some((section) => Array.isArray(section) && section.length > 0);
+}
 
 function renderSafeTreatmentEntry(entry: string) {
   const nodes: React.ReactNode[] = [];
@@ -79,9 +95,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
   const titleId = useId();
   const descriptionId = useId();
   const panelId = `${titleId}-${activeTab}-panel`;
-  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
-  const modalRef = useRef<HTMLDivElement | null>(null);
-  const previousFocusedElementRef = useRef<HTMLElement | null>(null);
+  const { modalRef, closeButtonRef, handleModalKeyDown } = useModalBehavior(onClose);
   
   const IconComponent = item.subtitle === 'Гинекология' 
     ? (gynIcons as Record<string, React.ReactNode>)[item.icon] 
@@ -115,82 +129,6 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
     }
     setTouchStart(null);
   }, [touchStart, isMobile, onClose]);
-
-  useEffect(() => {
-    previousFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    closeButtonRef.current?.focus();
-    return () => {
-      previousFocusedElementRef.current?.focus();
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
-
-  useEffect(() => {
-    const { body } = document;
-    const previousOverflow = body.style.overflow;
-    const previousPosition = body.style.position;
-    const previousWidth = body.style.width;
-    const previousTop = body.style.top;
-    const scrollY = window.scrollY;
-
-    body.style.overflow = 'hidden';
-    body.style.position = 'fixed';
-    body.style.width = '100%';
-    body.style.top = `-${scrollY}px`;
-
-    return () => {
-      body.style.overflow = previousOverflow;
-      body.style.position = previousPosition;
-      body.style.width = previousWidth;
-      body.style.top = previousTop;
-      window.scrollTo(0, scrollY);
-    };
-  }, []);
-
-  const handleModalKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Tab' || !modalRef.current) {
-      return;
-    }
-
-    const focusableSelector =
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-    const focusableElements = Array.from(modalRef.current.querySelectorAll<HTMLElement>(focusableSelector)).filter(
-      (element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true',
-    );
-
-    if (focusableElements.length === 0) {
-      event.preventDefault();
-      return;
-    }
-
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-    const activeElement = document.activeElement as HTMLElement | null;
-    const isFocusInsideModal = activeElement ? modalRef.current.contains(activeElement) : false;
-
-    if (event.shiftKey) {
-      if (!isFocusInsideModal || activeElement === firstFocusable) {
-        event.preventDefault();
-        lastFocusable.focus();
-      }
-      return;
-    }
-
-    if (!isFocusInsideModal || activeElement === lastFocusable) {
-      event.preventDefault();
-      firstFocusable.focus();
-    }
-  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -237,6 +175,72 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             )}
           </div>
         );
+      case 'quick':
+        return (
+          <div className="tab-content modal-grid" id={descriptionId}>
+            {item.clinicalSummary?.quickSummary && (
+              <section className="content-card content-card-wide quick-summary-card">
+                <span className="quick-summary-eyebrow">Коротко</span>
+                <p>{item.clinicalSummary.quickSummary}</p>
+              </section>
+            )}
+
+            {item.clinicalSummary?.redFlags?.length ? (
+              <section className="content-card quick-card quick-card-alert">
+                <h3>Красные флаги</h3>
+                <ul>
+                  {item.clinicalSummary.redFlags.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            {item.clinicalSummary?.firstLineActions?.length ? (
+              <section className="content-card quick-card">
+                <h3>Первая линия</h3>
+                <ul>
+                  {item.clinicalSummary.firstLineActions.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            {item.clinicalSummary?.diagnosticMinimum?.length ? (
+              <section className="content-card quick-card">
+                <h3>Диагностический минимум</h3>
+                <ul>
+                  {item.clinicalSummary.diagnosticMinimum.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            {item.clinicalSummary?.whenToEscalate?.length ? (
+              <section className="content-card quick-card">
+                <h3>Когда эскалировать</h3>
+                <ul>
+                  {item.clinicalSummary.whenToEscalate.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            {item.clinicalSummary?.clinicalPearls?.length ? (
+              <section className="content-card content-card-wide quick-card quick-card-pearl">
+                <h3>Клинические акценты</h3>
+                <ul>
+                  {item.clinicalSummary.clinicalPearls.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+          </div>
+        );
       case 'diagnostics':
         return (
           <div className="tab-content modal-grid" id={descriptionId}>
@@ -274,6 +278,51 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
               </p>
             </section>
 
+            {item.diagnosticCriteria &&
+            hasAnyValues([
+              item.diagnosticCriteria.clinical,
+              item.diagnosticCriteria.laboratory,
+              item.diagnosticCriteria.imaging,
+              item.diagnosticCriteria.diagnosisConfirmedWhen,
+              item.diagnosticCriteria.diagnosisExcludedWhen,
+            ]) ? (
+              <section className="content-card content-card-wide">
+                <h3>Критерии диагноза</h3>
+                <div className="structured-list">
+                  {item.diagnosticCriteria.clinical?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Клинические критерии</div>
+                      {renderList(item.diagnosticCriteria.clinical)}
+                    </article>
+                  ) : null}
+                  {item.diagnosticCriteria.laboratory?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Лабораторные критерии</div>
+                      {renderList(item.diagnosticCriteria.laboratory)}
+                    </article>
+                  ) : null}
+                  {item.diagnosticCriteria.imaging?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Инструментальные критерии</div>
+                      {renderList(item.diagnosticCriteria.imaging)}
+                    </article>
+                  ) : null}
+                  {item.diagnosticCriteria.diagnosisConfirmedWhen?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Диагноз подтвержден, если</div>
+                      {renderList(item.diagnosticCriteria.diagnosisConfirmedWhen)}
+                    </article>
+                  ) : null}
+                  {item.diagnosticCriteria.diagnosisExcludedWhen?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Диагноз маловероятен, если</div>
+                      {renderList(item.diagnosticCriteria.diagnosisExcludedWhen)}
+                    </article>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+
             {item.diagnostics.imaging && item.diagnostics.imaging.length > 0 && (
               <section className="content-card">
                 <h3>Визуализация</h3>
@@ -293,6 +342,27 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                     <li key={index}>{entry}</li>
                   ))}
                 </ul>
+              </section>
+            )}
+
+            {item.differentialDiagnosis && item.differentialDiagnosis.length > 0 && (
+              <section className="content-card content-card-wide">
+                <h3>Структурный дифференциальный диагноз</h3>
+                <div className="structured-list">
+                  {item.differentialDiagnosis.map((entry, index) => (
+                    <article className="structured-item" key={index}>
+                      <div className="structured-item-title">{entry.condition}</div>
+                      {entry.whyConfused && <p><strong>Почему похож:</strong> {entry.whyConfused}</p>}
+                      {entry.howToDistinguish && <p><strong>Как отличить:</strong> {entry.howToDistinguish}</p>}
+                      {entry.testsIfNeeded?.length ? (
+                        <>
+                          <p><strong>Что уточнить:</strong></p>
+                          {renderList(entry.testsIfNeeded)}
+                        </>
+                      ) : null}
+                    </article>
+                  ))}
+                </div>
               </section>
             )}
           </div>
@@ -425,13 +495,61 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             {item.recommendations && item.recommendations.length > 0 && (
               <section className="content-card content-card-wide">
                 <h3>Рекомендации</h3>
-                <ul>
-                  {item.recommendations.map((entry, index) => (
-                    <li key={index}>{entry}</li>
-                  ))}
-                </ul>
+                {renderList(item.recommendations)}
               </section>
             )}
+
+            {item.managementAlgorithm &&
+            hasAnyValues([
+              item.managementAlgorithm.initialAssessment,
+              item.managementAlgorithm.confirmDiagnosis,
+              item.managementAlgorithm.startTreatment,
+              item.managementAlgorithm.reassess,
+              item.managementAlgorithm.escalateWhen,
+              item.managementAlgorithm.referWhen,
+            ]) ? (
+              <section className="content-card content-card-wide">
+                <h3>Алгоритм ведения</h3>
+                <div className="structured-list">
+                  {item.managementAlgorithm.initialAssessment?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Первичная оценка</div>
+                      {renderList(item.managementAlgorithm.initialAssessment)}
+                    </article>
+                  ) : null}
+                  {item.managementAlgorithm.confirmDiagnosis?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Подтверждение диагноза</div>
+                      {renderList(item.managementAlgorithm.confirmDiagnosis)}
+                    </article>
+                  ) : null}
+                  {item.managementAlgorithm.startTreatment?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Старт лечения</div>
+                      {renderList(item.managementAlgorithm.startTreatment)}
+                    </article>
+                  ) : null}
+                  {item.managementAlgorithm.reassess?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Переоценка</div>
+                      {renderList(item.managementAlgorithm.reassess)}
+                    </article>
+                  ) : null}
+                  {item.managementAlgorithm.escalateWhen?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Когда эскалировать</div>
+                      {renderList(item.managementAlgorithm.escalateWhen)}
+                    </article>
+                  ) : null}
+                  {item.managementAlgorithm.referWhen?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Когда направлять</div>
+                      {renderList(item.managementAlgorithm.referWhen)}
+                    </article>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
 
             {item.prognosis && (
               <section className="content-card">
@@ -463,6 +581,97 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
               </section>
             )}
 
+            {item.followUpTriggers &&
+            hasAnyValues([
+              item.followUpTriggers.routineReview,
+              item.followUpTriggers.earlierReviewIf,
+              item.followUpTriggers.switchTreatmentIf,
+              item.followUpTriggers.urgentReassessmentIf,
+            ]) ? (
+              <section className="content-card">
+                <h3>Триггеры пересмотра</h3>
+                {item.followUpTriggers.routineReview?.length ? (
+                  <>
+                    <p><strong>Плановый контроль:</strong></p>
+                    {renderList(item.followUpTriggers.routineReview)}
+                  </>
+                ) : null}
+                {item.followUpTriggers.earlierReviewIf?.length ? (
+                  <>
+                    <p><strong>Раньше срока, если:</strong></p>
+                    {renderList(item.followUpTriggers.earlierReviewIf)}
+                  </>
+                ) : null}
+                {item.followUpTriggers.switchTreatmentIf?.length ? (
+                  <>
+                    <p><strong>Менять тактику, если:</strong></p>
+                    {renderList(item.followUpTriggers.switchTreatmentIf)}
+                  </>
+                ) : null}
+                {item.followUpTriggers.urgentReassessmentIf?.length ? (
+                  <>
+                    <p><strong>Срочно переоценить, если:</strong></p>
+                    {renderList(item.followUpTriggers.urgentReassessmentIf)}
+                  </>
+                ) : null}
+              </section>
+            ) : null}
+
+            {item.contraindicatedOrAvoid && item.contraindicatedOrAvoid.length > 0 && (
+              <section className="content-card">
+                <h3>Чего избегать</h3>
+                {renderList(item.contraindicatedOrAvoid)}
+              </section>
+            )}
+
+            {item.patientCounseling && item.patientCounseling.length > 0 && (
+              <section className="content-card">
+                <h3>Что объяснить пациентке</h3>
+                {renderList(item.patientCounseling)}
+              </section>
+            )}
+
+            {item.specialPopulations &&
+            hasAnyValues([
+              item.specialPopulations.adolescents,
+              item.specialPopulations.pregnancy,
+              item.specialPopulations.postpartum,
+              item.specialPopulations.perimenopause,
+              item.specialPopulations.postmenopause,
+              item.specialPopulations.obesity,
+              item.specialPopulations.fertilityPlanning,
+            ]) ? (
+              <section className="content-card content-card-wide">
+                <h3>Особые клинические группы</h3>
+                <div className="structured-list">
+                  {item.specialPopulations.adolescents?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Подростки</div>
+                      {renderList(item.specialPopulations.adolescents)}
+                    </article>
+                  ) : null}
+                  {item.specialPopulations.pregnancy?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Беременность</div>
+                      {renderList(item.specialPopulations.pregnancy)}
+                    </article>
+                  ) : null}
+                  {item.specialPopulations.postpartum?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Послеродовой период</div>
+                      {renderList(item.specialPopulations.postpartum)}
+                    </article>
+                  ) : null}
+                  {item.specialPopulations.fertilityPlanning?.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Планирование беременности</div>
+                      {renderList(item.specialPopulations.fertilityPlanning)}
+                    </article>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+
             {item.clinicalCases && item.clinicalCases.length > 0 && (
               <section className="content-card content-card-wide">
                 <h3>Клинические случаи</h3>
@@ -471,10 +680,19 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                     <article className="structured-item" key={index}>
                       <div className="structured-item-title">Случай {index + 1}</div>
                       <p><strong>Жалобы:</strong> {clinicalCase.presentation}</p>
+                      {clinicalCase.history && <p><strong>Анамнез:</strong> {clinicalCase.history}</p>}
                       <p><strong>Данные:</strong> {clinicalCase.findings}</p>
+                      {clinicalCase.decisionPoints?.length ? (
+                        <>
+                          <p><strong>Ключевые точки решения:</strong></p>
+                          {renderList(clinicalCase.decisionPoints)}
+                        </>
+                      ) : null}
                       <p><strong>Диагноз:</strong> {clinicalCase.diagnosis}</p>
                       <p><strong>Лечение:</strong> {clinicalCase.treatment}</p>
+                      {clinicalCase.whyThisPlan && <p><strong>Почему так:</strong> {clinicalCase.whyThisPlan}</p>}
                       <p><strong>Исход:</strong> {clinicalCase.outcome}</p>
+                      {clinicalCase.guidelineJustification && <p><strong>Опора на guideline:</strong> {clinicalCase.guidelineJustification}</p>}
                     </article>
                   ))}
                 </div>
@@ -485,6 +703,30 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
       case 'guidelines':
         return (
           <div className="tab-content modal-grid" id={descriptionId}>
+            {item.guidelineBasis && item.guidelineBasis.length > 0 && (
+              <section className="content-card content-card-wide">
+                <h3>Источник клинической логики</h3>
+                <div className="structured-list">
+                  {item.guidelineBasis.map((guideline, index) => (
+                    <article className="structured-item" key={index}>
+                      <div className="structured-item-title">{guideline.organization}</div>
+                      {guideline.year && <p><strong>Год:</strong> {guideline.year}</p>}
+                      {guideline.title && <p><strong>Документ:</strong> {guideline.title}</p>}
+                      {guideline.documentType && <p><strong>Тип:</strong> {guideline.documentType}</p>}
+                      {guideline.status && <p><strong>Статус:</strong> {guideline.status}</p>}
+                      {guideline.scope && <p>{guideline.scope}</p>}
+                      {guideline.usedFor?.length ? (
+                        <>
+                          <p><strong>Использовано для:</strong></p>
+                          {renderList(guideline.usedFor)}
+                        </>
+                      ) : null}
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {guidelineMeta.map((guideline) => (
               <section className="content-card guideline-card" key={guideline.key}>
                 <div className="guideline-card-header">
@@ -551,6 +793,17 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             >
               ✕
             </button>
+          </div>
+
+          <div className="modal-quick-strip">
+            <div className="modal-quick-meta">
+              <span className="modal-quick-chip">{item.subtitle}</span>
+              <span className="modal-quick-chip">МКБ {icdLabel}</span>
+              {item.clinicalSummary?.diagnosticMinimum?.[0] && (
+                <span className="modal-quick-chip is-muted">Диагностика: {item.clinicalSummary.diagnosticMinimum[0]}</span>
+              )}
+            </div>
+            {item.clinicalSummary?.quickSummary && <p className="modal-quick-summary">{item.clinicalSummary.quickSummary}</p>}
           </div>
 
           <div className="modal-tabs" role="tablist" aria-label="Разделы карточки">

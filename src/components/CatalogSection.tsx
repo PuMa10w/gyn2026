@@ -21,6 +21,8 @@ type EmptyState = {
 interface CatalogSectionProps {
   activeSectionMeta: SectionMeta;
   isDataLoading: boolean;
+  error: string | null;
+  onRetry: () => void;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
   filteredData: Disease[];
@@ -37,6 +39,8 @@ interface CatalogSectionProps {
 const CatalogSection = React.memo(function CatalogSection({
   activeSectionMeta,
   isDataLoading,
+  error,
+  onRetry,
   searchTerm,
   setSearchTerm,
   filteredData,
@@ -69,7 +73,7 @@ const CatalogSection = React.memo(function CatalogSection({
         <SearchBar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          resultCount={isDataLoading ? undefined : filteredData.length}
+          resultCount={isDataLoading || error ? undefined : filteredData.length}
         />
         <CategoryFilter
           activeCategory={activeCategory}
@@ -80,6 +84,17 @@ const CatalogSection = React.memo(function CatalogSection({
       </section>
 
       <section aria-live="polite" className="cards-grid">
+        {error && (
+          <motion.div className="catalog-status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+            <span className="catalog-status-eyebrow">Ошибка загрузки</span>
+            <h2>Раздел временно недоступен</h2>
+            <p>{error}</p>
+            <button type="button" className="q-btn q-btn-primary" onClick={onRetry}>
+              Повторить загрузку
+            </button>
+          </motion.div>
+        )}
+
         {isDataLoading && (
           <>
             <motion.div className="catalog-status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
@@ -95,7 +110,7 @@ const CatalogSection = React.memo(function CatalogSection({
           </>
         )}
 
-        {!isDataLoading &&
+        {!isDataLoading && !error &&
           filteredData.map((item, index) => (
             <DiseaseCard
               key={item.id}
@@ -107,7 +122,7 @@ const CatalogSection = React.memo(function CatalogSection({
             />
           ))}
 
-        {!isDataLoading && filteredData.length === 0 && (
+        {!isDataLoading && !error && filteredData.length === 0 && (
           <motion.div className="empty-state" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
             <span className="empty-eyebrow">{emptyState.eyebrow}</span>
             <h3>{emptyState.title}</h3>

@@ -1,4 +1,20 @@
-import type { Disease, UltrasoundFinding, UltrasoundProtocol } from '../types';
+import type {
+  DifferentialDiagnosisItem,
+  Disease,
+  DiseaseClinicalSummary,
+  DiseaseDiagnosticCriteria,
+  DiseaseFollowUpTriggers,
+  DiseaseManagementAlgorithm,
+  DiseaseOverview,
+  DiseaseSeverityStratification,
+  DiseaseSpecialPopulations,
+  GuidelineReference,
+  InpatientOutpatientPlan,
+  MonitoringPlan,
+  TimingOfDelivery,
+  UltrasoundFinding,
+  UltrasoundProtocol,
+} from '../types';
 
 type DiseaseInput = Disease & {
   diagnostics?: Disease['diagnostics'] | string[];
@@ -40,6 +56,8 @@ const cleanText = (value: string) => value.replace(/<[^>]+>/g, '').replace(/\s+/
 const asStringArray = (value: unknown) =>
   Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string').map(cleanText) : [];
 
+const withFallback = (value: string[] | undefined, fallback: string[]) => (value && value.length > 0 ? value : fallback);
+
 const normalizeDiagnostics = (disease: DiseaseInput): Disease['diagnostics'] => {
   if (Array.isArray(disease.diagnostics)) {
     return {
@@ -68,6 +86,11 @@ const normalizeTreatment = (disease: DiseaseInput): Disease['treatment'] => {
   return {
     conservative: asStringArray(treatment.conservative),
     surgical: asStringArray(treatment.surgical),
+    firstLine: asStringArray(treatment.firstLine),
+    secondLine: asStringArray(treatment.secondLine),
+    proceduralOrSurgical: asStringArray(treatment.proceduralOrSurgical),
+    inpatientManagement: asStringArray(treatment.inpatientManagement),
+    whatNotToDo: asStringArray(treatment.whatNotToDo),
     guidelines: {
       eau: typeof guidelines.eau === 'string' ? cleanText(guidelines.eau) : '',
       acog: typeof guidelines.acog === 'string' ? cleanText(guidelines.acog) : '',
@@ -76,6 +99,208 @@ const normalizeTreatment = (disease: DiseaseInput): Disease['treatment'] => {
     },
   };
 };
+
+const buildOverview = (disease: Disease): DiseaseOverview => ({
+  quickTake: disease.clinicalSummary?.quickSummary ?? `${disease.name} требует структурированной оценки по симптомам, критериям диагноза и тактике ведения.`,
+  prevalence: disease.epidemiology,
+  riskLevel: disease.subtitle === 'Акушерство' ? 'high' : 'moderate',
+  practiceFocus:
+    disease.subtitle === 'Акушерство'
+      ? 'Быстро оценить риски для матери и плода, подтвердить диагноз и определить сроки эскалации или родоразрешения.'
+      : 'Подтвердить диагноз, исключить основные альтернативы и выбрать тактику с учетом симптомов, фертильности и онкорисков.',
+});
+
+const buildGuidelineBasis = (disease: Disease): GuidelineReference[] => {
+  const guidelineMap: Array<{ organization: string; summary?: string; usedFor: string[] }> = [
+    { organization: 'EAU', summary: disease.treatment.guidelines.eau, usedFor: ['diagnosis', 'treatment'] },
+    { organization: 'ACOG', summary: disease.treatment.guidelines.acog, usedFor: ['diagnosis', 'treatment'] },
+    { organization: 'RANZCOG', summary: disease.treatment.guidelines.ranzcog, usedFor: ['diagnosis', 'treatment'] },
+  ];
+
+  return guidelineMap
+    .filter(({ summary }) => typeof summary === 'string' && summary.trim().length > 0)
+    .map(({ organization, summary, usedFor }) => ({
+      organization,
+      scope: cleanText(summary ?? ''),
+      status: 'legacy',
+      usedFor,
+    }));
+};
+
+const buildDiagnosticCriteria = (disease: Disease): DiseaseDiagnosticCriteria => ({
+  clinical: withFallback(
+    disease.symptomGroups?.typical,
+    [`Клиническая картина должна соответствовать типичным жалобам и признакам ${disease.name.toLowerCase()}.`],
+  ),
+  laboratory: [cleanText(disease.diagnostics.markers)],
+  imaging: withFallback(disease.diagnostics.imaging, [cleanText(getPrimaryDiagnosticStep(disease))]),
+  diagnosisConfirmedWhen: [
+    `Клинические данные согласуются с диагнозом ${disease.name.toLowerCase()}.`,
+    `Подтверждающие исследования соответствуют ожидаемой картине по guideline-first модели.`,
+  ],
+  diagnosisExcludedWhen: [
+    `Объективные данные не поддерживают диагноз ${disease.name.toLowerCase()}.`,
+    'Выявлено альтернативное состояние, лучше объясняющее симптомы и результаты обследования.',
+  ],
+  notes: ['Критерии диагноза требуют привязки к актуальному guideline при редакционном обновлении карточки.'],
+});
+
+const buildSeverityStratification = (disease: Disease): DiseaseSeverityStratification => ({
+  title: disease.subtitle === 'Акушерство' ? 'Стратификация тяжести и акушерского риска' : 'Стратификация тяжести и клинического риска',
+  tiers: [
+    {
+      name: 'Клинически стабильное течение',
+      criteria: ['Нет признаков быстрой декомпенсации.', 'Возможна плановая диагностика и стартовая терапия первой линии.'],
+      clinicalMeaning: 'Допустимо стандартное обследование и поэтапное ведение.',
+      managementImpact: 'Наблюдение по плану с ранним контролем эффективности лечения.',
+    },
+    {
+      name: 'Течение с повышенным риском',
+      criteria: ['Есть красные флаги, атипичное течение или отсутствие ответа на стартовую тактику.'],
+      clinicalMeaning: 'Требуется ускоренное уточнение диагноза и пересмотр маршрута.',
+      managementImpact: 'Нужна эскалация диагностики, консультация профильного специалиста или госпитализация по показаниям.',
+    },
+  ],
+});
+
+const buildStructuredDifferential = (disease: Disease): DifferentialDiagnosisItem[] =>
+  withFallback(disease.diagnostics.differential, buildDifferential(disease)).map((entry) => ({
+    condition: cleanText(entry),
+    whyConfused: `Может имитировать ${disease.name.toLowerCase()} по жалобам, данным осмотра или визуализации.`,
+    howToDistinguish: 'Требует сопоставления клиники, подтверждающих тестов и динамики состояния.',
+    testsIfNeeded: [cleanText(getPrimaryDiagnosticStep(disease))],
+  }));
+
+const buildManagementAlgorithm = (disease: Disease): DiseaseManagementAlgorithm => ({
+  initialAssessment: [
+    `Оценить жалобы, анамнез и клинические риски при подозрении на ${disease.name.toLowerCase()}.`,
+    cleanText(getPrimaryDiagnosticStep(disease)),
+  ],
+  confirmDiagnosis: [
+    'Подтвердить диагноз по совокупности клиники, лабораторных данных и визуализации.',
+    cleanText(disease.diagnostics.markers),
+  ],
+  startTreatment: withFallback(disease.treatment.firstLine, withFallback(disease.treatment.conservative, [cleanText(getPrimaryTreatment(disease))])),
+  reassess: ['Оценить клинический ответ, переносимость лечения и соответствие исходной гипотезы.'],
+  escalateWhen: withFallback(disease.clinicalSummary?.whenToEscalate, ['Эскалировать при красных флагах, ухудшении состояния или отсутствии эффекта от первой линии.']),
+  referWhen: [
+    disease.subtitle === 'Акушерство'
+      ? 'Направить в стационар или перинатальный центр при материнско-плодовом риске.'
+      : 'Направить к профильному специалисту при сложном течении, неясном диагнозе или необходимости процедуры/операции.',
+  ],
+});
+
+const buildFollowUpTriggers = (disease: Disease): DiseaseFollowUpTriggers => ({
+  routineReview: [disease.followUp?.frequency ?? 'Контроль по стандартному плану наблюдения после старта терапии.'],
+  earlierReviewIf: ['Симптомы нарастают, появляются красные флаги или ухудшается переносимость лечения.'],
+  switchTreatmentIf: ['Нет клинического ответа на терапию первой линии или меняется профиль риска/цель лечения.'],
+  urgentReassessmentIf: withFallback(disease.clinicalSummary?.redFlags, ['Появляются признаки осложненного или жизнеугрожающего течения.']),
+});
+
+const buildPatientCounseling = (disease: Disease) =>
+  withFallback(disease.recommendations, [
+    `Объяснить пациентке ожидаемое течение ${disease.name.toLowerCase()} и цель каждого этапа лечения.`,
+    'Согласовать признаки, при которых нужно срочно обратиться повторно.',
+  ]);
+
+const buildSpecialPopulations = (disease: Disease): DiseaseSpecialPopulations => {
+  if (disease.subtitle === 'Акушерство') {
+    return {
+      pregnancy: ['Тактика определяется балансом пользы и риска для матери и плода.'],
+      postpartum: ['После родов требуется отдельная переоценка рисков, симптомов и показаний к продолжению терапии.'],
+    };
+  }
+
+  return {
+    adolescents: ['У подростков важно учитывать влияние на цикл, развитие и долгосрочную репродуктивную функцию.'],
+    fertilityPlanning: ['При планировании беременности тактика должна учитывать влияние заболевания и лечения на фертильность.'],
+    perimenopause: ['В перименопаузе требуется учитывать изменение онкорисков и профиль аномальных кровотечений.'],
+  };
+};
+
+const buildTimingOfDelivery = (disease: Disease): TimingOfDelivery | undefined => {
+  if (disease.subtitle !== 'Акушерство') {
+    return undefined;
+  }
+
+  return {
+    expectantManagementUntil: ['Беременность пролонгируют только пока это безопасно для матери и плода.'],
+    deliverNowWhen: ['Родоразрешение показано при декомпенсации материнского состояния, ухудшении состояния плода или исчерпании безопасного окна ожидания.'],
+    gestationalAgeModifiers: ['Срок гестации влияет на баланс между ожиданием, кортикостероидами, переводом и срочным родоразрешением.'],
+    modeOfDeliveryNotes: ['Способ родоразрешения определяется акушерской ситуацией и срочностью вмешательства.'],
+  };
+};
+
+const buildMaternalMonitoring = (disease: Disease): MonitoringPlan | undefined => {
+  if (disease.subtitle !== 'Акушерство') {
+    return undefined;
+  }
+
+  return {
+    vitalSigns: ['Контроль артериального давления, пульса, температуры и общего состояния по клиническим показаниям.'],
+    labs: [cleanText(disease.diagnostics.markers)],
+    warningSymptoms: withFallback(disease.clinicalSummary?.redFlags, ['Нарастание симптомов, признаки органной дисфункции или кровотечения.']),
+    reassessmentInterval: ['Частота переоценки зависит от тяжести состояния и условий ведения.'],
+  };
+};
+
+const buildFetalMonitoring = (disease: Disease): MonitoringPlan | undefined => {
+  if (disease.subtitle !== 'Акушерство') {
+    return undefined;
+  }
+
+  return {
+    imaging: withFallback(disease.diagnostics.imaging, buildImaging(disease)),
+    warningSymptoms: ['Признаки дистресса плода, патологический допплер, отклонения КТГ или нарушение роста.'],
+    reassessmentInterval: ['Кратность мониторинга определяется риском и сроком беременности.'],
+  };
+};
+
+const buildInpatientVsOutpatient = (disease: Disease): InpatientOutpatientPlan | undefined => {
+  if (disease.subtitle !== 'Акушерство') {
+    return undefined;
+  }
+
+  return {
+    outpatientWhen: ['Амбулаторное ведение допустимо только при стабильном течении и отсутствии показаний к круглосуточному мониторингу.'],
+    inpatientWhen: ['Госпитализация нужна при тяжелом течении, нестабильности, риске срочного родоразрешения или необходимости интенсивного наблюдения.'],
+  };
+};
+
+const buildDeliveryIndications = (disease: Disease) =>
+  disease.subtitle === 'Акушерство'
+    ? ['Показания к родоразрешению определяются тяжестью состояния матери, статусом плода и сроком беременности.']
+    : undefined;
+
+const buildPostpartumManagement = (disease: Disease) =>
+  disease.subtitle === 'Акушерство'
+    ? ['После родов требуется пересмотр диагноза, остаточных рисков и необходимости продолжения мониторинга или терапии.']
+    : undefined;
+
+const buildFertilityImpact = (disease: Disease) =>
+  disease.subtitle === 'Гинекология'
+    ? ['Оценить влияние заболевания и лечения на овуляцию, имплантацию, проходимость труб и сроки планирования беременности.']
+    : undefined;
+
+const buildMalignancyRisk = (disease: Disease) =>
+  disease.subtitle === 'Гинекология'
+    ? ['Онкориск оценивается по возрасту, симптомам, визуализации, гистологии и наличию предраковых состояний.']
+    : undefined;
+
+const buildRecurrenceRisk = (disease: Disease) =>
+  disease.subtitle === 'Гинекология'
+    ? ['Риск рецидива зависит от биологии заболевания, полноты лечения и длительности поддерживающей терапии.']
+    : undefined;
+
+const buildScreeningAndPrevention = (disease: Disease) =>
+  disease.subtitle === 'Гинекология'
+    ? ['Профилактика и скрининг должны учитывать возраст, симптомы, ВПЧ-статус, репродуктивные планы и онкоанамнез.']
+    : undefined;
+
+const buildWhenBiopsyNeeded = (disease: Disease) =>
+  disease.subtitle === 'Гинекология'
+    ? ['Биопсия нужна при подозрении на неоплазию, предрак, атипичные кровотечения или несоответствии клиники и визуализации.']
+    : undefined;
 
 const normalizeDisease = (disease: DiseaseInput): Disease => ({
   ...disease,
@@ -91,6 +316,44 @@ const getPrimaryTreatment = (disease: Disease) => {
 const getPrimarySymptom = (disease: Disease) => disease.symptoms[0] ?? 'клинические симптомы';
 
 const getPrimaryDiagnosticStep = (disease: Disease) => disease.diagnostics.steps[0] ?? 'клиническая оценка';
+
+const getDifferentialSignal = (disease: Disease) => disease.diagnostics.differential?.[0] ?? 'атипичное течение или отсутствие ответа на стартовую тактику';
+
+const buildClinicalSummary = (disease: Disease): DiseaseClinicalSummary => {
+  const primarySymptom = cleanText(getPrimarySymptom(disease));
+  const primaryDiagnosticStep = cleanText(getPrimaryDiagnosticStep(disease));
+  const primaryTreatment = cleanText(getPrimaryTreatment(disease));
+  const primaryDifferentialSignal = cleanText(getDifferentialSignal(disease));
+  const conservativeAction = disease.treatment.conservative?.[0];
+  const surgicalAction = disease.treatment.surgical?.[0];
+
+  return {
+    quickSummary:
+      disease.subtitle === 'Акушерство'
+        ? `${disease.name} требует быстрой акушерской оценки, подтверждения через ${primaryDiagnosticStep} и раннего выбора тактики ведения.`
+        : `${disease.name} следует заподозрить при жалобах на ${primarySymptom}; базовый шаг подтверждения - ${primaryDiagnosticStep}.`,
+    redFlags: [
+      `Быстрое ухудшение симптомов или нетипичное течение при ${disease.name.toLowerCase()}.`,
+      `Признаки тяжелого осложнения, требующие немедленной очной оценки и пересмотра тактики.`,
+    ],
+    firstLineActions: [
+      `Провести стартовую клиническую оценку и подтвердить диагноз через ${primaryDiagnosticStep}.`,
+      conservativeAction ? cleanText(conservativeAction) : `Рассмотреть стартовую тактику: ${primaryTreatment}.`,
+    ],
+    diagnosticMinimum: [
+      primaryDiagnosticStep,
+      cleanText(disease.diagnostics.markers),
+    ],
+    whenToEscalate: [
+      surgicalAction ? `Если стартовая тактика недостаточна, рассмотреть эскалацию: ${cleanText(surgicalAction)}.` : 'При отсутствии эффекта от терапии первой линии требуется пересмотр диагноза и эскалация ведения.',
+      `Эскалировать тактику при подозрении на ${primaryDifferentialSignal}.`,
+    ],
+    clinicalPearls: [
+      `Оценивайте ${disease.name.toLowerCase()} по совокупности жалоб, клиники и подтверждающих исследований.`,
+      `Решения по лечению должны учитывать репродуктивные планы, возраст и клинические риски пациента.`,
+    ],
+  };
+};
 
 const getGynecologyCluster = (disease: Disease): GynecologyCluster => {
   const target = `${disease.id} ${disease.name} ${disease.icon}`.toLowerCase();
@@ -1366,6 +1629,9 @@ const buildUltrasound = (disease: Disease) => ({
       : 'Допплер помогает оценить характер кровоснабжения очага, выявить перекрут, воспалительную гиперваскуляризацию или патологический опухолевый рисунок.',
   imagingTips: buildImagingTips(disease),
   normalValues: buildNormalValues(disease),
+  pitfalls: ['Не интерпретировать УЗИ изолированно без клинического контекста и данных смежных исследований.', 'При неубедительной картине не повторять одно и то же исследование бесконечно, а эскалировать визуализацию по показаниям.'],
+  whenMRIorCTNeeded: ['Нужна дополнительная визуализация при неясной картине, глубоком распространении процесса, онкоподозрении или расхождении УЗИ с клиникой.'],
+  reportingChecklist: ['Локализация и размеры', 'Ключевые патологические признаки', 'Признаки осложнений', 'Клинически значимые измерения', 'Рекомендации по дальнейшей визуализации при необходимости'],
 });
 
 const mergeUltrasound = (disease: Disease) => {
@@ -1384,6 +1650,9 @@ const mergeUltrasound = (disease: Disease) => {
     dopplerFindings: current.dopplerFindings ?? fallback.dopplerFindings,
     imagingTips: current.imagingTips?.length ? current.imagingTips : fallback.imagingTips,
     normalValues: current.normalValues ?? fallback.normalValues,
+    pitfalls: current.pitfalls?.length ? current.pitfalls : fallback.pitfalls,
+    whenMRIorCTNeeded: current.whenMRIorCTNeeded?.length ? current.whenMRIorCTNeeded : fallback.whenMRIorCTNeeded,
+    reportingChecklist: current.reportingChecklist?.length ? current.reportingChecklist : fallback.reportingChecklist,
   };
 };
 
@@ -1393,20 +1662,53 @@ export const enrichDisease = (rawDisease: DiseaseInput): Disease => {
 
   return {
     ...disease,
+    overview: disease.overview ?? buildOverview(disease),
     diagnostics: {
       ...disease.diagnostics,
       imaging: disease.diagnostics.imaging?.length ? disease.diagnostics.imaging : buildImaging(disease),
       differential: disease.diagnostics.differential?.length ? disease.diagnostics.differential : buildDifferential(disease),
+      initialEvaluation: disease.diagnostics.initialEvaluation?.length ? disease.diagnostics.initialEvaluation : [cleanText(getPrimaryDiagnosticStep(disease))],
+      requiredMinimum: disease.diagnostics.requiredMinimum?.length ? disease.diagnostics.requiredMinimum : withFallback(disease.clinicalSummary?.diagnosticMinimum, [cleanText(getPrimaryDiagnosticStep(disease)), cleanText(disease.diagnostics.markers)]),
+      confirmatoryTests: disease.diagnostics.confirmatoryTests?.length ? disease.diagnostics.confirmatoryTests : withFallback(disease.diagnostics.imaging, [cleanText(getPrimaryDiagnosticStep(disease))]),
+      testsByIndication: disease.diagnostics.testsByIndication?.length ? disease.diagnostics.testsByIndication : withFallback(disease.diagnostics.differential, ['Дополнительные тесты назначаются при атипичном течении, осложнениях или необходимости уточнить альтернативный диагноз.']),
+      avoidOvertesting: disease.diagnostics.avoidOvertesting?.length ? disease.diagnostics.avoidOvertesting : ['Не расширять обследование без клинического вопроса и влияния результата на тактику.'],
     },
     treatment: {
       ...disease.treatment,
+      firstLine: disease.treatment.firstLine?.length ? disease.treatment.firstLine : disease.treatment.conservative,
+      secondLine: disease.treatment.secondLine?.length ? disease.treatment.secondLine : disease.treatment.surgical,
+      proceduralOrSurgical: disease.treatment.proceduralOrSurgical?.length ? disease.treatment.proceduralOrSurgical : disease.treatment.surgical,
+      inpatientManagement: disease.treatment.inpatientManagement?.length ? disease.treatment.inpatientManagement : (disease.subtitle === 'Акушерство' ? ['При нестабильном течении требуется стационарное ведение и мониторинг.'] : []),
+      whatNotToDo: disease.treatment.whatNotToDo?.length ? disease.treatment.whatNotToDo : ['Не продолжать неэффективную терапию без пересмотра диагноза и целей лечения.'],
       guidelines: gynecologyGuidelines ?? disease.treatment.guidelines,
     },
+    guidelineBasis: disease.guidelineBasis?.length ? disease.guidelineBasis : buildGuidelineBasis(disease),
+    guidelineStatus: disease.guidelineStatus ?? 'legacy',
+    diagnosticCriteria: disease.diagnosticCriteria ?? buildDiagnosticCriteria(disease),
+    severityStratification: disease.severityStratification ?? buildSeverityStratification(disease),
+    differentialDiagnosis: disease.differentialDiagnosis?.length ? disease.differentialDiagnosis : buildStructuredDifferential(disease),
+    managementAlgorithm: disease.managementAlgorithm ?? buildManagementAlgorithm(disease),
+    contraindicatedOrAvoid: disease.contraindicatedOrAvoid?.length ? disease.contraindicatedOrAvoid : disease.treatment.whatNotToDo?.length ? disease.treatment.whatNotToDo : ['Избегать задержки эскалации при ухудшении клинической картины.'],
     ultrasound: mergeUltrasound(disease),
     recommendations: disease.recommendations?.length ? disease.recommendations : buildRecommendations(disease),
     prognosis: disease.prognosis ?? buildPrognosis(disease),
     followUp: disease.followUp ?? buildFollowUp(disease),
+    followUpTriggers: disease.followUpTriggers ?? buildFollowUpTriggers(disease),
+    clinicalSummary: disease.clinicalSummary ?? buildClinicalSummary(disease),
     clinicalCases: disease.clinicalCases?.length ? disease.clinicalCases : buildClinicalCases(disease),
+    patientCounseling: disease.patientCounseling?.length ? disease.patientCounseling : buildPatientCounseling(disease),
+    specialPopulations: disease.specialPopulations ?? buildSpecialPopulations(disease),
+    timingOfDelivery: disease.timingOfDelivery ?? buildTimingOfDelivery(disease),
+    maternalMonitoring: disease.maternalMonitoring ?? buildMaternalMonitoring(disease),
+    fetalMonitoring: disease.fetalMonitoring ?? buildFetalMonitoring(disease),
+    inpatientVsOutpatient: disease.inpatientVsOutpatient ?? buildInpatientVsOutpatient(disease),
+    deliveryIndications: disease.deliveryIndications?.length ? disease.deliveryIndications : buildDeliveryIndications(disease),
+    postpartumManagement: disease.postpartumManagement?.length ? disease.postpartumManagement : buildPostpartumManagement(disease),
+    fertilityImpact: disease.fertilityImpact?.length ? disease.fertilityImpact : buildFertilityImpact(disease),
+    malignancyRisk: disease.malignancyRisk?.length ? disease.malignancyRisk : buildMalignancyRisk(disease),
+    recurrenceRisk: disease.recurrenceRisk?.length ? disease.recurrenceRisk : buildRecurrenceRisk(disease),
+    screeningAndPrevention: disease.screeningAndPrevention?.length ? disease.screeningAndPrevention : buildScreeningAndPrevention(disease),
+    whenBiopsyNeeded: disease.whenBiopsyNeeded?.length ? disease.whenBiopsyNeeded : buildWhenBiopsyNeeded(disease),
   };
 };
 
