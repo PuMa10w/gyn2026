@@ -31,7 +31,8 @@
     "typescript-eslint": "^8.58.2",
     "vite": "^6.3.5",
     "vite-plugin-pwa": "^1.2.0",
-    "vitest": "^3.0.0"
+    "vitest": "^3.0.0",
+    "wrangler": "^4.84.1"
   },
   "scripts": {
     "start": "vite",
