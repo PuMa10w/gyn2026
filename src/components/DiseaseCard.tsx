@@ -53,16 +53,7 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
       tabIndex={0}
       aria-label={`${item.name}, код ${icdLabel}. Открыть подробности.`}
     >
-      <div className="card-meta-row">
-        <span className="card-subtitle">{item.subtitle}</span>
-        <span className="card-icd-badge">{icdLabel}</span>
-      </div>
-
-      <div className="card-top-row">
-        <span className="card-icon" aria-hidden="true">
-          {IconComponent && <span className="card-icon-art">{IconComponent}</span>}
-        </span>
-
+      <div className="card-header">
         <button
           type="button"
           className={`favorite-btn ${isFavorite ? 'is-favorite' : ''}`}
@@ -76,8 +67,16 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
         </button>
       </div>
 
-      <div className="card-content">
+      <div className="card-body">
         <h3 className="card-title">{item.name}</h3>
+        <span className="card-icd-badge">{icdLabel}</span>
+        
+        <div className="card-icon-wrap">
+          <span className="card-icon" aria-hidden="true">
+            {IconComponent && <span className="card-icon-art">{IconComponent}</span>}
+          </span>
+        </div>
+        
         <p className="card-desc">{item.description}</p>
       </div>
     </motion.article>
