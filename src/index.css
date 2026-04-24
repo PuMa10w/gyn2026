@@ -100,6 +100,12 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+html.modal-open,
+body.modal-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   min-height: 100vh;
   overflow-x: hidden;
@@ -181,6 +187,21 @@ body {
   transition: background 0.25s ease, color 0.25s ease;
   padding-bottom: var(--safe-bottom);
   overscroll-behavior-y: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @media (max-width: 428px) {

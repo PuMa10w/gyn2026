@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import './App.css';
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
@@ -20,12 +20,12 @@ const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
 const Questionnaire = lazy(() => import('./components/Questionnaire'));
 const PharmacologyModal = lazy(() => import('./components/PharmacologyModal'));
 
-const LoadingSpinner = () => (
+const LoadingSpinner = ({ prefersReducedMotion }: { prefersReducedMotion: boolean }) => (
   <motion.div className="loading-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
     <motion.div
       className="loading-spinner"
-      animate={{ rotate: 360 }}
-      transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
+      animate={prefersReducedMotion ? undefined : { rotate: 360 }}
+      transition={prefersReducedMotion ? undefined : { repeat: Infinity, duration: 1.2, ease: 'linear' }}
       aria-label="Загрузка"
       role="status"
     >
@@ -44,6 +44,7 @@ function App() {
   const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
   const [showPharmacology, setShowPharmacology] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const { theme, toggleTheme } = useTheme();
   const { toggleFavorite, isFavorite, favorites } = useFavorites();
@@ -74,16 +75,35 @@ function App() {
       : emptyStateContent.search;
 
   useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 320);
+    let frameId = 0;
+
+    const updateScrollTopVisibility = () => {
+      const shouldShow = window.scrollY > 320;
+      setShowScrollTop((current) => (current === shouldShow ? current : shouldShow));
+      frameId = 0;
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      if (frameId !== 0) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(updateScrollTopVisibility);
+    };
+
+    updateScrollTopVisibility();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (frameId !== 0) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
 
   const recentItems = useMemo(() => history.slice(0, 4), [history]);
@@ -218,7 +238,7 @@ function App() {
           </footer>
         </main>
 
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<LoadingSpinner prefersReducedMotion={prefersReducedMotion} />}>
           {selectedItem && <DiseaseModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
           {showQuestionnaire && <Questionnaire onClose={() => setShowQuestionnaire(false)} />}
           {showPharmacology && <PharmacologyModal onClose={() => setShowPharmacology(false)} />}
@@ -228,11 +248,11 @@ function App() {
           <motion.button
             className="scroll-top-btn"
             onClick={scrollToTop}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.9 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.9 }}
+            whileHover={prefersReducedMotion ? undefined : { scale: 1.03 }}
+            whileTap={prefersReducedMotion ? undefined : { scale: 0.97 }}
             aria-label="Наверх"
             title="Наверх"
           >

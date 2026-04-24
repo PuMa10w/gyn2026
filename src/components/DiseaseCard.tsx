@@ -25,13 +25,28 @@ const cardVariants = {
   }),
 };
 
-const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFavorite, onToggleFavorite }: DiseaseCardProps) {
-  const IconComponent = (gynIcons as Record<string, React.ReactNode>)[item.icon] ?? (obsIcons as Record<string, React.ReactNode>)[item.icon];
+const DiseaseCard = React.memo(function DiseaseCard({
+  item,
+  onClick,
+  index,
+  isFavorite,
+  onToggleFavorite,
+}: DiseaseCardProps) {
+  const IconComponent =
+    (gynIcons as Record<string, React.ReactNode>)[item.icon] ??
+    (obsIcons as Record<string, React.ReactNode>)[item.icon];
   const icdLabel = item.icdDetail ?? item.icd;
 
   const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     onToggleFavorite(item.id);
+  };
+
+  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onClick(item);
+    }
   };
 
   return (
@@ -43,16 +58,15 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
       variants={cardVariants}
       whileHover={{ y: -4 }}
       onClick={() => onClick(item)}
-      onKeyDown={(event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          onClick(item);
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-label={`${item.name}, код ${icdLabel}. Открыть подробности.`}
     >
+      <button
+        type="button"
+        className="disease-card-action"
+        onClick={() => onClick(item)}
+        onKeyDown={handleCardKeyDown}
+        aria-label={`${item.name}, код ${icdLabel}. Открыть подробности.`}
+      />
+
       <header className="card-header">
         <div className="card-meta-row">
           <span className="card-subtitle">{item.subtitle}</span>

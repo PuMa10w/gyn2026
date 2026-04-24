@@ -31,6 +31,9 @@ const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, res
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
           autoComplete="off"
+          inputMode="search"
+          enterKeyHint="search"
+          spellCheck={false}
         />
         {searchTerm && (
           <motion.button

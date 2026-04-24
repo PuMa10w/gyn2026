@@ -31,7 +31,7 @@ const CategoryFilter = React.memo(function CategoryFilter({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.22 }}
     >
-      <div className="category-chips" role="tablist" aria-label="Фильтр по категориям">
+      <div className="category-chips" role="toolbar" aria-label="Фильтр по категориям">
         {categories
           .filter((category) => visibleCategories.includes(category.id))
           .map((category) => (

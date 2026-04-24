@@ -816,6 +816,312 @@ export const obsIcons = {
   )
 };
 
+const extraClinicalIcons = {
+  "breast-cancer": (
+    <IconWrapper>
+      <path d="M21,17 C19,23 20,34 25,41 C28,45 32,45 35,41 C40,34 41,23 39,17" fill="url(#grad)" opacity="0.42" />
+      <circle cx="30" cy="28" r="9" fill="none" stroke="white" strokeWidth="2" />
+      <path d="M24,22 L36,34 M36,22 L24,34" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+      <circle cx="30" cy="28" r="2.2" fill="#f2d9d3" />
+    </IconWrapper>
+  ),
+  "breast-screening": (
+    <IconWrapper>
+      <path d="M21,18 C20,24 21,33 25,39 C28,43 32,43 35,39 C39,33 40,24 39,18" fill="url(#grad)" opacity="0.38" />
+      <circle cx="28" cy="27" r="8" fill="none" stroke="white" strokeWidth="2" />
+      <path d="M34,33 L41,40" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+      <circle cx="28" cy="27" r="2.4" fill="#f3e4de" />
+    </IconWrapper>
+  ),
+  mastopathy: (
+    <IconWrapper>
+      <path d="M21,18 C20,24 21,33 25,39 C28,43 32,43 35,39 C39,33 40,24 39,18" fill="url(#grad)" opacity="0.36" />
+      <circle cx="25" cy="28" r="3" fill="white" opacity="0.82" />
+      <circle cx="31" cy="24" r="2.6" fill="white" opacity="0.76" />
+      <circle cx="34" cy="31" r="3.4" fill="white" opacity="0.72" />
+    </IconWrapper>
+  ),
+  fibroadenoma: (
+    <IconWrapper>
+      <path d="M21,18 C20,24 21,33 25,39 C28,43 32,43 35,39 C39,33 40,24 39,18" fill="url(#grad)" opacity="0.36" />
+      <circle cx="30" cy="28" r="7" fill="white" opacity="0.84" />
+      <circle cx="30" cy="28" r="3" fill="url(#grad)" opacity="0.72" />
+    </IconWrapper>
+  ),
+  "ductal-ectasia": (
+    <IconWrapper>
+      <path d="M21,18 C20,24 21,33 25,39 C28,43 32,43 35,39 C39,33 40,24 39,18" fill="url(#grad)" opacity="0.3" />
+      <path d="M24,24 C28,23 32,23 36,24" stroke="white" strokeWidth="2" fill="none" />
+      <path d="M23,29 C28,27 32,27 37,29" stroke="white" strokeWidth="2" fill="none" opacity="0.9" />
+      <path d="M24,34 C28,33 32,33 36,34" stroke="white" strokeWidth="2" fill="none" opacity="0.8" />
+    </IconWrapper>
+  ),
+  thyroid: (
+    <IconWrapper>
+      <path d="M24,18 C20,19 18,23 18,27 C18,32 21,36 25,38 C27,39 29,38 30,35 C31,38 33,39 35,38 C39,36 42,32 42,27 C42,23 40,19 36,18 C33,17 31,19 30,22 C29,19 27,17 24,18 Z" fill="url(#grad)" opacity="0.58" />
+      <path d="M30,22 L30,39" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.92" />
+    </IconWrapper>
+  ),
+  menopause: (
+    <IconWrapper>
+      <circle cx="30" cy="22" r="8" fill="none" stroke="url(#grad)" strokeWidth="2.6" />
+      <path d="M30,30 L30,45" stroke="url(#grad)" strokeWidth="3" strokeLinecap="round" />
+      <path d="M20,34 Q30,29 40,34" stroke="white" strokeWidth="2" fill="none" opacity="0.9" />
+      <path d="M22,40 Q30,36 38,40" stroke="white" strokeWidth="1.8" fill="none" opacity="0.65" />
+    </IconWrapper>
+  ),
+  hrt: (
+    <IconWrapper>
+      <rect x="18" y="19" width="24" height="12" rx="6" fill="url(#grad)" opacity="0.72" />
+      <rect x="18" y="31" width="24" height="12" rx="6" fill="white" opacity="0.86" />
+      <path d="M30,19 L30,43" stroke="#c48f7d" strokeWidth="2" opacity="0.8" />
+    </IconWrapper>
+  ),
+  osteoporosis: (
+    <IconWrapper>
+      <path d="M24,17 C21,17 19,19 19,22 C19,24 20.5,26 22.5,26 L37.5,26 C39.5,26 41,24 41,22 C41,19 39,17 36,17 Z" fill="url(#grad)" opacity="0.36" />
+      <path d="M22.5,34 C20.5,34 19,36 19,38 C19,41 21,43 24,43 L36,43 C39,43 41,41 41,38 C41,36 39.5,34 37.5,34 Z" fill="url(#grad)" opacity="0.36" />
+      <path d="M24,26 L24,34 M30,26 L30,34 M36,26 L36,34" stroke="white" strokeWidth="2" strokeDasharray="2 2" />
+    </IconWrapper>
+  ),
+  ivf: (
+    <IconWrapper>
+      <path d="M22,18 L38,18 L35,42 C34.5,45 25.5,45 25,42 Z" fill="url(#grad)" opacity="0.46" />
+      <circle cx="30" cy="28" r="5.5" fill="white" opacity="0.9" />
+      <circle cx="30" cy="28" r="2.1" fill="url(#grad)" opacity="0.7" />
+    </IconWrapper>
+  ),
+  iui: (
+    <IconWrapper>
+      <path d="M23,18 C23,14 37,14 37,18 L37,28 C37,35 23,35 23,28 Z" fill="url(#grad)" opacity="0.42" />
+      <path d="M30,18 L30,43" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M16,22 L28,26" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </IconWrapper>
+  ),
+  icsi: (
+    <IconWrapper>
+      <circle cx="28" cy="29" r="8" fill="white" opacity="0.9" />
+      <circle cx="28" cy="29" r="3" fill="url(#grad)" opacity="0.75" />
+      <path d="M36,22 L45,17" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M34,24 L42,20" stroke="url(#grad)" strokeWidth="2.2" strokeLinecap="round" />
+    </IconWrapper>
+  ),
+  pgd: (
+    <IconWrapper>
+      <circle cx="25" cy="26" r="7" fill="url(#grad)" opacity="0.5" />
+      <rect x="31" y="23" width="11" height="11" rx="2.5" fill="white" opacity="0.88" />
+      <path d="M34,29 L36.5,31.5 L40,26.5" stroke="#9e6e67" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </IconWrapper>
+  ),
+  donor: (
+    <IconWrapper>
+      <path d="M30,15 C24,15 20,20 20,26 C20,35 30,44 30,44 C30,44 40,35 40,26 C40,20 36,15 30,15 Z" fill="url(#grad)" opacity="0.54" />
+      <path d="M24,27 C26,24 29,23 30,20 C31,23 34,24 36,27" stroke="white" strokeWidth="2" fill="none" />
+    </IconWrapper>
+  ),
+  contraception: (
+    <IconWrapper>
+      <circle cx="30" cy="29" r="12" fill="none" stroke="url(#grad)" strokeWidth="2.8" />
+      <path d="M30,17 L30,41" stroke="white" strokeWidth="2" />
+      <path d="M22,25 L38,25" stroke="white" strokeWidth="2" />
+      <path d="M23,37 L37,21" stroke="url(#grad)" strokeWidth="2.4" strokeLinecap="round" />
+    </IconWrapper>
+  ),
+  bladder: (
+    <IconWrapper>
+      <path d="M21,18 C21,14 39,14 39,18 L39,31 C39,40 21,40 21,31 Z" fill="url(#grad)" opacity="0.44" />
+      <path d="M25,26 C27,29 33,29 35,26" stroke="white" strokeWidth="2" fill="none" />
+      <path d="M30,18 L30,13" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </IconWrapper>
+  ),
+  uterus: (
+    <IconWrapper>
+      <path d="M18,19 C21,19 24,23 24,27 C24,31 21,34 18,36" stroke="url(#grad)" strokeWidth="3" fill="none" />
+      <path d="M42,19 C39,19 36,23 36,27 C36,31 39,34 42,36" stroke="url(#grad)" strokeWidth="3" fill="none" />
+      <path d="M24,27 C24,20 36,20 36,27 L36,33 C36,40 24,40 24,33 Z" fill="url(#grad)" opacity="0.38" />
+      <path d="M30,33 L30,45" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+    </IconWrapper>
+  ),
+  vulvodynia: (
+    <IconWrapper>
+      <path d="M30,16 C24,16 20,22 20,28 C20,36 30,44 30,44 C30,44 40,36 40,28 C40,22 36,16 30,16 Z" fill="url(#grad)" opacity="0.44" />
+      <path d="M23,30 L27,26 L30,31 L34,24 L38,29" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </IconWrapper>
+  ),
+  lichen: (
+    <IconWrapper>
+      <ellipse cx="30" cy="30" rx="15" ry="12" fill="url(#grad)" opacity="0.26" />
+      <path d="M20,24 Q26,20 32,24 T44,24" stroke="white" strokeWidth="1.8" fill="none" opacity="0.82" />
+      <path d="M18,30 Q25,26 32,30 T42,30" stroke="white" strokeWidth="1.8" fill="none" opacity="0.7" />
+      <path d="M20,36 Q26,33 32,36 T42,36" stroke="white" strokeWidth="1.8" fill="none" opacity="0.58" />
+    </IconWrapper>
+  ),
+  vin: (
+    <IconWrapper>
+      <ellipse cx="30" cy="30" rx="15" ry="12" fill="url(#grad)" opacity="0.28" />
+      <circle cx="24" cy="26" r="2" fill="white" opacity="0.9" />
+      <circle cx="31" cy="30" r="2" fill="white" opacity="0.9" />
+      <circle cx="36" cy="25" r="2" fill="white" opacity="0.9" />
+      <path d="M22,38 L38,22" stroke="url(#grad)" strokeWidth="2" strokeLinecap="round" />
+    </IconWrapper>
+  ),
+  vain: (
+    <IconWrapper>
+      <path d="M24,16 L24,43 C24,46 36,46 36,43 L36,16" fill="url(#grad)" opacity="0.34" />
+      <circle cx="30" cy="23" r="2" fill="white" opacity="0.9" />
+      <circle cx="30" cy="30" r="2.4" fill="white" opacity="0.9" />
+      <circle cx="30" cy="37" r="2" fill="white" opacity="0.9" />
+      <path d="M26,18 L34,42" stroke="url(#grad)" strokeWidth="2" opacity="0.75" />
+    </IconWrapper>
+  ),
+  asherman: (
+    <IconWrapper>
+      <path d="M22,16 L22,44" stroke="url(#grad)" strokeWidth="2.6" />
+      <path d="M38,16 L38,44" stroke="url(#grad)" strokeWidth="2.6" />
+      <path d="M22,23 L38,27 M22,30 L38,31 M22,37 L38,35" stroke="white" strokeWidth="1.8" opacity="0.84" />
+    </IconWrapper>
+  ),
+  fistula: (
+    <IconWrapper>
+      <path d="M20,20 C20,15 28,15 28,20 L28,34 C28,39 20,39 20,34 Z" fill="url(#grad)" opacity="0.34" />
+      <path d="M32,20 C32,15 40,15 40,20 L40,34 C40,39 32,39 32,34 Z" fill="url(#grad)" opacity="0.34" />
+      <path d="M28,27 C30,25 30,25 32,27" stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+    </IconWrapper>
+  ),
+  circumcision: (
+    <IconWrapper>
+      <circle cx="30" cy="30" r="12" fill="none" stroke="url(#grad)" strokeWidth="2.6" />
+      <path d="M22,38 L38,22" stroke="white" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M36,20 L40,24" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </IconWrapper>
+  ),
+  anomaly: (
+    <IconWrapper>
+      <path d="M18,18 C21,18 24,22 24,27 C24,31 21,34 18,36" stroke="url(#grad)" strokeWidth="3" fill="none" />
+      <path d="M42,18 C39,18 36,22 36,27 C36,31 39,34 42,36" stroke="url(#grad)" strokeWidth="3" fill="none" />
+      <path d="M24,27 C24,21 28,20 30,24 C32,20 36,21 36,27 L36,33 C36,40 24,40 24,33 Z" fill="url(#grad)" opacity="0.32" />
+      <path d="M30,24 L30,45" stroke="white" strokeWidth="2" />
+    </IconWrapper>
+  ),
+  stenosis: (
+    <IconWrapper>
+      <path d="M24,15 L24,45 C24,48 36,48 36,45 L36,15" fill="url(#grad)" opacity="0.3" />
+      <path d="M22,28 L38,28" stroke="white" strokeWidth="2" />
+      <path d="M26,31 L34,31" stroke="white" strokeWidth="2" />
+    </IconWrapper>
+  ),
+  tb: (
+    <IconWrapper>
+      <path d="M19,24 C21,20 25,20 27,24 C29,28 33,28 35,24 C37,20 41,20 43,24" stroke="url(#grad)" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M17,34 C19,30 23,30 25,34 C27,38 31,38 33,34 C35,30 39,30 41,34" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.84" />
+    </IconWrapper>
+  ),
+  ohss: (
+    <IconWrapper>
+      <circle cx="22" cy="30" r="8" fill="url(#grad)" opacity="0.34" />
+      <circle cx="38" cy="30" r="8" fill="url(#grad)" opacity="0.34" />
+      <circle cx="20" cy="27" r="2.4" fill="white" opacity="0.88" />
+      <circle cx="24" cy="31" r="2.4" fill="white" opacity="0.88" />
+      <circle cx="36" cy="28" r="2.4" fill="white" opacity="0.88" />
+      <circle cx="40" cy="32" r="2.4" fill="white" opacity="0.88" />
+    </IconWrapper>
+  ),
+  "cervical-screening": (
+    <IconWrapper>
+      <path d="M22,15 C18,18 16,23 16,29 C16,38 22,44 30,44 C38,44 44,38 44,29 C44,23 42,18 38,15" fill="url(#grad)" opacity="0.3" />
+      <circle cx="27" cy="28" r="6" fill="none" stroke="white" strokeWidth="2" />
+      <path d="M31,32 L38,39" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+      <circle cx="27" cy="28" r="1.8" fill="#f2ddd6" />
+    </IconWrapper>
+  ),
+  "candidiasis": (
+    <IconWrapper>
+      <circle cx="30" cy="28" r="10" fill="url(#grad)" opacity="0.34" />
+      <circle cx="26" cy="24" r="3" fill="white" opacity="0.88" />
+      <circle cx="34" cy="24" r="3" fill="white" opacity="0.88" />
+      <circle cx="30" cy="33" r="3.4" fill="white" opacity="0.88" />
+    </IconWrapper>
+  ),
+  bv: (
+    <IconWrapper>
+      <path d="M18,24 Q24,20 30,24 T42,24" stroke="url(#grad)" strokeWidth="2.8" fill="none" />
+      <path d="M18,30 Q24,26 30,30 T42,30" stroke="white" strokeWidth="2" fill="none" opacity="0.86" />
+      <path d="M18,36 Q24,32 30,36 T42,36" stroke="url(#grad)" strokeWidth="2.4" fill="none" opacity="0.78" />
+    </IconWrapper>
+  )
+};
+
+Object.assign(gynIcons, extraClinicalIcons);
+
+Object.assign(gynIcons, {
+  bartholin: gynIcons.bartholinitis,
+  menorrhagia: gynIcons.aub,
+  hypermenorrhea: gynIcons.aub,
+  hypomenorrhea: gynIcons.amenorrhea,
+  metrorrhagia: gynIcons.aub,
+  oligomenorrhea: gynIcons.amenorrhea,
+  infertility: gynIcons["female-infertility"],
+  anovulation: gynIcons.pcos,
+  polyps: gynIcons.polyp,
+  ectopic: obsIcons["ectopic-pregnancy"],
+  pof: gynIcons.poi,
+  dor: gynIcons.poi,
+  miscarriage: gynIcons["recurrent-pregnancy-loss"],
+  erosion: gynIcons.ectropion,
+  dystrophy: gynIcons.lichen,
+  prolapse: gynIcons["uterine-prolapse"],
+  block: gynIcons.hydrosalpinx,
+  adhesion: gynIcons.synechiae,
+  sarcoma: gynIcons["uterine-sarcoma"],
+  blood: gynIcons.aub,
+  pain: gynIcons["chronic-pain"],
+  bladder: extraClinicalIcons.bladder,
+  uterus: extraClinicalIcons.uterus,
+  incontinence: gynIcons["stress-incontinence"],
+  uti: extraClinicalIcons.bladder
+});
+
+Object.assign(obsIcons, {
+  abruptio: obsIcons["placental-abruption"],
+  abruption: obsIcons["placental-abruption"],
+  afe: obsIcons["pulmonary-embolism"],
+  anemia: obsIcons["iron-deficiency-anemia"],
+  bacteria: extraClinicalIcons.bv,
+  blood: obsIcons["postpartum-hemorrhage"],
+  cesarean: extraClinicalIcons.circumcision,
+  cord: obsIcons["twin-pregnancy"],
+  depression: obsIcons["postpartum-depression"],
+  diabetes: obsIcons["gestational-diabetes"],
+  disproportion: obsIcons["labor-dystocia"],
+  distress: obsIcons["fetal-distress"],
+  edema: obsIcons.preeclampsia,
+  episiotomy: extraClinicalIcons.circumcision,
+  fast: obsIcons["fetal-distress"],
+  forceps: obsIcons["labor-dystocia"],
+  fpi: obsIcons["fetal-distress"],
+  hemorrhage: obsIcons["postpartum-hemorrhage"],
+  infection: obsIcons.chorioamnionitis,
+  inertia: obsIcons["labor-dystocia"],
+  inversion: obsIcons["uterine-subinvolution"],
+  iugr: obsIcons.fgr,
+  kidney: obsIcons["pyelonephritis-pregnancy"],
+  labor: obsIcons["preterm-labor"],
+  placenta: obsIcons["placenta-previa"],
+  postterm: obsIcons["postterm-pregnancy"],
+  preterm: obsIcons["preterm-labor"],
+  rh: obsIcons["hemolytic-disease"],
+  rupture: obsIcons["placental-abruption"],
+  scar: extraClinicalIcons.circumcision,
+  screening: extraClinicalIcons["breast-screening"],
+  sepsis: obsIcons["postpartum-sepsis"],
+  shoulder: obsIcons["labor-dystocia"],
+  thromboembolism: obsIcons["pulmonary-embolism"],
+  thrombosis: obsIcons["postpartum-dvt"],
+  torch: obsIcons["torch-infections"],
+  uti: obsIcons["uti-pregnancy"],
+  vacuum: obsIcons["labor-dystocia"]
+});
+
 export default { ...gynIcons, ...obsIcons };
 
 export const navIcons = {

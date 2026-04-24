@@ -31,10 +31,10 @@ function createSparkleConfig(count: number) {
 const BackgroundEffects: React.FC = () => {
   const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-  const particleConfig = useMemo(() => createParticleConfig(isMobile ? 10 : 20), [isMobile]);
-  const sparkleConfig = useMemo(() => createSparkleConfig(isMobile ? 6 : 12), [isMobile]);
+  const particleConfig = useMemo(() => createParticleConfig(isMobile ? 0 : 12), [isMobile]);
+  const sparkleConfig = useMemo(() => createSparkleConfig(isMobile ? 0 : 8), [isMobile]);
 
-  if (isReducedMotion) {
+  if (isReducedMotion || isMobile) {
     return <div className="bg-effects" aria-hidden="true" />;
   }
 

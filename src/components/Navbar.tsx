@@ -54,7 +54,7 @@ const Navbar = React.memo(function Navbar({
             <button type="button" className="nav-item nav-utility-item" onClick={onQuestionnaires} aria-label="Открыть опросники">
               Шкалы
             </button>
-            <button type="button" className="nav-item nav-utility-item" onClick={onPharmacology} aria-label="Открыть фармакологию">
+            <button type="button" className="nav-item nav-utility-item" onClick={onPharmacology} aria-label="Фармакология">
               Фарма
             </button>
             <button
@@ -63,7 +63,7 @@ const Navbar = React.memo(function Navbar({
               onClick={onFavoritesToggle}
               aria-pressed={showFavorites}
             >
-              Избр
+              Избранное
             </button>
             <button
               type="button"
@@ -71,7 +71,7 @@ const Navbar = React.memo(function Navbar({
               onClick={onHistoryToggle}
               aria-pressed={showHistory}
             >
-              Ист
+              История
             </button>
           </div>
         </div>

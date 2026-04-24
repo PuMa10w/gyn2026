@@ -29,33 +29,26 @@ export function useModalBehavior(onClose: () => void) {
   }, [onClose]);
 
   useEffect(() => {
-    const { body } = document;
-    const previousOverflow = body.style.overflow;
-    const previousPosition = body.style.position;
-    const previousWidth = body.style.width;
-    const previousTop = body.style.top;
-    const scrollY = window.scrollY;
+    const { body, documentElement } = document;
+    const previousBodyOverflow = body.style.overflow;
+    const previousHtmlOverflow = documentElement.style.overflow;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+    const previousHtmlOverscroll = documentElement.style.overscrollBehavior;
 
+    body.classList.add('modal-open');
+    documentElement.classList.add('modal-open');
     body.style.overflow = 'hidden';
-    body.style.position = 'fixed';
-    body.style.width = '100%';
-    body.style.top = `-${scrollY}px`;
+    documentElement.style.overflow = 'hidden';
+    body.style.overscrollBehavior = 'none';
+    documentElement.style.overscrollBehavior = 'none';
 
     return () => {
-      body.style.overflow = previousOverflow;
-      body.style.position = previousPosition;
-      body.style.width = previousWidth;
-      body.style.top = previousTop;
-
-      if (typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent)) {
-        return;
-      }
-
-      try {
-        window.scrollTo(0, scrollY);
-      } catch {
-        // jsdom does not implement scrollTo during tests.
-      }
+      body.classList.remove('modal-open');
+      documentElement.classList.remove('modal-open');
+      body.style.overflow = previousBodyOverflow;
+      documentElement.style.overflow = previousHtmlOverflow;
+      body.style.overscrollBehavior = previousBodyOverscroll;
+      documentElement.style.overscrollBehavior = previousHtmlOverscroll;
     };
   }, []);
 

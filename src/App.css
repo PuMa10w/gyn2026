@@ -444,14 +444,29 @@
   min-height: 184px;
   padding: 0.8rem 0.85rem 0.74rem;
   border-radius: 26px;
+  position: relative;
+}
+
+.disease-card-action {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: none;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
 }
 
 .card-header {
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: flex-end;
 }
 
 .card-body {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: 56px minmax(0, 1fr);
   grid-template-areas:
@@ -520,7 +535,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .App {
     --header-height: 142px;
   }
@@ -722,7 +737,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 820px) {
   .App {
     --header-height: 148px;
   }
@@ -931,8 +946,8 @@
 
   .search-clear-btn {
     right: 3.15rem;
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
   }
 
   .category-filter {
@@ -982,8 +997,8 @@
   }
 
   .favorite-btn {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
   }
 
   .favorite-icon {
@@ -1048,9 +1063,9 @@
   }
 
   .modal-close {
-    width: 38px;
-    height: 38px;
-    flex: 0 0 38px;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
   }
 
   .modal-quick-strip {
@@ -1074,7 +1089,7 @@
   }
 
   .modal-quick-toggle {
-    min-height: 34px;
+    min-height: 44px;
     padding: 0.34rem 0.6rem;
   }
 
@@ -1187,7 +1202,7 @@
 
   .navbar-actions .nav-item,
   .navbar-actions .theme-toggle {
-    min-height: 36px;
+    min-height: 44px;
     padding: 0.58rem 0.72rem;
     font-size: 0.72rem;
   }
@@ -1305,8 +1320,8 @@
 
   .search-clear-btn {
     right: 2.95rem;
-    width: 26px;
-    height: 26px;
+    width: 44px;
+    height: 44px;
   }
 
   .search-result-count {
@@ -1458,6 +1473,368 @@
   }
 }
 
+/* Final mobile stabilization pass */
+@media (max-width: 768px) {
+  html,
+  body,
+  #root,
+  .App,
+  .page-content {
+    max-width: 100%;
+    overflow-x: clip !important;
+  }
+
+  body {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .bg-effects,
+  body::before,
+  body::after {
+    max-width: 100vw;
+    overflow: hidden;
+  }
+
+  .navbar {
+    left: max(0.35rem, var(--safe-left)) !important;
+    right: max(0.35rem, var(--safe-right)) !important;
+    width: auto !important;
+    max-width: none !important;
+    border-radius: 20px !important;
+  }
+
+  .navbar-inner {
+    padding: 0.48rem !important;
+    gap: 0.42rem !important;
+  }
+
+  .navbar-topline {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      'brand theme'
+      'actions actions' !important;
+    gap: 0.38rem !important;
+    align-items: center !important;
+  }
+
+  .navbar-brand {
+    grid-area: brand;
+    min-width: 0;
+    gap: 0.45rem !important;
+  }
+
+  .navbar-brand-copy {
+    min-width: 0;
+  }
+
+  .navbar-brand-copy strong {
+    font-size: 0.88rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .navbar-brand-copy span {
+    font-size: 0.68rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .navbar-brand-mark {
+    min-width: 58px !important;
+    height: 34px !important;
+    padding: 0 0.7rem !important;
+    font-size: 0.74rem !important;
+  }
+
+  .navbar-theme-toggle {
+    grid-area: theme;
+    min-width: 62px !important;
+    min-height: 38px !important;
+    padding: 0.48rem 0.72rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  .navbar-actions {
+    grid-area: actions;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0.28rem !important;
+    width: 100% !important;
+  }
+
+  .navbar-actions .nav-item {
+    min-width: 0 !important;
+    min-height: 37px !important;
+    padding: 0.48rem 0.35rem !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-row-primary {
+    overflow: hidden !important;
+    border-radius: 15px !important;
+    padding: 0.18rem !important;
+  }
+
+  .nav-row-primary .nav-scroll {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.22rem !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .nav-primary-item {
+    min-width: 0 !important;
+    min-height: 38px !important;
+    padding: 0.46rem 0.25rem !important;
+    font-size: 0.66rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .page-content {
+    padding-top: calc(var(--safe-top) + var(--header-height) + 0.85rem) !important;
+  }
+
+  .home-shell,
+  .catalog-shell,
+  .catalog-header,
+  .search-container,
+  .category-filter,
+  .cards-grid,
+  .site-footer {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0.7rem !important;
+    padding-right: 0.7rem !important;
+    box-sizing: border-box;
+  }
+
+  .home-hero-grid,
+  .home-destination-grid,
+  .home-support-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.72rem !important;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .home-hero,
+  .home-hero-rail,
+  .home-panel,
+  .home-destination-card {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .home-hero-main[style] {
+    transform: none !important;
+  }
+
+  .home-hero {
+    min-height: 0 !important;
+    padding: 1rem !important;
+    border-radius: 26px !important;
+  }
+
+  .home-hero-title {
+    max-width: 7.8em !important;
+    font-size: clamp(2.15rem, 10vw, 3.1rem) !important;
+    line-height: 0.9 !important;
+  }
+
+  .home-hero-description {
+    max-width: 100% !important;
+    font-size: 0.95rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .home-hero-metrics {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.48rem !important;
+    margin-top: 1rem !important;
+  }
+
+  .home-metric-card {
+    min-width: 0;
+    padding: 0.78rem 0.82rem !important;
+    border-radius: 18px !important;
+  }
+
+  .hero-rail-card,
+  .home-quick-card {
+    padding: 0.95rem !important;
+    border-radius: 22px !important;
+  }
+
+  .home-destination-card {
+    min-height: 0 !important;
+    padding: 1.15rem !important;
+    border-radius: 24px !important;
+  }
+
+  .home-destination-title {
+    font-size: clamp(2rem, 9vw, 2.8rem) !important;
+    line-height: 0.9 !important;
+  }
+
+  .destination-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.42rem;
+    max-width: 100%;
+  }
+
+  .destination-tag {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .home-panel {
+    padding: 1rem !important;
+    border-radius: 24px !important;
+  }
+
+  .home-panel-header {
+    display: grid !important;
+    gap: 0.45rem !important;
+  }
+
+  .home-panel-title {
+    font-size: clamp(1.8rem, 8vw, 2.5rem) !important;
+    line-height: 0.95 !important;
+  }
+
+  .home-quick-actions,
+  .home-recent-list {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.55rem !important;
+  }
+
+  .search-input {
+    min-height: 54px !important;
+    padding-left: 1rem !important;
+    padding-right: 4.8rem !important;
+    font-size: 16px !important;
+  }
+
+  .search-clear-btn {
+    right: 3.15rem !important;
+  }
+
+  .search-result-count {
+    right: 0.85rem !important;
+  }
+
+  .category-filter {
+    overflow-x: clip !important;
+  }
+
+  .category-chips {
+    display: flex !important;
+    gap: 0.45rem !important;
+    padding-bottom: 0.2rem !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    max-width: 100% !important;
+  }
+
+  .category-chip {
+    flex: 0 0 auto;
+    min-width: 0;
+    max-width: calc(100vw - 2.2rem);
+    padding: 0.68rem 0.82rem !important;
+  }
+
+  .cards-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.62rem !important;
+  }
+
+  .disease-card {
+    min-height: 156px !important;
+    padding: 0.62rem 0.66rem !important;
+    border-radius: 22px !important;
+  }
+
+  .card-header {
+    gap: 0.3rem 0.5rem !important;
+  }
+
+  .card-desc {
+    -webkit-line-clamp: 4 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .App {
+    --header-height: 152px !important;
+  }
+
+  .navbar-brand-copy span {
+    display: none !important;
+  }
+
+  .navbar-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .navbar-actions .nav-item {
+    font-size: 0.7rem !important;
+  }
+
+  .nav-primary-item {
+    font-size: 0.63rem !important;
+  }
+
+  .home-shell,
+  .catalog-header,
+  .search-container,
+  .category-filter,
+  .cards-grid,
+  .site-footer {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .home-hero {
+    padding: 0.88rem !important;
+  }
+
+  .home-hero-title {
+    font-size: clamp(1.95rem, 10vw, 2.7rem) !important;
+  }
+
+  .home-hero-description {
+    font-size: 0.9rem !important;
+  }
+
+  .home-panel,
+  .home-destination-card {
+    padding: 0.92rem !important;
+  }
+
+  .destination-tag {
+    font-size: 0.7rem !important;
+  }
+}
+
 /* Final iPhone hardening layer */
 @media (max-width: 768px) {
   html,
@@ -1526,7 +1903,7 @@
   .navbar-theme-toggle {
     grid-area: theme;
     min-width: 58px !important;
-    min-height: 36px !important;
+    min-height: 44px !important;
     padding: 0.45rem 0.65rem !important;
     font-size: 0.68rem !important;
   }
@@ -1541,7 +1918,7 @@
 
   .navbar-actions .nav-item {
     min-width: 0 !important;
-    min-height: 36px !important;
+    min-height: 44px !important;
     padding: 0.46rem 0.4rem !important;
     font-size: 0.64rem !important;
     letter-spacing: 0.01em;
@@ -1566,7 +1943,7 @@
 
   .nav-primary-item {
     min-width: 0 !important;
-    min-height: 36px !important;
+    min-height: 44px !important;
     padding: 0.44rem 0.35rem !important;
     font-size: 0.65rem !important;
     white-space: nowrap;
@@ -1997,7 +2374,7 @@
   }
 
   .modal-quick-toggle {
-    min-height: 34px;
+    min-height: 44px;
   }
 
   .modal-tabs {
@@ -2585,13 +2962,13 @@
 
   .navbar-actions .nav-item {
     font-size: 0.67rem;
-    min-height: 34px;
+    min-height: 44px;
     padding: 0.52rem 0.38rem;
   }
 
   .nav-primary-item {
     font-size: 0.67rem;
-    min-height: 34px;
+    min-height: 44px;
     padding: 0.52rem 0.24rem;
   }
 }
@@ -2755,13 +3132,13 @@
   }
 
   .navbar-actions .nav-item {
-    min-height: 36px;
+    min-height: 44px;
     padding: 0.56rem 0.42rem;
     font-size: 0.7rem;
   }
 
   .nav-primary-item {
-    min-height: 36px;
+    min-height: 44px;
     font-size: 0.7rem;
     padding: 0.56rem 0.28rem;
   }
@@ -2859,7 +3236,7 @@
   margin: 0 auto;
   width: auto;
   max-width: 1240px;
-  z-index: 9999;
+  z-index: 9000;
   border: 1px solid var(--border-soft);
   border-radius: 24px;
   background: var(--bg-elevated);
@@ -3097,8 +3474,8 @@
 
 .search-clear-btn {
   right: 4.2rem;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border: none;
   border-radius: 999px;
   background: var(--bg-muted);
@@ -3144,6 +3521,7 @@
   border-radius: 999px;
   background: var(--bg-panel);
   color: var(--text-primary);
+  min-height: 44px;
   padding: 0.76rem 0.96rem;
   box-shadow: var(--shadow-soft);
   cursor: pointer;
@@ -3306,8 +3684,8 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.72);
   color: var(--text-primary);
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   font-size: 1.1rem;
   font-weight: 800;
@@ -3325,6 +3703,11 @@
 
 .favorite-icon {
   line-height: 1;
+}
+
+.favorite-btn {
+  position: relative;
+  z-index: 3;
 }
 
 .card-meta-row {
@@ -3512,6 +3895,19 @@
   justify-content: center;
   opacity: 1;
   filter: brightness(1.18) contrast(1.22) saturate(1.1);
+}
+
+.card-icon-art svg {
+  overflow: visible;
+}
+
+.card-icon-art path,
+.card-icon-art circle,
+.card-icon-art rect,
+.card-icon-art ellipse,
+.card-icon-art line,
+.card-icon-art polyline {
+  vector-effect: non-scaling-stroke;
 }
 
 .card-icon svg {
@@ -3863,7 +4259,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 2000;
+  z-index: 12000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3877,7 +4273,7 @@
 .modal-content {
   width: 100%;
   max-width: 1120px;
-  max-height: 92vh;
+  max-height: min(92dvh, 92vh);
   overflow-y: auto;
   border: 1px solid var(--border-soft);
   border-radius: 34px;
@@ -3948,8 +4344,8 @@
 }
 
 .modal-close {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--border-soft);
   border-radius: 999px;
   background: var(--bg-panel);
@@ -4053,6 +4449,7 @@
   border-radius: 999px;
   background: var(--bg-panel);
   color: var(--text-primary);
+  min-height: 44px;
   padding: 0.78rem 1rem;
   font-size: 0.9rem;
   font-weight: 700;
@@ -4619,7 +5016,8 @@
   margin-bottom: 0.9rem;
 }
 
-.disease-card:focus-visible,
+.disease-card-action:focus-visible,
+.disease-card:focus-within,
 .home-card:focus-visible,
 .q-card:focus-visible,
 .medication-card:focus-visible,
@@ -4831,8 +5229,8 @@
   }
 
   .favorite-btn {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     font-size: 1.1rem;
   }
 
@@ -4942,10 +5340,13 @@
   .modal-content,
   .modal-content.mobile-sheet {
     max-width: 100%;
-    max-height: 100vh;
-    height: 100vh;
+    max-height: 100dvh;
+    height: 100dvh;
+    min-height: 0;
     padding-bottom: var(--safe-bottom);
     border-radius: 20px 20px 0 0;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
   }
 
   .modal-header {
@@ -5082,12 +5483,14 @@
     max-width: 100%;
     max-height: 100dvh;
     height: 100dvh;
+    min-height: 0;
     padding-bottom: var(--safe-bottom);
     border-radius: 28px 28px 0 0;
     margin-top: auto;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    overscroll-behavior: contain;
   }
 
   .modal-drag-indicator {
@@ -5939,8 +6342,8 @@
 
   .search-clear-btn {
     right: 3.2rem;
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
   }
 
   .search-result-count {
@@ -6148,8 +6551,8 @@
   }
 
   .modal-close {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
 
   .modal-quick-strip {

@@ -113,6 +113,42 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
     }
   };
 
+  const handleOptionKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, optionIndex: number): void => {
+    if (!selectedQ) {
+      return;
+    }
+
+    const nextIndex = (() => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        return (optionIndex + 1) % selectedQ.options.length;
+      }
+
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        return (optionIndex - 1 + selectedQ.options.length) % selectedQ.options.length;
+      }
+
+      if (event.key === 'Home') {
+        return 0;
+      }
+
+      if (event.key === 'End') {
+        return selectedQ.options.length - 1;
+      }
+
+      return null;
+    })();
+
+    if (nextIndex === null) {
+      return;
+    }
+
+    event.preventDefault();
+    setAnswer(currentStep, nextIndex);
+
+    const optionButtons = event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="radio"]');
+    optionButtons?.[nextIndex]?.focus();
+  };
+
   if (!selectedQ) {
     return (
       <motion.div
@@ -267,8 +303,10 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setAnswer(currentStep, i)}
+                onKeyDown={(event) => handleOptionKeyDown(event, i)}
                 role="radio"
                 aria-checked={answers[currentStep] === i}
+                tabIndex={answers[currentStep] === i || (answers[currentStep] === undefined && i === 0) ? 0 : -1}
               >
                 {opt}
               </motion.button>
