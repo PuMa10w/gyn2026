@@ -1,4 +1,4 @@
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { commonRegimens, drugInteractions, medications } from '../data/pharmacology';
 import { useModalBehavior } from '../hooks/useModalBehavior';
@@ -16,6 +16,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
   const secondDrugId = useId();
   const subtitleId = useId();
   const { modalRef, closeButtonRef, handleModalKeyDown } = useModalBehavior(onClose);
+  const [isMobile, setIsMobile] = useState(false);
   const [activeTab, setActiveTab] = useState<'medications' | 'interactions' | 'regimens'>('medications');
   const [selectedMed, setSelectedMed] = useState<Medication | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -67,6 +68,16 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
     }
   };
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const updateViewportMode = () => setIsMobile(mediaQuery.matches);
+
+    updateViewportMode();
+    mediaQuery.addEventListener('change', updateViewportMode);
+
+    return () => mediaQuery.removeEventListener('change', updateViewportMode);
+  }, []);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -77,10 +88,10 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
         onClick={onClose}
       >
         <motion.div
-          className="modal-content pharmacology-modal"
-          initial={{ scale: 0.96, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.96, opacity: 0 }}
+          className={`modal-content pharmacology-modal ${isMobile ? 'mobile-sheet' : ''}`}
+          initial={isMobile ? { y: '100%' } : { scale: 0.96, opacity: 0 }}
+          animate={isMobile ? { y: 0 } : { scale: 1, opacity: 1 }}
+          exit={isMobile ? { y: '100%' } : { scale: 0.96, opacity: 0 }}
           ref={modalRef}
           onClick={(event) => event.stopPropagation()}
           onKeyDown={handleModalKeyDown}

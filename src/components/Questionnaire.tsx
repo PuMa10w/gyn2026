@@ -1,4 +1,4 @@
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { motion } from 'framer-motion';
 import { questionnaires } from '../data/questionnaires';
 import { useModalBehavior } from '../hooks/useModalBehavior';
@@ -16,6 +16,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   const questionId = useId();
   const optionsId = useId();
   const { modalRef, closeButtonRef, handleModalKeyDown } = useModalBehavior(onClose);
+  const [isMobile, setIsMobile] = useState(false);
   const [selectedQ, setSelectedQ] = useState<QuestionnaireData | null>(null);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [currentStep, setCurrentStep] = useState(0);
@@ -27,6 +28,16 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
       return [];
     }
   });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const updateViewportMode = () => setIsMobile(mediaQuery.matches);
+
+    updateViewportMode();
+    mediaQuery.addEventListener('change', updateViewportMode);
+
+    return () => mediaQuery.removeEventListener('change', updateViewportMode);
+  }, []);
 
   const startQuestionnaire = (q: QuestionnaireData): void => {
     setSelectedQ(q);
@@ -112,10 +123,10 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
         onClick={onClose}
       >
         <motion.div
-          className="modal-content questionnaire-modal"
-          initial={{ scale: 0.9, y: 50 }}
-          animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.9, y: 50 }}
+          className={`modal-content questionnaire-modal ${isMobile ? 'mobile-sheet' : ''}`}
+          initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
+          animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
+          exit={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
           ref={modalRef}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={handleModalKeyDown}
@@ -197,10 +208,10 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
         onClick={onClose}
       >
         <motion.div
-          className="modal-content questionnaire-modal"
-          initial={{ scale: 0.9, y: 50 }}
-          animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.9, y: 50 }}
+          className={`modal-content questionnaire-modal ${isMobile ? 'mobile-sheet' : ''}`}
+          initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
+          animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
+          exit={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
           ref={modalRef}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={handleModalKeyDown}
@@ -291,10 +302,10 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
       onClick={onClose}
     >
         <motion.div
-          className="modal-content questionnaire-modal"
-          initial={{ scale: 0.9, y: 50 }}
-          animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.9, y: 50 }}
+          className={`modal-content questionnaire-modal ${isMobile ? 'mobile-sheet' : ''}`}
+          initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
+          animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
+          exit={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
           ref={modalRef}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={handleModalKeyDown}

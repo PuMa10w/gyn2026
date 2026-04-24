@@ -72,17 +72,19 @@ const CatalogSection = React.memo(function CatalogSection({
           <p className="catalog-description">{activeSectionMeta.description}</p>
         </header>
 
-        <SearchBar
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          resultCount={isDataLoading || error ? undefined : filteredData.length}
-        />
-        <CategoryFilter
-          activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
-          categoryCounts={categoryCounts}
-          visibleCategories={visibleCategories}
-        />
+        <div className="catalog-controls">
+          <SearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            resultCount={isDataLoading || error ? undefined : filteredData.length}
+          />
+          <CategoryFilter
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+            categoryCounts={categoryCounts}
+            visibleCategories={visibleCategories}
+          />
+        </div>
       </section>
 
       <section aria-live="polite" className="cards-grid">
