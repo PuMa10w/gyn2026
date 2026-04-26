@@ -234,7 +234,8 @@ function getCategoryScore(text: string, category: NonAllCategory) {
 }
 
 function resolveDiseaseCategory(item: Disease, searchableText: string): NonAllCategory {
-  const overriddenCategory = categoryOverrides[item.id.trim().toLowerCase()];
+  const ruleId = item.id.trim().toLowerCase().split('__')[0];
+  const overriddenCategory = categoryOverrides[ruleId];
 
   if (overriddenCategory) {
     return overriddenCategory;

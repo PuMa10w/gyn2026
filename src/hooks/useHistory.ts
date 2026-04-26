@@ -11,6 +11,8 @@ export interface HistoryItem extends HistoryDisease {
   timestamp: number;
 }
 
+const getLegacyId = (diseaseId: string) => diseaseId.split('__')[0];
+
 export function useHistory() {
   const [history, setHistory] = useState<HistoryItem[]>(() => {
     try {
@@ -26,7 +28,8 @@ export function useHistory() {
 
   const addToHistory = (disease: HistoryDisease) => {
     setHistory((prev) => {
-      const filtered = prev.filter((item) => item.id !== disease.id);
+      const legacyId = getLegacyId(disease.id);
+      const filtered = prev.filter((item) => item.id !== disease.id && item.id !== legacyId);
       const updated = [
         { id: disease.id, name: disease.name, icd: disease.icd, subtitle: disease.subtitle, timestamp: Date.now() },
         ...filtered,

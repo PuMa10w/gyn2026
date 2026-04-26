@@ -13,5 +13,8 @@ const obsChunkLoaders = [
 
 export async function loadObsData(): Promise<Disease[]> {
   const chunks = await Promise.all(obsChunkLoaders.map((loadChunk) => loadChunk()));
-  return enrichDiseases(chunks.flatMap((chunk) => chunk.default as Disease[]));
+  return enrichDiseases(chunks.flatMap((chunk) => chunk.default as Disease[])).map((disease) => ({
+    ...disease,
+    id: `${disease.id}__obs`,
+  }));
 }

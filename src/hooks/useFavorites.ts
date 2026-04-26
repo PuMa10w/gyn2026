@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 type FavoriteId = string;
 
+const getLegacyId = (diseaseId: string) => diseaseId.split('__')[0];
+
 export function useFavorites() {
   const [favorites, setFavorites] = useState<FavoriteId[]>(() => {
     try {
@@ -16,13 +18,14 @@ export function useFavorites() {
   }, [favorites]);
 
   const addFavorite = (diseaseId: FavoriteId) => {
-    if (!favorites.includes(diseaseId)) {
+    if (!favorites.includes(diseaseId) && !favorites.includes(getLegacyId(diseaseId))) {
       setFavorites((prev) => [...prev, diseaseId]);
     }
   };
 
   const removeFavorite = (diseaseId: FavoriteId) => {
-    setFavorites((prev) => prev.filter((id) => id !== diseaseId));
+    const legacyId = getLegacyId(diseaseId);
+    setFavorites((prev) => prev.filter((id) => id !== diseaseId && id !== legacyId));
   };
 
   const toggleFavorite = (diseaseId: FavoriteId) => {
@@ -33,7 +36,7 @@ export function useFavorites() {
     }
   };
 
-  const isFavorite = (diseaseId: FavoriteId) => favorites.includes(diseaseId);
+  const isFavorite = (diseaseId: FavoriteId) => favorites.includes(diseaseId) || favorites.includes(getLegacyId(diseaseId));
 
   return { favorites, addFavorite, removeFavorite, toggleFavorite, isFavorite };
 }

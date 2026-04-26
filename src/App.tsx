@@ -20,6 +20,13 @@ const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
 const Questionnaire = lazy(() => import('./components/Questionnaire'));
 const PharmacologyModal = lazy(() => import('./components/PharmacologyModal'));
 
+const getIdVariants = (id: string) => {
+  const trimmedId = id.trim();
+  const legacyId = trimmedId.split('__')[0];
+
+  return trimmedId === legacyId ? [trimmedId] : [trimmedId, legacyId];
+};
+
 const LoadingSpinner = ({ prefersReducedMotion }: { prefersReducedMotion: boolean }) => (
   <motion.div className="loading-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
     <motion.div
@@ -52,8 +59,8 @@ function App() {
   const debouncedSearch = useDebounce(searchTerm, 300);
 
   const normalizedSearch = debouncedSearch.trim().toLowerCase();
-  const favoriteIds = useMemo(() => new Set(favorites), [favorites]);
-  const historyIds = useMemo(() => new Set(history.map((item) => item.id)), [history]);
+  const favoriteIds = useMemo(() => new Set(favorites.flatMap(getIdVariants)), [favorites]);
+  const historyIds = useMemo(() => new Set(history.flatMap((item) => getIdVariants(item.id))), [history]);
 
   const { isDataLoading, visibleCategories, categoryCounts, filteredData, error, retry } = useCatalogData({
     activeTab,

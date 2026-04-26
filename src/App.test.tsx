@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import App from './App';
 
 const { gynFixture, obsFixture } = vi.hoisted(() => ({
@@ -102,13 +102,13 @@ describe('App', () => {
     localStorage.clear();
   });
 
-  it('renders home screen with entry cards and footer', () => {
+  it('renders home screen with destination cards and footer', () => {
     render(<App />);
 
     expect(screen.getByRole('button', { name: /главная/i })).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: /гинекология/i }).length).toBeGreaterThan(1);
     expect(screen.getAllByRole('button', { name: /акушерство/i }).length).toBeGreaterThan(1);
-    expect(screen.getByText(/© PuMa10w with ❤️/i)).toBeInTheDocument();
+    expect(screen.getByText(/PuMa10w/i)).toBeInTheDocument();
   });
 
   it('navigates from home to gynecology catalog and loads data', async () => {
@@ -122,14 +122,14 @@ describe('App', () => {
     });
   });
 
-  it('opens questionnaire and pharmacology from home cards', async () => {
+  it('opens questionnaire and pharmacology from navbar actions', async () => {
     render(<App />);
 
-    fireEvent.click(screen.getAllByRole('button', { name: /опросники/i })[1]);
+    fireEvent.click(screen.getByRole('button', { name: /открыть опросники/i }));
     expect(await screen.findByTestId('questionnaire-modal')).toBeInTheDocument();
     fireEvent.click(screen.getAllByText('close')[0]);
 
-    fireEvent.click(screen.getAllByRole('button', { name: /фармакология/i })[1]);
+    fireEvent.click(screen.getByRole('button', { name: /фармакология/i }));
     expect(await screen.findByTestId('pharmacology-modal')).toBeInTheDocument();
   });
 
@@ -137,7 +137,6 @@ describe('App', () => {
     render(<App />);
 
     fireEvent.click(screen.getAllByRole('button', { name: /гинекология/i })[0]);
-
     await screen.findByText('Эндометриоз');
 
     const searchInput = screen.getByPlaceholderText(/нозология, симптом, код мкб/i);
@@ -205,5 +204,16 @@ describe('App', () => {
     await waitFor(() => {
       expect(screen.getAllByRole('button', { name: /эндометриоз, код n80/i })).toHaveLength(1);
     });
+  });
+
+  it('opens obstetrics card without runtime errors', async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getAllByRole('button', { name: /акушерство/i })[0]);
+    const card = await screen.findByRole('button', { name: /преэклампсия, код o14/i });
+    fireEvent.click(card);
+
+    expect(await screen.findByTestId('disease-modal')).toBeInTheDocument();
+    expect(within(screen.getByTestId('disease-modal')).getByText('Преэклампсия')).toBeInTheDocument();
   });
 });

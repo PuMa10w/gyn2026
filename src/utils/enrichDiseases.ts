@@ -1712,4 +1712,40 @@ export const enrichDisease = (rawDisease: DiseaseInput): Disease => {
   };
 };
 
-export const enrichDiseases = (diseases: Disease[]) => diseases.map((disease) => enrichDisease(disease as DiseaseInput));
+const slugifyIdPart = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9а-яё]+/gi, '-')
+    .replace(/^-+|-+$/g, '');
+
+const ensureUniqueDiseaseIds = (diseases: Disease[]) => {
+  const usedIds = new Set<string>();
+
+  return diseases.map((disease) => {
+    const baseId = disease.id.trim();
+
+    if (!usedIds.has(baseId)) {
+      usedIds.add(baseId);
+      return disease;
+    }
+
+    const subtitlePart = slugifyIdPart(disease.subtitle);
+    const icdPart = slugifyIdPart(disease.icdDetail ?? disease.icd);
+    let candidateId = `${baseId}__${subtitlePart}-${icdPart}`;
+    let duplicateIndex = 2;
+
+    while (usedIds.has(candidateId)) {
+      candidateId = `${baseId}__${subtitlePart}-${icdPart}-${duplicateIndex}`;
+      duplicateIndex += 1;
+    }
+
+    usedIds.add(candidateId);
+
+    return {
+      ...disease,
+      id: candidateId,
+    };
+  });
+};
+
+export const enrichDiseases = (diseases: Disease[]) => ensureUniqueDiseaseIds(diseases.map((disease) => enrichDisease(disease as DiseaseInput)));
