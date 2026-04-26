@@ -129,7 +129,7 @@ describe('App', () => {
     expect(await screen.findByTestId('questionnaire-modal')).toBeInTheDocument();
     fireEvent.click(screen.getAllByText('close')[0]);
 
-    fireEvent.click(screen.getByRole('button', { name: /фармакология/i }));
+    fireEvent.click(screen.getByRole('button', { name: /открыть фармакологию/i }));
     expect(await screen.findByTestId('pharmacology-modal')).toBeInTheDocument();
   });
 

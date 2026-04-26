@@ -54,7 +54,7 @@ const Navbar = React.memo(function Navbar({
             <button type="button" className="nav-item nav-utility-item" onClick={onQuestionnaires} aria-label="Открыть опросники">
               Шкалы
             </button>
-            <button type="button" className="nav-item nav-utility-item" onClick={onPharmacology} aria-label="Фармакология">
+            <button type="button" className="nav-item nav-utility-item" onClick={onPharmacology} aria-label="Открыть фармакологию">
               Фарма
             </button>
             <button

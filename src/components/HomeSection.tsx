@@ -22,6 +22,11 @@ interface HomeSectionProps {
   favoriteCount: number;
 }
 
+const sectionNotes = {
+  gynecology: ['МКБ-10 и нозологии', 'Диагностические ориентиры', 'Терапевтические маршруты'],
+  obstetrics: ['Беременность и триместры', 'Осложнения и риски', 'Наблюдение и протоколы'],
+} as const;
+
 const HomeSection = React.memo(function HomeSection({
   actions,
   setActiveTab,
@@ -43,32 +48,52 @@ const HomeSection = React.memo(function HomeSection({
       <h1 className="visually-hidden" id={titleId}>Главная страница</h1>
 
       <section className="home-destination-grid" aria-label="Основные разделы">
-        {primaryActions.map((item, index) => (
-          <motion.button
-            key={item.title}
-            type="button"
-            className={`home-destination-card ${index === 0 ? 'is-gynecology' : 'is-obstetrics'}`}
-            onClick={() => item.onClick(setActiveTab, openQuestionnaire, openPharmacology)}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.06 * index, duration: 0.4 }}
-          >
-            <div className="destination-head">
-              <span className="destination-kicker">{index === 0 ? 'Основной раздел' : 'Беременность и наблюдение'}</span>
-              <span className="destination-index">{index === 0 ? '01' : '02'}</span>
-            </div>
-            <h2 className="home-destination-title">{item.title}</h2>
-            <p className="home-destination-description">{item.description}</p>
-            <div className="destination-tags">
-              {(index === 0
-                ? ['МКБ-10', 'Диагностика', 'Лечение']
-                : ['Протоколы', 'Маршруты', 'Осложнения']
-              ).map((tag) => (
-                <span key={tag} className="destination-tag">{tag}</span>
-              ))}
-            </div>
-          </motion.button>
-        ))}
+        {primaryActions.map((item, index) => {
+          const isGynecology = index === 0;
+          const preview = isGynecology ? sectionNotes.gynecology : sectionNotes.obstetrics;
+
+          return (
+            <motion.button
+              key={item.title}
+              type="button"
+              className={`home-destination-card ${isGynecology ? 'is-gynecology' : 'is-obstetrics'}`}
+              onClick={() => item.onClick(setActiveTab, openQuestionnaire, openPharmacology)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.06 * index, duration: 0.4 }}
+            >
+              <div className="destination-head">
+                <span className="destination-kicker">{isGynecology ? 'Основной раздел' : 'Беременность и наблюдение'}</span>
+                <span className="destination-index">{isGynecology ? '01' : '02'}</span>
+              </div>
+
+              <div className="destination-main">
+                <h2 className="home-destination-title">{item.title}</h2>
+                <p className="home-destination-description">{item.description}</p>
+              </div>
+
+              <div className="destination-preview" aria-hidden="true">
+                {preview.map((entry) => (
+                  <span key={entry} className="destination-preview-item">
+                    {entry}
+                  </span>
+                ))}
+              </div>
+
+              <div className="destination-footer">
+                <div className="destination-tags">
+                  {(isGynecology
+                    ? ['МКБ-10', 'Диагностика', 'Лечение']
+                    : ['Протоколы', 'Маршруты', 'Осложнения']
+                  ).map((tag) => (
+                    <span key={tag} className="destination-tag">{tag}</span>
+                  ))}
+                </div>
+                <span className="destination-arrow" aria-hidden="true">↗</span>
+              </div>
+            </motion.button>
+          );
+        })}
       </section>
     </motion.section>
   );

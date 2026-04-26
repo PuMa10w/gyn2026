@@ -14,7 +14,6 @@ import { useFavorites } from './hooks/useFavorites';
 import { useHistory } from './hooks/useHistory';
 import { emptyStateContent, homeActions, sectionMeta } from './config/appContent';
 import type { CategoryId, Disease, TabType } from './types';
-import type { HistoryItem } from './hooks/useHistory';
 
 const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
 const Questionnaire = lazy(() => import('./components/Questionnaire'));
@@ -113,8 +112,6 @@ function App() {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
 
-  const recentItems = useMemo(() => history.slice(0, 4), [history]);
-
   const resetCatalogState = () => {
     setSearchTerm('');
     setActiveCategory('all');
@@ -151,13 +148,6 @@ function App() {
     resetCatalogState();
   };
 
-  const handleRecentItemOpen = (item: HistoryItem) => {
-    const nextTab = item.subtitle === 'Акушерство' ? 'obstetrics' : 'gynecology';
-
-    handleTabChange(nextTab);
-    setSearchTerm(item.name);
-  };
-
   const handleItemClick = (item: Disease) => {
     setSelectedItem(item);
     addToHistory(item);
@@ -181,15 +171,18 @@ function App() {
         <meta property="og:title" content="GYN — премиальный клинический справочник" />
         <meta
           property="og:description"
-          content="Гинекология и акушерство в едином спокойном и читабельном профессиональном интерфейсе."
+          content="Гинекология и акушерство в едином спокойном, читабельном и премиальном интерфейсе."
         />
         <meta property="og:type" content="website" />
       </Helmet>
+
       <div className="App">
         <a className="skip-link" href="#main-content">
           Перейти к основному содержанию
         </a>
+
         <BackgroundEffects />
+
         <Navbar
           activeTab={activeTab}
           onTabChange={handleTabChange}
@@ -212,8 +205,8 @@ function App() {
                 setActiveTab={handleTabChange}
                 openQuestionnaire={openQuestionnaire}
                 openPharmacology={openPharmacology}
-                recentItems={recentItems}
-                onRecentOpen={handleRecentItemOpen}
+                recentItems={history.slice(0, 4)}
+                onRecentOpen={() => {}}
                 onFavoritesOpen={handleFavoritesToggle}
                 onHistoryOpen={handleHistoryToggle}
                 favoriteCount={favorites.length}
@@ -241,7 +234,7 @@ function App() {
           </AnimatePresence>
 
           <footer className="site-footer">
-            <p>© PuMa10w with ❤️</p>
+            <p>© PuMa10w with ♥</p>
           </footer>
         </main>
 

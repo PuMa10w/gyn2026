@@ -104,7 +104,7 @@ const CatalogSection = React.memo(function CatalogSection({
             <motion.div className="catalog-status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
               <span className="catalog-status-eyebrow">Загрузка</span>
               <h2>{activeSectionMeta.loadingTitle}</h2>
-              <p>Подготавливаем карточки и клинические блоки. Это может занять несколько секунд при первом открытии раздела.</p>
+              <p>Подготавливаем карточки и клинические блоки. При первом открытии это может занять несколько секунд.</p>
             </motion.div>
             <div className="skeleton-grid">
               {Array.from({ length: 8 }).map((_, index) => (

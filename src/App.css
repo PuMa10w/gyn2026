@@ -146,7 +146,7 @@
 
 .home-shell {
   max-width: 1320px;
-  padding: 0 1rem 1.15rem;
+  padding: 0.4rem 1rem 1.15rem;
 }
 
 .home-hero-grid {
@@ -284,6 +284,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
   gap: 1rem;
+  align-items: start;
   margin-bottom: 1rem;
 }
 
@@ -292,7 +293,7 @@
   position: relative;
   display: grid;
   gap: 0.8rem;
-  min-height: 250px;
+  min-height: 320px;
   padding: 1.5rem;
   border: 1px solid rgba(226, 196, 188, 0.1);
   border-radius: 32px;
@@ -334,6 +335,7 @@
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.05), transparent 42%),
     linear-gradient(135deg, rgba(36, 31, 37, 0.98), rgba(22, 19, 24, 0.98));
+  margin-top: 2rem;
 }
 
 .home-destination-card.is-obstetrics::before {
@@ -368,11 +370,48 @@
   line-height: 1.72;
 }
 
+.destination-main {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.destination-preview {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.2rem;
+}
+
+.destination-preview-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: rgba(248, 238, 233, 0.8);
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.destination-preview-item::before {
+  content: '';
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: rgba(232, 204, 194, 0.8);
+  box-shadow: 0 0 0 6px rgba(232, 204, 194, 0.08);
+}
+
+.destination-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: auto;
+}
+
 .destination-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
-  margin-top: auto;
 }
 
 .destination-tag {
@@ -385,6 +424,20 @@
   color: rgba(251, 241, 236, 0.82);
   font-size: 0.76rem;
   font-weight: 700;
+}
+
+.destination-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(226, 196, 188, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff5ef;
+  font-size: 1.1rem;
+  flex: 0 0 auto;
 }
 
 .home-support-grid {
@@ -675,6 +728,10 @@
     padding: 1.15rem;
   }
 
+  .home-destination-card.is-obstetrics {
+    margin-top: 0;
+  }
+
   .home-destination-title {
     font-size: clamp(1.8rem, 8vw, 2.5rem);
   }
@@ -682,6 +739,10 @@
   .home-destination-description {
     font-size: 0.9rem;
     line-height: 1.58;
+  }
+
+  .destination-preview-item {
+    font-size: 0.8rem;
   }
 
   .home-panel {
@@ -807,9 +868,19 @@
     padding: 0.95rem;
   }
 
+  .destination-footer {
+    align-items: center;
+  }
+
   .destination-tag {
     padding: 0.38rem 0.62rem;
     font-size: 0.68rem;
+  }
+
+  .destination-arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
   }
 
   .cards-grid {
