@@ -68,7 +68,9 @@ const CatalogSection = React.memo(function CatalogSection({
       <section className="catalog-shell" aria-busy={isDataLoading}>
         <header className="catalog-header">
           <span className="catalog-eyebrow">{activeSectionMeta.eyebrow}</span>
-          <h1 className="catalog-title" id={titleId}>{activeSectionMeta.title}</h1>
+          <h1 className="catalog-title" id={titleId}>
+            {activeSectionMeta.title}
+          </h1>
           <p className="catalog-description">{activeSectionMeta.description}</p>
         </header>
 
@@ -114,7 +116,8 @@ const CatalogSection = React.memo(function CatalogSection({
           </>
         )}
 
-        {!isDataLoading && !error &&
+        {!isDataLoading &&
+          !error &&
           filteredData.map((item, index) => (
             <DiseaseCard
               key={item.id}

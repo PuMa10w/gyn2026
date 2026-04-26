@@ -45,7 +45,9 @@ const HomeSection = React.memo(function HomeSection({
       transition={{ duration: 0.22, ease: 'easeOut' }}
       aria-labelledby={titleId}
     >
-      <h1 className="visually-hidden" id={titleId}>Главная страница</h1>
+      <h1 className="visually-hidden" id={titleId}>
+        Главная страница
+      </h1>
 
       <section className="home-destination-grid" aria-label="Основные разделы">
         {primaryActions.map((item, index) => {
@@ -63,7 +65,9 @@ const HomeSection = React.memo(function HomeSection({
               transition={{ delay: 0.06 * index, duration: 0.4 }}
             >
               <div className="destination-head">
-                <span className="destination-kicker">{isGynecology ? 'Основной раздел' : 'Беременность и наблюдение'}</span>
+                <span className="destination-kicker">
+                  {isGynecology ? 'Основной раздел' : 'Беременность и наблюдение'}
+                </span>
                 <span className="destination-index">{isGynecology ? '01' : '02'}</span>
               </div>
 
@@ -86,10 +90,14 @@ const HomeSection = React.memo(function HomeSection({
                     ? ['МКБ-10', 'Диагностика', 'Лечение']
                     : ['Протоколы', 'Маршруты', 'Осложнения']
                   ).map((tag) => (
-                    <span key={tag} className="destination-tag">{tag}</span>
+                    <span key={tag} className="destination-tag">
+                      {tag}
+                    </span>
                   ))}
                 </div>
-                <span className="destination-arrow" aria-hidden="true">↗</span>
+                <span className="destination-arrow" aria-hidden="true">
+                  →
+                </span>
               </div>
             </motion.button>
           );

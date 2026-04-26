@@ -234,7 +234,7 @@ function App() {
           </AnimatePresence>
 
           <footer className="site-footer">
-            <p>© PuMa10w with ♥</p>
+            <p>© Puma10w</p>
           </footer>
         </main>
 
