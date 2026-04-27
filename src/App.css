@@ -1548,6 +1548,419 @@
   }
 }
 
+/* iPhone premium stabilization layer */
+
+@media (max-width: 768px) {
+  .App {
+    --header-height: 152px;
+  }
+
+  html,
+  body,
+  #root,
+  .App,
+  .page-content,
+  .home-shell,
+  .catalog-shell,
+  .cards-grid,
+  .modal-content,
+  .questionnaire-modal,
+  .pharmacology-modal {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  .navbar {
+    top: calc(var(--safe-top) + 0.32rem);
+    left: max(0.34rem, var(--safe-left));
+    right: max(0.34rem, var(--safe-right));
+    width: auto;
+    border-radius: 24px;
+  }
+
+  .navbar-inner {
+    padding: 0.54rem;
+    gap: 0.42rem;
+  }
+
+  .navbar-topline {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.42rem;
+    align-items: center;
+  }
+
+  .navbar-brand {
+    min-width: 0;
+    gap: 0.58rem;
+  }
+
+  .navbar-brand-mark {
+    min-width: 44px;
+    height: 34px;
+    padding: 0 0.68rem;
+    font-size: 0.76rem;
+  }
+
+  .navbar-brand-copy strong {
+    font-size: 0.78rem;
+  }
+
+  .navbar-brand-copy span {
+    font-size: 0.62rem;
+  }
+
+  .navbar-theme-toggle {
+    min-width: 64px;
+    min-height: 38px;
+    padding: 0.56rem 0.68rem;
+    font-size: 0.72rem;
+  }
+
+  .navbar-actions {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.36rem;
+    width: 100%;
+  }
+
+  .navbar-actions .nav-item,
+  .navbar-actions .theme-toggle {
+    min-height: 40px;
+    width: 100%;
+    min-width: 0;
+    padding: 0.64rem 0.72rem;
+    font-size: 0.74rem;
+  }
+
+  .nav-row-primary {
+    padding: 0.14rem;
+  }
+
+  .nav-row-primary .nav-scroll {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.18rem;
+    width: 100%;
+  }
+
+  .nav-primary-item {
+    min-width: 0;
+    min-height: 40px;
+    padding-inline: 0.4rem;
+    font-size: 0.72rem;
+  }
+
+  .page-content {
+    padding-top: calc(var(--safe-top) + var(--header-height) + 0.66rem);
+    padding-bottom: calc(var(--safe-bottom) + 1rem);
+  }
+
+  .home-shell {
+    padding: 0 0.66rem 0.88rem;
+  }
+
+  .home-destination-grid {
+    grid-template-columns: 1fr;
+    gap: 0.72rem;
+    margin-bottom: 0.86rem;
+  }
+
+  .home-destination-card,
+  .home-destination-card.is-obstetrics {
+    min-height: 0;
+    margin-top: 0;
+    padding: 1rem;
+    border-radius: 24px;
+  }
+
+  .destination-kicker {
+    font-size: 0.62rem;
+  }
+
+  .destination-index {
+    font-size: 0.74rem;
+  }
+
+  .home-destination-title {
+    font-size: clamp(1.8rem, 8vw, 2.25rem);
+    line-height: 0.96;
+  }
+
+  .home-destination-description {
+    font-size: 0.84rem;
+    line-height: 1.54;
+  }
+
+  .destination-preview {
+    gap: 0.42rem;
+  }
+
+  .destination-preview-item {
+    font-size: 0.76rem;
+    line-height: 1.34;
+  }
+
+  .destination-footer {
+    align-items: center;
+    gap: 0.58rem;
+  }
+
+  .destination-tags {
+    gap: 0.4rem;
+  }
+
+  .destination-tag {
+    padding: 0.34rem 0.56rem;
+    font-size: 0.64rem;
+  }
+
+  .destination-arrow {
+    width: 2.42rem;
+    height: 2.42rem;
+    font-size: 0.94rem;
+  }
+
+  .catalog-header,
+  .search-container,
+  .category-filter,
+  .cards-grid {
+    padding-left: 0.66rem;
+    padding-right: 0.66rem;
+  }
+
+  .catalog-header {
+    margin-bottom: 0.34rem;
+  }
+
+  .catalog-title {
+    font-size: clamp(1.58rem, 6vw, 1.94rem);
+    line-height: 1;
+  }
+
+  .catalog-description {
+    font-size: 0.84rem;
+    line-height: 1.48;
+  }
+
+  .catalog-controls {
+    position: static;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .search-container {
+    margin-bottom: 0;
+  }
+
+  .search-input {
+    min-height: 52px;
+    padding: 0.86rem 4.9rem 0.86rem 0.96rem;
+    border-radius: 20px;
+    font-size: 16px;
+  }
+
+  .search-clear-btn {
+    right: 3rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .search-result-count {
+    right: 0.74rem;
+    min-width: 1.82rem;
+    font-size: 0.68rem;
+  }
+
+  .category-filter {
+    margin-bottom: 0.14rem;
+  }
+
+  .category-chips {
+    gap: 0.42rem;
+    padding-bottom: 0.08rem;
+  }
+
+  .category-chip {
+    min-height: 40px;
+    padding: 0.54rem 0.72rem;
+  }
+
+  .chip-label {
+    font-size: 0.76rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    max-width: 100%;
+    padding-bottom: 0.96rem;
+  }
+
+  .cards-grid > * {
+    min-width: 0;
+  }
+
+  .disease-card {
+    min-height: 142px;
+    padding: 0.68rem 0.7rem 0.6rem;
+    border-radius: 22px;
+  }
+
+  .card-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.48rem;
+    align-items: start;
+    margin-bottom: 0.4rem;
+  }
+
+  .card-meta-row {
+    min-width: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.38rem;
+  }
+
+  .favorite-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .favorite-icon {
+    font-size: 0.9rem;
+  }
+
+  .card-body {
+    grid-template-columns: 40px minmax(0, 1fr);
+    column-gap: 0.6rem;
+    row-gap: 0.18rem;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+  }
+
+  .card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .card-subtitle,
+  .card-icd-badge {
+    font-size: 0.62rem;
+  }
+
+  .card-icd-badge {
+    padding: 0.24rem 0.46rem;
+  }
+
+  .card-title {
+    font-size: 0.88rem;
+    line-height: 1.12;
+  }
+
+  .card-desc {
+    font-size: 0.76rem;
+    line-height: 1.38;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@media (max-width: 480px) {
+  .App {
+    --header-height: 146px;
+  }
+
+  .navbar {
+    left: max(0.3rem, var(--safe-left));
+    right: max(0.3rem, var(--safe-right));
+    border-radius: 22px;
+  }
+
+  .navbar-inner {
+    padding: 0.48rem;
+  }
+
+  .navbar-brand-copy strong {
+    font-size: 0.76rem;
+  }
+
+  .navbar-brand-copy span {
+    font-size: 0.6rem;
+  }
+
+  .navbar-actions .nav-item,
+  .navbar-actions .theme-toggle,
+  .nav-primary-item {
+    font-size: 0.7rem;
+  }
+
+  .home-shell,
+  .catalog-header,
+  .search-container,
+  .category-filter,
+  .cards-grid {
+    padding-left: 0.58rem;
+    padding-right: 0.58rem;
+  }
+
+  .home-destination-card {
+    padding: 0.92rem;
+    border-radius: 22px;
+  }
+
+  .destination-preview-item:nth-child(3) {
+    display: none;
+  }
+
+  .destination-tags {
+    max-width: calc(100% - 3rem);
+  }
+
+  .catalog-title {
+    font-size: clamp(1.46rem, 7vw, 1.78rem);
+  }
+
+  .disease-card {
+    min-height: 136px;
+    padding: 0.62rem 0.64rem 0.56rem;
+    border-radius: 20px;
+  }
+
+  .card-body {
+    grid-template-columns: 38px minmax(0, 1fr);
+    column-gap: 0.56rem;
+  }
+
+  .card-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .card-title {
+    font-size: 0.84rem;
+  }
+
+  .card-desc {
+    font-size: 0.72rem;
+    line-height: 1.33;
+    -webkit-line-clamp: 2;
+  }
+}
+
 /* Final iPhone pass */
 
 @media (max-width: 768px) {

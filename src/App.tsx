@@ -90,10 +90,7 @@ function App() {
     };
 
     const handleScroll = () => {
-      if (frameId !== 0) {
-        return;
-      }
-
+      if (frameId !== 0) return;
       frameId = window.requestAnimationFrame(updateScrollTopVisibility);
     };
 
@@ -102,9 +99,7 @@ function App() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (frameId !== 0) {
-        window.cancelAnimationFrame(frameId);
-      }
+      if (frameId !== 0) window.cancelAnimationFrame(frameId);
     };
   }, []);
 
@@ -127,9 +122,7 @@ function App() {
   const handleFavoritesToggle = () => {
     const nextValue = !showFavorites;
 
-    if (activeTab === 'home') {
-      setActiveTab('gynecology');
-    }
+    if (activeTab === 'home') setActiveTab('gynecology');
 
     setShowFavorites(nextValue);
     setShowHistory(false);
@@ -139,9 +132,7 @@ function App() {
   const handleHistoryToggle = () => {
     const nextValue = !showHistory;
 
-    if (activeTab === 'home') {
-      setActiveTab('gynecology');
-    }
+    if (activeTab === 'home') setActiveTab('gynecology');
 
     setShowHistory(nextValue);
     setShowFavorites(false);
@@ -152,9 +143,6 @@ function App() {
     setSelectedItem(item);
     addToHistory(item);
   };
-
-  const openQuestionnaire = () => setShowQuestionnaire(true);
-  const openPharmacology = () => setShowPharmacology(true);
 
   return (
     <ErrorBoundary>
@@ -186,8 +174,8 @@ function App() {
         <Navbar
           activeTab={activeTab}
           onTabChange={handleTabChange}
-          onQuestionnaires={openQuestionnaire}
-          onPharmacology={openPharmacology}
+          onQuestionnaires={() => setShowQuestionnaire(true)}
+          onPharmacology={() => setShowPharmacology(true)}
           theme={theme}
           toggleTheme={toggleTheme}
           showFavorites={showFavorites}
@@ -203,8 +191,8 @@ function App() {
                 key="home"
                 actions={homeActions}
                 setActiveTab={handleTabChange}
-                openQuestionnaire={openQuestionnaire}
-                openPharmacology={openPharmacology}
+                openQuestionnaire={() => setShowQuestionnaire(true)}
+                openPharmacology={() => setShowPharmacology(true)}
                 recentItems={history.slice(0, 4)}
                 onRecentOpen={() => {}}
                 onFavoritesOpen={handleFavoritesToggle}

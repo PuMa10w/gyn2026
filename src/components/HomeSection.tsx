@@ -23,8 +23,8 @@ interface HomeSectionProps {
 }
 
 const sectionNotes = {
-  gynecology: ['МКБ-10 и нозологии', 'Диагностические ориентиры', 'Терапевтические маршруты'],
-  obstetrics: ['Беременность и триместры', 'Осложнения и риски', 'Наблюдение и протоколы'],
+  gynecology: ['МКБ-10', 'Диагностика', 'Лечение'],
+  obstetrics: ['Протоколы', 'Маршруты', 'Осложнения'],
 } as const;
 
 const HomeSection = React.memo(function HomeSection({
@@ -52,7 +52,7 @@ const HomeSection = React.memo(function HomeSection({
       <section className="home-destination-grid" aria-label="Основные разделы">
         {primaryActions.map((item, index) => {
           const isGynecology = index === 0;
-          const preview = isGynecology ? sectionNotes.gynecology : sectionNotes.obstetrics;
+          const tags = isGynecology ? sectionNotes.gynecology : sectionNotes.obstetrics;
 
           return (
             <motion.button
@@ -76,20 +76,9 @@ const HomeSection = React.memo(function HomeSection({
                 <p className="home-destination-description">{item.description}</p>
               </div>
 
-              <div className="destination-preview" aria-hidden="true">
-                {preview.map((entry) => (
-                  <span key={entry} className="destination-preview-item">
-                    {entry}
-                  </span>
-                ))}
-              </div>
-
               <div className="destination-footer">
                 <div className="destination-tags">
-                  {(isGynecology
-                    ? ['МКБ-10', 'Диагностика', 'Лечение']
-                    : ['Протоколы', 'Маршруты', 'Осложнения']
-                  ).map((tag) => (
+                  {tags.map((tag) => (
                     <span key={tag} className="destination-tag">
                       {tag}
                     </span>
