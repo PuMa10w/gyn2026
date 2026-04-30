@@ -1,6 +1,27 @@
+# Dependencies
 node_modules/
+package-lock.json
+
+# Build output
+build/
 dist/
 .vite/
+
+# Chrome profiles and artifacts
+artifacts/
+*.png
+*.err
+
+# Logs
 *.log
+
+# Environment and config
 .env
 .DS_Store
+
+# IDE and editor
+.vscode/
+.idea/
+
+# Test coverage
+coverage/
