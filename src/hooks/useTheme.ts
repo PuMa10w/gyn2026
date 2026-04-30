@@ -4,13 +4,9 @@ export type ThemeMode = 'light' | 'dark';
 
 export function useTheme() {
   const [theme, setTheme] = useState<ThemeMode>(() => {
-    try {
-      const saved = localStorage.getItem('app-theme');
-      if (saved === 'light' || saved === 'dark') {
-        return saved;
-      }
-    } catch {
-      return 'light';
+    const saved = localStorage.getItem('app-theme');
+    if (saved === 'light' || saved === 'dark') {
+      return saved;
     }
 
     try {
@@ -27,11 +23,7 @@ export function useTheme() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    try {
-      localStorage.setItem('app-theme', theme);
-    } catch {
-      // Storage may be blocked in private or restricted browsing modes.
-    }
+    localStorage.setItem('app-theme', theme);
   }, [theme]);
 
   const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));

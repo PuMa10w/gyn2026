@@ -18,42 +18,6 @@ export function useModalBehavior(onClose: () => void) {
   }, []);
 
   useEffect(() => {
-    const overlay = modalRef.current?.parentElement;
-    const container = overlay?.parentElement;
-
-    if (!overlay || !container) {
-      return;
-    }
-
-    const siblings = Array.from(container.children).filter((element): element is HTMLElement => {
-      return element instanceof HTMLElement && element !== overlay;
-    });
-
-    const previousStates = siblings.map((element) => ({
-      element,
-      ariaHidden: element.getAttribute('aria-hidden'),
-      inert: element.inert,
-    }));
-
-    siblings.forEach((element) => {
-      element.setAttribute('aria-hidden', 'true');
-      element.inert = true;
-    });
-
-    return () => {
-      previousStates.forEach(({ element, ariaHidden, inert }) => {
-        if (ariaHidden === null) {
-          element.removeAttribute('aria-hidden');
-        } else {
-          element.setAttribute('aria-hidden', ariaHidden);
-        }
-
-        element.inert = inert;
-      });
-    };
-  }, []);
-
-  useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();

@@ -23,7 +23,6 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
   const [interactionSearchTerm, setInteractionSearchTerm] = useState('');
   const [firstDrug, setFirstDrug] = useState('');
   const [secondDrug, setSecondDrug] = useState('');
-  const pharmaTabs = ['medications', 'interactions', 'regimens'] as const;
 
   const medicationEntries = medications as Medication[];
   const regimenEntries = commonRegimens as Regimen[];
@@ -69,43 +68,14 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
     }
   };
 
-  const handleTabKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    const currentIndex = pharmaTabs.indexOf(activeTab);
-    let nextIndex: number | null = null;
-
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-      nextIndex = (currentIndex + 1) % pharmaTabs.length;
-    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
-      nextIndex = (currentIndex - 1 + pharmaTabs.length) % pharmaTabs.length;
-    } else if (event.key === 'Home') {
-      nextIndex = 0;
-    } else if (event.key === 'End') {
-      nextIndex = pharmaTabs.length - 1;
-    }
-
-    if (nextIndex === null) {
-      return;
-    }
-
-    event.preventDefault();
-    const nextTab = pharmaTabs[nextIndex];
-    setActiveTab(nextTab);
-    setSelectedMed(null);
-    window.requestAnimationFrame(() => document.getElementById(`${titleId}-${nextTab}-tab`)?.focus());
-  };
-
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     const updateViewportMode = () => setIsMobile(mediaQuery.matches);
 
     updateViewportMode();
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', updateViewportMode);
-      return () => mediaQuery.removeEventListener('change', updateViewportMode);
-    }
+    mediaQuery.addEventListener('change', updateViewportMode);
 
-    mediaQuery.addListener(updateViewportMode);
-    return () => mediaQuery.removeListener(updateViewportMode);
+    return () => mediaQuery.removeEventListener('change', updateViewportMode);
   }, []);
 
   return (
@@ -141,7 +111,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="pharma-tabs" role="tablist" aria-label="Разделы фармакологии" onKeyDown={handleTabKeyDown}>
+          <div className="pharma-tabs" role="tablist" aria-label="Разделы фармакологии">
             <button
               type="button"
               className={`pharma-tab ${activeTab === 'medications' ? 'active' : ''}`}

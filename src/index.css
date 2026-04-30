@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
 :root {
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
@@ -109,17 +111,12 @@ body {
   overflow-x: hidden;
   background: var(--bg-hero);
   color: var(--text-primary);
-  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
+  font-family: 'Manrope', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
   transition: background 0.25s ease, color 0.25s ease;
-  padding-bottom: max(1rem, env(safe-area-inset-bottom));
-  overscroll-behavior-y: none;
-  position: relative;
+  padding-bottom: var(--safe-bottom);
 }
 
 body::before {
@@ -175,15 +172,21 @@ h5 {
   -webkit-font-optical-sizing: auto;
 }
 
-html {
-  overflow-x: hidden;
-  position: relative;
-}
-
-#root {
+body {
   min-height: 100vh;
   overflow-x: hidden;
-  position: relative;
+  background: var(--bg-hero);
+  color: var(--text-primary);
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  transition: background 0.25s ease, color 0.25s ease;
+  padding-bottom: var(--safe-bottom);
+  overscroll-behavior-y: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -463,90 +466,4 @@ html {
 
 .copper-glow {
   box-shadow: 0 0 16px rgba(184, 115, 51, 0.18);
-}
-
-@supports (padding: max(0px)) {
-  @media (max-width: 480px) {
-    :root {
-      --header-height: 140px;
-      --safe-top: env(safe-area-inset-top, 0px);
-    }
-  }
-}
-
-@supports (padding: max(0px)) and (height: 852px) {
-  @media (max-width: 480px) {
-    :root {
-      --header-height: 148px;
-    }
-  }
-}
-
-@supports (padding: max(0px)) and (height: 932px) {
-  @media (max-width: 480px) {
-    :root {
-      --header-height: 152px;
-    }
-  }
-}
-
-html.ios-blur-fix {
-  -webkit-backdrop-filter: blur(0);
-}
-
-@supports (-webkit-touch-callout: none) {
-  html.ios-fix {
-    min-height: -webkit-fill-available;
-  }
-}
-
-@media (max-width: 480px) {
-  .glass {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .glass-panel {
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-}
-
-
-/* ===== POLISH v2 ===== */
-
-/* Crisp rendering for headings */
-h1, h2, h3, h4, h5 {
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-/* Tighter letter-spacing for body text */
-p, li, span, button, a {
-  letter-spacing: 0.005em;
-}
-
-/* Universal touch target minimum */
-@media (max-width: 768px) {
-  button, [role="button"], a {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Prevent iOS zoom on input focus */
-  input, textarea, select {
-    font-size: 16px !important;
-  }
-}
-
-/* Smoother transitions site-wide */
-.App *, .App *::before, .App *::after {
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Disable transitions when reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .App *, .App *::before, .App *::after {
-    transition-duration: 0.01ms !important;
-  }
 }

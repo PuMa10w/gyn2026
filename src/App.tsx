@@ -14,7 +14,6 @@ import { useFavorites } from './hooks/useFavorites';
 import { useHistory } from './hooks/useHistory';
 import { emptyStateContent, homeActions, sectionMeta } from './config/appContent';
 import type { CategoryId, Disease, TabType } from './types';
-import type { HistoryItem } from './hooks/useHistory';
 
 const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
 const Questionnaire = lazy(() => import('./components/Questionnaire'));
@@ -145,11 +144,6 @@ function App() {
     addToHistory(item);
   };
 
-  const handleRecentItemOpen = (item: HistoryItem) => {
-    handleTabChange(item.subtitle === 'Акушерство' ? 'obstetrics' : 'gynecology');
-    setSearchTerm(item.name);
-  };
-
   return (
     <ErrorBoundary>
       <Helmet>
@@ -200,7 +194,7 @@ function App() {
                 openQuestionnaire={() => setShowQuestionnaire(true)}
                 openPharmacology={() => setShowPharmacology(true)}
                 recentItems={history.slice(0, 4)}
-                onRecentOpen={handleRecentItemOpen}
+                onRecentOpen={() => {}}
                 onFavoritesOpen={handleFavoritesToggle}
                 onHistoryOpen={handleHistoryToggle}
                 favoriteCount={favorites.length}
@@ -229,9 +223,6 @@ function App() {
 
           <footer className="site-footer">
             <p>© Puma10w</p>
-            <p className="site-footer-note">
-              Справочник предназначен для клинической навигации специалиста и не заменяет очную консультацию, локальные протоколы или экстренную помощь.
-            </p>
           </footer>
         </main>
 

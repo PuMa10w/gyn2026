@@ -29,21 +29,10 @@ const Navbar = React.memo(function Navbar({
   onHistoryToggle,
 }: NavbarProps) {
   return (
-    <motion.nav
-      className="navbar"
-      initial={{ opacity: 0, y: -18 }}
-      animate={{ opacity: 1, y: 0 }}
-      aria-label="Главная навигация"
-    >
+    <motion.nav className="navbar" initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} aria-label="Главная навигация">
       <div className="navbar-inner">
-        {/* Top line: brand + theme toggle */}
         <div className="navbar-topline">
-          <button
-            type="button"
-            className="navbar-brand"
-            onClick={() => onTabChange('home')}
-            aria-label="Перейти на главную"
-          >
+          <button type="button" className="navbar-brand" onClick={() => onTabChange('home')} aria-label="Перейти на главную">
             <span className="navbar-brand-mark">GYN</span>
             <span className="navbar-brand-copy">
               <strong>Clinical Desk</strong>
@@ -51,55 +40,42 @@ const Navbar = React.memo(function Navbar({
             </span>
           </button>
 
-          {/* Theme toggle — icon button */}
           <button
             type="button"
-            className="navbar-theme-icon"
+            className="theme-toggle navbar-theme-toggle"
             onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
+            aria-label={theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на тёмную тему'}
             title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
           >
-            {theme === 'dark' ? '☀️' : '🌙'}
+            Тема
           </button>
+
+          <div className="navbar-actions" role="toolbar" aria-label="Быстрые действия">
+            <button type="button" className="nav-item nav-utility-item" onClick={onQuestionnaires} aria-label="Открыть опросники">
+              Шкалы
+            </button>
+            <button type="button" className="nav-item nav-utility-item" onClick={onPharmacology} aria-label="Открыть фармакологию">
+              Фарма
+            </button>
+            <button
+              type="button"
+              className={`nav-item nav-utility-item ${showFavorites ? 'is-active' : ''}`}
+              onClick={onFavoritesToggle}
+              aria-pressed={showFavorites}
+            >
+              Избранное
+            </button>
+            <button
+              type="button"
+              className={`nav-item nav-utility-item ${showHistory ? 'is-active' : ''}`}
+              onClick={onHistoryToggle}
+              aria-pressed={showHistory}
+            >
+              История
+            </button>
+          </div>
         </div>
 
-        {/* Quick actions */}
-        <div className="navbar-actions" role="toolbar" aria-label="Быстрые действия">
-          <button
-            type="button"
-            className="nav-item nav-utility-item"
-            onClick={onQuestionnaires}
-            aria-label="Открыть опросники"
-          >
-            📋 Шкалы
-          </button>
-          <button
-            type="button"
-            className="nav-item nav-utility-item"
-            onClick={onPharmacology}
-            aria-label="Открыть фармакологию"
-          >
-            ⚕ Фарма
-          </button>
-          <button
-            type="button"
-            className={`nav-item nav-utility-item ${showFavorites ? 'is-active' : ''}`}
-            onClick={onFavoritesToggle}
-            aria-pressed={showFavorites}
-          >
-            ♥ Избранное
-          </button>
-          <button
-            type="button"
-            className={`nav-item nav-utility-item ${showHistory ? 'is-active' : ''}`}
-            onClick={onHistoryToggle}
-            aria-pressed={showHistory}
-          >
-            🕐 История
-          </button>
-        </div>
-
-        {/* Main tabs */}
         <div className="nav-row nav-row-primary" aria-label="Основные разделы">
           <div className="nav-scroll">
             <button

@@ -7,19 +7,14 @@ const getLegacyId = (diseaseId: string) => diseaseId.split('__')[0];
 export function useFavorites() {
   const [favorites, setFavorites] = useState<FavoriteId[]>(() => {
     try {
-      const parsed = JSON.parse(localStorage.getItem('disease-favorites') || '[]');
-      return Array.isArray(parsed) ? parsed.filter((id): id is FavoriteId => typeof id === 'string') : [];
+      return JSON.parse(localStorage.getItem('disease-favorites') || '[]') as FavoriteId[];
     } catch {
       return [];
     }
   });
 
   useEffect(() => {
-    try {
-      localStorage.setItem('disease-favorites', JSON.stringify(favorites));
-    } catch {
-      // Storage may be blocked in private or restricted browsing modes.
-    }
+    localStorage.setItem('disease-favorites', JSON.stringify(favorites));
   }, [favorites]);
 
   const addFavorite = (diseaseId: FavoriteId) => {
@@ -34,7 +29,7 @@ export function useFavorites() {
   };
 
   const toggleFavorite = (diseaseId: FavoriteId) => {
-    if (isFavorite(diseaseId)) {
+    if (favorites.includes(diseaseId)) {
       removeFavorite(diseaseId);
     } else {
       addFavorite(diseaseId);

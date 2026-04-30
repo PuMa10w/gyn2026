@@ -9,7 +9,6 @@ interface SearchBarProps {
 
 const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, resultCount }: SearchBarProps) {
   const inputId = useId();
-  const resultCountId = useId();
 
   return (
     <motion.form
@@ -35,7 +34,6 @@ const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, res
           inputMode="search"
           enterKeyHint="search"
           spellCheck={false}
-          aria-describedby={typeof resultCount === 'number' ? resultCountId : undefined}
         />
         {searchTerm && (
           <motion.button
@@ -53,11 +51,8 @@ const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, res
         {typeof resultCount === 'number' && (
           <motion.span
             className="search-result-count"
-            id={resultCountId}
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
-            role="status"
-            aria-live="polite"
             aria-label={`Найдено результатов: ${resultCount}`}
           >
             {resultCount}

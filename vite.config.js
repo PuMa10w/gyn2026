@@ -19,24 +19,8 @@ export default defineConfig({
         scope: '.',
         start_url: '.',
         prefer_related_applications: false,
-        categories: ['medical', 'health', 'education'],
-        lang: 'ru-RU',
-        shortcuts: [
-          {
-            name: 'Гинекология',
-            short_name: 'Гинекология',
-            description: 'Открыть клинический каталог по гинекологии',
-            url: '.',
-            icons: [{ src: 'logo192.png', sizes: '192x192', type: 'image/png' }],
-          },
-          {
-            name: 'Акушерство',
-            short_name: 'Акушерство',
-            description: 'Открыть клинический каталог по акушерству',
-            url: '.',
-            icons: [{ src: 'logo192.png', sizes: '192x192', type: 'image/png' }],
-          },
-        ],
+        categories: ['medical', 'health', 'fitness'],
+        lang: 'ru',
         icons: [
           {
             src: 'favicon.ico',
@@ -77,20 +61,6 @@ export default defineConfig({
               },
             },
           },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-font-files-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
         ],
       },
     }),
@@ -120,6 +90,10 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             if (id.includes('framer-motion')) {
               return 'motion-vendor';
+            }
+
+            if (id.includes('react-icons')) {
+              return 'icons-vendor';
             }
 
             return 'vendor';

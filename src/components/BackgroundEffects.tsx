@@ -31,51 +31,46 @@ function createSparkleConfig(count: number) {
 const BackgroundEffects: React.FC = () => {
   const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-
-  if (isReducedMotion) {
-    return <div className="bg-effects" aria-hidden="true" />;
-  }
-
   const particleConfig = useMemo(() => createParticleConfig(isMobile ? 0 : 12), [isMobile]);
   const sparkleConfig = useMemo(() => createSparkleConfig(isMobile ? 0 : 8), [isMobile]);
 
+  if (isReducedMotion || isMobile) {
+    return <div className="bg-effects" aria-hidden="true" />;
+  }
+
   return (
     <div className="bg-effects">
-      {!isMobile && (
-        <>
-          <div className="blob blob-1">
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                rotate: [0, 90, 0],
-                opacity: [0.3, 0.5, 0.3]
-              }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-          <div className="blob blob-2">
-            <motion.div
-              animate={{
-                scale: [1.2, 1, 1.2],
-                rotate: [0, -60, 0],
-                opacity: [0.25, 0.45, 0.25]
-              }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-          <div className="blob blob-3">
-            <motion.div
-              animate={{
-                scale: [1, 1.15, 1],
-                x: [0, 50, 0],
-                y: [0, -30, 0],
-                opacity: [0.2, 0.35, 0.2]
-              }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-        </>
-      )}
+      <div className="blob blob-1">
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
+      <div className="blob blob-2">
+        <motion.div
+          animate={{
+            scale: [1.2, 1, 1.2],
+            rotate: [0, -60, 0],
+            opacity: [0.25, 0.45, 0.25]
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
+      <div className="blob blob-3">
+        <motion.div
+          animate={{
+            scale: [1, 1.15, 1],
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+            opacity: [0.2, 0.35, 0.2]
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
 
       <div className="particles">
         {particleConfig.map((particle) => (

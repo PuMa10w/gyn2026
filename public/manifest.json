@@ -1,7 +1,7 @@
 {
-  "name": "GYN — Клинический справочник",
+  "name": "GYN — Акушерство и Гинекология",
   "short_name": "GYN",
-  "description": "Премиальный клинический справочник по гинекологии и акушерству",
+  "description": "Медицинский справочник по акушерству и гинекологии с поиском нозологий, опросниками и фармакологией",
   "lang": "ru-RU",
   "icons": [
     {
@@ -25,25 +25,10 @@
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
-  "theme_color": "#8d616c",
+  "theme_color": "#e05a78",
   "background_color": "#fdf2f5",
   "orientation": "portrait-primary",
   "categories": ["medical", "health", "education"],
-  "shortcuts": [
-    {
-      "name": "Гинекология",
-      "short_name": "Гинекология",
-      "description": "Открыть клинический каталог по гинекологии",
-      "url": ".",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192", "type": "image/png" }]
-    },
-    {
-      "name": "Акушерство",
-      "short_name": "Акушерство",
-      "description": "Открыть клинический каталог по акушерству",
-      "url": ".",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192", "type": "image/png" }]
-    }
-  ],
+  "iarc_rating_id": "Mature",
   "prefer_related_applications": false
 }

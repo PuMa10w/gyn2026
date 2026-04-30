@@ -1,5 +1,3 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
-
-# Add an absolute Sitemap URL here when the production domain is finalized.

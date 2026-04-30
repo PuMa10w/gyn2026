@@ -18,14 +18,12 @@ const cardVariants = {
     y: 0,
     scale: 1,
     transition: {
-      delay: Math.min(index, 8) * 0.035,
-      duration: 0.34,
+      delay: index * 0.05,
+      duration: 0.5,
       ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
     },
   }),
 };
-
-const canHover = typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 const DiseaseCard = React.memo(function DiseaseCard({
   item,
@@ -44,11 +42,6 @@ const DiseaseCard = React.memo(function DiseaseCard({
     onToggleFavorite(item.id);
   };
 
-  const handleCardActionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    onClick(item);
-  };
-
   const handleCardKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -63,13 +56,13 @@ const DiseaseCard = React.memo(function DiseaseCard({
       initial="hidden"
       animate="visible"
       variants={cardVariants}
-      whileHover={canHover ? { y: -4 } : undefined}
+      whileHover={{ y: -4 }}
       onClick={() => onClick(item)}
     >
       <button
         type="button"
         className="disease-card-action"
-        onClick={handleCardActionClick}
+        onClick={() => onClick(item)}
         onKeyDown={handleCardKeyDown}
         aria-label={`${item.name}, код ${icdLabel}. Открыть подробности.`}
       />

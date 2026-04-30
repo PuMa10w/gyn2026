@@ -13,31 +13,17 @@ export interface HistoryItem extends HistoryDisease {
 
 const getLegacyId = (diseaseId: string) => diseaseId.split('__')[0];
 
-function isHistoryItem(value: unknown): value is HistoryItem {
-  if (!value || typeof value !== 'object') {
-    return false;
-  }
-
-  const item = value as Partial<HistoryItem>;
-  return typeof item.id === 'string' && typeof item.name === 'string' && typeof item.icd === 'string' && typeof item.timestamp === 'number';
-}
-
 export function useHistory() {
   const [history, setHistory] = useState<HistoryItem[]>(() => {
     try {
-      const parsed = JSON.parse(localStorage.getItem('disease-history') || '[]');
-      return Array.isArray(parsed) ? parsed.filter(isHistoryItem).slice(0, 10) : [];
+      return JSON.parse(localStorage.getItem('disease-history') || '[]') as HistoryItem[];
     } catch {
       return [];
     }
   });
 
   useEffect(() => {
-    try {
-      localStorage.setItem('disease-history', JSON.stringify(history));
-    } catch {
-      // Storage may be blocked in private or restricted browsing modes.
-    }
+    localStorage.setItem('disease-history', JSON.stringify(history));
   }, [history]);
 
   const addToHistory = (disease: HistoryDisease) => {

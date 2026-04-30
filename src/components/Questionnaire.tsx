@@ -6,23 +6,6 @@ import type { QuestionnaireData, ScoringResult, QuestionnaireHistory } from '../
 
 const QUESTIONNAIRE_HISTORY_KEY = 'questionnaire-history';
 
-function isQuestionnaireHistoryItem(value: unknown): value is QuestionnaireHistory {
-  if (!value || typeof value !== 'object') {
-    return false;
-  }
-
-  const item = value as Partial<QuestionnaireHistory>;
-  return (
-    typeof item.id === 'string' &&
-    typeof item.name === 'string' &&
-    typeof item.fullName === 'string' &&
-    typeof item.date === 'string' &&
-    typeof item.score === 'number' &&
-    typeof item.level === 'string' &&
-    typeof item.color === 'string'
-  );
-}
-
 interface QuestionnaireProps {
   onClose: () => void;
 }
@@ -40,8 +23,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   const [result, setResult] = useState<ScoringResult | null>(null);
   const [history, setHistory] = useState<QuestionnaireHistory[]>(() => {
     try {
-      const parsed = JSON.parse(localStorage.getItem(QUESTIONNAIRE_HISTORY_KEY) || '[]');
-      return Array.isArray(parsed) ? parsed.filter(isQuestionnaireHistoryItem).slice(0, 20) : [];
+      return JSON.parse(localStorage.getItem(QUESTIONNAIRE_HISTORY_KEY) || '[]');
     } catch {
       return [];
     }
@@ -52,13 +34,9 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
     const updateViewportMode = () => setIsMobile(mediaQuery.matches);
 
     updateViewportMode();
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', updateViewportMode);
-      return () => mediaQuery.removeEventListener('change', updateViewportMode);
-    }
+    mediaQuery.addEventListener('change', updateViewportMode);
 
-    mediaQuery.addListener(updateViewportMode);
-    return () => mediaQuery.removeListener(updateViewportMode);
+    return () => mediaQuery.removeEventListener('change', updateViewportMode);
   }, []);
 
   const startQuestionnaire = (q: QuestionnaireData): void => {
@@ -92,20 +70,12 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
     const updatedHistory = [historyEntry, ...history].slice(0, 20);
     setHistory(updatedHistory);
-    try {
-      localStorage.setItem(QUESTIONNAIRE_HISTORY_KEY, JSON.stringify(updatedHistory));
-    } catch {
-      // Storage may be blocked in private or restricted browsing modes.
-    }
+    localStorage.setItem(QUESTIONNAIRE_HISTORY_KEY, JSON.stringify(updatedHistory));
   };
 
   const clearHistory = (): void => {
     setHistory([]);
-    try {
-      localStorage.removeItem(QUESTIONNAIRE_HISTORY_KEY);
-    } catch {
-      // Storage may be blocked in private or restricted browsing modes.
-    }
+    localStorage.removeItem(QUESTIONNAIRE_HISTORY_KEY);
   };
 
   const closeResults = (): void => {
@@ -133,6 +103,13 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
       setCurrentStep((prev) => prev + 1);
     } else {
       calculateResult();
+    }
+  };
+
+  const handleCardKeyDown = (event: React.KeyboardEvent, onActivate: () => void): void => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onActivate();
     }
   };
 
@@ -204,15 +181,17 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
           <div className="q-grid">
             {questionnaires.map((q, idx) => (
-              <motion.button
+              <motion.article
                 key={q.id}
-                type="button"
                 className="q-card"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
                 whileHover={{ y: -5, boxShadow: '0 12px 35px rgba(224,90,120,0.15)' }}
                 onClick={() => startQuestionnaire(q)}
+                onKeyDown={(event) => handleCardKeyDown(event, () => startQuestionnaire(q))}
+                role="button"
+                tabIndex={0}
                 aria-label={`Открыть опросник: ${q.name}`}
               >
                 <div className="q-icon">{q.icon}</div>
@@ -221,7 +200,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
                 <div className="q-cat">{q.category}</div>
                 <div className="q-desc">{q.description}</div>
                 <div className="q-count">{q.questions.length} вопросов</div>
-              </motion.button>
+              </motion.article>
             ))}
           </div>
 

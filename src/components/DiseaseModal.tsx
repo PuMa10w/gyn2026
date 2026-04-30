@@ -36,8 +36,6 @@ const tabs = [
 
 type ModalTab = (typeof tabs)[number]['id'];
 
-const tabIds = tabs.map((tab) => tab.id);
-
 function normalizeText(value: string) {
   return value.replace(/\s+/g, ' ').trim();
 }
@@ -114,13 +112,9 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
     const updateViewportMode = () => setIsMobile(mediaQuery.matches);
 
     updateViewportMode();
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', updateViewportMode);
-      return () => mediaQuery.removeEventListener('change', updateViewportMode);
-    }
+    mediaQuery.addEventListener('change', updateViewportMode);
 
-    mediaQuery.addListener(updateViewportMode);
-    return () => mediaQuery.removeListener(updateViewportMode);
+    return () => mediaQuery.removeEventListener('change', updateViewportMode);
   }, []);
 
   useEffect(() => {
@@ -150,30 +144,6 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
     }
     setTouchStart(null);
   }, [touchStart, isMobile, onClose]);
-
-  const handleTabKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-    const currentIndex = tabIds.indexOf(activeTab);
-    let nextIndex: number | null = null;
-
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-      nextIndex = (currentIndex + 1) % tabIds.length;
-    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
-      nextIndex = (currentIndex - 1 + tabIds.length) % tabIds.length;
-    } else if (event.key === 'Home') {
-      nextIndex = 0;
-    } else if (event.key === 'End') {
-      nextIndex = tabIds.length - 1;
-    }
-
-    if (nextIndex === null) {
-      return;
-    }
-
-    event.preventDefault();
-    const nextTab = tabIds[nextIndex];
-    setActiveTab(nextTab);
-    window.requestAnimationFrame(() => document.getElementById(`${titleId}-${nextTab}-tab`)?.focus());
-  }, [activeTab, titleId]);
 
   const handleModalScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {
     if (!isMobile || !isQuickStripExpanded) return;
@@ -1045,15 +1015,17 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
           transition={isMobile ? { type: 'spring', damping: 25, stiffness: 300 } : { duration: 0.3 }}
           onClick={(event) => event.stopPropagation()}
           onKeyDown={handleModalKeyDown}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           onScroll={handleModalScroll}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
           aria-describedby={descriptionId}
         >
-          {isMobile && <div className="modal-drag-indicator" aria-hidden="true" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} />}
+          {isMobile && <div className="modal-drag-indicator" aria-hidden="true" />}
 
-          <div className="modal-header" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+          <div className="modal-header">
             <div className="modal-title-group">
               <div className="modal-icon-wrapper" aria-hidden="true">
                 {IconComponent}
@@ -1107,7 +1079,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             {item.clinicalSummary?.quickSummary && <p className="modal-quick-summary">{item.clinicalSummary.quickSummary}</p>}
           </div>
 
-          <div className="modal-tabs" role="tablist" aria-label="Разделы карточки" onKeyDown={handleTabKeyDown}>
+          <div className="modal-tabs" role="tablist" aria-label="Разделы карточки">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
