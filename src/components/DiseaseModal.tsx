@@ -48,7 +48,7 @@ const tabs = [
 
 type ModalTab = (typeof tabs)[number]['id'];
 
-function normalizeText(value: string) {
+function normalizeText(value: unknown) {
   return repairText(value).replace(/\s+/g, ' ').trim();
 }
 
@@ -69,9 +69,9 @@ function hasAnyValues(sections: Array<string[] | undefined>) {
 function buildTreatmentSteps(treatment: Disease['treatment']) {
   return [
     ...(treatment.firstLine ?? treatment.conservative ?? []).map((detail) => ({ step: 'Первая линия', detail })),
-    ...(treatment.secondLine ?? []).map((detail) => ({ step: '�’С‚орая линия', detail })),
-    ...(treatment.proceduralOrSurgical ?? treatment.surgical ?? []).map((detail) => ({ step: 'Про�†едур�‹/С…ирургия', detail })),
-    ...(treatment.inpatientManagement ?? []).map((detail) => ({ step: 'С�‚Р°С†ионар', detail })),
+    ...(treatment.secondLine ?? []).map((detail) => ({ step: 'Вторая линия', detail })),
+    ...(treatment.proceduralOrSurgical ?? treatment.surgical ?? []).map((detail) => ({ step: 'Процедуры/хирургия', detail })),
+    ...(treatment.inpatientManagement ?? []).map((detail) => ({ step: 'Стационар', detail })),
   ];
 }
 
@@ -129,6 +129,15 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
   const displayName = repairText(item.name);
   const displaySubtitle = item.icd?.startsWith('O') ? 'Акушерство' : repairText(item.subtitle);
   const icdLabel = repairText(item.icdDetail ?? item.icd);
+  const sourceConfidenceLabel = item.sourceConfidence?.level ?? item.sourceQuality?.label ?? item.guidelineStatus ?? 'требует клинической ревизии';
+  const immediateNow = item.immediateActionPlan?.now ?? item.clinicalSummary?.firstLineActions ?? [];
+  const immediateUrgent = item.immediateActionPlan?.urgentIf ?? item.clinicalSummary?.whenToEscalate ?? item.clinicalSummary?.redFlags ?? [];
+  const timeline = item.clinicalTimeline ?? {
+    suspicion: item.clinicalSummary?.redFlags?.slice(0, 2),
+    confirmation: item.clinicalSummary?.diagnosticMinimum?.slice(0, 2),
+    treatmentStart: item.clinicalSummary?.firstLineActions?.slice(0, 2),
+    review: item.followUpTriggers?.routineReview?.slice(0, 2) ?? item.followUpTriggers?.earlierReviewIf?.slice(0, 2),
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -216,12 +225,12 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
           <div className="tab-content modal-grid" id={descriptionId}>
             {item.overview && (item.overview.quickTake || item.overview.prevalence || item.overview.practiceFocus) ? (
               <section className="content-card content-card-wide overview-summary-card">
-                <span className="quick-summary-eyebrow">Клини�‡еский �„окус</span>
+                <span className="quick-summary-eyebrow">Клинический фокус</span>
                 {item.overview.quickTake ? <p>{normalizeText(item.overview.quickTake)}</p> : null}
                 <div className="overview-summary-grid">
                   {item.overview.prevalence ? (
                     <article className="structured-item overview-summary-item">
-                      <div className="structured-item-title">Распрос�‚раненнос�‚ь</div>
+                      <div className="structured-item-title">Распространенность</div>
                       <p>{normalizeText(item.overview.prevalence)}</p>
                     </article>
                   ) : null}
@@ -233,7 +242,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                   ) : null}
                   {item.overview.practiceFocus ? (
                     <article className="structured-item overview-summary-item overview-summary-item-wide">
-                      <div className="structured-item-title">Прак�‚и�‡еский ак�†ен�‚</div>
+                      <div className="structured-item-title">Практический акцент</div>
                       <p>{normalizeText(item.overview.practiceFocus)}</p>
                     </article>
                   ) : null}
@@ -254,7 +263,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                   fontSize: '13px',
                 }}
               >
-                ⚠️ Про�‚окол ле�‡ения може�‚ Р±С‹С‚ь ус�‚арев�€им. Рекомендуе�‚ся свери�‚ься с ак�‚уальн�‹ми клини�‡ескими рекоменда�†иями.
+                Протокол лечения может устареть. Рекомендуется свериться с актуальными клиническими рекомендациями.
               </motion.div>
             )}
 
@@ -269,10 +278,10 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             </section>
 
             <section className="content-card">
-              <h3>Клини�‡еская кар�‚ина</h3>
+              <h3>Клиническая картина</h3>
               <ul>
                 {item.symptoms.map((symptom, index) => (
-                  <li key={index}>{symptom}</li>
+                  <li key={index}>{normalizeText(symptom)}</li>
                 ))}
               </ul>
             </section>
@@ -286,11 +295,11 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
               item.symptomGroups.atypical,
             ]) ? (
               <section className="content-card content-card-wide">
-                <h3>Па�‚С‚ерн�‹ симп�‚омов</h3>
+                <h3>Паттерны симптомов</h3>
                 <div className="structured-list">
                   {item.symptomGroups.typical?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Типи�‡н�‹е проявления</div>
+                      <div className="structured-item-title">Типичные проявления</div>
                       {renderList(item.symptomGroups.typical)}
                     </article>
                   ) : null}
@@ -308,13 +317,13 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                   ) : null}
                   {item.symptomGroups.alarm?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Тревожн�‹е симп�‚ом�‹</div>
+                      <div className="structured-item-title">Тревожные симптомы</div>
                       {renderList(item.symptomGroups.alarm)}
                     </article>
                   ) : null}
                   {item.symptomGroups.atypical?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">А�‚ипи�‡н�‹е вариан�‚С‹</div>
+                      <div className="structured-item-title">Атипичные варианты</div>
                       {renderList(item.symptomGroups.atypical)}
                     </article>
                   ) : null}
@@ -323,20 +332,20 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             ) : null}
 
             <section className="content-card content-card-wide">
-              <h3>Р­С‚иология</h3>
+              <h3>Этиология</h3>
               <ul>
                 {item.etiology.map((entry, index) => (
-                  <li key={index}>{entry}</li>
+                  <li key={index}>{normalizeText(entry)}</li>
                 ))}
               </ul>
             </section>
 
             {item.classification && (
               <section className="content-card content-card-wide">
-                <h3>{item.classification.title}</h3>
+                <h3>{normalizeText(item.classification.title)}</h3>
                 <ul>
                   {item.classification.stages.map((stage, index) => (
-                    <li key={index}>{stage}</li>
+                    <li key={index}>{normalizeText(stage)}</li>
                   ))}
                 </ul>
               </section>
@@ -344,14 +353,14 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.severityStratification?.tiers?.length ? (
               <section className="content-card content-card-wide">
-                <h3>{item.severityStratification.title ?? 'С�‚ра�‚и�„ика�†ия �‚яжес�‚и'}</h3>
+                <h3>{item.severityStratification.title ?? 'Стратификация тяжести'}</h3>
                 <div className="structured-list">
                   {item.severityStratification.tiers.map((tier, index) => (
                     <article className="structured-item" key={index}>
                       <div className="structured-item-title">{tier.name}</div>
                       {renderList(tier.criteria)}
-                      {tier.clinicalMeaning ? <p><strong>Клини�‡еское зна�‡ение:</strong> {normalizeText(tier.clinicalMeaning)}</p> : null}
-                      {tier.managementImpact ? <p><strong>�’лияние на �‚ак�‚ику:</strong> {normalizeText(tier.managementImpact)}</p> : null}
+                      {tier.clinicalMeaning ? <p><strong>Клиническое значение:</strong> {normalizeText(tier.clinicalMeaning)}</p> : null}
+                      {tier.managementImpact ? <p><strong>Влияние на тактику:</strong> {normalizeText(tier.managementImpact)}</p> : null}
                     </article>
                   ))}
                 </div>
@@ -369,6 +378,69 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
               </section>
             )}
 
+            {(immediateNow.length || immediateUrgent.length) ? (
+              <section className="content-card content-card-wide immediate-action-card">
+                <span className="quick-summary-eyebrow">Что делать сейчас</span>
+                <div className="structured-list">
+                  {immediateNow.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Первичные действия</div>
+                      {renderList(immediateNow.slice(0, 4))}
+                    </article>
+                  ) : null}
+                  {immediateUrgent.length ? (
+                    <article className="structured-item">
+                      <div className="structured-item-title">Когда срочно</div>
+                      {renderList(immediateUrgent.slice(0, 4))}
+                    </article>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+
+            {hasAnyValues([timeline.suspicion, timeline.confirmation, timeline.treatmentStart, timeline.review]) ? (
+              <section className="content-card content-card-wide clinical-timeline-card">
+                <span className="quick-summary-eyebrow">Клинический маршрут</span>
+                <div className="clinical-timeline">
+                  {timeline.suspicion?.length ? (
+                    <article>
+                      <span>01</span>
+                      <strong>Заподозрить</strong>
+                      {renderList(timeline.suspicion.slice(0, 2))}
+                    </article>
+                  ) : null}
+                  {timeline.confirmation?.length ? (
+                    <article>
+                      <span>02</span>
+                      <strong>Подтвердить</strong>
+                      {renderList(timeline.confirmation.slice(0, 2))}
+                    </article>
+                  ) : null}
+                  {timeline.treatmentStart?.length ? (
+                    <article>
+                      <span>03</span>
+                      <strong>Начать ведение</strong>
+                      {renderList(timeline.treatmentStart.slice(0, 2))}
+                    </article>
+                  ) : null}
+                  {timeline.review?.length ? (
+                    <article>
+                      <span>04</span>
+                      <strong>Пересмотреть</strong>
+                      {renderList(timeline.review.slice(0, 2))}
+                    </article>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+
+            <section className="content-card source-confidence-card">
+              <h3>Доверие к источникам</h3>
+              <p>{normalizeText(sourceConfidenceLabel)}</p>
+              {item.lastReviewed ? <small>Ревизия: {normalizeText(item.lastReviewed)}</small> : null}
+              {item.sourceConfidence?.note ? <small>{normalizeText(item.sourceConfidence.note)}</small> : null}
+            </section>
+
             {item.clinicalSummary?.redFlags?.length ? (
               <section className="content-card quick-card quick-card-alert">
                 <h3>Красные флаги</h3>
@@ -385,7 +457,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 <h3>Первая линия</h3>
                 <ul>
                   {item.clinicalSummary.firstLineActions.map((entry, index) => (
-                    <li key={index}>{entry}</li>
+                    <li key={index}>{normalizeText(entry)}</li>
                   ))}
                 </ul>
               </section>
@@ -442,36 +514,36 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
         return (
           <div className="tab-content modal-grid" id={descriptionId}>
             <section className="content-card content-card-wide diagnostics-hero">
-              <h3>То�‡ная диагнос�‚ика</h3>
+              <h3>Точная диагностика</h3>
               <p>
-                Э�‚о не прос�‚о список исследований, а рабо�‡ий алгори�‚м: на �‡С‚о ориен�‚ирова�‚ься в
-                осмо�‚ре, какие �‚ес�‚С‹ под�‚верждаю�‚ диагноз и какие маркер�‹ помогаю�‚ у�‚о�‡ни�‚ь кар�‚ину.
+                Это рабочий алгоритм: на что ориентироваться при осмотре, какие тесты подтверждают диагноз
+                и какие маркеры помогают уточнить клиническую картину.
               </p>
             </section>
 
             <section className="content-card content-card-wide">
-              <h3>Алгори�‚м диагнос�‚ики</h3>
+              <h3>Алгоритм диагностики</h3>
               <ol className="diagnostics-list">
                 {item.diagnostics.steps.map((step, index) => (
                   <li key={index}>
                     <span className="diagnostics-step-index">{index + 1}</span>
-                    <span>{step}</span>
+                    <span>{normalizeText(step)}</span>
                   </li>
                 ))}
               </ol>
             </section>
 
             <section className="content-card">
-              <h3>Маркер�‹ и лабора�‚ория</h3>
+              <h3>Маркеры и лаборатория</h3>
               <p>{normalizeText(item.diagnostics.markers)}</p>
             </section>
 
             <section className="content-card">
-              <h3>Клини�‡еский коммен�‚арий</h3>
+              <h3>Клинический комментарий</h3>
               <p>
-                О�†енивай�‚е диагноз по совокупнос�‚и симп�‚омов, данн�‹С… осмо�‚ра, визуализа�†ии и
-                лабора�‚орн�‹С… маркеров. При а�‚ипи�‡ном �‚РµС‡ении нужен пересмо�‚р ди�„С„ерен�†иального
-                диагноза и пов�‚орная о�†енка �‚ак�‚ики.
+                Оценивайте диагноз по совокупности симптомов, данных осмотра, визуализации и лабораторных
+                маркеров. При атипичном течении нужен пересмотр дифференциального диагноза и повторная
+                оценка тактики.
               </p>
             </section>
 
@@ -484,35 +556,35 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
               item.diagnosticCriteria.diagnosisExcludedWhen,
             ]) ? (
               <section className="content-card content-card-wide">
-                <h3>Кри�‚ерии диагноза</h3>
+                <h3>Критерии диагноза</h3>
                 <div className="structured-list">
                   {item.diagnosticCriteria.clinical?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Клини�‡еские кри�‚ерии</div>
+                      <div className="structured-item-title">Клинические критерии</div>
                       {renderList(item.diagnosticCriteria.clinical)}
                     </article>
                   ) : null}
                   {item.diagnosticCriteria.laboratory?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">�›абора�‚орн�‹е кри�‚РµСЂРёРё</div>
+                      <div className="structured-item-title">Лабораторные критерии</div>
                       {renderList(item.diagnosticCriteria.laboratory)}
                     </article>
                   ) : null}
                   {item.diagnosticCriteria.imaging?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">РРЅСЃС‚румен�‚альн�‹е кри�‚ерии</div>
+                      <div className="structured-item-title">Инструментальные критерии</div>
                       {renderList(item.diagnosticCriteria.imaging)}
                     </article>
                   ) : null}
                   {item.diagnosticCriteria.diagnosisConfirmedWhen?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">�”иагноз под�‚вержден, если</div>
+                      <div className="structured-item-title">Диагноз подтвержден, если</div>
                       {renderList(item.diagnosticCriteria.diagnosisConfirmedWhen)}
                     </article>
                   ) : null}
                   {item.diagnosticCriteria.diagnosisExcludedWhen?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">�”иагноз маловероя�‚ен, если</div>
+                      <div className="structured-item-title">Диагноз маловероятен, если</div>
                       {renderList(item.diagnosticCriteria.diagnosisExcludedWhen)}
                     </article>
                   ) : null}
@@ -522,10 +594,10 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.diagnostics.imaging && item.diagnostics.imaging.length > 0 && (
               <section className="content-card">
-                <h3>Р’изуализа�†ия</h3>
+                <h3>Визуализация</h3>
                 <ul>
                   {item.diagnostics.imaging.map((entry, index) => (
-                    <li key={index}>{entry}</li>
+                    <li key={index}>{normalizeText(entry)}</li>
                   ))}
                 </ul>
               </section>
@@ -533,10 +605,10 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.diagnostics.differential && item.diagnostics.differential.length > 0 && (
               <section className="content-card">
-                <h3>Р”и�„С„ерен�†иальн�‹й диагноз</h3>
+                <h3>Дифференциальный диагноз</h3>
                 <ul>
                   {item.diagnostics.differential.map((entry, index) => (
-                    <li key={index}>{entry}</li>
+                    <li key={index}>{normalizeText(entry)}</li>
                   ))}
                 </ul>
               </section>
@@ -544,16 +616,16 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.differentialDiagnosis && item.differentialDiagnosis.length > 0 && (
               <section className="content-card content-card-wide">
-                <h3>С�‚рук�‚урн�‹й ди�„С„ерен�†иальн�‹й диагноз</h3>
+                <h3>Структурный дифференциальный диагноз</h3>
                 <div className="structured-list">
                   {item.differentialDiagnosis.map((entry, index) => (
                     <article className="structured-item" key={index}>
-                      <div className="structured-item-title">{entry.condition}</div>
-                      {entry.whyConfused && <p><strong>По�‡ему по�…ож:</strong> {entry.whyConfused}</p>}
-                      {entry.howToDistinguish && <p><strong>Как о�‚ли�‡и�‚ь:</strong> {entry.howToDistinguish}</p>}
+                      <div className="structured-item-title">{normalizeText(entry.condition)}</div>
+                      {entry.whyConfused && <p><strong>Почему похож:</strong> {normalizeText(entry.whyConfused)}</p>}
+                      {entry.howToDistinguish && <p><strong>Как отличить:</strong> {normalizeText(entry.howToDistinguish)}</p>}
                       {entry.testsIfNeeded?.length ? (
                         <>
-                          <p><strong>Ч�‚о у�‚о�‡ни�‚ь:</strong></p>
+                          <p><strong>Что уточнить:</strong></p>
                           {renderList(entry.testsIfNeeded)}
                         </>
                       ) : null}
@@ -569,17 +641,17 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
           <div className="tab-content modal-grid" id={descriptionId}>
             {item.ultrasound?.protocols && item.ultrasound.protocols.length > 0 && (
               <section className="content-card content-card-wide">
-                <h3>Про�‚окол�‹ исследования</h3>
+                <h3>Протоколы исследования</h3>
                 <div className="structured-list">
                   {item.ultrasound.protocols.map((protocol, index) => (
                     <article className="structured-item" key={index}>
-                      <div className="structured-item-title">{protocol.method}</div>
+                      <div className="structured-item-title">{normalizeText(protocol.method)}</div>
                       <ul>
                         {protocol.indications.map((indication, indicationIndex) => (
-                          <li key={indicationIndex}>{indication}</li>
+                          <li key={indicationIndex}>{normalizeText(indication)}</li>
                         ))}
                       </ul>
-                      {protocol.preparation && <p className="structured-item-note">Подго�‚овка: {protocol.preparation}</p>}
+                      {protocol.preparation && <p className="structured-item-note">Подготовка: {normalizeText(protocol.preparation)}</p>}
                     </article>
                   ))}
                 </div>
@@ -588,25 +660,25 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.ultrasound?.findings && item.ultrasound.findings.length > 0 && (
               <section className="content-card content-card-wide">
-                <h3>Уль�‚развуков�‹е признаки</h3>
+                <h3>Ультразвуковые признаки</h3>
                 <div className="structured-list">
                   {item.ultrasound.findings.map((finding, index) => (
                     <article className="structured-item" key={index}>
-                      <div className="structured-item-title">{finding.location}</div>
-                      <p>{finding.description}</p>
+                      <div className="structured-item-title">{normalizeText(finding.location)}</div>
+                      <p>{normalizeText(finding.description)}</p>
                       {finding.measurements && (
                         <dl className="metric-list">
                           {Object.entries(finding.measurements).map(([key, value]) => (
                             <div className="metric-item" key={key}>
-                              <dt>{key}</dt>
-                              <dd>{value}</dd>
+                              <dt>{normalizeText(key)}</dt>
+                              <dd>{normalizeText(value)}</dd>
                             </div>
                           ))}
                         </dl>
                       )}
-                      {finding.normal && <p><strong>Норма:</strong> {finding.normal}</p>}
-                      {finding.pathology && <p><strong>Па�‚ология:</strong> {finding.pathology}</p>}
-                      {finding.clinicalSignificance && <p><strong>Клини�‡еское зна�‡ение:</strong> {finding.clinicalSignificance}</p>}
+                      {finding.normal && <p><strong>Норма:</strong> {normalizeText(finding.normal)}</p>}
+                      {finding.pathology && <p><strong>Патология:</strong> {normalizeText(finding.pathology)}</p>}
+                      {finding.clinicalSignificance && <p><strong>Клиническое значение:</strong> {normalizeText(finding.clinicalSignificance)}</p>}
                     </article>
                   ))}
                 </div>
@@ -615,33 +687,33 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.ultrasound?.echogenicity && (
               <section className="content-card">
-                <h3>Р­С…ос�‚рук�‚ура</h3>
-                <p>{item.ultrasound.echogenicity}</p>
+                <h3>Эхоструктура</h3>
+                <p>{normalizeText(item.ultrasound.echogenicity)}</p>
               </section>
             )}
 
             {item.ultrasound?.vascularization && (
               <section className="content-card">
-                <h3>Р’аскуляриза�†ия</h3>
-                <p>{item.ultrasound.vascularization}</p>
+                <h3>Васкуляризация</h3>
+                <p>{normalizeText(item.ultrasound.vascularization)}</p>
               </section>
             )}
 
             {item.ultrasound?.dopplerFindings && (
               <section className="content-card">
-                <h3>Р”опплер</h3>
-                <p>{item.ultrasound.dopplerFindings}</p>
+                <h3>Допплер</h3>
+                <p>{normalizeText(item.ultrasound.dopplerFindings)}</p>
               </section>
             )}
 
             {item.ultrasound?.normalValues && (
               <section className="content-card">
-                <h3>Нормальн�‹е зна�‡ения</h3>
+                <h3>Нормальные значения</h3>
                 <dl className="metric-list">
                   {Object.entries(item.ultrasound.normalValues).map(([key, value]) => (
                     <div className="metric-item" key={key}>
-                      <dt>{key}</dt>
-                      <dd>{value}</dd>
+                      <dt>{normalizeText(key)}</dt>
+                      <dd>{normalizeText(value)}</dd>
                     </div>
                   ))}
                 </dl>
@@ -650,10 +722,10 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.ultrasound?.imagingTips && item.ultrasound.imagingTips.length > 0 && (
               <section className="content-card">
-                <h3>Прак�‚и�‡еские сове�‚С‹</h3>
+                <h3>Практические советы</h3>
                 <ul>
                   {item.ultrasound.imagingTips.map((tip, index) => (
-                    <li key={index}>{tip}</li>
+                    <li key={index}>{normalizeText(tip)}</li>
                   ))}
                 </ul>
               </section>
@@ -665,10 +737,10 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
           <div className="tab-content modal-grid" id={descriptionId}>
             {item.treatment.conservative && (
               <section className="content-card content-card-wide">
-                <h3>Консерва�‚ивная �‚ерапия</h3>
+                <h3>Консервативная терапия</h3>
                 <ul>
                   {item.treatment.conservative.map((entry, index) => (
-                    <li key={index}>{renderSafeTreatmentEntry(entry)}</li>
+                    <li key={index}>{renderSafeTreatmentEntry(normalizeText(entry))}</li>
                   ))}
                 </ul>
               </section>
@@ -676,10 +748,10 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.treatment.surgical && (
               <section className="content-card content-card-wide">
-                <h3>Хирурги�‡еская �‚ак�‚ика</h3>
+                <h3>Хирургическая тактика</h3>
                 <ul>
                   {item.treatment.surgical.map((entry, index) => (
-                    <li key={index}>{renderSafeTreatmentEntry(entry)}</li>
+                    <li key={index}>{renderSafeTreatmentEntry(normalizeText(entry))}</li>
                   ))}
                 </ul>
               </section>
@@ -691,7 +763,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
           <div className="tab-content modal-grid" id={descriptionId}>
             {item.recommendations && item.recommendations.length > 0 && (
               <section className="content-card content-card-wide">
-                <h3>Рекоменда�†ии</h3>
+                <h3>Рекомендации</h3>
                 {renderList(item.recommendations)}
               </section>
             )}
@@ -706,41 +778,41 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
               item.managementAlgorithm.referWhen,
             ]) ? (
               <section className="content-card content-card-wide">
-                <h3>Алгори�‚м ведения</h3>
+                <h3>Алгоритм ведения</h3>
                 <div className="structured-list">
                   {item.managementAlgorithm.initialAssessment?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Перви�‡ная о�†енка</div>
+                      <div className="structured-item-title">Первичная оценка</div>
                       {renderList(item.managementAlgorithm.initialAssessment)}
                     </article>
                   ) : null}
                   {item.managementAlgorithm.confirmDiagnosis?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Под�‚верждение диагноза</div>
+                      <div className="structured-item-title">Подтверждение диагноза</div>
                       {renderList(item.managementAlgorithm.confirmDiagnosis)}
                     </article>
                   ) : null}
                   {item.managementAlgorithm.startTreatment?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">С�‚ар�‚ Р»РµС‡ения</div>
+                      <div className="structured-item-title">Старт лечения</div>
                       {renderList(item.managementAlgorithm.startTreatment)}
                     </article>
                   ) : null}
                   {item.managementAlgorithm.reassess?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Перео�†енка</div>
+                      <div className="structured-item-title">Переоценка</div>
                       {renderList(item.managementAlgorithm.reassess)}
                     </article>
                   ) : null}
                   {item.managementAlgorithm.escalateWhen?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Когда эскалирова�‚ь</div>
+                      <div className="structured-item-title">Когда эскалировать</div>
                       {renderList(item.managementAlgorithm.escalateWhen)}
                     </article>
                   ) : null}
                   {item.managementAlgorithm.referWhen?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Когда направля�‚ь</div>
+                      <div className="structured-item-title">Когда направлять</div>
                       {renderList(item.managementAlgorithm.referWhen)}
                     </article>
                   ) : null}
@@ -751,27 +823,27 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             {item.prognosis && (
               <section className="content-card">
                 <h3>Прогноз</h3>
-                {item.prognosis.general && <p>{item.prognosis.general}</p>}
+                {item.prognosis.general && <p>{normalizeText(item.prognosis.general)}</p>}
                 {item.prognosis.factors && item.prognosis.factors.length > 0 && (
                   <ul>
                     {item.prognosis.factors.map((factor, index) => (
-                      <li key={index}>{factor}</li>
+                      <li key={index}>{normalizeText(factor)}</li>
                     ))}
                   </ul>
                 )}
-                {item.prognosis.survival && <p><strong>РСЃС…од�‹:</strong> {item.prognosis.survival}</p>}
+                {item.prognosis.survival && <p><strong>Исходы:</strong> {normalizeText(item.prognosis.survival)}</p>}
               </section>
             )}
 
             {item.followUp && (
               <section className="content-card">
                 <h3>Наблюдение</h3>
-                {item.followUp.frequency && <p><strong>Час�‚о�‚Р°:</strong> {item.followUp.frequency}</p>}
-                {item.followUp.duration && <p><strong>Р”ли�‚ельнос�‚ь:</strong> {item.followUp.duration}</p>}
+                {item.followUp.frequency && <p><strong>Частота:</strong> {normalizeText(item.followUp.frequency)}</p>}
+                {item.followUp.duration && <p><strong>Длительность:</strong> {normalizeText(item.followUp.duration)}</p>}
                 {item.followUp.tests && item.followUp.tests.length > 0 && (
                   <ul>
                     {item.followUp.tests.map((test, index) => (
-                      <li key={index}>{test}</li>
+                      <li key={index}>{normalizeText(test)}</li>
                     ))}
                   </ul>
                 )}
@@ -786,28 +858,28 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
               item.followUpTriggers.urgentReassessmentIf,
             ]) ? (
               <section className="content-card">
-                <h3>Триггер�‹ пересмо�‚ра</h3>
+                <h3>Триггеры пересмотра</h3>
                 {item.followUpTriggers.routineReview?.length ? (
                   <>
-                    <p><strong>Планов�‹й кон�‚роль:</strong></p>
+                    <p><strong>Плановый контроль:</strong></p>
                     {renderList(item.followUpTriggers.routineReview)}
                   </>
                 ) : null}
                 {item.followUpTriggers.earlierReviewIf?.length ? (
                   <>
-                    <p><strong>Рань�€е срока, если:</strong></p>
+                    <p><strong>Раньше срока, если:</strong></p>
                     {renderList(item.followUpTriggers.earlierReviewIf)}
                   </>
                 ) : null}
                 {item.followUpTriggers.switchTreatmentIf?.length ? (
                   <>
-                    <p><strong>Меня�‚ь �‚ак�‚ику, если:</strong></p>
+                    <p><strong>Менять тактику, если:</strong></p>
                     {renderList(item.followUpTriggers.switchTreatmentIf)}
                   </>
                 ) : null}
                 {item.followUpTriggers.urgentReassessmentIf?.length ? (
                   <>
-                    <p><strong>Сро�‡но перео�†ени�‚ь, если:</strong></p>
+                    <p><strong>Срочно переоценить, если:</strong></p>
                     {renderList(item.followUpTriggers.urgentReassessmentIf)}
                   </>
                 ) : null}
@@ -816,29 +888,29 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {(item.fertilityImpact?.length || item.recurrenceRisk?.length || item.malignancyRisk || item.screeningAndPrevention?.length || item.whenBiopsyNeeded?.length) ? (
               <section className="content-card content-card-wide">
-                <h3>�”ополни�‚ельн�‹е клини�‡еские ак�†ен�‚С‹</h3>
+                <h3>Дополнительные клинические акценты</h3>
                 <div className="structured-list">
                   {item.fertilityImpact?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Р’лияние на �„ер�‚ильнос�‚ь</div>
+                      <div className="structured-item-title">Влияние на фертильность</div>
                       {renderList(item.fertilityImpact)}
                     </article>
                   ) : null}
                   {item.recurrenceRisk?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Риск ре�†идива</div>
+                      <div className="structured-item-title">Риск рецидива</div>
                       {renderList(item.recurrenceRisk)}
                     </article>
                   ) : null}
                   {item.malignancyRisk?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Онкологи�‡еские риски</div>
+                      <div className="structured-item-title">Онкологические риски</div>
                       {renderList(item.malignancyRisk)}
                     </article>
                   ) : null}
                   {item.screeningAndPrevention?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Скрининг и про�„илак�‚ика</div>
+                      <div className="structured-item-title">Скрининг и профилактика</div>
                       {renderList(item.screeningAndPrevention)}
                     </article>
                   ) : null}
@@ -854,14 +926,14 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.contraindicatedOrAvoid && item.contraindicatedOrAvoid.length > 0 && (
               <section className="content-card">
-                <h3>Чего избега�‚ь</h3>
+                <h3>Чего избегать</h3>
                 {renderList(item.contraindicatedOrAvoid)}
               </section>
             )}
 
             {item.patientCounseling && item.patientCounseling.length > 0 && (
               <section className="content-card">
-                <h3>Р§С‚о объясни�‚ь па�†иен�‚ке</h3>
+                <h3>Что объяснить пациентке</h3>
                 {renderList(item.patientCounseling)}
               </section>
             )}
@@ -877,17 +949,17 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
               item.specialPopulations.fertilityPlanning,
             ]) ? (
               <section className="content-card content-card-wide">
-                <h3>Особ�‹е клини�‡еские групп�‹</h3>
+                <h3>Особые клинические группы</h3>
                 <div className="structured-list">
                   {item.specialPopulations.adolescents?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Подрос�‚ки</div>
+                      <div className="structured-item-title">Подростки</div>
                       {renderList(item.specialPopulations.adolescents)}
                     </article>
                   ) : null}
                   {item.specialPopulations.pregnancy?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">�‘еременнос�‚ь</div>
+                      <div className="structured-item-title">Беременность</div>
                       {renderList(item.specialPopulations.pregnancy)}
                     </article>
                   ) : null}
@@ -905,7 +977,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                   ) : null}
                   {item.specialPopulations.postmenopause?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Пос�‚менопауза</div>
+                      <div className="structured-item-title">Постменопауза</div>
                       {renderList(item.specialPopulations.postmenopause)}
                     </article>
                   ) : null}
@@ -917,7 +989,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                   ) : null}
                   {item.specialPopulations.fertilityPlanning?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Планирование беременнос�‚и</div>
+                      <div className="structured-item-title">Планирование беременности</div>
                       {renderList(item.specialPopulations.fertilityPlanning)}
                     </article>
                   ) : null}
@@ -927,7 +999,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {(item.timingOfDelivery || item.maternalMonitoring || item.fetalMonitoring || item.inpatientVsOutpatient || item.deliveryIndications?.length || item.postpartumManagement?.length) ? (
               <section className="content-card content-card-wide">
-                <h3>Аку�€ерская �‚ак�‚ика</h3>
+                <h3>Акушерская тактика</h3>
                 <div className="structured-list">
                   {item.timingOfDelivery && hasAnyValues([
                     item.timingOfDelivery.expectantManagementUntil,
@@ -936,11 +1008,11 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                     item.timingOfDelivery.modeOfDeliveryNotes,
                   ]) ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Срок и способ родоразре�€ения</div>
-                      {item.timingOfDelivery.expectantManagementUntil?.length ? (<><p><strong>Ожида�‚ельная �‚ак�‚ика до:</strong></p>{renderList(item.timingOfDelivery.expectantManagementUntil)}</>) : null}
-                      {item.timingOfDelivery.deliverNowWhen?.length ? (<><p><strong>Родоразре�€Р°С‚ь немедленно, если:</strong></p>{renderList(item.timingOfDelivery.deliverNowWhen)}</>) : null}
+                      <div className="structured-item-title">Срок и способ родоразрешения</div>
+                      {item.timingOfDelivery.expectantManagementUntil?.length ? (<><p><strong>Ожидательная тактика до:</strong></p>{renderList(item.timingOfDelivery.expectantManagementUntil)}</>) : null}
+                      {item.timingOfDelivery.deliverNowWhen?.length ? (<><p><strong>Родоразрешать немедленно, если:</strong></p>{renderList(item.timingOfDelivery.deliverNowWhen)}</>) : null}
                       {item.timingOfDelivery.gestationalAgeModifiers?.length ? (<><p><strong>Поправки на срок:</strong></p>{renderList(item.timingOfDelivery.gestationalAgeModifiers)}</>) : null}
-                      {item.timingOfDelivery.modeOfDeliveryNotes?.length ? (<><p><strong>Заме�‡ания по способу родоразре�€ения:</strong></p>{renderList(item.timingOfDelivery.modeOfDeliveryNotes)}</>) : null}
+                      {item.timingOfDelivery.modeOfDeliveryNotes?.length ? (<><p><strong>Замечания по способу родоразрешения:</strong></p>{renderList(item.timingOfDelivery.modeOfDeliveryNotes)}</>) : null}
                     </article>
                   ) : null}
                   {item.maternalMonitoring && hasAnyValues([
@@ -951,11 +1023,11 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                     item.maternalMonitoring.reassessmentInterval,
                   ]) ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Мони�‚оринг ма�‚ери</div>
-                      {item.maternalMonitoring.vitalSigns?.length ? (<><p><strong>�’и�‚альн�‹е параме�‚р�‹:</strong></p>{renderList(item.maternalMonitoring.vitalSigns)}</>) : null}
-                      {item.maternalMonitoring.labs?.length ? (<><p><strong>Р›абора�‚ория:</strong></p>{renderList(item.maternalMonitoring.labs)}</>) : null}
-                      {item.maternalMonitoring.warningSymptoms?.length ? (<><p><strong>Тревожн�‹е симп�‚ом�‹:</strong></p>{renderList(item.maternalMonitoring.warningSymptoms)}</>) : null}
-                      {item.maternalMonitoring.reassessmentInterval?.length ? (<><p><strong>Час�‚о�‚а пересмо�‚ра:</strong></p>{renderList(item.maternalMonitoring.reassessmentInterval)}</>) : null}
+                      <div className="structured-item-title">Мониторинг матери</div>
+                      {item.maternalMonitoring.vitalSigns?.length ? (<><p><strong>Витальные параметры:</strong></p>{renderList(item.maternalMonitoring.vitalSigns)}</>) : null}
+                      {item.maternalMonitoring.labs?.length ? (<><p><strong>Лаборатория:</strong></p>{renderList(item.maternalMonitoring.labs)}</>) : null}
+                      {item.maternalMonitoring.warningSymptoms?.length ? (<><p><strong>Тревожные симптомы:</strong></p>{renderList(item.maternalMonitoring.warningSymptoms)}</>) : null}
+                      {item.maternalMonitoring.reassessmentInterval?.length ? (<><p><strong>Частота пересмотра:</strong></p>{renderList(item.maternalMonitoring.reassessmentInterval)}</>) : null}
                     </article>
                   ) : null}
                   {item.fetalMonitoring && hasAnyValues([
@@ -966,10 +1038,10 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                     item.fetalMonitoring.reassessmentInterval,
                   ]) ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Мони�‚РѕСЂРёРЅРі РїР»РѕРґР°</div>
-                      {item.fetalMonitoring.imaging?.length ? (<><p><strong>РРЅСЃС‚румен�‚С‹:</strong></p>{renderList(item.fetalMonitoring.imaging)}</>) : null}
-                      {item.fetalMonitoring.warningSymptoms?.length ? (<><p><strong>Признаки у�…уд�€ения:</strong></p>{renderList(item.fetalMonitoring.warningSymptoms)}</>) : null}
-                      {item.fetalMonitoring.reassessmentInterval?.length ? (<><p><strong>Час�‚о�‚а о�†енки:</strong></p>{renderList(item.fetalMonitoring.reassessmentInterval)}</>) : null}
+                      <div className="structured-item-title">Мониторинг плода</div>
+                      {item.fetalMonitoring.imaging?.length ? (<><p><strong>Инструменты:</strong></p>{renderList(item.fetalMonitoring.imaging)}</>) : null}
+                      {item.fetalMonitoring.warningSymptoms?.length ? (<><p><strong>Признаки ухудшения:</strong></p>{renderList(item.fetalMonitoring.warningSymptoms)}</>) : null}
+                      {item.fetalMonitoring.reassessmentInterval?.length ? (<><p><strong>Частота оценки:</strong></p>{renderList(item.fetalMonitoring.reassessmentInterval)}</>) : null}
                     </article>
                   ) : null}
                   {item.inpatientVsOutpatient && hasAnyValues([
@@ -977,14 +1049,14 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                     item.inpatientVsOutpatient.inpatientWhen,
                   ]) ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Амбула�‚орно или с�‚Р°С†ионарно</div>
-                      {item.inpatientVsOutpatient.outpatientWhen?.length ? (<><p><strong>Амбула�‚орно, если:</strong></p>{renderList(item.inpatientVsOutpatient.outpatientWhen)}</>) : null}
-                      {item.inpatientVsOutpatient.inpatientWhen?.length ? (<><p><strong>С�‚Р°С†ионар, если:</strong></p>{renderList(item.inpatientVsOutpatient.inpatientWhen)}</>) : null}
+                      <div className="structured-item-title">Амбулаторно или стационарно</div>
+                      {item.inpatientVsOutpatient.outpatientWhen?.length ? (<><p><strong>Амбулаторно, если:</strong></p>{renderList(item.inpatientVsOutpatient.outpatientWhen)}</>) : null}
+                      {item.inpatientVsOutpatient.inpatientWhen?.length ? (<><p><strong>Стационар, если:</strong></p>{renderList(item.inpatientVsOutpatient.inpatientWhen)}</>) : null}
                     </article>
                   ) : null}
                   {item.deliveryIndications?.length ? (
                     <article className="structured-item">
-                      <div className="structured-item-title">Показания к родоразре�€ению</div>
+                      <div className="structured-item-title">Показания к родоразрешению</div>
                       {renderList(item.deliveryIndications)}
                     </article>
                   ) : null}
@@ -1000,25 +1072,25 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.clinicalCases && item.clinicalCases.length > 0 && (
               <section className="content-card content-card-wide">
-                <h3>Клини�‡еские слу�‡аи</h3>
+                <h3>Клинические случаи</h3>
                 <div className="structured-list">
                   {item.clinicalCases.map((clinicalCase, index) => (
                     <article className="structured-item" key={index}>
-                      <div className="structured-item-title">Слу�‡ай {index + 1}</div>
-                      <p><strong>Жалоб�‹:</strong> {clinicalCase.presentation}</p>
-                      {clinicalCase.history && <p><strong>Анамнез:</strong> {clinicalCase.history}</p>}
-                      <p><strong>�”анн�‹е:</strong> {clinicalCase.findings}</p>
+                      <div className="structured-item-title">Случай {index + 1}</div>
+                      <p><strong>Жалобы:</strong> {normalizeText(clinicalCase.presentation)}</p>
+                      {clinicalCase.history && <p><strong>Анамнез:</strong> {normalizeText(clinicalCase.history)}</p>}
+                      <p><strong>Данные:</strong> {normalizeText(clinicalCase.findings)}</p>
                       {clinicalCase.decisionPoints?.length ? (
                         <>
-                          <p><strong>Клю�‡ев�‹Рµ С‚о�‡ки ре�€ения:</strong></p>
+                          <p><strong>Ключевые точки решения:</strong></p>
                           {renderList(clinicalCase.decisionPoints)}
                         </>
                       ) : null}
-                      <p><strong>�”иагноз:</strong> {clinicalCase.diagnosis}</p>
-                      <p><strong>�›РµС‡ение:</strong> {clinicalCase.treatment}</p>
-                      {clinicalCase.whyThisPlan && <p><strong>По�‡ему �‚Р°Рє:</strong> {clinicalCase.whyThisPlan}</p>}
-                      <p><strong>РСЃС…од:</strong> {clinicalCase.outcome}</p>
-                      {clinicalCase.guidelineJustification && <p><strong>Опора на guideline:</strong> {clinicalCase.guidelineJustification}</p>}
+                      <p><strong>Диагноз:</strong> {normalizeText(clinicalCase.diagnosis)}</p>
+                      <p><strong>Лечение:</strong> {normalizeText(clinicalCase.treatment)}</p>
+                      {clinicalCase.whyThisPlan && <p><strong>Почему так:</strong> {normalizeText(clinicalCase.whyThisPlan)}</p>}
+                      <p><strong>Исход:</strong> {normalizeText(clinicalCase.outcome)}</p>
+                      {clinicalCase.guidelineJustification && <p><strong>Опора на guideline:</strong> {normalizeText(clinicalCase.guidelineJustification)}</p>}
                     </article>
                   ))}
                 </div>
@@ -1031,17 +1103,17 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
           <div className="tab-content modal-grid" id={descriptionId}>
             {(item.guidelineStatus || item.lastReviewed) && (
               <section className="content-card content-card-wide overview-summary-card">
-                <span className="quick-summary-eyebrow">Ак�‚уальнос�‚ь данн�‹С…</span>
+                <span className="quick-summary-eyebrow">Актуальность данных</span>
                 <div className="overview-summary-grid">
                   {item.guidelineStatus ? (
                     <article className="structured-item overview-summary-item">
-                      <div className="structured-item-title">С�‚Р°С‚ус guideline-баз�‹</div>
+                      <div className="structured-item-title">Статус guideline-базы</div>
                       <p>{normalizeText(item.guidelineStatus)}</p>
                     </article>
                   ) : null}
                   {item.lastReviewed ? (
                     <article className="structured-item overview-summary-item">
-                      <div className="structured-item-title">Последний пересмо�‚р</div>
+                      <div className="structured-item-title">Последний пересмотр</div>
                       <p>{normalizeText(item.lastReviewed)}</p>
                     </article>
                   ) : null}
@@ -1051,16 +1123,16 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
             {item.guidelineBasis && item.guidelineBasis.length > 0 && (
               <section className="content-card content-card-wide">
-                <h3>РСЃС‚о�‡ник клини�‡еской логики</h3>
+                <h3>Источник клинической логики</h3>
                 <div className="structured-list">
                   {item.guidelineBasis.map((guideline, index) => (
                     <article className="structured-item" key={index}>
-                      <div className="structured-item-title">{guideline.organization}</div>
-                      {guideline.year && <p><strong>Р“од:</strong> {guideline.year}</p>}
-                      {guideline.title && <p><strong>Р”окумен�‚:</strong> {guideline.title}</p>}
-                      {guideline.documentType && <p><strong>Тип:</strong> {guideline.documentType}</p>}
-                      {guideline.status && <p><strong>С�‚Р°С‚ус:</strong> {guideline.status}</p>}
-                      {guideline.scope && <p>{guideline.scope}</p>}
+                      <div className="structured-item-title">{normalizeText(guideline.organization)}</div>
+                      {guideline.year && <p><strong>Год:</strong> {normalizeText(guideline.year)}</p>}
+                      {guideline.title && <p><strong>Документ:</strong> {normalizeText(guideline.title)}</p>}
+                      {guideline.documentType && <p><strong>Тип:</strong> {normalizeText(guideline.documentType)}</p>}
+                      {guideline.status && <p><strong>Статус:</strong> {normalizeText(guideline.status)}</p>}
+                      {guideline.scope && <p>{normalizeText(guideline.scope)}</p>}
                     </article>
                   ))}
                 </div>
@@ -1073,7 +1145,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                   <span className={`guideline-badge ${guideline.badgeClass}`}>{guideline.org}</span>
                   <span className="guideline-region">{guideline.title}</span>
                 </div>
-                <p>{item.treatment.guidelines[guideline.key]}</p>
+                <p>{normalizeText(item.treatment.guidelines[guideline.key])}</p>
               </section>
             ))}
           </div>
@@ -1226,3 +1298,4 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 };
 
 export default DiseaseModal;
+

@@ -17,6 +17,7 @@
   UltrasoundFinding,
   UltrasoundProtocol,
 } from '../types';
+import { repairText } from './textRepair';
 
 type DiseaseInput = Disease & {
   diagnostics?: Disease['diagnostics'] | string[];
@@ -53,7 +54,7 @@ type ObstetricsCluster =
   | 'labor'
   | 'general';
 
-const cleanText = (value: string) => value.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+const cleanText = (value: string) => repairText(value).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
 const asStringArray = (value: unknown) =>
   Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string').map(cleanText) : [];
@@ -1816,6 +1817,24 @@ const mergeUltrasound = (disease: Disease) => {
   };
 };
 
+const deepRepair = <T,>(value: T): T => {
+  if (typeof value === 'string') {
+    return cleanText(value) as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => deepRepair(entry)) as T;
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, entry]) => [cleanText(key), deepRepair(entry)]),
+    ) as T;
+  }
+
+  return value;
+};
+
 export const enrichDisease = (rawDisease: DiseaseInput): Disease => {
   const disease = normalizeDisease(rawDisease);
   const finalGuidelines =
@@ -1823,7 +1842,7 @@ export const enrichDisease = (rawDisease: DiseaseInput): Disease => {
       ? buildGynecologyGuidelines(getGynecologyCluster(disease))
       : buildObstetricsGuidelines(getObstetricsCluster(disease));
 
-  return {
+  const enriched: Disease = {
     ...disease,
     overview: disease.overview ?? buildOverview(disease),
     diagnostics: {
@@ -1877,6 +1896,8 @@ export const enrichDisease = (rawDisease: DiseaseInput): Disease => {
     screeningAndPrevention: disease.screeningAndPrevention?.length ? disease.screeningAndPrevention : buildScreeningAndPrevention(disease),
     whenBiopsyNeeded: disease.whenBiopsyNeeded?.length ? disease.whenBiopsyNeeded : buildWhenBiopsyNeeded(disease),
   };
+
+  return deepRepair(enriched);
 };
 
 const slugifyIdPart = (value: string) =>
@@ -1916,5 +1937,3 @@ const ensureUniqueDiseaseIds = (diseases: Disease[]) => {
 };
 
 export const enrichDiseases = (diseases: Disease[]) => ensureUniqueDiseaseIds(diseases.map((disease) => enrichDisease(disease as DiseaseInput)));
-
-

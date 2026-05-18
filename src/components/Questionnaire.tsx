@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from 'react';
+﻿import React, { useEffect, useId, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import { questionnaires } from '../data/questionnaires';
@@ -31,6 +31,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [result, setResult] = useState<ScoringResult | null>(null);
+  const [copied, setCopied] = useState(false);
   const [history, setHistory] = useState<QuestionnaireHistory[]>(() => {
     try {
       return JSON.parse(localStorage.getItem(QUESTIONNAIRE_HISTORY_KEY) || '[]');
@@ -49,11 +50,26 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
     return () => mediaQuery.removeEventListener('change', updateViewportMode);
   }, []);
 
+  const score = useMemo(() => Object.values(answers).reduce((a, b) => a + b, 0), [answers]);
+
+  const previousSameQuestionnaire = useMemo(() => {
+    if (!selectedQ || !result) return null;
+    return history.find((entry) => entry.id === selectedQ.id && entry.score !== score) ?? null;
+  }, [history, result, score, selectedQ]);
+
+  const dynamicsLabel = useMemo(() => {
+    if (!previousSameQuestionnaire) return 'Это первое сохранённое прохождение этой шкалы.';
+    const delta = score - previousSameQuestionnaire.score;
+    if (delta === 0) return `Динамика без изменений относительно ${previousSameQuestionnaire.date}.`;
+    return `${delta > 0 ? 'Рост' : 'Снижение'} на ${Math.abs(delta)} балл(а) относительно ${previousSameQuestionnaire.date}.`;
+  }, [previousSameQuestionnaire, score]);
+
   const startQuestionnaire = (q: QuestionnaireData): void => {
     setSelectedQ(q);
     setAnswers({});
     setCurrentStep(0);
     setResult(null);
+    setCopied(false);
   };
 
   const setAnswer = (qIndex: number, value: number): void => {
@@ -93,6 +109,28 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
     setSelectedQ(null);
     setAnswers({});
     setCurrentStep(0);
+    setCopied(false);
+  };
+
+  const copyResultSummary = async (): Promise<void> => {
+    if (!selectedQ || !result) return;
+
+    const maxScore = selectedQ.questions.length * (selectedQ.options.length - 1);
+    const summary = [
+      `${selectedQ.name}: ${result.level}`,
+      `Баллы: ${score} из ${maxScore}`,
+      `Интерпретация: ${result.recommendation}`,
+      `Динамика: ${dynamicsLabel}`,
+      `Дата: ${new Date().toLocaleDateString('ru-RU')}`,
+    ].join('\n');
+
+    try {
+      await navigator.clipboard?.writeText(summary);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
   };
 
   const goBack = (): void => {
@@ -139,15 +177,17 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
         >
           <div className="modal-header">
             <div>
-              <h2 className="modal-title" id={titleId}>📋 Шкалы и опросники</h2>
-              <div className="modal-icd" id={subtitleId}>Выберите шкалу для оценки</div>
+              <h2 className="modal-title" id={titleId}>Шкалы и опросники</h2>
+              <div className="modal-icd" id={subtitleId}>Выберите шкалу для структурированной клинической оценки</div>
             </div>
             <PremiumButton
+              ref={closeButtonRef}
               onClick={onClose}
               variant="ghost"
               size="sm"
               className="modal-close"
               shimmer={false}
+              aria-label="Закрыть опросники"
             >
               ×
             </PremiumButton>
@@ -158,7 +198,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               <motion.article
                 key={q.id}
                 className="q-card glass"
-                style={{ 
+                style={{
                   backdropFilter: 'blur(40px)',
                   WebkitBackdropFilter: 'blur(40px)'
                 }}
@@ -177,7 +217,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
                 tabIndex={0}
                 aria-label={`Открыть опросник: ${q.name}`}
               >
-                <div className="q-icon">{q.icon}</div>
+                <div className="q-icon" aria-hidden="true">{q.icon}</div>
                 <div className="q-info">
                   <h3>{q.name}</h3>
                   <div className="q-cat">{q.category}</div>
@@ -193,7 +233,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
           <div className="q-history">
             <div className="q-history-header">
-              <h3>📊 История прохождений</h3>
+              <h3>История прохождений</h3>
               {history.length > 0 && (
                 <PremiumButton
                   onClick={clearHistory}
@@ -210,14 +250,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               <div className="q-history-list">
                 {history.map((h, i) => (
                   <div key={i} className="q-history-item" style={{ borderLeftColor: h.color }}>
-                    <div className="q-h-name">{h.name} — {h.level}</div>
+                    <div className="q-h-name">{h.name} - {h.level}</div>
                     <div className="q-h-date">{h.date}</div>
-                    <div className="q-h-score">Балл: {h.score}</div>
+                    <div className="q-h-score">Баллы: {h.score}</div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="q-history-empty">История пока пуста. После первого прохождения результаты появятся здесь.</p>
+              <p className="q-history-empty">История пока пустая. После первого прохождения результаты появятся здесь.</p>
             )}
           </div>
         </motion.div>
@@ -254,17 +294,19 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               <div className="modal-icd" id={subtitleId}>{selectedQ.fullName}</div>
             </div>
             <PremiumButton
+              ref={closeButtonRef}
               onClick={onClose}
               variant="ghost"
               size="sm"
               className="modal-close"
               shimmer={false}
+              aria-label="Закрыть шкалу"
             >
               ×
             </PremiumButton>
           </div>
 
-          <div 
+          <div
             className="q-progress-bar"
             role="progressbar"
             aria-valuemin={0}
@@ -274,7 +316,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           >
             <div
               className="q-progress-fill"
-              style={{ 
+              style={{
                 width: `${progress}%`,
                 background: 'linear-gradient(135deg, var(--color-turquoise), var(--color-emerald))'
               }}
@@ -344,7 +386,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
             >
               ← Назад
             </PremiumButton>
-            
+
             <PremiumButton
               onClick={goNext}
               variant="primary"
@@ -352,7 +394,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               disabled={answers[currentStep] === undefined}
               shimmer={true}
             >
-              {currentStep === selectedQ.questions.length - 1 ? '✨ Получить результат →' : 'Далее →'}
+              {currentStep === selectedQ.questions.length - 1 ? 'Получить результат →' : 'Далее →'}
             </PremiumButton>
           </div>
         </motion.div>
@@ -383,15 +425,17 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
       >
         <div className="modal-header">
           <div>
-            <h2 className="modal-title" id={titleId}>📊 Результат</h2>
-            <div className="modal-icd" id={subtitleId}>{selectedQ.name} — {selectedQ.fullName}</div>
+            <h2 className="modal-title" id={titleId}>Результат</h2>
+            <div className="modal-icd" id={subtitleId}>{selectedQ.name} - {selectedQ.fullName}</div>
           </div>
           <PremiumButton
+            ref={closeButtonRef}
             onClick={onClose}
             variant="ghost"
             size="sm"
             className="modal-close"
             shimmer={false}
+            aria-label="Закрыть результат"
           >
             ×
           </PremiumButton>
@@ -401,7 +445,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           <div className="q-result-badge" style={{ background: result.color }}>
             <div className="q-result-level">{result.level}</div>
             <div className="q-result-score">
-              Балл: {Object.values(answers).reduce((a, b) => a + b, 0)} из {selectedQ.questions.length * (selectedQ.options.length - 1)}
+              Баллы: {score} из {selectedQ.questions.length * (selectedQ.options.length - 1)}
             </div>
           </div>
 
@@ -422,8 +466,13 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           </div>
 
           <div className="q-recommendation">
-            <h4>💡 Рекомендация</h4>
+            <h4>Рекомендация</h4>
             <p>{result.recommendation}</p>
+          </div>
+
+          <div className="q-clinical-panel q-dynamics-panel">
+            <h4>Динамика</h4>
+            <p>{dynamicsLabel}</p>
           </div>
 
           <div className="q-clinical-panel">
@@ -441,14 +490,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
             {renderCompactList(selectedQ.limitations)}
             {selectedQ.evidenceNote?.length ? (
               <>
-                <h4>Evidence note</h4>
+                <h4>Заметка по доказательности</h4>
                 {renderCompactList(selectedQ.evidenceNote)}
               </>
             ) : null}
           </div>
 
           <div className="q-answers-summary">
-            <h4>Ваши ответы</h4>
+            <h4>Ответы</h4>
             {selectedQ.questions.map((q, i) => (
               <div key={i} className="q-answer-row">
                 <span className="q-a-idx">{i + 1}</span>
@@ -458,16 +507,25 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
             ))}
           </div>
 
-          <div className="q-nav">
+          <div className="q-nav q-nav-wrap">
             <PremiumButton
               onClick={() => startQuestionnaire(selectedQ)}
               variant="secondary"
               size="md"
               shimmer={false}
             >
-              🔄 Пройти заново
+              Пройти заново
             </PremiumButton>
-            
+
+            <PremiumButton
+              onClick={copyResultSummary}
+              variant="secondary"
+              size="md"
+              shimmer={false}
+            >
+              {copied ? 'Скопировано' : 'Экспорт кратко'}
+            </PremiumButton>
+
             <PremiumButton
               onClick={closeResults}
               variant="primary"

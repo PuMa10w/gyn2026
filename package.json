@@ -50,7 +50,8 @@
     "audit:content": "node scripts/content-quality-audit.mjs",
     "audit:iphone": "node scripts/iphone-audit.mjs",
     "audit:a11y": "node scripts/accessibility-smoke.mjs",
-    "verify:premium": "npm run typecheck && npm run test:run && npm run audit:content -- --strict && npm run build"
+    "verify:premium": "npm run typecheck && npm run test:run && npm run audit:content -- --strict && npm run build && npm run audit:iphone && npm run audit:a11y && npm run audit:visual:iphone",
+    "audit:visual:iphone": "node scripts/iphone-visual-audit.mjs"
   },
   "eslintConfig": {
     "extends": [

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 
@@ -14,17 +14,22 @@ interface VersionCheckerProps {
 }
 
 const LATEST_VERSION: VersionInfo = {
-  version: '2.1.0',
-  releaseDate: '2026-05-08',
+  version: '3.0.0',
+  releaseDate: '2026-05-18',
   changelog: [
-    'Обновлена клиническая структура карточек.',
-    'Улучшены мобильные модальные окна для iPhone.',
-    'Добавлены премиальные состояния PWA и проверка кэша.',
-    'Уточнены разделы фармакологии, шкал и маршрутов наблюдения.',
+    'Усилен iPhone safety gate для навигации, модальных окон, поиска и опросников.',
+    'Добавлен визуальный аудит iPhone и контроль регрессий перед production deploy.',
+    'Уточнены клинические блоки: источники, ограничения, следующие шаги и памятки.',
+    'Обновлён PWA-контур: проверка кэша, статус синхронизации и подсказка установки.',
   ],
 };
 
 type UpdateState = 'idle' | 'checking' | 'available' | 'updating' | 'updated' | 'error';
+
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice?: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+};
 
 const compareVersions = (v1: string, v2: string): number => {
   const parts1 = v1.split('.').map(Number);
@@ -45,6 +50,8 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
   const [latestVersion, setLatestVersion] = useState<VersionInfo | null>(null);
   const [showChangelog, setShowChangelog] = useState(false);
   const [updateState, setUpdateState] = useState<UpdateState>('idle');
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isOnline, setIsOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
   const [lastSyncAt, setLastSyncAt] = useState<string | null>(() => {
     if (typeof window === 'undefined') return null;
     return window.localStorage.getItem('gyn-db-last-sync');
@@ -68,6 +75,28 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
     return () => window.clearInterval(interval);
   }, [currentVersion]);
 
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    const handleInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as BeforeInstallPromptEvent);
+    };
+    const handleInstalled = () => setInstallPrompt(null);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    window.addEventListener('beforeinstallprompt', handleInstallPrompt);
+    window.addEventListener('appinstalled', handleInstalled);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
+      window.removeEventListener('appinstalled', handleInstalled);
+    };
+  }, []);
+
   const refreshAppCache = async () => {
     setUpdateState('updating');
 
@@ -81,7 +110,7 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
         const cacheNames = await window.caches.keys();
         await Promise.all(
           cacheNames
-            .filter((cacheName) => /gyn|workbox|precache|vite|pwa/i.test(cacheName))
+            .filter((cacheName) => /gyn|gynecology|workbox|precache|vite|pwa/i.test(cacheName))
             .map((cacheName) => window.caches.delete(cacheName)),
         );
       }
@@ -95,6 +124,13 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
       console.error('[VersionChecker] Не удалось обновить PWA-кэш:', error);
       setUpdateState('error');
     }
+  };
+
+  const installPwa = async () => {
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    await installPrompt.userChoice?.catch(() => undefined);
+    setInstallPrompt(null);
   };
 
   const lastSyncLabel = lastSyncAt
@@ -141,7 +177,20 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
           <span>Последняя синхронизация</span>
           <strong>{lastSyncLabel}</strong>
         </div>
+        <div>
+          <span>Сеть</span>
+          <strong>{isOnline ? 'онлайн' : 'офлайн'}</strong>
+        </div>
       </div>
+
+      {installPrompt && (
+        <div className="version-ready-state version-install-state">
+          <span>Можно установить GYN как приложение на iPhone/рабочий стол.</span>
+          <PremiumButton onClick={installPwa} variant="secondary" size="sm" shimmer={false}>
+            Установить PWA
+          </PremiumButton>
+        </div>
+      )}
 
       {isUpdateAvailable && latestVersion && (
         <motion.div

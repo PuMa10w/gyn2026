@@ -173,12 +173,38 @@ export interface PatientExplanation {
   whenToSeekCare?: string[];
 }
 
+export interface DiseaseClinicalTimeline {
+  suspicion?: string[];
+  confirmation?: string[];
+  treatmentStart?: string[];
+  review?: string[];
+}
+
+export interface DiseaseImmediateActionPlan {
+  now?: string[];
+  urgentIf?: string[];
+  avoid?: string[];
+  followUp?: string[];
+}
+
+export interface DiseaseSourceConfidence {
+  level?: 'high' | 'moderate' | 'limited' | 'requires-review' | string;
+  reviewedBy?: string;
+  note?: string;
+}
+
+export type DiseaseSubtitle =
+  | 'Гинекология'
+  | 'Акушерство'
+  | 'Р“РёРЅРµРєРѕР»РѕРіРёСЏ'
+  | 'РђРєСѓС€РµСЂСЃС‚РІРѕ';
+
 export interface Disease {
   id: string;
   name: string;
   icd: string;
   icdDetail?: string;
-  subtitle: 'Гинекология' | 'Акушерство' | 'Р“РёРЅРµРєРѕР»РѕРіРёСЏ' | 'РђРєСѓС€РµСЂСЃС‚РІРѕ';
+  subtitle: DiseaseSubtitle;
   description: string;
   icon: string;
   definition: string;
@@ -236,6 +262,9 @@ export interface Disease {
   clinicalSummary?: DiseaseClinicalSummary;
   clinicalCases?: DiseaseClinicalCase[];
   patientExplanation?: PatientExplanation;
+  clinicalTimeline?: DiseaseClinicalTimeline;
+  immediateActionPlan?: DiseaseImmediateActionPlan;
+  sourceConfidence?: DiseaseSourceConfidence;
   patientCounseling?: string[];
   specialPopulations?: DiseaseSpecialPopulations;
   timingOfDelivery?: TimingOfDelivery;
@@ -346,6 +375,14 @@ export interface Medication {
     duringTreatment?: string[];
     stopOrReviewIf?: string[];
   };
+  monitoringChecklist?: string[];
+  pregnancyLactationDecision?: string[];
+  regimenComparison?: Array<{
+    regimen: string;
+    bestFor?: string;
+    avoidWhen?: string;
+    monitoring?: string[];
+  }>;
   clinicalUseCases?: Array<{
     scenario: string;
     whyChosen?: string;

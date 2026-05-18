@@ -4,6 +4,7 @@ import { PremiumButton } from './PremiumButton';
 import { useModalBehavior } from '../hooks/useModalBehavior';
 import { commonRegimens, drugInteractions, medications } from '../data/pharmacology';
 import type { Medication, MedicationInteraction, Regimen } from '../types';
+import { repairText } from '../utils/textRepair';
 
 interface PharmacologyModalProps {
   onClose: () => void;
@@ -27,11 +28,12 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
 
   const medicationEntries = medications as Medication[];
   const regimenEntries = commonRegimens as Regimen[];
+  const text = (value: unknown): string => repairText(value);
 
   const interactionEntries = medicationEntries.flatMap((medication) =>
     (medication.interactions ?? []).map((interaction, index) => ({
       id: `${medication.id}-${interaction.drug}-${index}`,
-      medicationName: medication.name,
+      medicationName: text(medication.name),
       medicationId: medication.id,
       interaction,
     })),
@@ -41,9 +43,9 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
   const normalizedInteractionSearch = interactionSearchTerm.trim().toLowerCase();
 
   const filteredMeds: Medication[] = medicationEntries.filter((med) =>
-    med.name.toLowerCase().includes(normalizedMedicationSearch) ||
-    med.nameEn.toLowerCase().includes(normalizedMedicationSearch) ||
-    med.category.toLowerCase().includes(normalizedMedicationSearch),
+    text(med.name).toLowerCase().includes(normalizedMedicationSearch) ||
+    text(med.nameEn).toLowerCase().includes(normalizedMedicationSearch) ||
+    text(med.category).toLowerCase().includes(normalizedMedicationSearch),
   );
 
   const filteredInteractions = interactionEntries.filter(({ medicationName, interaction }) => {
@@ -51,7 +53,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
       return true;
     }
 
-    const haystack = [medicationName, interaction.drug, interaction.effect, interaction.level].join(' ').toLowerCase();
+    const haystack = [medicationName, interaction.drug, interaction.effect, interaction.level].map(text).join(' ').toLowerCase();
     return haystack.includes(normalizedInteractionSearch);
   });
 
@@ -73,7 +75,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
     items?.length ? (
       <ul>
         {items.map((entry, index) => (
-          <li key={index}>{entry}</li>
+          <li key={index}>{text(entry)}</li>
         ))}
       </ul>
     ) : null;
@@ -209,10 +211,10 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                     tabIndex={0}
                     aria-expanded={selectedMed?.id === med.id}
                     aria-controls={`med-details-${med.id}`}
-                    aria-label={`Открыть детали препарата: ${med.name}`}
+                    aria-label={`Открыть детали препарата: ${text(med.name)}`}
                   >
-                    <div className="med-name">{med.name}</div>
-                    <div className="med-category">{med.category}</div>
+                    <div className="med-name">{text(med.name)}</div>
+                    <div className="med-category">{text(med.category)}</div>
 
                     {selectedMed?.id === med.id && (
                       <motion.div
@@ -222,10 +224,10 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                         animate={{ opacity: 1, height: 'auto' }}
                       >
                         <p>
-                          <strong>ENG:</strong> {med.nameEn}
+                          <strong>ENG:</strong> {text(med.nameEn)}
                         </p>
                         <p>
-                          <strong>Формы:</strong> {med.forms.join(', ')}
+                          <strong>Формы:</strong> {med.forms.map(text).join(', ')}
                         </p>
                         <p>
                           <strong>Дозировки:</strong>
@@ -233,7 +235,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                         <ul>
                           {Object.entries(med.dosage).map(([key, value]) => (
                             <li key={key}>
-                              {key}: {value}
+                              {text(key)}: {text(value)}
                             </li>
                           ))}
                         </ul>
@@ -242,7 +244,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                         </p>
                         <ul>
                           {med.indications.map((indication, index) => (
-                            <li key={index}>{indication}</li>
+                            <li key={index}>{text(indication)}</li>
                           ))}
                         </ul>
                         <p className="contraindications">
@@ -250,7 +252,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                         </p>
                         <ul>
                           {med.contraindications.map((entry, index) => (
-                            <li key={index}>{entry}</li>
+                            <li key={index}>{text(entry)}</li>
                           ))}
                         </ul>
                         <p className="side-effects">
@@ -258,7 +260,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                         </p>
                         <ul>
                           {med.sideEffects.map((entry, index) => (
-                            <li key={index}>{entry}</li>
+                            <li key={index}>{text(entry)}</li>
                           ))}
                         </ul>
 
@@ -266,7 +268,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                           <section className="clinical-tool-block">
                             <h4>Клиническая роль</h4>
                             <p>
-                              <strong>{med.firstLineStatus?.role}</strong>
+                              <strong>{text(med.firstLineStatus?.role)}</strong>
                             </p>
                             {renderList(med.firstLineStatus?.forConditions)}
                           </section>
@@ -274,11 +276,11 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                           <section className="clinical-tool-block">
                             <h4>Беременность / лактация</h4>
                             <p>
-                              <strong>Беременность:</strong> {med.pregnancyLactation?.pregnancyStatus}
+                              <strong>Беременность:</strong> {text(med.pregnancyLactation?.pregnancyStatus)}
                             </p>
                             {renderList(med.pregnancyLactation?.pregnancyNotes)}
                             <p>
-                              <strong>Лактация:</strong> {med.pregnancyLactation?.lactationStatus}
+                              <strong>Лактация:</strong> {text(med.pregnancyLactation?.lactationStatus)}
                             </p>
                             {renderList(med.pregnancyLactation?.lactationNotes)}
                           </section>
@@ -300,8 +302,8 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                             <h4>Сценарии применения</h4>
                             {med.clinicalUseCases?.map((useCase, index) => (
                               <article key={index} className="clinical-use-case">
-                                <strong>{useCase.scenario}</strong>
-                                {useCase.whyChosen ? <p>{useCase.whyChosen}</p> : null}
+                                <strong>{text(useCase.scenario)}</strong>
+                                {useCase.whyChosen ? <p>{text(useCase.whyChosen)}</p> : null}
                                 {renderList(useCase.importantNotes)}
                               </article>
                             ))}
@@ -309,10 +311,10 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
 
                           <section className="clinical-tool-block">
                             <h4>Маршрут</h4>
-                            {med.routeAndSetting?.route?.join(', ') !== med.forms.join(', ') ? (
-                              <p><strong>Путь:</strong> {med.routeAndSetting?.route?.join(', ')}</p>
+                            {med.routeAndSetting?.route?.map(text).join(', ') !== med.forms.map(text).join(', ') ? (
+                              <p><strong>Путь:</strong> {med.routeAndSetting?.route?.map(text).join(', ')}</p>
                             ) : null}
-                            <p><strong>Сеттинг:</strong> {med.routeAndSetting?.setting?.join(', ')}</p>
+                            <p><strong>Сеттинг:</strong> {med.routeAndSetting?.setting?.map(text).join(', ')}</p>
                             {renderList(med.routeAndSetting?.prescriberLevel)}
                           </section>
                         </div>
@@ -322,8 +324,8 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                             <h4>Источниковая опора</h4>
                             {med.guidelineBasis.map((guideline, index) => (
                               <p key={index}>
-                                <strong>{guideline.organization}</strong>
-                                {guideline.year ? `, ${guideline.year}` : ''}: {guideline.scope ?? guideline.title ?? guideline.status}
+                                <strong>{text(guideline.organization)}</strong>
+                                {guideline.year ? `, ${text(guideline.year)}` : ''}: {text(guideline.scope ?? guideline.title ?? guideline.status)}
                               </p>
                             ))}
                           </div>
@@ -360,7 +362,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                       <option value="">Выберите первый препарат</option>
                       {medicationEntries.map((medication) => (
                         <option key={medication.id} value={medication.id}>
-                          {medication.name}
+                          {text(medication.name)}
                         </option>
                       ))}
                     </select>
@@ -371,7 +373,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                       <option value="">Выберите второй препарат</option>
                       {medicationEntries.map((medication) => (
                         <option key={medication.id} value={medication.id}>
-                          {medication.name}
+                          {text(medication.name)}
                         </option>
                       ))}
                     </select>
@@ -382,12 +384,12 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                   <div className={`interaction-result ${checkedInteraction ? `is-${checkedInteraction.level}` : 'is-none'}`}>
                     <h3>Проверка сочетания</h3>
                     <p>
-                      {checkedFirstMedication?.name ?? 'Препарат 1'} + {checkedSecondMedication?.name ?? 'Препарат 2'}
+                      {text(checkedFirstMedication?.name ?? 'Препарат 1')} + {text(checkedSecondMedication?.name ?? 'Препарат 2')}
                     </p>
                     {checkedInteraction ? (
                       <>
-                        <span className={`legend-item ${checkedInteraction.level}`}>{interactionCategoryMeta(checkedInteraction.level).label}</span>
-                        <p>{checkedInteraction.effect}</p>
+                        <span className={`legend-item ${checkedInteraction.level}`}>{text(interactionCategoryMeta(checkedInteraction.level).label)}</span>
+                        <p>{text(checkedInteraction.effect)}</p>
                       </>
                     ) : (
                       <p>Явное взаимодействие в справочнике не найдено. Это не заменяет клиническую проверку сочетаний.</p>
@@ -415,13 +417,13 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                     <article key={id} className="interaction-card">
                       <div className="interaction-card-header">
                         <div>
-                          <h3>{medicationName}</h3>
-                          <p>{interaction.drug}</p>
+                          <h3>{text(medicationName)}</h3>
+                          <p>{text(interaction.drug)}</p>
                         </div>
-                        <span className={`legend-item ${interaction.level}`}>{meta.label}</span>
+                        <span className={`legend-item ${interaction.level}`}>{text(meta.label)}</span>
                       </div>
-                      <p className="interaction-effect">{interaction.effect}</p>
-                      <p className="interaction-meta">{meta.description}</p>
+                      <p className="interaction-effect">{text(interaction.effect)}</p>
+                      <p className="interaction-meta">{text(meta.description)}</p>
                     </article>
                   );
                 })}
@@ -443,7 +445,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                 {regimenEntries.map((regimen) => (
                   <motion.div key={regimen.id} className="regimen-card" whileHover={{ scale: 1.01 }}>
                     <div className="regimen-card-header">
-                      <h3 className="regimen-title">{regimen.name}</h3>
+                      <h3 className="regimen-title">{text(regimen.name)}</h3>
                       <div className="regimen-steps-count">{regimen.steps.length} шага</div>
                     </div>
 
@@ -458,9 +460,9 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                       <tbody>
                         {regimen.steps.map((step, index) => (
                           <tr key={index}>
-                            <td data-label="День">{step.day}</td>
-                            <td data-label="Препарат">{step.drug}</td>
-                            <td data-label="Доза / заметки">{step.dose || step.note || '-'}</td>
+                            <td data-label="День">{text(step.day)}</td>
+                            <td data-label="Препарат">{text(step.drug)}</td>
+                            <td data-label="Доза / заметки">{text(step.dose || step.note || '-')}</td>
                           </tr>
                         ))}
                       </tbody>

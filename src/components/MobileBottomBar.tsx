@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavItem {
@@ -91,19 +91,12 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
                   key={item.path}
                   onClick={() => onNavigate(item.path)}
                   className={`mobile-bottom-item ${isActive ? 'is-active' : ''}`}
-                  whileTap={{ scale: 0.9 }}
-                  animate={isActive ? { 
-                    scale: [1, 1.1, 1],
-                    transition: { duration: 0.3 }
-                  } : {}}
+                  whileTap={{ scale: 0.96 }}
+                  animate={isActive ? { scale: [1, 1.03, 1], transition: { duration: 0.24 } } : {}}
+                  aria-label={item.label}
+                  aria-current={isActive ? 'page' : undefined}
                 >
-                  <motion.div
-                    className={`mobile-bottom-icon-wrap ${isActive ? 'glow-turquoise' : ''}`}
-                    animate={isActive ? {
-                      filter: ['drop-shadow(0 0 0px var(--color-turquoise))', 'drop-shadow(0 0 10px var(--color-turquoise))', 'drop-shadow(0 0 0px var(--color-turquoise))'],
-                      transition: { duration: 2, repeat: Infinity }
-                    } : {}}
-                  >
+                  <motion.div className={`mobile-bottom-icon-wrap ${isActive ? 'glow-turquoise' : ''}`}>
                     {item.icon}
                   </motion.div>
                   <span className="mobile-bottom-label">{item.label}</span>

@@ -1394,6 +1394,7 @@ body::after,
 .category-filter {
   width: 100% !important;
   max-width: 100% !important;
+  box-sizing: border-box !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch !important;
@@ -1558,5 +1559,299 @@ body::after,
     left: auto !important;
     z-index: 80 !important;
     pointer-events: auto !important;
+  }
+}
+
+/* Premium V3 iPhone safety layer: modal hierarchy, horizontal clinical tabs and no text collisions. */
+.search-suggestions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.search-suggestions::-webkit-scrollbar {
+  display: none;
+}
+
+.search-suggestion-chip {
+  flex: 0 0 auto;
+  min-height: 42px;
+  max-width: min(220px, 72vw);
+  padding: 0.55rem 0.72rem;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ui-text);
+  font: inherit;
+  text-align: left;
+}
+
+.search-suggestion-chip span,
+.search-suggestion-chip small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-suggestion-chip small {
+  margin-top: 0.1rem;
+  color: var(--ui-text-muted);
+  font-size: 0.68rem;
+}
+
+.immediate-action-card,
+.clinical-timeline-card,
+.source-confidence-card,
+.q-dynamics-panel {
+  border-color: rgba(218, 184, 122, 0.24) !important;
+}
+
+.clinical-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: 0.65rem;
+  margin-top: 0.8rem;
+}
+
+.clinical-timeline article {
+  padding: 0.8rem;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.clinical-timeline span {
+  display: inline-flex;
+  margin-bottom: 0.45rem;
+  color: var(--ui-gold);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.clinical-timeline strong,
+.source-confidence-card h3 {
+  display: block;
+  color: var(--ui-text);
+}
+
+.clinical-timeline ul {
+  margin: 0.45rem 0 0;
+  padding-left: 1rem;
+  color: var(--ui-text-soft);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.source-confidence-card small {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--ui-text-muted);
+  font-size: 0.75rem;
+}
+
+.q-nav-wrap {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.version-install-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .search-container,
+  .search-input-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .search-container {
+    overflow: hidden !important;
+  }
+
+  .search-input {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .modal-content.mobile-sheet {
+    padding: 0 !important;
+  }
+
+  .modal-content.mobile-sheet .modal-drag-indicator {
+    position: fixed !important;
+    top: calc(env(safe-area-inset-top) + 0.35rem) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 90 !important;
+  }
+
+  .modal-content.mobile-sheet .modal-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+    align-items: center !important;
+    gap: 0.55rem !important;
+    min-height: calc(78px + env(safe-area-inset-top)) !important;
+    padding: calc(env(safe-area-inset-top) + 0.92rem) calc(env(safe-area-inset-right) + 0.74rem) 0.72rem calc(env(safe-area-inset-left) + 0.82rem) !important;
+    border-bottom: 1px solid var(--ui-line) !important;
+  }
+
+  .modal-title-group {
+    display: grid !important;
+    grid-template-columns: 38px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 0.55rem !important;
+    min-width: 0 !important;
+  }
+
+  .modal-icon-wrapper {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+  }
+
+  .modal-title {
+    display: block !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: clamp(1rem, 5vw, 1.25rem) !important;
+  }
+
+  .modal-icd {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 0.74rem !important;
+  }
+
+  .modal-header .modal-close,
+  .modal-content.mobile-sheet > .modal-close {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    z-index: 40 !important;
+    align-self: center !important;
+    justify-self: end !important;
+  }
+
+  .modal-content.mobile-sheet .modal-quick-strip {
+    position: sticky !important;
+    top: calc(78px + env(safe-area-inset-top)) !important;
+    z-index: 18 !important;
+    margin: 0 !important;
+    padding: 0.55rem calc(env(safe-area-inset-right) + 0.82rem) 0.58rem calc(env(safe-area-inset-left) + 0.82rem) !important;
+    border-bottom: 1px solid var(--ui-line) !important;
+    border-radius: 0 !important;
+    background: rgba(31, 25, 30, 0.94) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+  }
+
+  .modal-quick-strip.is-collapsed .modal-quick-summary,
+  .modal-quick-strip.is-collapsed .modal-quick-chip-detail {
+    display: none !important;
+  }
+
+  .modal-quick-meta {
+    display: flex !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .modal-quick-meta::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .modal-quick-chip {
+    flex: 0 0 auto !important;
+    max-width: 72vw !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .modal-content.mobile-sheet .modal-tabs {
+    position: sticky !important;
+    top: calc(78px + env(safe-area-inset-top) + 52px) !important;
+    z-index: 17 !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 0.42rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0.52rem calc(env(safe-area-inset-right) + 0.82rem) 0.56rem calc(env(safe-area-inset-left) + 0.82rem) !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    border-bottom: 1px solid var(--ui-line) !important;
+    background: rgba(22, 17, 21, 0.96) !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x !important;
+  }
+
+  .modal-content.mobile-sheet .modal-tabs::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .modal-content.mobile-sheet .tab-btn {
+    flex: 0 0 auto !important;
+    min-width: max-content !important;
+    min-height: 40px !important;
+    padding: 0.48rem 0.72rem !important;
+    border: 1px solid var(--ui-line) !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.055) !important;
+    color: var(--ui-text-soft) !important;
+    font-size: 0.76rem !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+  }
+
+  .modal-content.mobile-sheet .tab-btn.active {
+    background: linear-gradient(135deg, rgba(218, 184, 122, 0.95), rgba(244, 231, 199, 0.92)) !important;
+    border-color: rgba(218, 184, 122, 0.35) !important;
+    color: #211a12 !important;
+  }
+
+  .modal-content.mobile-sheet .modal-body {
+    padding: 0.82rem calc(env(safe-area-inset-right) + 0.82rem) calc(6.2rem + env(safe-area-inset-bottom)) calc(env(safe-area-inset-left) + 0.82rem) !important;
+    scroll-padding-top: 190px !important;
+  }
+
+  .modal-content.mobile-sheet .content-card,
+  .questionnaire-modal.mobile-sheet .content-card {
+    overflow-wrap: anywhere !important;
+  }
+
+  .clinical-timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .search-suggestions {
+    padding: 0 0.1rem 0.1rem;
+  }
+
+  .version-install-state {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

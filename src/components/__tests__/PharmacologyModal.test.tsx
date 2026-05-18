@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+﻿import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import PharmacologyModal from '../PharmacologyModal';
 
@@ -40,6 +40,6 @@ describe('PharmacologyModal', () => {
     fireEvent.click(screen.getByRole('tab', { name: /схемы/i }));
 
     expect(screen.getByText(/стимуляция овуляции при спкя/i)).toBeInTheDocument();
-    expect(screen.queryByText(/^Нитрофурантоин$/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^нитрофурантоин$/i)).not.toBeInTheDocument();
   });
 });

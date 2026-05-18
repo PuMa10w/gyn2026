@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+﻿import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import App from './App';
 
@@ -97,6 +97,10 @@ vi.mock('./components/PharmacologyModal', () => ({
   ),
 }));
 
+const expectEndometriosisVisible = () => {
+  expect(screen.getAllByText('Эндометриоз').length).toBeGreaterThan(0);
+};
+
 describe('App', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -118,7 +122,7 @@ describe('App', () => {
 
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: /гинекология/i })).toBeInTheDocument();
-      expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
+      expectEndometriosisVisible();
     });
   });
 
@@ -137,21 +141,19 @@ describe('App', () => {
     render(<App />);
 
     fireEvent.click(screen.getAllByRole('button', { name: /гинекология/i })[0]);
-    await screen.findByText('Эндометриоз');
+    await screen.findAllByText('Эндометриоз');
 
     const searchInput = screen.getByPlaceholderText(/нозология, симптом, код мкб/i);
     fireEvent.change(searchInput, { target: { value: 'Эндометриоз' } });
 
-    await waitFor(() => {
-      expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
-    });
+    await waitFor(expectEndometriosisVisible);
   });
 
   it('resets search when switching sections', async () => {
     render(<App />);
 
     fireEvent.click(screen.getAllByRole('button', { name: /гинекология/i })[0]);
-    await screen.findByText('Эндометриоз');
+    await screen.findAllByText('Эндометриоз');
 
     const searchInput = screen.getByPlaceholderText(/нозология, симптом, код мкб/i) as HTMLInputElement;
     fireEvent.change(searchInput, { target: { value: 'не найдено' } });
@@ -167,14 +169,12 @@ describe('App', () => {
     render(<App />);
 
     fireEvent.click(screen.getAllByRole('button', { name: /гинекология/i })[0]);
-    await screen.findByText('Эндометриоз');
+    await screen.findAllByText('Эндометриоз');
 
     fireEvent.click(screen.getByRole('button', { name: /добавить эндометриоз в избранное/i }));
     fireEvent.click(screen.getByRole('button', { name: /^избранное$/i }));
 
-    await waitFor(() => {
-      expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
-    });
+    await waitFor(expectEndometriosisVisible);
   });
 
   it('opens favorites from home inside catalog mode', async () => {
@@ -186,7 +186,7 @@ describe('App', () => {
 
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: /гинекология/i })).toBeInTheDocument();
-      expect(screen.getByText('Эндометриоз')).toBeInTheDocument();
+      expectEndometriosisVisible();
     });
   });
 

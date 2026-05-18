@@ -1,7 +1,18 @@
+import { repairText } from './textRepair.ts';
+
 const REVIEW_DATE = '2026-05-18';
 
 const hasText = (value) => typeof value === 'string' && value.trim().length > 0;
-const cleanText = (value) => String(value ?? '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+const cleanText = (value) => repairText(value).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+const deepRepair = (value) => {
+  if (typeof value === 'string') return repairText(value);
+  if (Array.isArray(value)) return value.map(deepRepair);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [repairText(key), deepRepair(entry)]));
+  }
+
+  return value;
+};
 const toList = (value) => {
   if (Array.isArray(value)) {
     return value.map(cleanText).filter(Boolean);
@@ -41,7 +52,8 @@ const buildMedicationGuidelineFallback = (medication) => [
   },
 ];
 
-export const enrichMedication = (medication) => {
+export const enrichMedication = (rawMedication) => {
+  const medication = deepRepair(rawMedication);
   const primaryIndication = getPrimaryIndication(medication);
 
   return {
@@ -126,7 +138,7 @@ export const enrichMedication = (medication) => {
   };
 };
 
-export const enrichMedications = (medications) => medications.map(enrichMedication);
+export const enrichMedications = (medications) => medications.map(enrichMedication).map(deepRepair);
 
 const questionnaireProfiles = {
   'phq-9': {
