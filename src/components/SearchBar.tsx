@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+﻿import React, { useId } from 'react';
 import { motion } from 'framer-motion';
 
 interface SearchBarProps {
@@ -27,6 +27,7 @@ const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, res
           id={inputId}
           type="search"
           className="search-input"
+          aria-label="Поиск по нозологиям, симптомам и кодам МКБ"
           placeholder="Нозология, симптом, код МКБ..."
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}

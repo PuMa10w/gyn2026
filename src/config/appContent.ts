@@ -1,10 +1,10 @@
-import type { TabType } from '../types';
+﻿import type { TabType } from '../types';
 
 export const emptyStateContent = {
   favorites: {
     eyebrow: 'Избранное',
     title: 'Список избранного пока пуст',
-    description: 'Сохраняйте важные нозологии и возвращайтесь к ним без лишнего поиска.',
+    description: 'Сохраняйте важные нозологии и возвращайтесь к ним без повторного поиска.',
   },
   history: {
     eyebrow: 'История',

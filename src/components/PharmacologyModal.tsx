@@ -1,7 +1,8 @@
-import React, { useEffect, useId, useState } from 'react';
+﻿import React, { useEffect, useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { commonRegimens, drugInteractions, medications } from '../data/pharmacology';
+import { PremiumButton } from './PremiumButton';
 import { useModalBehavior } from '../hooks/useModalBehavior';
+import { commonRegimens, drugInteractions, medications } from '../data/pharmacology';
 import type { Medication, MedicationInteraction, Regimen } from '../types';
 
 interface PharmacologyModalProps {
@@ -68,6 +69,15 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
     }
   };
 
+  const renderList = (items?: string[]): React.ReactNode =>
+    items?.length ? (
+      <ul>
+        {items.map((entry, index) => (
+          <li key={index}>{entry}</li>
+        ))}
+      </ul>
+    ) : null;
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     const updateViewportMode = () => setIsMobile(mediaQuery.matches);
@@ -100,9 +110,17 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
           aria-labelledby={titleId}
           aria-describedby={subtitleId}
         >
-          <button ref={closeButtonRef} type="button" className="modal-close" onClick={onClose} aria-label="Закрыть фармакологию">
-            ✕
-          </button>
+          <PremiumButton
+            ref={closeButtonRef}
+            onClick={onClose}
+            variant="ghost"
+            size="sm"
+            className="modal-close"
+            shimmer={false}
+            aria-label="Закрыть фармакологию"
+          >
+            ×
+          </PremiumButton>
 
           <div className="modal-header">
             <div>
@@ -112,10 +130,12 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
           </div>
 
           <div className="pharma-tabs" role="tablist" aria-label="Разделы фармакологии">
-            <button
-              type="button"
-              className={`pharma-tab ${activeTab === 'medications' ? 'active' : ''}`}
+            <PremiumButton
               onClick={() => setActiveTab('medications')}
+              variant={activeTab === 'medications' ? 'primary' : 'ghost'}
+              size="sm"
+              className="pharma-tab"
+              shimmer={activeTab === 'medications'}
               role="tab"
               id={`${titleId}-medications-tab`}
               aria-selected={activeTab === 'medications'}
@@ -123,14 +143,17 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
               tabIndex={activeTab === 'medications' ? 0 : -1}
             >
               Препараты
-            </button>
-            <button
-              type="button"
-              className={`pharma-tab ${activeTab === 'interactions' ? 'active' : ''}`}
+            </PremiumButton>
+            
+            <PremiumButton
               onClick={() => {
                 setActiveTab('interactions');
                 setSelectedMed(null);
               }}
+              variant={activeTab === 'interactions' ? 'primary' : 'ghost'}
+              size="sm"
+              className="pharma-tab"
+              shimmer={activeTab === 'interactions'}
               role="tab"
               id={`${titleId}-interactions-tab`}
               aria-selected={activeTab === 'interactions'}
@@ -138,14 +161,17 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
               tabIndex={activeTab === 'interactions' ? 0 : -1}
             >
               Взаимодействия
-            </button>
-            <button
-              type="button"
-              className={`pharma-tab ${activeTab === 'regimens' ? 'active' : ''}`}
+            </PremiumButton>
+            
+            <PremiumButton
               onClick={() => {
                 setActiveTab('regimens');
                 setSelectedMed(null);
               }}
+              variant={activeTab === 'regimens' ? 'primary' : 'ghost'}
+              size="sm"
+              className="pharma-tab"
+              shimmer={activeTab === 'regimens'}
               role="tab"
               id={`${titleId}-regimens-tab`}
               aria-selected={activeTab === 'regimens'}
@@ -153,7 +179,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
               tabIndex={activeTab === 'regimens' ? 0 : -1}
             >
               Схемы
-            </button>
+            </PremiumButton>
           </div>
 
           {activeTab === 'medications' && (
@@ -163,6 +189,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                 id={searchId}
                 type="text"
                 className="search-input"
+                aria-label="Поиск препарата"
                 placeholder="Поиск препарата..."
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
@@ -234,6 +261,73 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                             <li key={index}>{entry}</li>
                           ))}
                         </ul>
+
+                        <div className="clinical-tool-grid">
+                          <section className="clinical-tool-block">
+                            <h4>Клиническая роль</h4>
+                            <p>
+                              <strong>{med.firstLineStatus?.role}</strong>
+                            </p>
+                            {renderList(med.firstLineStatus?.forConditions)}
+                          </section>
+
+                          <section className="clinical-tool-block">
+                            <h4>Беременность / лактация</h4>
+                            <p>
+                              <strong>Беременность:</strong> {med.pregnancyLactation?.pregnancyStatus}
+                            </p>
+                            {renderList(med.pregnancyLactation?.pregnancyNotes)}
+                            <p>
+                              <strong>Лактация:</strong> {med.pregnancyLactation?.lactationStatus}
+                            </p>
+                            {renderList(med.pregnancyLactation?.lactationNotes)}
+                          </section>
+
+                          <section className="clinical-tool-block">
+                            <h4>Мониторинг</h4>
+                            <p><strong>До старта:</strong></p>
+                            {renderList(med.monitoring?.beforeStart)}
+                            <p><strong>В динамике:</strong></p>
+                            {renderList(med.monitoring?.duringTreatment)}
+                          </section>
+
+                          <section className="clinical-tool-block">
+                            <h4>Практические акценты</h4>
+                            {renderList(med.majorPracticePoints)}
+                          </section>
+
+                          <section className="clinical-tool-block">
+                            <h4>Сценарии применения</h4>
+                            {med.clinicalUseCases?.map((useCase, index) => (
+                              <article key={index} className="clinical-use-case">
+                                <strong>{useCase.scenario}</strong>
+                                {useCase.whyChosen ? <p>{useCase.whyChosen}</p> : null}
+                                {renderList(useCase.importantNotes)}
+                              </article>
+                            ))}
+                          </section>
+
+                          <section className="clinical-tool-block">
+                            <h4>Маршрут</h4>
+                            {med.routeAndSetting?.route?.join(', ') !== med.forms.join(', ') ? (
+                              <p><strong>Путь:</strong> {med.routeAndSetting?.route?.join(', ')}</p>
+                            ) : null}
+                            <p><strong>Сеттинг:</strong> {med.routeAndSetting?.setting?.join(', ')}</p>
+                            {renderList(med.routeAndSetting?.prescriberLevel)}
+                          </section>
+                        </div>
+
+                        {med.guidelineBasis?.length ? (
+                          <div className="clinical-tool-block clinical-tool-block-wide">
+                            <h4>Источниковая опора</h4>
+                            {med.guidelineBasis.map((guideline, index) => (
+                              <p key={index}>
+                                <strong>{guideline.organization}</strong>
+                                {guideline.year ? `, ${guideline.year}` : ''}: {guideline.scope ?? guideline.title ?? guideline.status}
+                              </p>
+                            ))}
+                          </div>
+                        ) : null}
                       </motion.div>
                     )}
                   </motion.article>
@@ -307,6 +401,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                 id={interactionSearchId}
                 type="text"
                 className="search-input"
+                aria-label="Поиск взаимодействий"
                 placeholder="Поиск взаимодействий..."
                 value={interactionSearchTerm}
                 onChange={(event) => setInteractionSearchTerm(event.target.value)}

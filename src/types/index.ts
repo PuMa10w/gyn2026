@@ -25,6 +25,12 @@ export interface GuidelineReference {
   usedFor?: string[];
 }
 
+export interface SourceQuality {
+  level: 'verified' | 'reviewed' | 'needs-source-review' | 'fallback' | string;
+  label: string;
+  note?: string;
+}
+
 export interface DiseaseOverview {
   quickTake?: string;
   prevalence?: string;
@@ -160,12 +166,19 @@ export interface DiseaseClinicalSummary {
   clinicalPearls?: string[];
 }
 
+export interface PatientExplanation {
+  plainLanguageSummary?: string;
+  whatToWatch?: string[];
+  selfCareBoundaries?: string[];
+  whenToSeekCare?: string[];
+}
+
 export interface Disease {
   id: string;
   name: string;
   icd: string;
   icdDetail?: string;
-  subtitle: 'Гинекология' | 'Акушерство';
+  subtitle: 'Гинекология' | 'Акушерство' | 'Р“РёРЅРµРєРѕР»РѕРіРёСЏ' | 'РђРєСѓС€РµСЂСЃС‚РІРѕ';
   description: string;
   icon: string;
   definition: string;
@@ -209,6 +222,8 @@ export interface Disease {
     whatNotToDo?: string[];
     guidelines: TreatmentGuidelines;
   };
+  sourceQuality?: SourceQuality;
+  redFlags?: string[];
   guidelineBasis?: GuidelineReference[];
   guidelineStatus?: string;
   lastReviewed?: string;
@@ -220,6 +235,7 @@ export interface Disease {
   followUpTriggers?: DiseaseFollowUpTriggers;
   clinicalSummary?: DiseaseClinicalSummary;
   clinicalCases?: DiseaseClinicalCase[];
+  patientExplanation?: PatientExplanation;
   patientCounseling?: string[];
   specialPopulations?: DiseaseSpecialPopulations;
   timingOfDelivery?: TimingOfDelivery;

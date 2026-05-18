@@ -60,6 +60,7 @@
   font-size: 0.92rem;
   font-weight: 800;
   letter-spacing: 0.18em;
+  -webkit-text-fill-color: #f4dfd5;
 }
 
 .navbar-brand-copy {
@@ -1545,6 +1546,158 @@
   .site-footer {
     padding: 0.92rem 0.7rem calc(var(--safe-bottom) + 0.9rem);
     font-size: 0.76rem;
+  }
+}
+
+/* Final mobile polish overrides: keep the first screen usable on iPhone-sized viewports. */
+@media (max-width: 520px) {
+  .App {
+    --header-height: 138px;
+  }
+
+  .page-content {
+    padding-bottom: calc(var(--safe-bottom) + 5.9rem);
+  }
+
+  .navbar {
+    border-radius: 18px;
+  }
+
+  .navbar-inner {
+    gap: 0.45rem;
+    padding: 0.45rem;
+  }
+
+  .navbar-topline {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.42rem;
+  }
+
+  .navbar-brand {
+    min-width: 0;
+    gap: 0.45rem;
+  }
+
+  .navbar-brand-mark {
+    min-width: 46px;
+    height: 34px;
+    padding: 0 0.55rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+  }
+
+  .navbar-brand-copy strong {
+    font-size: 0.78rem;
+  }
+
+  .navbar-brand-copy span {
+    display: none;
+  }
+
+  .navbar-theme-toggle {
+    min-width: 0;
+    max-width: 5.6rem;
+    min-height: 34px;
+    padding: 0.45rem 0.56rem;
+    font-size: 0.72rem;
+  }
+
+  .navbar-actions {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.32rem;
+    width: 100%;
+  }
+
+  .navbar-actions .premium-button {
+    min-width: 0;
+    min-height: 34px;
+    padding: 0.42rem 0.34rem;
+    overflow: hidden;
+    font-size: 0.68rem;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-row-primary .nav-scroll {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.32rem;
+    padding: 0.22rem;
+  }
+
+  .nav-row-primary .premium-button {
+    min-width: 0;
+    min-height: 36px;
+    padding: 0.44rem 0.28rem;
+    font-size: 0.68rem;
+    line-height: 1.12;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .home-shell {
+    padding: 0 0.62rem 0.7rem;
+  }
+
+  .home-destination-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.62rem;
+  }
+
+  .home-destination-card,
+  .home-destination-card.is-obstetrics {
+    min-height: 0;
+    padding: 1rem;
+    border-radius: 18px;
+  }
+
+  .destination-head,
+  .destination-footer {
+    gap: 0.55rem;
+  }
+
+  .destination-kicker,
+  .destination-index {
+    font-size: 0.68rem;
+    line-height: 1.2;
+  }
+
+  .home-destination-title {
+    margin: 0.48rem 0 0.32rem;
+    font-size: 1.28rem;
+    line-height: 1.08;
+  }
+
+  .home-destination-description {
+    font-size: 0.82rem;
+    line-height: 1.38;
+  }
+
+  .destination-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.32rem;
+  }
+
+  .destination-tag {
+    display: inline-flex;
+    min-height: 24px;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.22rem 0.48rem;
+    font-size: 0.66rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .analytics-dashboard {
+    padding: 0 0.62rem;
   }
 }
 

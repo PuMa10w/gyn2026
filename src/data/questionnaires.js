@@ -1,4 +1,6 @@
-export const questionnaires = [
+import { enrichQuestionnaires } from '../utils/enrichClinicalTools.js';
+
+const rawQuestionnaires = [
   {
     id: "phq-9",
     name: "PHQ-9",
@@ -519,3 +521,5 @@ export const questionnaires = [
     }
   }
 ];
+
+export const questionnaires = enrichQuestionnaires(rawQuestionnaires);

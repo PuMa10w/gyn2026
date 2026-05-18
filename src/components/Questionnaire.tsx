@@ -1,10 +1,20 @@
 import React, { useEffect, useId, useState } from 'react';
 import { motion } from 'framer-motion';
+import { PremiumButton } from './PremiumButton';
 import { questionnaires } from '../data/questionnaires';
 import { useModalBehavior } from '../hooks/useModalBehavior';
 import type { QuestionnaireData, ScoringResult, QuestionnaireHistory } from '../types';
 
 const QUESTIONNAIRE_HISTORY_KEY = 'questionnaire-history';
+
+const renderCompactList = (items?: string[]): React.ReactNode =>
+  items?.length ? (
+    <ul className="q-clinical-list">
+      {items.map((entry, index) => (
+        <li key={index}>{entry}</li>
+      ))}
+    </ul>
+  ) : null;
 
 interface QuestionnaireProps {
   onClose: () => void;
@@ -98,55 +108,11 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   };
 
   const goNext = (): void => {
-    if (!selectedQ) return;
-    if (currentStep < selectedQ.questions.length - 1) {
+    if (currentStep < selectedQ!.questions.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
       calculateResult();
     }
-  };
-
-  const handleCardKeyDown = (event: React.KeyboardEvent, onActivate: () => void): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      onActivate();
-    }
-  };
-
-  const handleOptionKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, optionIndex: number): void => {
-    if (!selectedQ) {
-      return;
-    }
-
-    const nextIndex = (() => {
-      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-        return (optionIndex + 1) % selectedQ.options.length;
-      }
-
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
-        return (optionIndex - 1 + selectedQ.options.length) % selectedQ.options.length;
-      }
-
-      if (event.key === 'Home') {
-        return 0;
-      }
-
-      if (event.key === 'End') {
-        return selectedQ.options.length - 1;
-      }
-
-      return null;
-    })();
-
-    if (nextIndex === null) {
-      return;
-    }
-
-    event.preventDefault();
-    setAnswer(currentStep, nextIndex);
-
-    const optionButtons = event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="radio"]');
-    optionButtons?.[nextIndex]?.focus();
   };
 
   if (!selectedQ) {
@@ -173,33 +139,54 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
         >
           <div className="modal-header">
             <div>
-              <h2 className="modal-title" id={titleId}>📋 Тест-опросники</h2>
-              <div className="modal-icd" id={subtitleId}>Международные скрининговые шкалы</div>
+              <h2 className="modal-title" id={titleId}>📋 Шкалы и опросники</h2>
+              <div className="modal-icd" id={subtitleId}>Выберите шкалу для оценки</div>
             </div>
-            <button ref={closeButtonRef} type="button" className="modal-close" onClick={onClose} aria-label="Закрыть опросники">×</button>
+            <PremiumButton
+              onClick={onClose}
+              variant="ghost"
+              size="sm"
+              className="modal-close"
+              shimmer={false}
+            >
+              ×
+            </PremiumButton>
           </div>
 
-          <div className="q-grid">
-            {questionnaires.map((q, idx) => (
+          <div className="q-list">
+            {questionnaires.map((q, index) => (
               <motion.article
                 key={q.id}
-                className="q-card"
+                className="q-card glass"
+                style={{ 
+                  backdropFilter: 'blur(40px)',
+                  WebkitBackdropFilter: 'blur(40px)'
+                }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                whileHover={{ y: -5, boxShadow: '0 12px 35px rgba(224,90,120,0.15)' }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ scale: 1.02 }}
                 onClick={() => startQuestionnaire(q)}
-                onKeyDown={(event) => handleCardKeyDown(event, () => startQuestionnaire(q))}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    startQuestionnaire(q);
+                  }
+                }}
                 role="button"
                 tabIndex={0}
                 aria-label={`Открыть опросник: ${q.name}`}
               >
                 <div className="q-icon">{q.icon}</div>
-                <div className="q-name">{q.name}</div>
-                <div className="q-full">{q.fullName}</div>
-                <div className="q-cat">{q.category}</div>
-                <div className="q-desc">{q.description}</div>
-                <div className="q-count">{q.questions.length} вопросов</div>
+                <div className="q-info">
+                  <h3>{q.name}</h3>
+                  <div className="q-cat">{q.category}</div>
+                  <div className="q-desc">{q.description}</div>
+                  <div className="q-count">{q.questions.length} вопросов</div>
+                  <div className="q-clinical-note">
+                    {q.clinicalPurpose?.screening?.[0] ?? 'Клиническая шкала для структурированной оценки симптомов.'}
+                  </div>
+                </div>
               </motion.article>
             ))}
           </div>
@@ -208,9 +195,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
             <div className="q-history-header">
               <h3>📊 История прохождений</h3>
               {history.length > 0 && (
-                <button type="button" className="q-btn q-btn-secondary" onClick={clearHistory}>
+                <PremiumButton
+                  onClick={clearHistory}
+                  variant="secondary"
+                  size="sm"
+                  shimmer={false}
+                >
                   Очистить историю
-                </button>
+                </PremiumButton>
               )}
             </div>
 
@@ -261,19 +253,43 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               <h2 className="modal-title" id={titleId}>{selectedQ.icon} {selectedQ.name}</h2>
               <div className="modal-icd" id={subtitleId}>{selectedQ.fullName}</div>
             </div>
-            <button ref={closeButtonRef} type="button" className="modal-close" onClick={goBack} aria-label="Закрыть опросник">×</button>
+            <PremiumButton
+              onClick={onClose}
+              variant="ghost"
+              size="sm"
+              className="modal-close"
+              shimmer={false}
+            >
+              ×
+            </PremiumButton>
           </div>
 
-          <div className="q-progress-bar">
+          <div 
+            className="q-progress-bar"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(progress)}
+            aria-label="Прогресс прохождения опросника"
+          >
             <div
               className="q-progress-fill"
-              style={{ width: `${progress}%`, background: 'var(--gradient-rose)' }}
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={Math.round(progress)}
-              aria-label="Прогресс прохождения опросника"
+              style={{ 
+                width: `${progress}%`,
+                background: 'linear-gradient(135deg, var(--color-turquoise), var(--color-emerald))'
+              }}
             />
+          </div>
+
+          <div className="q-clinical-panel">
+            <h3>Клиническое назначение</h3>
+            {renderCompactList(selectedQ.clinicalPurpose?.screening)}
+            {selectedQ.targetPopulation?.intendedFor?.length ? (
+              <>
+                <h4>Для кого</h4>
+                {renderCompactList(selectedQ.targetPopulation.intendedFor)}
+              </>
+            ) : null}
           </div>
 
           <div className="q-steps" aria-label="Шаги опросника">
@@ -303,7 +319,12 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setAnswer(currentStep, i)}
-                onKeyDown={(event) => handleOptionKeyDown(event, i)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setAnswer(currentStep, i);
+                  }
+                }}
                 role="radio"
                 aria-checked={answers[currentStep] === i}
                 tabIndex={answers[currentStep] === i || (answers[currentStep] === undefined && i === 0) ? 0 : -1}
@@ -314,17 +335,25 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           </div>
 
           <div className="q-nav">
-            <button type="button" className="q-btn q-btn-secondary" onClick={goBack} disabled={currentStep === 0}>
-              ← Назад
-            </button>
-            <button
-              type="button"
-              className="q-btn q-btn-primary"
-              onClick={goNext}
-              disabled={answers[currentStep] === undefined}
+            <PremiumButton
+              onClick={goBack}
+              variant="secondary"
+              size="md"
+              disabled={currentStep === 0}
+              shimmer={false}
             >
-              {currentStep === selectedQ.questions.length - 1 ? 'Получить результат →' : 'Далее →'}
-            </button>
+              ← Назад
+            </PremiumButton>
+            
+            <PremiumButton
+              onClick={goNext}
+              variant="primary"
+              size="md"
+              disabled={answers[currentStep] === undefined}
+              shimmer={true}
+            >
+              {currentStep === selectedQ.questions.length - 1 ? '✨ Получить результат →' : 'Далее →'}
+            </PremiumButton>
           </div>
         </motion.div>
       </motion.div>
@@ -339,78 +368,118 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
       exit={{ opacity: 0 }}
       onClick={onClose}
     >
-        <motion.div
-          className={`modal-content questionnaire-modal ${isMobile ? 'mobile-sheet' : ''}`}
-          initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
-          animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
-          exit={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
-          ref={modalRef}
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={handleModalKeyDown}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={subtitleId}
-        >
-          <div className="modal-header">
-            <div>
-              <h2 className="modal-title" id={titleId}>📊 Результат</h2>
-              <div className="modal-icd" id={subtitleId}>{selectedQ.name} — {selectedQ.fullName}</div>
+      <motion.div
+        className={`modal-content questionnaire-modal ${isMobile ? 'mobile-sheet' : ''}`}
+        initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
+        animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
+        exit={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
+        ref={modalRef}
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={handleModalKeyDown}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={subtitleId}
+      >
+        <div className="modal-header">
+          <div>
+            <h2 className="modal-title" id={titleId}>📊 Результат</h2>
+            <div className="modal-icd" id={subtitleId}>{selectedQ.name} — {selectedQ.fullName}</div>
+          </div>
+          <PremiumButton
+            onClick={onClose}
+            variant="ghost"
+            size="sm"
+            className="modal-close"
+            shimmer={false}
+          >
+            ×
+          </PremiumButton>
+        </div>
+
+        <div className="q-result">
+          <div className="q-result-badge" style={{ background: result.color }}>
+            <div className="q-result-level">{result.level}</div>
+            <div className="q-result-score">
+              Балл: {Object.values(answers).reduce((a, b) => a + b, 0)} из {selectedQ.questions.length * (selectedQ.options.length - 1)}
             </div>
-            <button ref={closeButtonRef} type="button" className="modal-close" onClick={closeResults} aria-label="Закрыть результат">×</button>
           </div>
 
-          <div className="q-result">
-            <div className="q-result-badge" style={{ background: result.color }}>
-              <div className="q-result-level">{result.level}</div>
-              <div className="q-result-score">
-                Балл: {Object.values(answers).reduce((a, b) => a + b, 0)} из {selectedQ.questions.length * (selectedQ.options.length - 1)}
-              </div>
-            </div>
-
-            <div className="q-severity-bar">
-              {['normal', 'mild', 'moderate', 'severe', 'critical'].map((sev, i) => {
-                const labels = ['Норма', 'Лёгкая', 'Умеренная', 'Тяжёлая', 'Критическая'];
-                const colors = ['#27ae60', '#f39c12', '#e67e22', '#e74c3c', '#c0392b'];
-                return (
-                  <div
-                    key={sev}
-                    className={`q-seg ${result.severity === sev ? 'active' : ''}`}
-                    style={{ background: result.severity === sev ? colors[i] : '#eee' }}
-                  >
-                    {labels[i]}
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="q-recommendation">
-              <h4>💡 Рекомендация</h4>
-              <p>{result.recommendation}</p>
-            </div>
-
-            <div className="q-answers-summary">
-              <h4>Ваши ответы</h4>
-              {selectedQ.questions.map((q, i) => (
-                <div key={i} className="q-answer-row">
-                  <span className="q-a-idx">{i + 1}</span>
-                  <span className="q-a-text">{q}</span>
-                  <span className="q-a-val" style={{ color: result.color }}>{selectedQ.options[answers[i]]}</span>
+          <div className="q-severity-bar">
+            {['normal', 'mild', 'moderate', 'severe', 'critical'].map((sev, i) => {
+              const labels = ['Норма', 'Лёгкая', 'Умеренная', 'Тяжёлая', 'Критическая'];
+              const colors = ['#27ae60', '#f39c12', '#e67e22', '#e74c3c', '#c0392b'];
+              return (
+                <div
+                  key={sev}
+                  className={`q-seg ${result.severity === sev ? 'active' : ''}`}
+                  style={{ background: result.severity === sev ? colors[i] : '#eee' }}
+                >
+                  {labels[i]}
                 </div>
-              ))}
-            </div>
-
-            <div className="q-nav">
-              <button type="button" className="q-btn q-btn-secondary" onClick={() => startQuestionnaire(selectedQ)}>
-                🔄 Пройти заново
-              </button>
-              <button type="button" className="q-btn q-btn-primary" onClick={closeResults}>
-                ← К списку тестов
-              </button>
-            </div>
+              );
+            })}
           </div>
-        </motion.div>
+
+          <div className="q-recommendation">
+            <h4>💡 Рекомендация</h4>
+            <p>{result.recommendation}</p>
+          </div>
+
+          <div className="q-clinical-panel">
+            <h4>Следующие шаги</h4>
+            {renderCompactList([
+              ...(selectedQ.nextStepByScore?.low ?? []),
+              ...(selectedQ.nextStepByScore?.intermediate ?? []),
+              ...(selectedQ.nextStepByScore?.high ?? []),
+              ...(result.severity === 'critical' ? selectedQ.nextStepByScore?.critical ?? [] : []),
+            ].slice(0, 5))}
+          </div>
+
+          <div className="q-clinical-panel">
+            <h4>Ограничения интерпретации</h4>
+            {renderCompactList(selectedQ.limitations)}
+            {selectedQ.evidenceNote?.length ? (
+              <>
+                <h4>Evidence note</h4>
+                {renderCompactList(selectedQ.evidenceNote)}
+              </>
+            ) : null}
+          </div>
+
+          <div className="q-answers-summary">
+            <h4>Ваши ответы</h4>
+            {selectedQ.questions.map((q, i) => (
+              <div key={i} className="q-answer-row">
+                <span className="q-a-idx">{i + 1}</span>
+                <span className="q-a-text">{q}</span>
+                <span className="q-a-val" style={{ color: result.color }}>{selectedQ.options[answers[i]]}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="q-nav">
+            <PremiumButton
+              onClick={() => startQuestionnaire(selectedQ)}
+              variant="secondary"
+              size="md"
+              shimmer={false}
+            >
+              🔄 Пройти заново
+            </PremiumButton>
+            
+            <PremiumButton
+              onClick={closeResults}
+              variant="primary"
+              size="md"
+              shimmer={true}
+            >
+              ← К списку тестов
+            </PremiumButton>
+          </div>
+        </div>
       </motion.div>
+    </motion.div>
   );
 };
 

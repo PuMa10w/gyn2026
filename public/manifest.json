@@ -1,8 +1,9 @@
-{
-  "name": "GYN — Акушерство и Гинекология",
+﻿{
+  "name": "GYN — премиальный клинический PWA",
   "short_name": "GYN",
-  "description": "Медицинский справочник по акушерству и гинекологии с поиском нозологий, опросниками и фармакологией",
+  "description": "Премиальный клинический справочник по гинекологии и акушерству: нозологии, диагностика, лечение, фармакология и клинические шкалы.",
   "lang": "ru-RU",
+  "dir": "ltr",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,15 +21,47 @@
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "any"
     }
   ],
-  "start_url": ".",
-  "scope": ".",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "theme_color": "#e05a78",
-  "background_color": "#fdf2f5",
   "orientation": "portrait-primary",
+  "theme_color": "#100d10",
+  "background_color": "#100d10",
   "categories": ["medical", "health", "education"],
   "iarc_rating_id": "Mature",
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Гинекология",
+      "short_name": "Гинекология",
+      "description": "Открыть каталог гинекологических нозологий",
+      "url": "./?tab=gynecology",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Акушерство",
+      "short_name": "Акушерство",
+      "description": "Открыть каталог акушерских состояний",
+      "url": "./?tab=obstetrics",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Избранное",
+      "short_name": "Избранное",
+      "description": "Открыть сохранённые клинические карточки",
+      "url": "./?tab=favorites",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    }
+  ],
+  "apple_mobile_web_app_capable": "yes",
+  "apple_mobile_web_app_status_bar_style": "black-translucent"
 }
+

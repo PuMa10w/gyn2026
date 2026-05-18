@@ -1,28 +1,37 @@
-import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+﻿import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import './index.css';
 import './App.css';
+import './premium-unified.css';
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import CatalogSection from './components/CatalogSection';
 import BackgroundEffects from './components/BackgroundEffects';
 import ErrorBoundary from './components/ErrorBoundary';
+import { AnalyticsDashboard } from './components/AnalyticsDashboard';
+import { VersionChecker } from './components/VersionChecker';
 import { useDebounce } from './hooks/useDebounce';
 import { useCatalogData } from './hooks/useCatalogData';
 import { useTheme } from './hooks/useTheme';
 import { useFavorites } from './hooks/useFavorites';
 import { useHistory } from './hooks/useHistory';
+import { useToast } from './components/ToastSystem';
 import { emptyStateContent, homeActions, sectionMeta } from './config/appContent';
+import { isObstetricsLabel, repairText } from './utils/textRepair';
 import type { CategoryId, Disease, TabType } from './types';
 
+// Lazy-loaded components
 const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
 const Questionnaire = lazy(() => import('./components/Questionnaire'));
 const PharmacologyModal = lazy(() => import('./components/PharmacologyModal'));
+const MobileBottomBar = lazy(() => import('./components/MobileBottomBar').then(m => ({ default: m.MobileBottomBar })));
+const Particle3DBackground = lazy(() => import('./components/Particle3DBackground').then(m => ({ default: m.Particle3DBackground })));
+const ToastContainer = lazy(() => import('./components/ToastSystem').then(m => ({ default: m.ToastContainer })));
 
 const getIdVariants = (id: string) => {
   const trimmedId = id.trim();
   const legacyId = trimmedId.split('__')[0];
-
   return trimmedId === legacyId ? [trimmedId] : [trimmedId, legacyId];
 };
 
@@ -40,26 +49,44 @@ const LoadingSpinner = ({ prefersReducedMotion }: { prefersReducedMotion: boolea
   </motion.div>
 );
 
+const resetViewportScroll = () => {
+  window.scrollTo({ top: 0, behavior: 'auto' });
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+};
+
+const settleViewportScroll = () => {
+  resetViewportScroll();
+  window.requestAnimationFrame(resetViewportScroll);
+  window.setTimeout(resetViewportScroll, 0);
+  window.setTimeout(resetViewportScroll, 80);
+  window.setTimeout(resetViewportScroll, 220);
+};
+
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
+  const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState<Disease | null>(null);
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showFavorites, setShowFavorites] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
   const [showPharmacology, setShowPharmacology] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isOnline, setIsOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
+  const [isMobileViewport, setIsMobileViewport] = useState(() => (typeof window === 'undefined' ? false : window.innerWidth <= 768));
   const prefersReducedMotion = useReducedMotion();
 
   const { theme, toggleTheme } = useTheme();
   const { toggleFavorite, isFavorite, favorites } = useFavorites();
   const { history, addToHistory } = useHistory();
+  const { toasts, addToast, removeToast } = useToast();
   const debouncedSearch = useDebounce(searchTerm, 300);
 
   const normalizedSearch = debouncedSearch.trim().toLowerCase();
   const favoriteIds = useMemo(() => new Set(favorites.flatMap(getIdVariants)), [favorites]);
   const historyIds = useMemo(() => new Set(history.flatMap((item) => getIdVariants(item.id))), [history]);
+  const resetActiveCategory = useCallback(() => setActiveCategory('all'), []);
 
   const { isDataLoading, visibleCategories, categoryCounts, filteredData, error, retry } = useCatalogData({
     activeTab,
@@ -69,7 +96,7 @@ function App() {
     normalizedSearch,
     showFavorites,
     showHistory,
-    onInvalidCategory: () => setActiveCategory('all'),
+    onInvalidCategory: resetActiveCategory,
   });
 
   const showHome = activeTab === 'home';
@@ -103,6 +130,31 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const updateOnlineState = () => setIsOnline(navigator.onLine);
+    window.addEventListener('online', updateOnlineState);
+    window.addEventListener('offline', updateOnlineState);
+    updateOnlineState();
+
+    return () => {
+      window.removeEventListener('online', updateOnlineState);
+      window.removeEventListener('offline', updateOnlineState);
+    };
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const updateViewport = () => setIsMobileViewport(mediaQuery.matches);
+    updateViewport();
+    mediaQuery.addEventListener('change', updateViewport);
+
+    return () => mediaQuery.removeEventListener('change', updateViewport);
+  }, []);
+
+  useLayoutEffect(() => {
+    settleViewportScroll();
+  }, [activeTab, showFavorites, showHistory]);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
@@ -117,57 +169,76 @@ function App() {
     setShowFavorites(false);
     setShowHistory(false);
     resetCatalogState();
+    settleViewportScroll();
   };
 
   const handleFavoritesToggle = () => {
     const nextValue = !showFavorites;
-
     if (activeTab === 'home') setActiveTab('gynecology');
-
     setShowFavorites(nextValue);
     setShowHistory(false);
     resetCatalogState();
+    settleViewportScroll();
   };
 
   const handleHistoryToggle = () => {
     const nextValue = !showHistory;
-
     if (activeTab === 'home') setActiveTab('gynecology');
-
     setShowHistory(nextValue);
     setShowFavorites(false);
     resetCatalogState();
+    settleViewportScroll();
   };
 
   const handleItemClick = (item: Disease) => {
     setSelectedItem(item);
     addToHistory(item);
+    addToast({
+      message: `Открыта карточка: ${repairText(item.name)}`,
+      type: 'success',
+      duration: 3000,
+    });
+  };
+
+  const handleRecentOpen = (item: (typeof history)[number]) => {
+    const targetTab = isObstetricsLabel(item.subtitle) ? 'obstetrics' : 'gynecology';
+    setActiveTab(targetTab);
+    setShowFavorites(false);
+    setShowHistory(false);
+    setSearchTerm(repairText(item.name));
+    settleViewportScroll();
   };
 
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>GYN — премиальный клинический справочник по гинекологии и акушерству</title>
+        <title>GYN — премиальный клинический PWA по гинекологии и акушерству</title>
         <meta
           name="description"
-          content="Премиальный клинический справочник по гинекологии и акушерству: нозологии, диагностика, лечение, фармакология и опросники."
+          content="GYN: премиальный клинический справочник по гинекологии и акушерству с нозологиями, алгоритмами диагностики, лечением, фармакологией, шкалами и iPhone-first PWA интерфейсом."
         />
         <meta
           name="keywords"
-          content="гинекология, акушерство, клинический справочник, нозологии, диагностика, лечение, фармакология"
+          content="гинекология, акушерство, клинический справочник, нозологии, диагностика, лечение, фармакология, шкалы, PWA"
         />
-        <meta property="og:title" content="GYN — премиальный клинический справочник" />
+        <meta property="og:title" content="GYN — премиальный клинический PWA" />
         <meta
           property="og:description"
-          content="Гинекология и акушерство в едином спокойном, читабельном и премиальном интерфейсе."
+          content="Гинекология, акушерство, фармакология и клинические шкалы в едином мобильном справочнике."
         />
         <meta property="og:type" content="website" />
+        <meta name="theme-color" content="#100d10" />
       </Helmet>
 
-      <div className="App">
+      <div className="App page-transition">
         <a className="skip-link" href="#main-content">
           Перейти к основному содержанию
         </a>
+
+        {/* 3D Particle Background (Wow-effect) */}
+        <Suspense fallback={null}>
+          <Particle3DBackground particleCount={prefersReducedMotion ? 0 : isMobileViewport ? 26 : 80} color="#14b8a6" />
+        </Suspense>
 
         <BackgroundEffects />
 
@@ -194,7 +265,7 @@ function App() {
                 openQuestionnaire={() => setShowQuestionnaire(true)}
                 openPharmacology={() => setShowPharmacology(true)}
                 recentItems={history.slice(0, 4)}
-                onRecentOpen={() => {}}
+                onRecentOpen={handleRecentOpen}
                 onFavoritesOpen={handleFavoritesToggle}
                 onHistoryOpen={handleHistoryToggle}
                 favoriteCount={favorites.length}
@@ -221,8 +292,25 @@ function App() {
             )}
           </AnimatePresence>
 
+          <VersionChecker currentVersion="1.0.0" />
+
+          {!isOnline && (
+            <section className="premium-offline-state" role="status" aria-live="polite">
+              <strong>Офлайн-режим</strong>
+              <span>Справочник остаётся доступным из PWA-кэша; новые обновления загрузятся после восстановления сети.</span>
+            </section>
+          )}
+
+          <motion.section
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, ease: 'easeOut' }}
+          >
+            <AnalyticsDashboard />
+          </motion.section>
+
           <footer className="site-footer">
-            <p>© Puma10w</p>
+            <p>© Puma10w • Премиальный медицинский справочник</p>
           </footer>
         </main>
 
@@ -232,9 +320,30 @@ function App() {
           {showPharmacology && <PharmacologyModal onClose={() => setShowPharmacology(false)} />}
         </Suspense>
 
+        {/* Mobile Bottom Bar */}
+        <Suspense fallback={null}>
+          <MobileBottomBar
+            currentPath={showFavorites ? '/bookmarks' : `/${activeTab === 'home' ? '' : activeTab}`}
+            onNavigate={(path) => {
+              if (path === '/bookmarks') {
+                handleFavoritesToggle();
+                return;
+              }
+
+              const tab = path === '/' ? 'home' : path.replace('/', '') as TabType;
+              handleTabChange(tab);
+            }}
+          />
+        </Suspense>
+
+        {/* Toast Container */}
+        <Suspense fallback={null}>
+          <ToastContainer toasts={toasts} onRemove={removeToast} />
+        </Suspense>
+
         {showScrollTop && !showHome && (
           <motion.button
-            className="scroll-top-btn"
+            className="scroll-top-btn glass glow-turquoise"
             onClick={scrollToTop}
             initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.9 }}
             animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
@@ -244,7 +353,7 @@ function App() {
             aria-label="Наверх"
             title="Наверх"
           >
-            Вверх
+            ↑
           </motion.button>
         )}
       </div>
@@ -253,3 +362,4 @@ function App() {
 }
 
 export default App;
+

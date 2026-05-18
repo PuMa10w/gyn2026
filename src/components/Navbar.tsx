@@ -1,5 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
+import { PremiumButton } from './PremiumButton';
 import type { ThemeMode } from '../hooks/useTheme';
 import type { TabType } from '../types';
 
@@ -16,6 +17,8 @@ interface NavbarProps {
   onHistoryToggle: () => void;
 }
 
+const navTransition = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+
 const Navbar = React.memo(function Navbar({
   activeTab,
   onTabChange,
@@ -29,79 +32,60 @@ const Navbar = React.memo(function Navbar({
   onHistoryToggle,
 }: NavbarProps) {
   return (
-    <motion.nav className="navbar" initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} aria-label="Главная навигация">
+    <motion.nav
+      className="navbar glass"
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={navTransition}
+      aria-label="Главная навигация"
+      style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)' }}
+    >
       <div className="navbar-inner">
         <div className="navbar-topline">
-          <button type="button" className="navbar-brand" onClick={() => onTabChange('home')} aria-label="Перейти на главную">
-            <span className="navbar-brand-mark">GYN</span>
+          <button
+            type="button"
+            className="navbar-brand group"
+            onClick={() => onTabChange('home')}
+            aria-label="Перейти на главную"
+          >
+            <span className="navbar-brand-mark text-gradient-animated">GYN</span>
             <span className="navbar-brand-copy">
-              <strong>Clinical Desk</strong>
+              <strong>Клинический справочник</strong>
               <span>гинекология и акушерство</span>
             </span>
           </button>
 
-          <button
-            type="button"
-            className="theme-toggle navbar-theme-toggle"
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на тёмную тему'}
-            title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
-          >
-            Тема
-          </button>
+          <PremiumButton onClick={toggleTheme} variant="ghost" size="sm" className="navbar-theme-toggle" shimmer={false}>
+            {theme === 'dark' ? 'Светлая' : 'Тёмная'}
+          </PremiumButton>
 
           <div className="navbar-actions" role="toolbar" aria-label="Быстрые действия">
-            <button type="button" className="nav-item nav-utility-item" onClick={onQuestionnaires} aria-label="Открыть опросники">
+            <PremiumButton onClick={onQuestionnaires} variant="secondary" size="sm" shimmer={false} aria-label="Открыть опросники">
               Шкалы
-            </button>
-            <button type="button" className="nav-item nav-utility-item" onClick={onPharmacology} aria-label="Открыть фармакологию">
+            </PremiumButton>
+            <PremiumButton onClick={onPharmacology} variant="secondary" size="sm" shimmer={false} aria-label="Открыть фармакологию">
               Фарма
-            </button>
-            <button
-              type="button"
-              className={`nav-item nav-utility-item ${showFavorites ? 'is-active' : ''}`}
-              onClick={onFavoritesToggle}
-              aria-pressed={showFavorites}
-            >
-              Избранное
-            </button>
-            <button
-              type="button"
-              className={`nav-item nav-utility-item ${showHistory ? 'is-active' : ''}`}
-              onClick={onHistoryToggle}
-              aria-pressed={showHistory}
-            >
-              История
-            </button>
+            </PremiumButton>
+            <PremiumButton onClick={onFavoritesToggle} variant={showFavorites ? 'primary' : 'ghost'} size="sm" shimmer={false} aria-label="Избранное">
+              {showFavorites ? 'Скрыть избранное' : 'Избранное'}
+            </PremiumButton>
+            <PremiumButton onClick={onHistoryToggle} variant={showHistory ? 'primary' : 'ghost'} size="sm" shimmer={false} aria-label="История">
+              {showHistory ? 'Скрыть историю' : 'История'}
+            </PremiumButton>
           </div>
         </div>
 
         <div className="nav-row nav-row-primary" aria-label="Основные разделы">
-          <div className="nav-scroll">
-            <button
-              type="button"
-              className={`nav-item nav-primary-item ${activeTab === 'home' ? 'is-active' : ''}`}
-              onClick={() => onTabChange('home')}
-              aria-current={activeTab === 'home' ? 'page' : undefined}
-            >
+          <div className="nav-scroll flex gap-2 p-2">
+            <PremiumButton onClick={() => onTabChange('home')} variant={activeTab === 'home' ? 'primary' : 'ghost'} shimmer={false}>
               Главная
-            </button>
-            <button
-              type="button"
-              className={`nav-item nav-primary-item ${activeTab === 'gynecology' ? 'is-active' : ''}`}
-              onClick={() => onTabChange('gynecology')}
-              aria-current={activeTab === 'gynecology' ? 'page' : undefined}
-            >
+            </PremiumButton>
+            <PremiumButton onClick={() => onTabChange('gynecology')} variant={activeTab === 'gynecology' ? 'primary' : 'ghost'} shimmer={false}>
               Гинекология
-            </button>
-            <button
-              type="button"
-              className={`nav-item nav-primary-item ${activeTab === 'obstetrics' ? 'is-active' : ''}`}
-              onClick={() => onTabChange('obstetrics')}
-              aria-current={activeTab === 'obstetrics' ? 'page' : undefined}
-            >
+            </PremiumButton>
+            <PremiumButton onClick={() => onTabChange('obstetrics')} variant={activeTab === 'obstetrics' ? 'primary' : 'ghost'} shimmer={false}>
               Акушерство
-            </button>
+            </PremiumButton>
           </div>
         </div>
       </div>

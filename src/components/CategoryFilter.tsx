@@ -25,7 +25,12 @@ const CategoryFilter = React.memo(function CategoryFilter({
   visibleCategories,
 }: CategoryFilterProps) {
   return (
-    <motion.div className="category-filter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }}>
+    <motion.div
+      className="category-filter"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.12, duration: 0.28, ease: 'easeOut' }}
+    >
       <div className="category-chips" role="toolbar" aria-label="Фильтр по категориям">
         {categories
           .filter((category) => visibleCategories.includes(category.id))

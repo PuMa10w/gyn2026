@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
+
+type HistorySubtitle = 'Гинекология' | 'Акушерство' | 'Р“РёРЅРµРєРѕР»РѕРіРёСЏ' | 'РђРєСѓС€РµСЂСЃС‚РІРѕ';
 
 interface HistoryDisease {
   id: string;
   name: string;
   icd: string;
-  subtitle?: 'Гинекология' | 'Акушерство';
+  subtitle?: HistorySubtitle;
 }
 
 export interface HistoryItem extends HistoryDisease {

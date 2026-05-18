@@ -1,3 +1,5 @@
+import { enrichMedications } from '../utils/enrichClinicalTools.js';
+
 const baseMedications = [
   {
     id: "progesterone",
@@ -2050,6 +2052,6 @@ const dedupeById = (items) => {
   });
 };
 
-export const medications = dedupeById([...baseMedications, ...rawCommonRegimens.filter((entry) => !isRegimenEntry(entry))]);
+export const medications = enrichMedications(dedupeById([...baseMedications, ...rawCommonRegimens.filter((entry) => !isRegimenEntry(entry))]));
 
 export const commonRegimens = dedupeById(rawCommonRegimens.filter(isRegimenEntry));
