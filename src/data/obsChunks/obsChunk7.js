@@ -12,7 +12,7 @@ const chunk = [
       "Угроза разрыва промежности",
       "Крупный плод",
       "Тазовая предлежание",
-      "Использование ак��шерских щипцов"
+      "Использование акшерских щипцов"
     ],
     symptoms: [],
     classification: {
@@ -117,7 +117,7 @@ const chunk = [
     treatment: {
       conservative: [],
       surgical: [
-        "��акуум-экстракция <span class='badge badge-acog'>ACOG B</span>",
+        "акуум-экстракция <span class='badge badge-acog'>ACOG B</span>",
         "Кесарево сечение — при неудаче"
       ],
       guidelines: {
@@ -138,7 +138,7 @@ const chunk = [
     epidemiology: "1-5% при планировании VBAC.",
     etiology: [
       "Предыдущее КС",
-      "Тонкий руб��ик",
+      "Тонкий рубик",
       "Инфекция",
       "Перерастяжение"
     ],

@@ -48,9 +48,12 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
     "audit:content": "node scripts/content-quality-audit.mjs",
+    "audit:mojibake:source": "node scripts/source-mojibake-audit.mjs",
     "audit:iphone": "node scripts/iphone-audit.mjs",
+    "audit:iphone:overlap": "node scripts/iphone-overlap-audit.mjs",
     "audit:a11y": "node scripts/accessibility-smoke.mjs",
-    "verify:premium": "npm run typecheck && npm run test:run && npm run audit:content -- --strict && npm run build && npm run audit:iphone && npm run audit:a11y && npm run audit:visual:iphone",
+    "verify:premium": "npm run typecheck && npm run test:run && npm run audit:content -- --strict && npm run audit:mojibake:source && npm run build && npm run audit:iphone && npm run audit:iphone:overlap && npm run audit:a11y && npm run audit:visual:iphone",
+    "verify:release": "npm run verify:premium",
     "audit:visual:iphone": "node scripts/iphone-visual-audit.mjs"
   },
   "eslintConfig": {

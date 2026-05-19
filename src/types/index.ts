@@ -195,9 +195,7 @@ export interface DiseaseSourceConfidence {
 
 export type DiseaseSubtitle =
   | 'Гинекология'
-  | 'Акушерство'
-  | 'Р“РёРЅРµРєРѕР»РѕРіРёСЏ'
-  | 'РђРєСѓС€РµСЂСЃС‚РІРѕ';
+  | 'Акушерство';
 
 export interface Disease {
   id: string;

@@ -367,7 +367,7 @@ const rawQuestionnaires = [
       "Насколько Вы ограничены в физической активности?",
       "Как часто Вы испытывали боль в груди?",
       "Насколько чувствительна или болезненна была Ваша грудь?",
-      "��ак Вы оцениваете результат операции на грудь?",
+      "Как Вы оцениваете результат операции на грудь?",
       "Насколько Вы удовлетворены информированием о лечении?"
     ],
     options: ["0 — Совсем нет", "1 — Немного", "2 — Умеренно", "3 — Очень", "4 — Полностью"],
@@ -468,7 +468,7 @@ const rawQuestionnaires = [
     scoring: (answers) => {
       const score = answers[0] || 0;
       if (score <= 2) return { level: "Слабая боль", severity: "normal", color: "#27ae60", recommendation: "Наблюдение. НПВС при необходимости." };
-      if (score <= 4) return { level: "Умеренная боль", severity: "mild", color: "#f39c12", recommendation: "НПВС. Оценка через 30 ми��ут." };
+      if (score <= 4) return { level: "Умеренная боль", severity: "mild", color: "#f39c12", recommendation: "НПВС. Оценка через 30 минут." };
       if (score <= 6) return { level: "Сильная боль", severity: "moderate", color: "#e67e22", recommendation: "Комбинированная аналгезия. Консультация." };
       if (score <= 8) return { level: "Очень сильная боль", severity: "severe", color: "#e74c3c", recommendation: "Сильные анальгетики. Оценка причины." };
       return { level: "Нестерпимая боль", severity: "critical", color: "#c0392b", recommendation: "Немедленная помощь. Исключить острую патологию." };
@@ -516,7 +516,7 @@ const rawQuestionnaires = [
       const total = answers.reduce((a, b) => a + b, 0);
       if (total <= 4) return { level: "Нет дисменореи", severity: "normal", color: "#27ae60", recommendation: "Наблюдение." };
       if (total <= 8) return { level: "Лёгкая дисменорея", severity: "mild", color: "#f39c12", recommendation: "НПВС при необходимости." };
-      if (total <= 12) return { level: "Умеренная дисменор��я", severity: "moderate", color: "#e67e22", recommendation: "НПВС. Обследование." };
+      if (total <= 12) return { level: "Умеренная дисменорея", severity: "moderate", color: "#e67e22", recommendation: "НПВС. Обследование." };
       return { level: "Тяжёлая дисменорея", severity: "severe", color: "#e74c3c", recommendation: "Обследование (УЗИ, гормоны). Исключить эндометриоз." };
     }
   }

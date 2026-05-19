@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 
-type HistorySubtitle = 'Гинекология' | 'Акушерство' | 'Р“РёРЅРµРєРѕР»РѕРіРёСЏ' | 'РђРєСѓС€РµСЂСЃС‚РІРѕ';
+type HistorySubtitle = 'Гинекология' | 'Акушерство';
 
 interface HistoryDisease {
   id: string;

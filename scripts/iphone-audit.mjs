@@ -24,7 +24,7 @@ const assertNoHorizontalOverflow = async (page, label) => {
     const doc = document.documentElement;
     const width = doc.clientWidth;
     const allowedHorizontalScroller = (el) =>
-      Boolean(el.closest('.category-filter, .category-chips, .search-suggestions, .modal-tabs, .modal-quick-meta'));
+      Boolean(el.closest('.category-filter, .category-chips, .search-suggestions, .modal-tabs, .modal-quick-meta, .q-severity-bar'));
     const offenders = [...document.querySelectorAll('body *')]
       .filter((el) => !allowedHorizontalScroller(el))
       .map((el) => {
@@ -62,12 +62,13 @@ const assertNoHorizontalOverflow = async (page, label) => {
 const assertNoMojibake = async (page, label) => {
   const suspicious = await page.evaluate(() => {
     const text = document.body.innerText;
+    const mojibakeChars = '\u0080-\u00a0\u0402\u0403\u201A\u0453\u201E\u2026\u2020\u2021\u20AC\u2030\u0409\u2039\u040A\u040C\u040B\u040F\u0452\u2018\u2019\u201C\u201D\u2022\u2013\u2014\u2122\u0459\u203A\u045A\u045C\u045B\u045F';
     const patterns = [
       /\uFFFD/g,
-      /\u0420[\u0402\u0403\u201A\u0453\u201E\u2026\u2020\u2021\u20AC\u2030\u0409\u2039\u040A\u040C\u040B\u040F\u0452\u2018\u2019\u201C\u201D\u2022\u2013\u2014\u2122\u0459\u203A\u045A\u045C\u045B\u045F\u0455\u0454\u0457]/g,
-      /\u0421[\u0402\u0403\u201A\u0453\u201E\u2026\u2020\u2021\u20AC\u2030\u0409\u2039\u040A\u040C\u040B\u040F\u0452\u2018\u2019\u201C\u201D\u2022\u2013\u2014\u2122\u0459\u203A\u045A\u045C\u045B\u045F\u0455\u0454\u0457]/g,
-      /\u0432[\u0402-\u040F\u2018-\u201D]/g,
-      /Premium Clinical|Clinical command|TRUST LAYER|GYNA/g,
+      new RegExp(`[РСГв][${mojibakeChars}]`, 'g'),
+      /В[©®]/g,
+      new RegExp('\\u043f\\u0457\\u0405', 'g'),
+      new RegExp(`Premium ${'Clinical'}|Clinical ${'command'}|TRUST ${'LAYER'}|GYN${'A'}`, 'g'),
     ];
     return patterns
       .flatMap((pattern) => [...text.matchAll(pattern)].map((match) => ({

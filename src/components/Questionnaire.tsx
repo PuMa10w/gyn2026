@@ -466,6 +466,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           </div>
 
           <div className="q-recommendation">
+            <h4>Профессиональное заключение</h4>
+            <p>
+              Итог шкалы требует клинической интерпретации вместе с анамнезом, осмотром,
+              факторами риска и клинической безопасностью пациентки.
+            </p>
+          </div>
+
+          <div className="q-recommendation">
             <h4>Рекомендация</h4>
             <p>{result.recommendation}</p>
           </div>

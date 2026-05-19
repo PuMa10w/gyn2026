@@ -33,16 +33,16 @@ const allowedInlineBadgeClasses = new Set(['badge-eau', 'badge-acog', 'badge-ran
 
 const tabs = [
   { id: 'quick', label: 'Кратко' },
-  { id: 'overview', label: 'Обзор' },
   { id: 'diagnostics', label: 'Диагностика' },
   { id: 'ultrasound', label: 'УЗИ' },
   { id: 'treatment', label: 'Лечение' },
   { id: 'management', label: 'Ведение' },
-  { id: 'guidelines', label: 'Рекомендации' },
+  { id: 'overview', label: 'Обзор' },
+  { id: 'patient-memo', label: 'Пациентке' },
+  { id: 'guidelines', label: 'Источники' },
   { id: 'ai-assistant', label: 'AI помощник' },
   { id: '3d-atlas', label: '3D атлас' },
   { id: 'symptom-checker', label: 'AI-диагност' },
-  { id: 'patient-memo', label: 'Памятка' },
   { id: 'pubmed', label: 'PubMed' },
 ] as const;
 

@@ -1855,3 +1855,416 @@ body::after,
     flex-direction: column;
   }
 }
+
+/* Premium V4 iPhone safety layer. Kept at the end intentionally to neutralize
+   older mobile overrides without changing protected navigation components. */
+:root {
+  --mobile-bottom-bar-height: 96px;
+  --mobile-readable-gap: 28px;
+}
+
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .page-content {
+    padding-bottom: calc(var(--mobile-bottom-bar-height) + var(--mobile-readable-gap) + env(safe-area-inset-bottom)) !important;
+  }
+
+  .home-shell,
+  .cards-grid,
+  .version-checker,
+  .premium-offline-state,
+  .site-footer {
+    margin-bottom: 0 !important;
+  }
+
+  .site-footer {
+    padding-bottom: calc(var(--mobile-bottom-bar-height) + env(safe-area-inset-bottom)) !important;
+  }
+
+  .mobile-bottom-bar {
+    min-height: calc(var(--mobile-bottom-bar-height) + env(safe-area-inset-bottom)) !important;
+    background:
+      linear-gradient(180deg, rgba(25, 20, 24, 0.76), rgba(18, 14, 18, 0.96)),
+      rgba(18, 14, 18, 0.92) !important;
+    box-shadow: 0 -18px 45px rgba(14, 10, 13, 0.32) !important;
+  }
+
+  .mobile-bottom-items {
+    min-height: var(--mobile-bottom-bar-height) !important;
+    padding: 0.55rem max(0.75rem, env(safe-area-inset-right)) calc(0.58rem + env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left)) !important;
+  }
+
+  .mobile-bottom-item {
+    min-height: 58px !important;
+  }
+
+  .catalog-shell {
+    min-height: auto !important;
+    gap: 0.48rem !important;
+    padding: 0.82rem 1rem 0.55rem !important;
+  }
+
+  .catalog-header {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .catalog-title {
+    margin-bottom: 0.28rem !important;
+    font-size: clamp(1.5rem, 7.5vw, 2rem) !important;
+    line-height: 0.98 !important;
+  }
+
+  .catalog-description {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+    margin-bottom: 0.45rem !important;
+    font-size: 0.86rem !important;
+    line-height: 1.38 !important;
+  }
+
+  .catalog-controls {
+    gap: 0.42rem !important;
+    margin-top: 0 !important;
+    position: relative !important;
+    z-index: 30 !important;
+  }
+
+  .catalog-eyebrow {
+    margin-bottom: 0.24rem !important;
+    font-size: 0.62rem !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .search-input {
+    min-height: 48px !important;
+    padding-top: 0.72rem !important;
+    padding-bottom: 0.72rem !important;
+  }
+
+  .search-input-wrapper {
+    position: relative !important;
+    z-index: 31 !important;
+    border: 1px solid rgba(218, 184, 122, 0.28) !important;
+    background: #fffaf2 !important;
+    box-shadow: 0 18px 40px rgba(18, 13, 16, 0.32) !important;
+  }
+
+  .search-input {
+    color: #241a1e !important;
+    -webkit-text-fill-color: #241a1e !important;
+  }
+
+  .search-input::placeholder {
+    color: rgba(36, 26, 30, 0.64) !important;
+    -webkit-text-fill-color: rgba(36, 26, 30, 0.64) !important;
+  }
+
+  .search-suggestions {
+    margin-top: 0.36rem !important;
+    gap: 0.38rem !important;
+    padding-bottom: 0 !important;
+  }
+
+  .search-suggestion-chip {
+    min-height: 38px !important;
+    max-width: min(180px, 58vw) !important;
+    padding: 0.46rem 0.62rem !important;
+    border-radius: 14px !important;
+  }
+
+  .search-suggestion-chip small {
+    display: none !important;
+  }
+
+  .category-filter {
+    position: relative !important;
+    z-index: 30 !important;
+    display: block !important;
+    width: calc(100vw - 2rem) !important;
+    margin: 0 auto !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x proximity !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x !important;
+    mask-image: linear-gradient(90deg, transparent 0, #000 0.8rem, #000 calc(100% - 2.2rem), transparent 100%);
+  }
+
+  .category-filter::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .category-chips {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 0.55rem !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    padding: 0.06rem 1.5rem 0.08rem 0 !important;
+  }
+
+  .category-chip {
+    flex: 0 0 auto !important;
+    min-height: 40px !important;
+    padding-top: 0.55rem !important;
+    padding-bottom: 0.55rem !important;
+    scroll-snap-align: start !important;
+    white-space: nowrap !important;
+  }
+
+  .cards-grid {
+    margin-top: calc(var(--mobile-bottom-bar-height) + 0.75rem) !important;
+  }
+
+  .modal-overlay {
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .modal-content.mobile-sheet,
+  .questionnaire-modal.mobile-sheet,
+  .pharmacology-modal.mobile-sheet {
+    position: fixed !important;
+    inset: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: var(--ui-surface) !important;
+  }
+
+  .modal-content.mobile-sheet .modal-drag-indicator {
+    position: fixed !important;
+    top: calc(env(safe-area-inset-top) + 0.35rem) !important;
+    z-index: 100 !important;
+  }
+
+  .modal-content.mobile-sheet .modal-header,
+  .questionnaire-modal.mobile-sheet .modal-header,
+  .pharmacology-modal.mobile-sheet .modal-header {
+    position: relative !important;
+    top: auto !important;
+    z-index: 30 !important;
+    flex: 0 0 auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: calc(env(safe-area-inset-top) + 1rem) calc(env(safe-area-inset-right) + 0.9rem) 0.72rem calc(env(safe-area-inset-left) + 0.9rem) !important;
+    border-bottom: 1px solid var(--ui-line) !important;
+    background:
+      linear-gradient(180deg, rgba(251, 248, 242, 0.98), rgba(246, 241, 234, 0.96)) !important;
+    color: var(--ui-ink) !important;
+    box-shadow: 0 10px 28px rgba(35, 26, 30, 0.08) !important;
+  }
+
+  [data-theme='dark'] .modal-content.mobile-sheet .modal-header,
+  [data-theme='dark'] .questionnaire-modal.mobile-sheet .modal-header,
+  [data-theme='dark'] .pharmacology-modal.mobile-sheet .modal-header {
+    background:
+      linear-gradient(180deg, rgba(31, 25, 30, 0.98), rgba(24, 19, 23, 0.96)) !important;
+    color: var(--ui-text) !important;
+  }
+
+  .modal-content.mobile-sheet .modal-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+  }
+
+  .modal-title {
+    white-space: normal !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+  }
+
+  .modal-content.mobile-sheet .modal-quick-strip {
+    position: relative !important;
+    top: auto !important;
+    z-index: 24 !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    max-height: 108px !important;
+    overflow: hidden !important;
+  }
+
+  .modal-content.mobile-sheet .modal-tabs,
+  .pharma-tabs {
+    position: relative !important;
+    top: auto !important;
+    z-index: 22 !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    min-height: 52px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x proximity !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x !important;
+  }
+
+  .modal-tabs::-webkit-scrollbar,
+  .pharma-tabs::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .modal-content.mobile-sheet .modal-body,
+  .pharmacology-modal.mobile-sheet .pharma-content {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-top: 1rem !important;
+    padding-bottom: calc(var(--mobile-bottom-bar-height) + 2rem + env(safe-area-inset-bottom)) !important;
+    scroll-padding-top: 1rem !important;
+    scroll-padding-bottom: calc(var(--mobile-bottom-bar-height) + env(safe-area-inset-bottom)) !important;
+  }
+
+  .questionnaire-modal.mobile-sheet {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-padding-bottom: calc(var(--mobile-bottom-bar-height) + env(safe-area-inset-bottom)) !important;
+  }
+
+  .questionnaire-modal.mobile-sheet .q-list,
+  .questionnaire-modal.mobile-sheet .q-history,
+  .questionnaire-modal.mobile-sheet .q-clinical-panel,
+  .questionnaire-modal.mobile-sheet .q-steps,
+  .questionnaire-modal.mobile-sheet .q-question,
+  .questionnaire-modal.mobile-sheet .q-options,
+  .questionnaire-modal.mobile-sheet .q-result {
+    padding-left: max(1rem, env(safe-area-inset-left)) !important;
+    padding-right: max(1rem, env(safe-area-inset-right)) !important;
+  }
+
+  .questionnaire-modal.mobile-sheet .q-result {
+    padding-top: 1rem !important;
+    padding-bottom: calc(var(--mobile-bottom-bar-height) + 2.2rem + env(safe-area-inset-bottom)) !important;
+  }
+
+  .questionnaire-modal.mobile-sheet .q-nav {
+    position: static !important;
+    bottom: auto !important;
+    margin-top: 1rem !important;
+    padding-bottom: calc(0.85rem + env(safe-area-inset-bottom)) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .questionnaire-modal.mobile-sheet .q-result .q-nav {
+    position: static !important;
+    padding: 0 !important;
+    margin-top: 1rem !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .q-result-badge {
+    border: 1px solid rgba(218, 184, 122, 0.34) !important;
+    background:
+      radial-gradient(circle at 18% 0%, rgba(218, 184, 122, 0.28), transparent 34%),
+      linear-gradient(135deg, rgba(255, 252, 248, 0.96), rgba(239, 230, 216, 0.92)) !important;
+    color: #22191d !important;
+    box-shadow: 0 18px 38px rgba(48, 34, 34, 0.16) !important;
+  }
+
+  .q-result-level {
+    color: #22191d !important;
+  }
+
+  .q-result-score {
+    color: rgba(34, 25, 29, 0.78) !important;
+  }
+
+  .q-severity-bar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .q-severity-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .q-seg {
+    flex: 0 0 auto !important;
+    min-width: 92px !important;
+    border-radius: 999px !important;
+  }
+
+  .pharmacology-modal.mobile-sheet > .modal-close {
+    position: absolute !important;
+    top: calc(env(safe-area-inset-top) + 0.85rem) !important;
+    right: calc(env(safe-area-inset-right) + 0.85rem) !important;
+    z-index: 90 !important;
+  }
+
+  .regimen-table,
+  .regimen-table tbody,
+  .regimen-table tr,
+  .regimen-table td {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .regimen-table thead {
+    display: none !important;
+  }
+
+  .regimen-table tr {
+    border: 1px solid var(--ui-line) !important;
+    border-radius: 18px !important;
+    padding: 0.8rem !important;
+    margin-bottom: 0.7rem !important;
+    background: rgba(255, 255, 255, 0.045) !important;
+  }
+
+  .regimen-table td {
+    border: 0 !important;
+    padding: 0.3rem 0 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .premium-inline-action,
+  .version-actions .premium-button,
+  .q-nav .premium-button,
+  .pharma-tab {
+    min-height: 44px !important;
+    border-radius: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
