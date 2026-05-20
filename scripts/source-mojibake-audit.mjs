@@ -12,8 +12,19 @@ const allowedFiles = new Set([
 ]);
 const textExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.json', '.html', '.css', '.md', '.cjs', '.mjs']);
 const legacyEnglishPattern = /Premium Clinical|Clinical command|TRUST LAYER|GYNA/g;
-const obviousBrokenPattern = /вЂ|В[©®]|пїЅ|�/g;
-const encodedLatinPattern = /[ÐÑÂâ][\u0080-\u00ff\u201a-\u201e\u2020-\u2022\u2013\u2014\u2030\u2039\u203a\u20ac\u2122]/g;
+const obviousBrokenPattern = new RegExp([
+  '\\u0420\\u045f',
+  '\\u0420\\u00a0',
+  '\\u0420\\u2014',
+  '\\u0420\\u00a4',
+  '\\u0432\\u0402',
+  '\\u0413\\u2014',
+  '\\u0440\\u045f',
+  '\\u0412[\\u00a9\\u00ae]',
+  '\\u043f\\u0457\\u0405',
+  '\\ufffd',
+].join('|'), 'g');
+const encodedLatinPattern = new RegExp('[\\u00d0\\u00d1\\u00c2\\u00e2][\\u0080-\\u00ff\\u201a-\\u201e\\u2020-\\u2022\\u2013\\u2014\\u2030\\u2039\\u203a\\u20ac\\u2122]', 'g');
 
 async function walk(dir, files = []) {
   const entries = await fs.readdir(dir, { withFileTypes: true });

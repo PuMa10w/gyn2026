@@ -1,93 +1,163 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-// Полный список кодов МКБ-10 (Гинекология + Акушерство)
-// Гинекология: N70-N99 (воспалительные, N80-N98 - другие)
-const GYN_RANGE = [];
-for (let i = 70; i <= 99; i++) {
-  GYN_RANGE.push(`N${i}`);
-  // Добавляем подкатегории для основных
-  if (i === 70 || i === 71 || i === 73 || i === 74 || i === 75 || i === 76 || i === 80 || i === 81 || i === 82 || i === 83 || i === 84 || i === 85 || i === 89 || i === 90 || i === 91 || i === 92 || i === 93 || i === 94 || i === 95 || i === 96 || i === 97 || i === 98 || i === 99) {
-    for (let j = 0; j <= 9; j++) {
-      GYN_RANGE.push(`N${i}.${j}`);
-    }
-  }
-}
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(__dirname, '..');
+const strict = process.argv.includes('--strict');
 
-// Акушерство: O00-O99
-const OBS_RANGE = [];
-for (let i = 0; i <= 99; i++) {
-  const code = i < 10 ? `O0${i}` : `O${i}`;
-  OBS_RANGE.push(code);
-  // Подкатегории для основных
-  if (i === 10 || i === 11 || i === 12 || i === 13 || i === 14 || i === 15 || i === 20 || i === 21 || i === 24 || i === 30 || i === 32 || i === 33 || i === 34 || i === 35 || i === 36 || i === 40 || i === 41 || i === 42 || i === 43 || i === 44 || i === 45 || i === 47 || i === 48 || i === 60 || i === 62 || i === 64 || i === 66 || i === 68 || i === 70 || i === 72 || i === 73 || i === 74 || i === 80 || i === 82 || i === 85 || i === 86 || i === 87 || i === 88 || i === 90 || i === 91 || i === 98 || i === 99) {
-    for (let j = 0; j <= 9; j++) {
-      OBS_RANGE.push(`${code}.${j}`);
-    }
-  }
-}
+const chunkDirs = [
+  { kind: 'gynecology', prefix: 'N', dir: path.join(root, 'src', 'data', 'gynChunks') },
+  { kind: 'obstetrics', prefix: 'O', dir: path.join(root, 'src', 'data', 'obsChunks') },
+];
 
-// Функция извлечения кодов из файлов
-function extractCodesFromFiles(dir) {
-  const codes = new Set();
-  const files = fs.readdirSync(dir).filter(f => f.endsWith('.js'));
-  
-  files.forEach(file => {
-    const content = fs.readFileSync(path.join(dir, file), 'utf8');
-    // Ищем паттерн icd: "N..." или icd: "O..."
-    const regex = /icd:\s*"([NO]\d+\.?\d*)"/g;
-    let match;
-    while ((match = regex.exec(content)) !== null) {
-      codes.add(match[1]);
-    }
-  });
-  
-  return codes;
-}
-
-// Основная логика
-const gynDir = path.join(process.cwd(), 'src', 'data', 'gynChunks');
-const obsDir = path.join(process.cwd(), 'src', 'data', 'obsChunks');
-
-console.log('🔍 Аудит базы данных МКБ-10...\n');
-
-const existingGyn = extractCodesFromFiles(gynDir);
-const existingObs = extractCodesFromFiles(obsDir);
-
-console.log(`📊 Найдено кодов (Гинекология): ${existingGyn.size}`);
-console.log(`📊 Найдено кодов (Акушерство): ${existingObs.size}\n`);
-
-// Проверяем отсутствующие
-const missingGyn = GYN_RANGE.filter(code => !existingGyn.has(code));
-const missingObs = OBS_RANGE.filter(code => !existingObs.has(code));
-
-console.log(`❌ Отсутствуют (Гинекология): ${missingGyn.length}`);
-missingGyn.slice(0, 30).forEach(code => console.log(`   - ${code}`));
-if (missingGyn.length > 30) console.log(`   ... и еще ${missingGyn.length - 30}`);
-
-console.log(`\n❌ Отсутствуют (Акушерство): ${missingObs.length}`);
-missingObs.slice(0, 30).forEach(code => console.log(`   - ${code}`));
-if (missingObs.length > 30) console.log(`   ... и еще ${missingObs.length - 30}`);
-
-// Процент покрытия
-const totalGyn = new Set(GYN_RANGE).size;
-const totalObs = new Set(OBS_RANGE).size;
-console.log(`\n📈 Покрытие (Гинекология): ${((existingGyn.size / totalGyn) * 100).toFixed(1)}%`);
-console.log(`📈 Покрытие (Акушерство): ${((existingObs.size / totalObs) * 100).toFixed(1)}%`);
-
-// Сохраняем полный список отсутствующих
-const report = {
-  missingGyn,
-  missingObs,
-  coverage: {
-    gyn: `${((existingGyn.size / totalGyn) * 100).toFixed(1)}%`,
-    obs: `${((existingObs.size / totalObs) * 100).toFixed(1)}%`,
-  }
+const clinicallyRelevant = {
+  gynecology: [
+    'N70', 'N71', 'N72', 'N73', 'N75', 'N76', 'N80', 'N81', 'N82', 'N83',
+    'N84', 'N85', 'N86', 'N87', 'N88', 'N89', 'N90', 'N91', 'N92', 'N93',
+    'N94', 'N95', 'N96', 'N97', 'N98', 'N99',
+  ],
+  obstetrics: [
+    'O00', 'O01', 'O02', 'O03', 'O10', 'O11', 'O12', 'O13', 'O14', 'O15',
+    'O20', 'O21', 'O22', 'O23', 'O24', 'O26', 'O30', 'O32', 'O33', 'O34',
+    'O35', 'O36', 'O40', 'O41', 'O42', 'O43', 'O44', 'O45', 'O46', 'O47',
+    'O48', 'O60', 'O62', 'O63', 'O64', 'O66', 'O68', 'O70', 'O71', 'O72',
+    'O73', 'O74', 'O75', 'O80', 'O82', 'O85', 'O86', 'O87', 'O88', 'O90',
+    'O91', 'O92', 'O98', 'O99',
+  ],
 };
 
-fs.writeFileSync(
-  path.join(process.cwd(), 'icd-audit-report.json'),
-  JSON.stringify(report, null, 2)
-);
+const icdPattern = /\bicd\s*:\s*(['"`])([^'"`]+)\1/g;
+const codePattern = /\b([A-Z][0-9]{2}(?:\.[0-9A-Z]+)?)\b/g;
 
-console.log('\n✅ Отчет сохранен: icd-audit-report.json');
+function walk(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) return walk(fullPath);
+    return /\.(js|ts|tsx|json)$/i.test(entry.name) ? [fullPath] : [];
+  });
+}
+
+function normalizeCode(raw) {
+  return String(raw).trim().toUpperCase();
+}
+
+function extractCodesFromFile(file, prefix) {
+  const text = fs.readFileSync(file, 'utf8');
+  const entries = [];
+  const duplicatesInFile = new Map();
+  let match;
+
+  while ((match = icdPattern.exec(text)) !== null) {
+    const raw = match[2];
+    const codes = [...raw.matchAll(codePattern)]
+      .map((codeMatch) => normalizeCode(codeMatch[1]))
+      .filter((code) => code.startsWith(prefix));
+
+    for (const code of codes) {
+      entries.push({ code, raw, file: path.relative(root, file), index: match.index });
+      duplicatesInFile.set(code, (duplicatesInFile.get(code) || 0) + 1);
+    }
+  }
+
+  return {
+    entries,
+    duplicates: [...duplicatesInFile.entries()]
+      .filter(([, count]) => count > 1)
+      .map(([code, count]) => ({ code, count, file: path.relative(root, file) })),
+  };
+}
+
+function auditDir({ kind, prefix, dir }) {
+  const files = walk(dir);
+  const entries = [];
+  const duplicates = [];
+
+  for (const file of files) {
+    const result = extractCodesFromFile(file, prefix);
+    entries.push(...result.entries);
+    duplicates.push(...result.duplicates);
+  }
+
+  const byCode = new Map();
+  for (const entry of entries) {
+    if (!byCode.has(entry.code)) byCode.set(entry.code, []);
+    byCode.get(entry.code).push(entry);
+  }
+
+  const existingCodes = [...byCode.keys()].sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+  const expected = clinicallyRelevant[kind];
+  const missingClinicallyRelevant = expected.filter((code) => {
+    return !existingCodes.some((existing) => existing === code || existing.startsWith(`${code}.`));
+  });
+
+  const crossFileDuplicates = [...byCode.entries()]
+    .filter(([, values]) => values.length > 1)
+    .map(([code, values]) => ({
+      code,
+      count: values.length,
+      files: [...new Set(values.map((value) => value.file))],
+    }));
+
+  const coverage = expected.length > 0
+    ? Number((((expected.length - missingClinicallyRelevant.length) / expected.length) * 100).toFixed(1))
+    : 0;
+
+  return {
+    kind,
+    prefix,
+    scannedFiles: files.length,
+    totalIcdMentions: entries.length,
+    uniqueCodes: existingCodes.length,
+    existingCodes,
+    coverage,
+    missingClinicallyRelevant,
+    duplicates: [...duplicates, ...crossFileDuplicates],
+    priorities: missingClinicallyRelevant.slice(0, 20).map((code) => ({
+      code,
+      priority: code.startsWith('O') || ['N80', 'N83', 'N92', 'N93', 'N94', 'N97'].includes(code) ? 'high' : 'medium',
+      action: 'Добавить source-aware карточку или подтвердить, что код намеренно не входит в клиническую базу.',
+    })),
+  };
+}
+
+const sections = chunkDirs.map(auditDir);
+const report = {
+  generatedAt: new Date().toISOString(),
+  strict,
+  sections,
+  summary: {
+    totalUniqueCodes: sections.reduce((sum, section) => sum + section.uniqueCodes, 0),
+    totalMentions: sections.reduce((sum, section) => sum + section.totalIcdMentions, 0),
+    lowestCoverage: Math.min(...sections.map((section) => section.coverage)),
+  },
+};
+
+const artifactsDir = path.join(root, 'artifacts');
+fs.mkdirSync(artifactsDir, { recursive: true });
+const reportPath = path.join(artifactsDir, 'icd-audit-report.json');
+fs.writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf8');
+
+console.log('ICD audit complete');
+for (const section of sections) {
+  console.log(
+    `${section.kind}: ${section.uniqueCodes} unique codes, ${section.coverage}% clinically relevant coverage, ${section.missingClinicallyRelevant.length} gaps`,
+  );
+}
+console.log(`Report: ${path.relative(root, reportPath)}`);
+
+const failures = [];
+for (const section of sections) {
+  if (section.scannedFiles === 0) failures.push(`${section.kind}: chunk directory is empty or missing`);
+  if (section.uniqueCodes === 0) failures.push(`${section.kind}: no ICD codes found`);
+  if (strict && section.coverage < 35) {
+    failures.push(`${section.kind}: clinically relevant ICD coverage is below 35% (${section.coverage}%)`);
+  }
+}
+
+if (failures.length > 0) {
+  console.error('\nICD audit failed:');
+  failures.forEach((failure) => console.error(`- ${failure}`));
+  process.exit(1);
+}

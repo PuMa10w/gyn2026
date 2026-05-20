@@ -313,6 +313,7 @@ export interface Questionnaire {
   limitations?: string[];
   evidenceNote?: string[];
   guidelineBasis?: GuidelineReference[];
+  sourceQuality?: SourceQuality;
   lastReviewed?: string;
 }
 

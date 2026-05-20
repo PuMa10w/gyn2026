@@ -36,6 +36,15 @@ const findings = [];
 const inspect = async (label) => {
   const result = await page.evaluate(({ selectors, bannedLegacyRgb }) => {
     const findings = [];
+    const removedSharePattern = new RegExp(`\\b${'Q'}${'R'}\\b|${'Q'}${'R'}-код`);
+    if (removedSharePattern.test(document.body.innerText)) {
+      findings.push({
+        selector: 'body',
+        property: 'text',
+        value: 'removed share block is visible',
+        text: 'Удалённый блок шаринга должен отсутствовать в пользовательском интерфейсе',
+      });
+    }
     for (const selector of selectors) {
       const elements = Array.from(document.querySelectorAll(selector)).filter((element) => {
         const rect = element.getBoundingClientRect();

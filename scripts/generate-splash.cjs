@@ -2,7 +2,7 @@ const { createCanvas, registerFont } = require('canvas');
 const fs = require('fs');
 const path = require('path');
 
-// Р азмеры для iPhone (как в index.html)
+// Размеры для iPhone (как в index.html)
 const splashSizes = [
   { width: 1125, height: 2436, name: 'splash-1125x2436' },   // iPhone X
   { width: 750, height: 1334, name: 'splash-750x1334' },     // iPhone 8,7,6s,6
@@ -101,9 +101,9 @@ function generateIcon(size) {
 }
 
 // Генерируем всё
-console.log('рџЋЁ Генерация splash-экранов для iOS...');
+console.log('Генерация splash-экранов для iOS...');
 splashSizes.forEach(size => generateSplashImage(size));
-console.log('\nрџЋЁ Генерация Apple Touch Icon...');
+console.log('\nГенерация Apple Touch Icon...');
 iconSizes.forEach(size => generateIcon(size));
 
-console.log('\nрџЋ‰ Готово! Все изображения созданы в /public/');
+console.log('\nГотово! Все изображения созданы в /public/');

@@ -31,7 +31,7 @@ const UTERUS_PATHOLOGIES: PathologyHotspot[] = [
   {
     id: 'endometriosis',
     name: 'Эндометриоз',
-    description: 'Р азрастание ткани, похожей на эндометрий, за пределами матки.',
+    description: 'Разрастание ткани, похожей на эндометрий, за пределами матки.',
     position: [-0.6, -0.2, 0.7],
     color: 0xff8844,
   },
@@ -368,7 +368,7 @@ export const Organ3DViewer: React.FC<Organ3DViewerProps> = ({
             pointerEvents: 'none',
           }}
         >
-          рџ–±пёЏ Кликайте на красные точки (патологии)
+          Кликайте на красные точки (патологии)
         </div>
       )}
     </motion.div>

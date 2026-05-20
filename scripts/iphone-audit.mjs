@@ -69,6 +69,7 @@ const assertNoMojibake = async (page, label) => {
       /В[©®]/g,
       new RegExp('\\u043f\\u0457\\u0405', 'g'),
       new RegExp(`Premium ${'Clinical'}|Clinical ${'command'}|TRUST ${'LAYER'}|GYN${'A'}`, 'g'),
+      new RegExp(`\\b${'Q'}${'R'}\\b|${'Q'}${'R'}-код`, 'g'),
     ];
     return patterns
       .flatMap((pattern) => [...text.matchAll(pattern)].map((match) => ({

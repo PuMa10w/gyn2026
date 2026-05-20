@@ -111,7 +111,7 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
       animate={{ opacity: 1, y: 0 }}
     >
       <h3 className="text-gradient" style={{ marginTop: 0, marginBottom: '16px' }}>
-        рџ§  AI-Диагност (Симптом-чекер)
+        AI-Диагност (Симптом-чекер)
       </h3>
 
       <p style={{ fontSize: '14px', opacity: 0.8, marginBottom: '16px' }}>
@@ -152,7 +152,7 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
           shimmer={selectedSymptoms.length > 0}
           disabled={selectedSymptoms.length === 0}
         >
-          рџ”Ќ Анализировать ({selectedSymptoms.length} симптомов)
+          Анализировать ({selectedSymptoms.length} симптомов)
         </PremiumButton>
 
         {selectedSymptoms.length > 0 && (
@@ -180,7 +180,7 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
           }}
         >
           <h4 style={{ marginTop: 0, marginBottom: '12px', color: '#B97886' }}>
-            рџЋЇ Вероятные диагнозы:
+            Вероятные диагнозы:
           </h4>
 
           {results.map((result, index) => (
@@ -202,7 +202,7 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
             >
               <div>
                 <div style={{ fontWeight: 'bold', fontSize: '14px' }}>
-                  {index === 0 && 'рџҐ‡ '}{result.name}
+                  {index === 0 && ''}{result.name}
                 </div>
                 <div style={{ fontSize: '12px', opacity: 0.6 }}>МКБ-10: {result.code}</div>
               </div>

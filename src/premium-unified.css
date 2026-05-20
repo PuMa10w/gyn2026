@@ -928,6 +928,49 @@ main .catalog-header {
   -webkit-text-fill-color: currentColor !important;
 }
 
+/* Ultra Premium V6: clinical action cluster in disease sheets. */
+.modal-clinical-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+
+.modal-clinical-action {
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid rgba(185, 120, 134, 0.28);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.72), transparent 36%),
+    linear-gradient(135deg, rgba(255, 250, 244, 0.98), rgba(246, 231, 214, 0.92));
+  color: var(--peach-cocoa);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 24px rgba(88, 55, 48, 0.08);
+}
+
+.modal-clinical-action:hover,
+.modal-clinical-action:focus-visible {
+  border-color: rgba(185, 120, 134, 0.44);
+  background: linear-gradient(135deg, rgba(232, 160, 140, 0.9), rgba(216, 154, 167, 0.84));
+  outline: none;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .modal-clinical-actions {
+    flex: 0 0 auto;
+  }
+
+  .modal-clinical-action {
+    min-width: 44px;
+    padding-inline: 0.85rem;
+    font-size: 0.82rem;
+  }
+}
+
 /* Premium V2 primitives and command center */
 :root,
 [data-theme='dark'] {

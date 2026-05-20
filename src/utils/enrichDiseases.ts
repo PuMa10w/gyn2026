@@ -364,7 +364,7 @@ const normalizeDisease = (disease: DiseaseInput): Disease => {
       typeof disease.description === 'string' && disease.description.trim().length > 0
         ? cleanText(disease.description)
         : `${name}: клиническая карточка для быстрой оценки, диагностики и выбора тактики ведения.`,
-    icon: typeof disease.icon === 'string' && disease.icon.trim().length > 0 ? disease.icon : 'рџ“‹',
+    icon: typeof disease.icon === 'string' && disease.icon.trim().length > 0 ? disease.icon : 'card',
     definition:
       typeof disease.definition === 'string' && disease.definition.trim().length > 0
         ? cleanText(disease.definition)

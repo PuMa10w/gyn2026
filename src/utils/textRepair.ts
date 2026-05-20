@@ -5,9 +5,10 @@
   ['\u00B0', 0xb0], ['\u00B1', 0xb1], ['\u0406', 0xb2], ['\u0456', 0xb3], ['\u0491', 0xb4], ['\u00B5', 0xb5], ['\u00B6', 0xb6], ['\u00B7', 0xb7], ['\u0451', 0xb8], ['\u2116', 0xb9], ['\u0454', 0xba], ['\u00BB', 0xbb], ['\u0458', 0xbc], ['\u0405', 0xbd], ['\u0455', 0xbe], ['\u0457', 0xbf],
 ]);
 
-const mojibakeTail = '\u0080-\u00ff\u0402-\u045f\u201a-\u201e\u2020-\u2022\u2013\u2014\u2030\u2039\u203a\u20ac\u2122';
-const mojibakePattern = new RegExp(`[РСГвÐÑÂâ][${mojibakeTail}]|В[©®]|пїЅ|�`);
-const mojibakeScorePattern = new RegExp(`[РСГвÐÑÂâ][${mojibakeTail}]|В[©®]|пїЅ|�`, 'g');
+const mojibakeTail = '\\u0080-\\u00ff\\u0402-\\u045f\\u201a-\\u201e\\u2020-\\u2022\\u2013\\u2014\\u2030\\u2039\\u203a\\u20ac\\u2122';
+const mojibakeLead = '\\u0420\\u0421\\u0413\\u0432\\u00d0\\u00d1\\u00c2\\u00e2';
+const mojibakePattern = new RegExp(`[${mojibakeLead}][${mojibakeTail}]|\\u0412[\\u00a9\\u00ae]|\\u043f\\u0457\\u0405|\\ufffd`);
+const mojibakeScorePattern = new RegExp(`[${mojibakeLead}][${mojibakeTail}]|\\u0412[\\u00a9\\u00ae]|\\u043f\\u0457\\u0405|\\ufffd`, 'g');
 
 function byteFor(char: string) {
   const code = char.codePointAt(0) ?? 0;
@@ -52,7 +53,7 @@ export function repairText(value: unknown): string {
       .split(/(\s+)/)
       .map((part) => repairCandidate(part))
       .join('')
-      .replace(/РњР\s*Т/g, 'МРТ')
+      .replace(new RegExp('\\u0420\\u045a\\u0420\\s*Т', 'g'), 'МРТ')
       .replace(/�+/g, '')
       .trim();
 

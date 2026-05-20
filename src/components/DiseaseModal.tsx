@@ -7,7 +7,6 @@ import { AIClinicalAssistant } from './AIClinicalAssistant';
 import { Organ3DViewer } from './Organ3DViewer';
 import { SymptomChecker } from './SymptomChecker';
 import { PatientMemo } from './PatientMemo';
-import { QRShareButton } from './QRShareButton';
 import { PubMedFeed } from './PubMedFeed';
 import { isObstetricsLabel, repairText } from '../utils/textRepair';
 
@@ -1229,7 +1228,15 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 </div>
               </div>
             </div>
-            <QRShareButton diseaseName={displayName} icdCode={icdLabel} />
+            <div className="modal-clinical-actions" aria-label="Быстрые действия карточки">
+              <button
+                type="button"
+                className="modal-clinical-action"
+                onClick={() => setActiveTab('patient-memo')}
+              >
+                Пациентке
+              </button>
+            </div>
             <button
               ref={closeButtonRef}
               type="button"

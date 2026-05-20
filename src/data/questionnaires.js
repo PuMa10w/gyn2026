@@ -7,7 +7,7 @@ const rawQuestionnaires = [
     fullName: "Patient Health Questionnaire-9",
     category: "Психическое здоровье",
     description: "Оценка тяжести депрессии у пациентов. 9 вопросов, оценка за последние 2 недели.",
-    icon: "рџ§ ",
+    icon: "Шкала",
     questions: [
       "Мало интересa или удовольствия от вещей",
       "Чувство подавленности, депрессии или безнадёжности",
@@ -23,10 +23,10 @@ const rawQuestionnaires = [
     scoring: (answers) => {
       const total = answers.reduce((a, b) => a + b, 0);
       if (total <= 4) return { level: "Минимальная депрессия", severity: "normal", color: "#B9DCC7", recommendation: "Наблюдение. Специфическое лечение не требуется." };
-      if (total <= 9) return { level: "Лёгкая депрессия", severity: "mild", color: "#f39c12", recommendation: "Наблюдение, повторная оценка при ухудшении. Р ассмотреть психотерапию." };
-      if (total <= 14) return { level: "Умеренная депрессия", severity: "moderate", color: "#e67e22", recommendation: "Р ассмотреть антидепрессант и/или психотерапию. Контроль через 4-6 нед." };
+      if (total <= 9) return { level: "Лёгкая депрессия", severity: "mild", color: "#f39c12", recommendation: "Наблюдение, повторная оценка при ухудшении. Рассмотреть психотерапию." };
+      if (total <= 14) return { level: "Умеренная депрессия", severity: "moderate", color: "#e67e22", recommendation: "Рассмотреть антидепрессант и/или психотерапию. Контроль через 4-6 нед." };
       if (total <= 19) return { level: "Умеренно тяжёлая депрессия", severity: "severe", color: "#e74c3c", recommendation: "Антидепрессант + психотерапия. Направление к психиатру." };
-      return { level: "Тяжёлая депрессия", severity: "critical", color: "#c0392b", recommendation: "Немедленное направление к психиатру. Р ассмотреть госпитализацию." };
+      return { level: "Тяжёлая депрессия", severity: "critical", color: "#c0392b", recommendation: "Немедленное направление к психиатру. Рассмотреть госпитализацию." };
     }
   },
   {
@@ -35,14 +35,14 @@ const rawQuestionnaires = [
     fullName: "Generalized Anxiety Disorder-7",
     category: "Психическое здоровье",
     description: "Оценка генерализованного тревожного расстройства. 7 вопросов, за последние 2 недели.",
-    icon: "рџ°",
+    icon: "Шкала",
     questions: [
       "Нервозность, тревожность или напряжение",
       "Неспособность прекратить или контролировать беспокойство",
       "Избыточное беспокойство о различных вещах",
       "Трудности с расслаблением",
       "Беспокойство, мешающее сидеть спокойно",
-      "Р аздражительность или легкое раздражение",
+      "Раздражительность или легкое раздражение",
       "Чувство страха, как будто может случиться что-то ужасное"
     ],
     options: ["0 — Совсем нет", "1 — Несколько дней", "2 — Больше половины дней", "3 — Почти каждый день"],
@@ -62,7 +62,7 @@ const rawQuestionnaires = [
     description: "Числовая рейтинговая шкала интенсивности боли. Оценка боли за последние 24 часа.",
     icon: "⚡",
     questions: [
-      "Оцените вашу РЎР ЕДНЮЮ боль за последние 24 часа",
+      "Оцените вашу СРЕДНЮЮ боль за последние 24 часа",
       "Оцените вашу ХУДШУЮ боль за последние 24 часа",
       "Оцените вашу ТЕКУЩУЮ боль прямо сейчас"
     ],
@@ -70,7 +70,7 @@ const rawQuestionnaires = [
     scoring: (answers) => {
       const avg = answers.reduce((a, b) => a + b, 0) / answers.length;
       if (avg <= 3) return { level: "Лёгкая боль", severity: "normal", color: "#B9DCC7", recommendation: "НПВС, парацетамол. Наблюдение." };
-      if (avg <= 6) return { level: "Умеренная боль", severity: "moderate", color: "#f39c12", recommendation: "НПВС + адъювантная терапия (габапентин, амитриптилин). Р ассмотреть физиотерапию." };
+      if (avg <= 6) return { level: "Умеренная боль", severity: "moderate", color: "#f39c12", recommendation: "НПВС + адъювантная терапия (габапентин, амитриптилин). Рассмотреть физиотерапию." };
       return { level: "Сильная боль", severity: "severe", color: "#e74c3c", recommendation: "Слабые/сильные опиоиды + адъюванты. Направление в клинику боли." };
     }
   },
@@ -80,7 +80,7 @@ const rawQuestionnaires = [
     fullName: "Premenstrual Symptoms Screening Tool (PSST)",
     category: "Гинекология",
     description: "Скрининг предменструального синдрома / предменструального дисфорического расстройства.",
-    icon: "рџЊ™",
+    icon: "Шкала",
     questions: [
       "Чувство подавленности, безнадёжности, самоуничижения",
       "Тревога, напряжение, ощущение «на взводе»",
@@ -95,7 +95,7 @@ const rawQuestionnaires = [
       const total = answers.reduce((a, b) => a + b, 0);
       const severeCount = answers.filter(a => a >= 2).length;
       if (total <= 4 && severeCount < 2) return { level: "Нет ПМС", severity: "normal", color: "#B9DCC7", recommendation: "Симптомы не соответствуют критериям ПМС. Наблюдение." };
-      if (total <= 10 && severeCount < 4) return { level: "Лёгкий/Умеренный ПМС", severity: "mild", color: "#f39c12", recommendation: "Модификация образа жизни, кальций, витамин B6, НПВС. Р ассмотреть КОК." };
+      if (total <= 10 && severeCount < 4) return { level: "Лёгкий/Умеренный ПМС", severity: "mild", color: "#f39c12", recommendation: "Модификация образа жизни, кальций, витамин B6, НПВС. Рассмотреть КОК." };
       return { level: "Тяжёлый ПМС / ПМД ", severity: "severe", color: "#e74c3c", recommendation: "SSRIs (флуоксетин, сертралин) — лютеиновая фаза или непрерывно. КОК с дроспиреноном." };
     }
   },
@@ -105,12 +105,12 @@ const rawQuestionnaires = [
     fullName: "Menopause-specific Quality of Life",
     category: "Менопауза",
     description: "Оценка качества жизни в менопаузе. Вазомоторные, психосоциальные, физические и сексуальные симптомы.",
-    icon: "рџЊє",
+    icon: "Шкала",
     questions: [
       "Приливы жара",
       "Ночная потливость",
       "Нарушения сна",
-      "Р аздражительность",
+      "Раздражительность",
       "Тревожность/беспокойство",
       "Головные боли",
       "Боли в суставах или мышцах",
@@ -123,7 +123,7 @@ const rawQuestionnaires = [
       const maxScore = answers.length * 4;
       const pct = (total / maxScore) * 100;
       if (pct <= 25) return { level: "Лёгкие симптомы", severity: "normal", color: "#B9DCC7", recommendation: "Образ жизни: физическая активность, кальций + витамин D. Наблюдение." };
-      if (pct <= 50) return { level: "Умеренные симптомы", severity: "moderate", color: "#f39c12", recommendation: "Р ассмотреть МГТ (если нет противопоказаний). Негормональные альтернативы: флуоксетин, венлафаксин." };
+      if (pct <= 50) return { level: "Умеренные симптомы", severity: "moderate", color: "#f39c12", recommendation: "Рассмотреть МГТ (если нет противопоказаний). Негормональные альтернативы: флуоксетин, венлафаксин." };
       return { level: "Тяжёлые симптомы", severity: "severe", color: "#e74c3c", recommendation: "МГТ показана (системная ЗГТ). Трансдермальный эстрадиол + прогестаген. Контроль через 3 мес." };
     }
   },
@@ -133,7 +133,7 @@ const rawQuestionnaires = [
     fullName: "Edinburgh Postnatal Depression Scale",
     category: "Акушерство",
     description: "Эдинбургская шкала послеродовой депрессии. 10 вопросов, за последние 7 дней.",
-    icon: "рџ‘¶",
+    icon: "Шкала",
     questions: [
       "Мне было смешно и я могла смеяться, как обычно",
       "Я с радостью смотрела вперёд и наслаждалась вещами",
@@ -146,16 +146,16 @@ const rawQuestionnaires = [
       "Я была настолько расстроена, что плакала",
       "Мне приходили в голову мысли о причинении себе вреда"
     ],
-    options: ["0 — Да, постоянно", "1 — Чаще всего", "2 — Иногда", "3 — Р едко или никогда"],
+    options: ["0 — Да, постоянно", "1 — Чаще всего", "2 — Иногда", "3 — Редко или никогда"],
     scoring: (answers) => {
       // Reverse scoring: Q1 and Q2 are reverse-scored (0=3, 1=2, 2=1, 3=0)
       const adjusted = [...answers];
       adjusted[0] = 3 - adjusted[0];
       adjusted[1] = 3 - adjusted[1];
       const total = adjusted.reduce((a, b) => a + b, 0);
-      if (total <= 9) return { level: "Норма", severity: "normal", color: "#B9DCC7", recommendation: "Р иск послеродовой депрессии низкий. Продолжать наблюдение." };
-      if (total <= 12) return { level: "Возможная депрессия", severity: "mild", color: "#f39c12", recommendation: "Повторить через 2-4 недели. Р ассмотреть консультацию психолога." };
-      return { level: "Вероятная депрессия", severity: "severe", color: "#e74c3c", recommendation: "Направление к психиатру/психотерапевту. Р ассмотреть SSRIs. Оценка риска самоповреждения." };
+      if (total <= 9) return { level: "Норма", severity: "normal", color: "#B9DCC7", recommendation: "Риск послеродовой депрессии низкий. Продолжать наблюдение." };
+      if (total <= 12) return { level: "Возможная депрессия", severity: "mild", color: "#f39c12", recommendation: "Повторить через 2-4 недели. Рассмотреть консультацию психолога." };
+      return { level: "Вероятная депрессия", severity: "severe", color: "#e74c3c", recommendation: "Направление к психиатру/психотерапевту. Рассмотреть SSRIs. Оценка риска самоповреждения." };
     }
   },
   {
@@ -164,7 +164,7 @@ const rawQuestionnaires = [
     fullName: "Pelvic Floor Distress Inventory",
     category: "Тазовое дно",
     description: "Оценка симптомов дисфункции тазового дна. Пролапс, колоректальные и мочевые симптомы.",
-    icon: "рџЏҐ",
+    icon: "Шкала",
     questions: [
       "Чувство давления или тяжести внизу живота",
       "Чувство «шишки» или выпячивания во влагалище",
@@ -183,7 +183,7 @@ const rawQuestionnaires = [
       const maxScore = answers.length * 4;
       const pct = (total / maxScore) * 100;
       if (pct <= 25) return { level: "Лёгкая дисфункция", severity: "normal", color: "#B9DCC7", recommendation: "Упражнения Кегеля, наблюдение. Консервативное ведение." };
-      if (pct <= 50) return { level: "Умеренная дисфункция", severity: "moderate", color: "#f39c12", recommendation: "Физиотерапия тазового дна. Пессарий. Р ассмотреть хирургическую коррекцию." };
+      if (pct <= 50) return { level: "Умеренная дисфункция", severity: "moderate", color: "#f39c12", recommendation: "Физиотерапия тазового дна. Пессарий. Рассмотреть хирургическую коррекцию." };
       return { level: "Тяжёлая дисфункция", severity: "severe", color: "#e74c3c", recommendation: "Хирургическая коррекция (кольпорафия, сакрокольпопексия). Направление к урогинекологу." };
     }
   },
@@ -193,7 +193,7 @@ const rawQuestionnaires = [
     fullName: "Incontinence Quality of Life",
     category: "Тазовое дно",
     description: "Оценка влияния недержания мочи на качество жизни. 3 субшкалы: избегание, социальное воздействие, психологическое воздействие.",
-    icon: "рџ’§",
+    icon: "Шкала",
     questions: [
       "Я ограничиваю количество выпиваемой жидкости",
       "Я стараюсь не выходить из дома без туалета",
@@ -203,13 +203,13 @@ const rawQuestionnaires = [
       "Я чувствую себя беспомощным из-за недержания",
       "Недержание влияет на мою уверенность в себе"
     ],
-    options: ["0 — Всегда", "1 — Часто", "2 — Иногда", "3 — Р едко", "4 — Никогда"],
+    options: ["0 — Всегда", "1 — Часто", "2 — Иногда", "3 — Редко", "4 — Никогда"],
     scoring: (answers) => {
       const total = answers.reduce((a, b) => a + b, 0);
       const maxScore = answers.length * 4;
       const pct = (total / maxScore) * 100;
       if (pct >= 75) return { level: "Хорошее качество жизни", severity: "normal", color: "#B9DCC7", recommendation: "Недержание минимально влияет на качество жизни. Упражнения Кегеля." };
-      if (pct >= 50) return { level: "Умеренное влияние", severity: "moderate", color: "#f39c12", recommendation: "Физиотерапия тазового дна. Р ассмотреть медикаментозную терапию." };
+      if (pct >= 50) return { level: "Умеренное влияние", severity: "moderate", color: "#f39c12", recommendation: "Физиотерапия тазового дна. Рассмотреть медикаментозную терапию." };
       return { level: "Значительное влияние", severity: "severe", color: "#e74c3c", recommendation: "Хирургическое лечение (слинговые операции). Направление к урогинекологу." };
     }
   },
@@ -219,9 +219,9 @@ const rawQuestionnaires = [
     fullName: "Premenstrual Syndrome Scale",
     category: "Гинекология",
     description: "Шкала оценки предменструального синдрома. 12 вопросов, оценка за последний цикл.",
-    icon: "рџ“…",
+    icon: "Шкала",
     questions: [
-      "Р аздражительность",
+      "Раздражительность",
       "Тревожность",
       "Депрессивное настроение",
       "Чувство подавленности",
@@ -238,8 +238,8 @@ const rawQuestionnaires = [
     scoring: (answers) => {
       const total = answers.reduce((a, b) => a + b, 0);
       if (total <= 12) return { level: "Нет ПМС", severity: "normal", color: "#B9DCC7", recommendation: "Симптомы не выражены. Наблюдение." };
-      if (total <= 24) return { level: "Лёгкий ПМС", severity: "mild", color: "#f39c12", recommendation: "Р екомендации: регулярное питание, ограничение соли и кофеина, витамины B6 и E." };
-      if (total <= 36) return { level: "Умеренный ПМС", severity: "moderate", color: "#e67e22", recommendation: "Р ассмотреть КОК, дроспиренон. НПВС для соматических симптомов. Консультация при ухудшении." };
+      if (total <= 24) return { level: "Лёгкий ПМС", severity: "mild", color: "#f39c12", recommendation: "Рекомендации: регулярное питание, ограничение соли и кофеина, витамины B6 и E." };
+      if (total <= 36) return { level: "Умеренный ПМС", severity: "moderate", color: "#e67e22", recommendation: "Рассмотреть КОК, дроспиренон. НПВС для соматических симптомов. Консультация при ухудшении." };
       return { level: "Тяжёлый ПМС", severity: "severe", color: "#e74c3c", recommendation: "SSRIs (флуоксетин, сертралин) — прерывистый или непрерывный приём. Направление к гинекологу." };
     }
   },
@@ -249,7 +249,7 @@ const rawQuestionnaires = [
     fullName: "Major Depression Inventory",
     category: "Психическое здоровье",
     description: "Оценка депрессивных симптомов по критериям МКБ-10/DSM. 10 вопросов, за последние 2 недели.",
-    icon: "рџ”",
+    icon: "Шкала",
     questions: [
       "У вас бывает пониженное настроение?",
       "У вас снижен интерес к повседневным делам?",
@@ -266,7 +266,7 @@ const rawQuestionnaires = [
     scoring: (answers) => {
       const total = answers.reduce((a, b) => a + b, 0);
       if (total <= 9) return { level: "Нет депрессии", severity: "normal", color: "#B9DCC7", recommendation: "Депрессивные симптомы отсутствуют. Наблюдение." };
-      if (total <= 19) return { level: "Лёгкая депрессия", severity: "mild", color: "#f39c12", recommendation: "Повторная оценка через 2 недели. Р ассмотреть психотерапию, физическую активность." };
+      if (total <= 19) return { level: "Лёгкая депрессия", severity: "mild", color: "#f39c12", recommendation: "Повторная оценка через 2 недели. Рассмотреть психотерапию, физическую активность." };
       if (total <= 29) return { level: "Умеренная депрессия", severity: "moderate", color: "#e67e22", recommendation: "Комбинированная терапия: психотерапия + антидепрессанты. Контроль через 4-6 недель." };
       return { level: "Тяжёлая депрессия", severity: "critical", color: "#c0392b", recommendation: "Немедленная консультация психиатра. Активная фармакотерапия. Оценка риска суицида." };
     }
@@ -277,7 +277,7 @@ const rawQuestionnaires = [
     fullName: "Alcohol Use Disorders Identification Test",
     category: "Зависимости",
     description: "Скрининг употребления алкоголя. 10 вопросов ВОЗ, оценка за последние 12 месяцев.",
-    icon: "рџЌ·",
+    icon: "Шкала",
     questions: [
       "Как часто вы употребляете алкоголь?",
       "Сколько стандартных порций алкоголя вы выпиваете за один день?",
@@ -294,8 +294,8 @@ const rawQuestionnaires = [
     scoring: (answers) => {
       const total = answers.reduce((a, b) => a + b, 0);
       if (total <= 7) return { level: "Низкий риск", severity: "normal", color: "#B9DCC7", recommendation: "Употребление в пределах безопасных норм. Продолжать контролировать." };
-      if (total <= 15) return { level: "Средний риск", severity: "mild", color: "#f39c12", recommendation: "Р екомендации по снижению потребления. Безопасные пределы: не более 2 порций/день для женщин." };
-      if (total <= 19) return { level: "Высокий риск", severity: "moderate", color: "#e67e22", recommendation: "Консультация нарколога. Р иск зависимости. Снижение потребления или полный отказ." };
+      if (total <= 15) return { level: "Средний риск", severity: "mild", color: "#f39c12", recommendation: "Рекомендации по снижению потребления. Безопасные пределы: не более 2 порций/день для женщин." };
+      if (total <= 19) return { level: "Высокий риск", severity: "moderate", color: "#e67e22", recommendation: "Консультация нарколога. Риск зависимости. Снижение потребления или полный отказ." };
       return { level: "Вероятная зависимость", severity: "severe", color: "#e74c3c", recommendation: "Требуется помощь специалиста. Направление к наркологу. Лечение зависимости." };
     }
   },
@@ -305,7 +305,7 @@ const rawQuestionnaires = [
     fullName: "Female Sexual Function Index",
     category: "Сексуальное здоровье",
     description: "Оценка сексуальной функции у женщин. 6 доменов: желание, возбуждение, смазка, оргазм, удовлетворение, боль. За последние 4 недели.",
-    icon: "рџ’•",
+    icon: "Шкала",
     questions: [
       "Как часто Вы испытывали сексуальное желание или интерес?",
       "Насколько сильным было Ваше сексуальное желание или интерес?",
@@ -346,7 +346,7 @@ const rawQuestionnaires = [
       const total = desireScore + arousalScore + lubricationScore + orgasmScore + satisfactionScore + painScore;
       
       if (total <= 15) return { level: "Выраженная дисфункция", severity: "severe", color: "#e74c3c", recommendation: "Направление к сексологу. Исключить органические причины. Комплексная терапия." };
-      if (total <= 25) return { level: "Умеренная дисфункция", severity: "moderate", color: "#e67e22", recommendation: "Консультация сексолога. Р ассмотреть гормональную терапию при СИМ." };
+      if (total <= 25) return { level: "Умеренная дисфункция", severity: "moderate", color: "#e67e22", recommendation: "Консультация сексолога. Рассмотреть гормональную терапию при СИМ." };
       if (total <= 30) return { level: "Лёгкая дисфункция", severity: "mild", color: "#f39c12", recommendation: "Наблюдение. Консультирование. Лубриканты при сухости." };
       return { level: "Нормальная функция", severity: "normal", color: "#B9DCC7", recommendation: "Сексуальная функция в пределах нормы. Наблюдение." };
     }
@@ -357,7 +357,7 @@ const rawQuestionnaires = [
     fullName: "Breast-Q Quality of Life",
     category: "Молочная железа",
     description: "Оценка качества жизни после операций на молочной железе. Сексуальное, физическое и психологическое благополучие.",
-    icon: "рџЏҐ",
+    icon: "Шкала",
     questions: [
       "Насколько Вы уверены в себе?",
       "Как часто Вы чувствовали себя привлекательной?",
@@ -378,7 +378,7 @@ const rawQuestionnaires = [
       
       if (pct >= 75) return { level: "Высокое качество жизни", severity: "normal", color: "#B9DCC7", recommendation: "Отличные результаты. Продолжать наблюдение." };
       if (pct >= 50) return { level: "Умеренное качество жизни", severity: "moderate", color: "#f39c12", recommendation: "Консультация психолога. Физическая реабилитация." };
-      return { level: "Низкое качество жизни", severity: "severe", color: "#e74c3c", recommendation: "Направление к онкопсихологу. Р еабилитационная программа." };
+      return { level: "Низкое качество жизни", severity: "severe", color: "#e74c3c", recommendation: "Направление к онкопсихологу. Реабилитационная программа." };
     }
   },
   {
@@ -387,7 +387,7 @@ const rawQuestionnaires = [
     fullName: "Pelvic Organ Prolapse Quantification System",
     category: "Урогинекология",
     description: "Система количественной оценки пролапса тазовых органов. 6 точек измерения, 3 степени.",
-    icon: "рџ“Џ",
+    icon: "Шкала",
     questions: [
       "Аа (передняя стенка влагалища): -3 до 0 см",
       "Ba (передняя стенка): -3 до 0 см",
@@ -411,7 +411,7 @@ const rawQuestionnaires = [
     fullName: "International Consultation on Incontinence Questionnaire — Short Form",
     category: "Урогинекология",
     description: "Краткий опросник недержания мочи. 4 вопроса, оценка симптомов и качества жизни.",
-    icon: "рџ’§",
+    icon: "Шкала",
     questions: [
       "Как часто Вы замечаете подтекание мочи?",
       "Обычно какое количество мочи подтекает (от капель до большого количества)?",
@@ -432,7 +432,7 @@ const rawQuestionnaires = [
     fullName: "Edinburgh Postnatal Depression Scale",
     category: "Психическое здоровье",
     description: "Шкала послеродовой депрессии. 10 вопросов, для послеродового периода.",
-    icon: "рџ‘¶",
+    icon: "Шкала",
     questions: [
       "Я могла смеяться и видеть смешную сторону вещей",
       "Я с удовольствием ждала будущие события",
@@ -450,7 +450,7 @@ const rawQuestionnaires = [
       const total = answers.reduce((a, b) => a + b, 0);
       if (total <= 9) return { level: "Низкий риск депрессии", severity: "normal", color: "#B9DCC7", recommendation: "Наблюдение. Поддержка семьи." };
       if (total <= 12) return { level: "Умеренный риск", severity: "mild", color: "#f39c12", recommendation: "Консультация психолога. Наблюдение." };
-      if (total <= 15) return { level: "Вероятная депрессия", severity: "moderate", color: "#e67e22", recommendation: "Консультация психолога. Р ассмотреть антидепрессанты." };
+      if (total <= 15) return { level: "Вероятная депрессия", severity: "moderate", color: "#e67e22", recommendation: "Консультация психолога. Рассмотреть антидепрессанты." };
       return { level: "Высокий риск депрессии", severity: "severe", color: "#e74c3c", recommendation: "Немедленная консультация психиатра." };
     }
   },
@@ -460,7 +460,7 @@ const rawQuestionnaires = [
     fullName: "Visual Analogue Scale",
     category: "Боль",
     description: "Визуальная аналоговая шкала боли. 10 см линия для оценки интенсивности боли.",
-    icon: "рџ“Љ",
+    icon: "Шкала",
     questions: [
       "Отметьте интенсивность боли на шкале от 0 (нет боли) до 10 (нестерпимая боль)"
     ],
@@ -480,9 +480,9 @@ const rawQuestionnaires = [
     fullName: "Satisfaction With Life Scale",
     category: "Психическое здоровье",
     description: "Шкала удовлетворённости жизнью. 5 вопросов.",
-    icon: "рџЉ",
+    icon: "Шкала",
     questions: [
-      "Р’ большинстве моя жизнь близка к идеальной",
+      "В большинстве моя жизнь близка к идеальной",
       "Мои жизненные условия превосходны",
       "Я удовлетворена своей жизнью",
       "До сих пор я получала от жизни всё, что хотела",
@@ -503,7 +503,7 @@ const rawQuestionnaires = [
     fullName: "Kuiper menstrual index",
     category: "Гинекология",
     description: "Индекс менструальной боли. Оценка дисменореи.",
-    icon: "рџ“€",
+    icon: "Шкала",
     questions: [
       "Интенсивность боли внизу живота",
       "Количество дней с болью",
