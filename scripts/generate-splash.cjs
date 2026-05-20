@@ -2,7 +2,7 @@ const { createCanvas, registerFont } = require('canvas');
 const fs = require('fs');
 const path = require('path');
 
-// Размеры для iPhone (как в index.html)
+// Р азмеры для iPhone (как в index.html)
 const splashSizes = [
   { width: 1125, height: 2436, name: 'splash-1125x2436' },   // iPhone X
   { width: 750, height: 1334, name: 'splash-750x1334' },     // iPhone 8,7,6s,6
@@ -15,7 +15,7 @@ const iconSizes = [
 ];
 
 // Градиент (как в проекте: Turquoise, Emerald, Gold)
-const gradientColors = ['#14b8a6', '#10b981', '#f59e0b'];
+const gradientColors = ['#D89AA7', '#B97886', '#D8B878'];
 
 // Функция для создания градиента
 function createGradient(ctx, width, height) {
@@ -101,9 +101,9 @@ function generateIcon(size) {
 }
 
 // Генерируем всё
-console.log('🎨 Генерация splash-экранов для iOS...');
+console.log('рџЋЁ Генерация splash-экранов для iOS...');
 splashSizes.forEach(size => generateSplashImage(size));
-console.log('\n🎨 Генерация Apple Touch Icon...');
+console.log('\nрџЋЁ Генерация Apple Touch Icon...');
 iconSizes.forEach(size => generateIcon(size));
 
-console.log('\n🎉 Готово! Все изображения созданы в /public/');
+console.log('\nрџЋ‰ Готово! Все изображения созданы в /public/');

@@ -1,4 +1,4 @@
-﻿import fs from 'fs/promises';
+import fs from 'fs/promises';
 import path from 'path';
 import { chromium, devices } from 'playwright';
 let canvasTools = null;
@@ -140,4 +140,3 @@ if (failed.length) {
 }
 
 console.log(JSON.stringify({ ok: true, update, results }, null, 2));
-

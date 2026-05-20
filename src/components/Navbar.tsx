@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import type { ThemeMode } from '../hooks/useTheme';

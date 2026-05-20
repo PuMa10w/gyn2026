@@ -62,9 +62,9 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
 
         // Градиент от turquoise к emerald к gold
         const gradient = ctx.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
-        gradient.addColorStop(0, '#14b8a6'); // turquoise
-        gradient.addColorStop(0.5, '#10b981'); // emerald
-        gradient.addColorStop(1, '#f59e0b'); // gold
+        gradient.addColorStop(0, '#D89AA7'); // turquoise
+        gradient.addColorStop(0.5, '#B97886'); // emerald
+        gradient.addColorStop(1, '#D8B878'); // gold
 
         ctx.fillStyle = gradient;
         ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);

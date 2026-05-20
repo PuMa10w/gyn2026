@@ -1,4 +1,4 @@
-﻿import { chromium, devices } from 'playwright';
+import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const deviceNames = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
@@ -191,6 +191,7 @@ for (const deviceName of deviceNames) {
   const tabs = page.locator('.modal-tabs').first();
   await tabs.evaluate((el) => { el.scrollLeft = el.scrollWidth; });
   await page.getByRole('tab', { name: 'Диагностика' }).click();
+  await page.getByRole('tab', { name: 'УЗИ' }).click();
   await page.locator('.modal-body').evaluate((el) => { el.scrollTop = el.scrollHeight; });
   await capture(page, deviceName, 'disease-modal');
   await assertNoHorizontalOverflow(page, `${deviceName} disease modal`);
@@ -258,4 +259,3 @@ if (browserErrors.length > 0) {
 }
 
 console.log(JSON.stringify({ ok: true, devices: deviceNames, messages: allMessages, screenshots }, null, 2));
-

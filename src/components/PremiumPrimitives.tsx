@@ -45,7 +45,7 @@ type SourceBadgeProps = {
   note?: string;
 };
 
-export const SourceBadge = ({ label = 'Source review', level = 'needs-source-review', note }: SourceBadgeProps) => (
+export const SourceBadge = ({ label = 'Проверка источника', level = 'needs-source-review', note }: SourceBadgeProps) => (
   <span className={`source-badge source-badge--${String(level).replace(/[^a-z0-9-]/gi, '-').toLowerCase()}`} title={note}>
     {label}
   </span>

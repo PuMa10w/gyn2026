@@ -31,7 +31,7 @@ const UTERUS_PATHOLOGIES: PathologyHotspot[] = [
   {
     id: 'endometriosis',
     name: 'Эндометриоз',
-    description: 'Разрастание ткани, похожей на эндометрий, за пределами матки.',
+    description: 'Р азрастание ткани, похожей на эндометрий, за пределами матки.',
     position: [-0.6, -0.2, 0.7],
     color: 0xff8844,
   },
@@ -313,7 +313,7 @@ export const Organ3DViewer: React.FC<Organ3DViewerProps> = ({
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <h4 style={{ margin: 0, color: '#64d2ff' }}>{selectedPathology.name}</h4>
+            <h4 style={{ margin: 0, color: '#B97886' }}>{selectedPathology.name}</h4>
             <button
               onClick={() => setSelectedPathology(null)}
               style={{
@@ -333,9 +333,9 @@ export const Organ3DViewer: React.FC<Organ3DViewerProps> = ({
           <div style={{ marginTop: '12px' }}>
             <button
               style={{
-                background: 'rgba(100, 210, 255, 0.2)',
-                border: '1px solid rgba(100, 210, 255, 0.3)',
-                color: '#64d2ff',
+                background: 'rgba(216, 184, 120, 0.18)',
+                border: '1px solid rgba(216, 184, 120, 0.32)',
+                color: '#B97886',
                 padding: '6px 12px',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -368,7 +368,7 @@ export const Organ3DViewer: React.FC<Organ3DViewerProps> = ({
             pointerEvents: 'none',
           }}
         >
-          🖱️ Кликайте на красные точки (патологии)
+          рџ–±пёЏ Кликайте на красные точки (патологии)
         </div>
       )}
     </motion.div>

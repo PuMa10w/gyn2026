@@ -111,7 +111,7 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
       animate={{ opacity: 1, y: 0 }}
     >
       <h3 className="text-gradient" style={{ marginTop: 0, marginBottom: '16px' }}>
-        🧠 AI-Диагност (Симптом-чекер)
+        рџ§  AI-Диагност (Симптом-чекер)
       </h3>
 
       <p style={{ fontSize: '14px', opacity: 0.8, marginBottom: '16px' }}>
@@ -127,10 +127,10 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
               padding: '8px 16px',
               borderRadius: '20px',
               border: selectedSymptoms.includes(symptom)
-                ? '1px solid rgba(100, 210, 255, 0.5)'
+                ? '1px solid rgba(216, 154, 167, 0.38)'
                 : '1px solid rgba(255, 255, 255, 0.1)',
               background: selectedSymptoms.includes(symptom)
-                ? 'rgba(100, 210, 255, 0.2)'
+                ? 'rgba(216, 184, 120, 0.18)'
                 : 'rgba(255, 255, 255, 0.05)',
               color: 'white',
               cursor: 'pointer',
@@ -152,7 +152,7 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
           shimmer={selectedSymptoms.length > 0}
           disabled={selectedSymptoms.length === 0}
         >
-          🔍 Анализировать ({selectedSymptoms.length} симптомов)
+          рџ”Ќ Анализировать ({selectedSymptoms.length} симптомов)
         </PremiumButton>
 
         {selectedSymptoms.length > 0 && (
@@ -179,8 +179,8 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
             padding: '16px',
           }}
         >
-          <h4 style={{ marginTop: 0, marginBottom: '12px', color: '#64d2ff' }}>
-            🎯 Вероятные диагнозы:
+          <h4 style={{ marginTop: 0, marginBottom: '12px', color: '#B97886' }}>
+            рџЋЇ Вероятные диагнозы:
           </h4>
 
           {results.map((result, index) => (
@@ -195,14 +195,14 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
                 alignItems: 'center',
                 padding: '12px',
                 marginBottom: '8px',
-                background: index === 0 ? 'rgba(100, 210, 255, 0.1)' : 'transparent',
+                background: index === 0 ? 'rgba(216, 184, 120, 0.16)' : 'transparent',
                 borderRadius: '8px',
-                border: index === 0 ? '1px solid rgba(100, 210, 255, 0.3)' : 'none',
+                border: index === 0 ? '1px solid rgba(216, 184, 120, 0.34)' : 'none',
               }}
             >
               <div>
                 <div style={{ fontWeight: 'bold', fontSize: '14px' }}>
-                  {index === 0 && '🥇 '}{result.name}
+                  {index === 0 && 'рџҐ‡ '}{result.name}
                 </div>
                 <div style={{ fontSize: '12px', opacity: 0.6 }}>МКБ-10: {result.code}</div>
               </div>
@@ -210,9 +210,9 @@ export const SymptomChecker: React.FC<SymptomCheckerProps> = ({
                 <div style={{
                   padding: '4px 8px',
                   borderRadius: '12px',
-                  background: result.score > 1.5 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)',
+                  background: result.score > 1.5 ? 'rgba(185, 120, 134, 0.16)' : 'rgba(216, 184, 120, 0.18)',
                   fontSize: '12px',
-                  color: result.score > 1.5 ? '#10b981' : '#f59e0b',
+                  color: result.score > 1.5 ? '#B97886' : '#D8B878',
                 }}>
                   {Math.round(result.score * 100)}% вероятность
                 </div>

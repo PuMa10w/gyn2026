@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useId, useState, useCallback } from 'react';
+import React, { useEffect, useId, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { gynIcons, obsIcons } from './Icons';
 import { useModalBehavior } from '../hooks/useModalBehavior';
@@ -1298,4 +1298,3 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 };
 
 export default DiseaseModal;
-

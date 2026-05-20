@@ -1,4 +1,4 @@
-﻿import type { TabType } from '../types';
+import type { TabType } from '../types';
 
 export const emptyStateContent = {
   favorites: {

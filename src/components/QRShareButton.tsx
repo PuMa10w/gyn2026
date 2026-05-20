@@ -38,7 +38,7 @@ export const QRShareButton: React.FC<QRShareButtonProps> = ({
         size="sm"
         shimmer={false}
       >
-        🌐 {showQR ? 'Скрыть QR' : 'QR-код'}
+        {showQR ? 'Скрыть QR' : 'QR-код'}
       </PremiumButton>
 
       {showQR && (
@@ -53,8 +53,8 @@ export const QRShareButton: React.FC<QRShareButtonProps> = ({
             textAlign: 'center',
           }}
         >
-          <h4 style={{ marginTop: 0, marginBottom: '12px', color: '#64d2ff' }}>
-            📱 Поделиться: {diseaseName}
+          <h4 style={{ marginTop: 0, marginBottom: '12px', color: '#B97886' }}>
+            Поделиться: {diseaseName}
           </h4>
           
           <div style={{ 
@@ -81,7 +81,7 @@ export const QRShareButton: React.FC<QRShareButtonProps> = ({
               variant="secondary"
               size="sm"
             >
-              {copied ? '✅ Скопировано!' : '📋 Копировать ссылку'}
+              {copied ? 'Скопировано' : 'Копировать ссылку'}
             </PremiumButton>
 
             <PremiumButton
@@ -99,7 +99,7 @@ export const QRShareButton: React.FC<QRShareButtonProps> = ({
               variant="primary"
               size="sm"
             >
-              📤 Поделиться
+              Поделиться
             </PremiumButton>
           </div>
 

@@ -1,4 +1,4 @@
-﻿const REVIEW_DATE = '2026-05-18';
+const REVIEW_DATE = '2026-05-18';
 
 const medicationGroups = [
   {

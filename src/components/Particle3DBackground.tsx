@@ -9,7 +9,7 @@ interface Particle3DBackgroundProps {
 export const Particle3DBackground: React.FC<Particle3DBackgroundProps> = ({
   className = '',
   particleCount = 100,
-  color = '#14b8a6',
+  color = '#D89AA7',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);

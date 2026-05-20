@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { gynIcons, obsIcons } from './Icons';
 import { PremiumBadge } from './PremiumPrimitives';

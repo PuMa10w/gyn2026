@@ -824,6 +824,110 @@ body::after,
   }
 }
 
+/* Premium Peach V5 final iPhone polish: keep protected navigation, remove dark legacy bands. */
+.catalog-section .catalog-header,
+.catalog-shell .catalog-header,
+main .catalog-header {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.86), transparent 42%),
+    linear-gradient(145deg, rgba(255, 250, 244, 0.96), rgba(249, 232, 220, 0.92)) !important;
+  border: 1px solid rgba(185, 120, 134, 0.22) !important;
+  color: var(--peach-cocoa) !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+.catalog-section .catalog-eyebrow,
+.catalog-section .catalog-title,
+.catalog-section .catalog-description,
+.catalog-shell .catalog-eyebrow,
+.catalog-shell .catalog-title,
+.catalog-shell .catalog-description {
+  color: var(--peach-cocoa) !important;
+  opacity: 1 !important;
+  filter: none !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.catalog-section .catalog-description,
+.catalog-shell .catalog-description {
+  color: var(--peach-cocoa-soft) !important;
+}
+
+.modal-content.mobile-sheet .modal-header,
+.modal-content.mobile-sheet .modal-quick-strip,
+.modal-content.mobile-sheet .modal-tabs,
+.questionnaire-modal.mobile-sheet .modal-header,
+.questionnaire-modal.mobile-sheet .modal-tabs,
+.pharmacology-modal.mobile-sheet .modal-header,
+.pharmacology-modal.mobile-sheet .pharma-tabs {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.72), transparent 36%),
+    linear-gradient(145deg, rgba(255, 250, 244, 0.98), rgba(249, 232, 220, 0.95)) !important;
+  border-color: rgba(185, 120, 134, 0.22) !important;
+  color: var(--peach-cocoa) !important;
+}
+
+.modal-content.mobile-sheet .tab-btn,
+.modal-content.mobile-sheet .modal-tab,
+.questionnaire-modal.mobile-sheet .tab-btn,
+.pharmacology-modal.mobile-sheet .pharma-tab {
+  background: rgba(255, 250, 244, 0.92) !important;
+  border-color: rgba(185, 120, 134, 0.24) !important;
+  color: var(--peach-cocoa) !important;
+}
+
+.modal-content.mobile-sheet .tab-btn.active,
+.modal-content.mobile-sheet .modal-tab.active,
+.questionnaire-modal.mobile-sheet .tab-btn.active,
+.pharmacology-modal.mobile-sheet .pharma-tab.active {
+  background: linear-gradient(135deg, rgba(232, 160, 140, 0.9), rgba(216, 154, 167, 0.86)) !important;
+  border-color: rgba(185, 120, 134, 0.38) !important;
+  color: var(--peach-cocoa) !important;
+}
+
+[data-theme='dark'] .modal-content.mobile-sheet .modal-header,
+[data-theme='dark'] .modal-content.mobile-sheet .modal-quick-strip,
+[data-theme='dark'] .modal-content.mobile-sheet .modal-tabs,
+[data-theme='dark'] .questionnaire-modal.mobile-sheet .modal-header,
+[data-theme='dark'] .questionnaire-modal.mobile-sheet .modal-tabs,
+[data-theme='dark'] .pharmacology-modal.mobile-sheet .modal-header,
+[data-theme='dark'] .pharmacology-modal.mobile-sheet .pharma-tabs {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 244, 236, 0.12), transparent 38%),
+    linear-gradient(145deg, rgba(64, 42, 43, 0.98), rgba(51, 34, 36, 0.96)) !important;
+  border-color: rgba(216, 154, 167, 0.24) !important;
+  color: var(--peach-cream) !important;
+}
+
+[data-theme='dark'] .modal-content.mobile-sheet .tab-btn,
+[data-theme='dark'] .modal-content.mobile-sheet .modal-tab,
+[data-theme='dark'] .questionnaire-modal.mobile-sheet .tab-btn,
+[data-theme='dark'] .pharmacology-modal.mobile-sheet .pharma-tab {
+  background: rgba(255, 244, 236, 0.08) !important;
+  border-color: rgba(216, 154, 167, 0.26) !important;
+  color: rgba(255, 244, 236, 0.88) !important;
+}
+
+[data-theme='dark'] .modal-content.mobile-sheet .tab-btn.active,
+[data-theme='dark'] .modal-content.mobile-sheet .modal-tab.active,
+[data-theme='dark'] .questionnaire-modal.mobile-sheet .tab-btn.active,
+[data-theme='dark'] .pharmacology-modal.mobile-sheet .pharma-tab.active {
+  background: linear-gradient(135deg, rgba(216, 184, 120, 0.92), rgba(216, 154, 167, 0.9)) !important;
+  border-color: rgba(216, 184, 120, 0.42) !important;
+  color: #2b2023 !important;
+}
+
+.catalog-section .search-input,
+.catalog-section .search-input-wrapper,
+.catalog-section .category-chip,
+.catalog-section .filter-chip {
+  color: var(--peach-cocoa) !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
 /* Premium V2 primitives and command center */
 :root,
 [data-theme='dark'] {
@@ -2267,4 +2371,604 @@ body::after,
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* --------------------------------------------------------------------------
+   Premium Peach V5 layer
+   Pastel medical tokens live last on purpose: legacy styles remain available,
+   but the visible product language is unified around peach, beige and rose.
+-------------------------------------------------------------------------- */
+:root,
+:root[data-theme='light'],
+[data-theme='light'] {
+  --peach-cream: #fff4ec;
+  --peach-cream-2: #f9e8dc;
+  --peach-beige: #f6e7d6;
+  --peach-beige-2: #efe0cf;
+  --peach-rose: #d89aa7;
+  --peach-rose-deep: #b97886;
+  --peach-coral: #e8a08c;
+  --peach-coral-soft: #f3bea9;
+  --peach-gold: #d8b878;
+  --peach-cocoa: #2b2023;
+  --peach-cocoa-soft: #5d4a4e;
+  --peach-muted: #7a6569;
+  --peach-danger: #c76f7a;
+  --peach-mint: #b9dcc7;
+  --peach-line: rgba(185, 120, 134, 0.24);
+  --peach-line-strong: rgba(185, 120, 134, 0.38);
+  --peach-shadow: 0 20px 48px rgba(88, 55, 48, 0.13);
+  --peach-shadow-soft: 0 12px 30px rgba(88, 55, 48, 0.09);
+
+  --ui-bg: var(--peach-cream);
+  --ui-bg-soft: var(--peach-cream-2);
+  --ui-surface: rgba(255, 250, 244, 0.96);
+  --ui-surface-strong: #fffaf4;
+  --ui-card: rgba(246, 231, 214, 0.88);
+  --ui-card-strong: rgba(255, 250, 244, 0.98);
+  --ui-line: var(--peach-line);
+  --ui-text: var(--peach-cocoa);
+  --ui-text-muted: var(--peach-cocoa-soft);
+  --ui-ink: var(--peach-cocoa);
+  --ui-teal: var(--peach-rose-deep);
+  --ui-green: var(--peach-coral);
+  --ui-gold: var(--peach-gold);
+  --color-turquoise: var(--peach-rose-deep);
+  --color-emerald: var(--peach-coral);
+  --gradient-accent: linear-gradient(135deg, var(--peach-coral), var(--peach-rose));
+  --gradient-primary: linear-gradient(135deg, var(--peach-coral), var(--peach-rose));
+  --gradient-soft: linear-gradient(145deg, #fff9f2, var(--peach-cream-2));
+}
+
+:root[data-theme='dark'],
+[data-theme='dark'] {
+  --peach-cream: #25191d;
+  --peach-cream-2: #302126;
+  --peach-beige: #3a2a2a;
+  --peach-beige-2: #493434;
+  --peach-rose: #d39aa6;
+  --peach-rose-deep: #eba5a2;
+  --peach-coral: #f0ad92;
+  --peach-coral-soft: #f4bea8;
+  --peach-gold: #e0c184;
+  --peach-cocoa: #fff4ec;
+  --peach-cocoa-soft: #ead0c7;
+  --peach-muted: #c7aaa5;
+  --peach-danger: #ee909c;
+  --peach-mint: #b6d5c3;
+  --peach-line: rgba(232, 160, 140, 0.25);
+  --peach-line-strong: rgba(232, 160, 140, 0.42);
+  --peach-shadow: 0 22px 54px rgba(0, 0, 0, 0.34);
+  --peach-shadow-soft: 0 14px 34px rgba(0, 0, 0, 0.22);
+
+  --ui-bg: #20161a;
+  --ui-bg-soft: #2b1e22;
+  --ui-surface: rgba(49, 34, 38, 0.94);
+  --ui-surface-strong: #35252a;
+  --ui-card: rgba(65, 45, 45, 0.9);
+  --ui-card-strong: rgba(62, 43, 43, 0.98);
+  --ui-line: var(--peach-line);
+  --ui-text: var(--peach-cocoa);
+  --ui-text-muted: var(--peach-cocoa-soft);
+  --ui-ink: var(--peach-cocoa);
+  --ui-teal: var(--peach-rose);
+  --ui-green: var(--peach-coral);
+  --ui-gold: var(--peach-gold);
+  --color-turquoise: var(--peach-rose);
+  --color-emerald: var(--peach-coral);
+  --gradient-accent: linear-gradient(135deg, var(--peach-coral), var(--peach-rose));
+  --gradient-primary: linear-gradient(135deg, var(--peach-coral), var(--peach-rose));
+  --gradient-soft: linear-gradient(145deg, #332329, #24191d);
+}
+
+html,
+body,
+#root,
+.App {
+  background:
+    radial-gradient(circle at 16% -10%, rgba(232, 160, 140, 0.24), transparent 34%),
+    radial-gradient(circle at 90% 4%, rgba(216, 184, 120, 0.18), transparent 30%),
+    linear-gradient(155deg, var(--peach-cream), var(--peach-cream-2)) !important;
+  color: var(--ui-text) !important;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  color: var(--ui-text);
+}
+
+.glass,
+.navbar.glass,
+.navbar-inner,
+.mobile-bottom-bar,
+.premium-command-hero,
+.premium-card,
+.premium-tool-card,
+.home-destination-card,
+.premium-recent-panel,
+.version-checker,
+.disease-card,
+.content-card,
+.clinical-panel,
+.q-card,
+.q-clinical-panel,
+.q-question,
+.q-result,
+.q-recommendation,
+.q-answers-summary,
+.medication-card,
+.interaction-card,
+.regimen-card,
+.clinical-tool-block,
+.modal-content,
+.questionnaire-modal,
+.pharmacology-modal,
+.mobile-sheet {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.56), transparent 34%),
+    linear-gradient(145deg, var(--ui-card-strong), var(--ui-card)) !important;
+  border-color: var(--peach-line) !important;
+  box-shadow: var(--peach-shadow-soft) !important;
+  color: var(--ui-text) !important;
+}
+
+.navbar.glass,
+.mobile-bottom-bar,
+.modal-header,
+.modal-tabs,
+.pharma-header,
+.pharma-tabs,
+.q-header,
+.disease-modal-topline,
+.mobile-sheet-handle {
+  background:
+    linear-gradient(145deg, rgba(255, 250, 244, 0.94), rgba(249, 232, 220, 0.9)) !important;
+  border-color: var(--peach-line) !important;
+  color: var(--ui-text) !important;
+  backdrop-filter: blur(18px) saturate(122%) !important;
+}
+
+[data-theme='dark'] .navbar.glass,
+[data-theme='dark'] .mobile-bottom-bar,
+[data-theme='dark'] .modal-header,
+[data-theme='dark'] .modal-tabs,
+[data-theme='dark'] .pharma-header,
+[data-theme='dark'] .pharma-tabs,
+[data-theme='dark'] .q-header,
+[data-theme='dark'] .disease-modal-topline,
+[data-theme='dark'] .mobile-sheet-handle {
+  background: linear-gradient(145deg, rgba(49, 34, 38, 0.95), rgba(39, 27, 31, 0.92)) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+.modal-title,
+.navbar-brand,
+.navbar-label,
+.disease-title,
+.q-title,
+.pharma-title,
+.premium-command-copy h2,
+.home-destination-title {
+  color: var(--ui-text) !important;
+}
+
+p,
+li,
+.modal-subtitle,
+.modal-icd,
+.disease-summary,
+.q-subtitle,
+.pharma-subtitle,
+.premium-command-copy p,
+.home-destination-text,
+.premium-card p,
+.clinical-panel p,
+.content-card p {
+  color: var(--ui-text-muted) !important;
+}
+
+.premium-button,
+.q-option,
+.category-chip,
+.modal-tab,
+.pharma-tab,
+.navbar-action,
+.nav-tab,
+.mobile-bottom-item,
+.premium-inline-action,
+.search-suggestion,
+.filter-chip,
+.chip {
+  min-height: 44px !important;
+  border-radius: 18px !important;
+  border-color: var(--peach-line) !important;
+  color: var(--ui-text) !important;
+}
+
+.premium-button--primary,
+.q-btn-primary,
+.card-primary-action,
+.version-actions .premium-button--primary,
+.premium-inline-action.primary,
+.mobile-bottom-item.is-active,
+.nav-tab.active,
+.category-chip.active,
+.modal-tab.active,
+.pharma-tab.active,
+.q-option.selected,
+.q-step.active,
+.q-step.done {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.38), transparent 34%),
+    linear-gradient(135deg, var(--peach-coral), var(--peach-rose)) !important;
+  border-color: rgba(185, 120, 134, 0.36) !important;
+  color: #2b2023 !important;
+  box-shadow: 0 14px 32px rgba(216, 154, 167, 0.24) !important;
+}
+
+.premium-button--secondary,
+.premium-button--ghost,
+.q-btn-secondary,
+.navbar-action,
+.nav-tab,
+.category-chip,
+.modal-tab,
+.pharma-tab,
+.mobile-bottom-item,
+.premium-inline-action,
+.q-option,
+.search-suggestion,
+.filter-chip,
+.chip {
+  background: rgba(255, 250, 244, 0.72) !important;
+  border-color: var(--peach-line) !important;
+  box-shadow: 0 8px 20px rgba(88, 55, 48, 0.06) !important;
+}
+
+[data-theme='dark'] .premium-button--secondary,
+[data-theme='dark'] .premium-button--ghost,
+[data-theme='dark'] .navbar-action,
+[data-theme='dark'] .nav-tab,
+[data-theme='dark'] .category-chip,
+[data-theme='dark'] .modal-tab,
+[data-theme='dark'] .pharma-tab,
+[data-theme='dark'] .mobile-bottom-item,
+[data-theme='dark'] .premium-inline-action,
+[data-theme='dark'] .q-option,
+[data-theme='dark'] .search-suggestion,
+[data-theme='dark'] .filter-chip,
+[data-theme='dark'] .chip {
+  background: rgba(70, 49, 49, 0.72) !important;
+}
+
+.premium-button:hover,
+.q-option:hover,
+.category-chip:hover,
+.modal-tab:hover,
+.pharma-tab:hover,
+.navbar-action:hover,
+.mobile-bottom-item:hover {
+  border-color: var(--peach-line-strong) !important;
+  transform: translateY(-1px);
+}
+
+.premium-card--success,
+.premium-badge--success,
+.premium-badge--accent,
+.premium-badge--neutral,
+.source-badge,
+.med-code,
+.modal-icd,
+.search-result-count,
+.review-badge,
+.guideline-badge,
+.status-badge,
+.q-time,
+.q-meta,
+.pharma-meta,
+.version-status-badge {
+  background: rgba(216, 184, 120, 0.16) !important;
+  border-color: rgba(216, 184, 120, 0.36) !important;
+  color: var(--peach-cocoa) !important;
+}
+
+[data-theme='dark'] .premium-card--success,
+[data-theme='dark'] .premium-badge--success,
+[data-theme='dark'] .premium-badge--accent,
+[data-theme='dark'] .premium-badge--neutral,
+[data-theme='dark'] .source-badge,
+[data-theme='dark'] .med-code,
+[data-theme='dark'] .modal-icd,
+[data-theme='dark'] .search-result-count,
+[data-theme='dark'] .review-badge,
+[data-theme='dark'] .guideline-badge,
+[data-theme='dark'] .status-badge,
+[data-theme='dark'] .q-time,
+[data-theme='dark'] .q-meta,
+[data-theme='dark'] .pharma-meta,
+[data-theme='dark'] .version-status-badge {
+  color: var(--peach-cocoa) !important;
+}
+
+.premium-badge--gold,
+.premium-card--warning,
+.clinical-panel--warning {
+  background: rgba(216, 184, 120, 0.18) !important;
+  border-color: rgba(216, 184, 120, 0.38) !important;
+}
+
+.premium-badge--rose,
+.premium-badge--danger,
+.premium-card--danger,
+.clinical-panel--danger,
+.risk-flag,
+.risk-flag--danger,
+.version-error-state,
+.error-state {
+  background: rgba(199, 111, 122, 0.14) !important;
+  border-color: rgba(199, 111, 122, 0.34) !important;
+  color: var(--peach-danger) !important;
+}
+
+.search-input-wrapper,
+.search-input,
+.catalog-search,
+.pharma-search,
+.interaction-select,
+.form-control,
+input[type='search'],
+input[type='text'],
+select,
+textarea {
+  background: rgba(255, 250, 244, 0.9) !important;
+  border-color: var(--peach-line) !important;
+  color: var(--ui-text) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 10px 26px rgba(88, 55, 48, 0.06) !important;
+}
+
+::placeholder {
+  color: rgba(93, 74, 78, 0.62) !important;
+}
+
+.category-filter,
+.category-chips,
+.filter-row,
+.modal-tabs,
+.pharma-tabs,
+.q-steps {
+  scrollbar-color: var(--peach-rose) transparent !important;
+}
+
+.category-filter::after,
+.category-chips::after,
+.modal-tabs::after,
+.pharma-tabs::after {
+  background: linear-gradient(90deg, transparent, var(--peach-cream-2)) !important;
+}
+
+.catalog-header,
+.catalog-shell .catalog-header {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.72), transparent 38%),
+    linear-gradient(145deg, rgba(255, 250, 244, 0.86), rgba(249, 232, 220, 0.78)) !important;
+  border-color: rgba(185, 120, 134, 0.2) !important;
+  box-shadow: 0 16px 38px rgba(88, 55, 48, 0.08) !important;
+}
+
+.catalog-eyebrow,
+.catalog-title,
+.catalog-description {
+  color: var(--peach-cocoa) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+.catalog-description {
+  color: var(--peach-cocoa-soft) !important;
+}
+
+.disease-card-action,
+.card-primary-action,
+.premium-inline-action,
+a.card-primary-action {
+  color: var(--peach-rose-deep) !important;
+  text-decoration-color: rgba(185, 120, 134, 0.38) !important;
+}
+
+.q-progress-bar {
+  background: rgba(185, 120, 134, 0.14) !important;
+  border-color: var(--peach-line) !important;
+}
+
+.q-progress-fill {
+  background: linear-gradient(135deg, var(--peach-coral), var(--peach-rose)) !important;
+}
+
+.q-result-badge {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(216, 184, 120, 0.28), transparent 34%),
+    linear-gradient(135deg, rgba(255, 250, 244, 0.98), rgba(246, 231, 214, 0.94)) !important;
+  border-color: rgba(216, 184, 120, 0.38) !important;
+  color: var(--peach-cocoa) !important;
+}
+
+.q-result-level,
+.q-result-score {
+  color: var(--peach-cocoa) !important;
+}
+
+.q-seg {
+  color: var(--peach-cocoa) !important;
+  border: 1px solid var(--peach-line) !important;
+}
+
+.q-seg:nth-child(1) {
+  background: rgba(185, 220, 199, 0.62) !important;
+}
+
+.q-seg:nth-child(2) {
+  background: rgba(240, 215, 162, 0.62) !important;
+}
+
+.q-seg:nth-child(3) {
+  background: rgba(232, 180, 143, 0.62) !important;
+}
+
+.q-seg:nth-child(4) {
+  background: rgba(216, 154, 167, 0.62) !important;
+}
+
+.q-seg:nth-child(5) {
+  background: rgba(199, 111, 122, 0.62) !important;
+}
+
+.q-seg.active {
+  border-color: rgba(185, 120, 134, 0.5) !important;
+  box-shadow: 0 10px 22px rgba(185, 120, 134, 0.18) !important;
+}
+
+.regimen-table tr,
+.regimen-table td,
+.pharma-regimen-table tr,
+.pharma-regimen-table td {
+  background: rgba(255, 250, 244, 0.54) !important;
+  border-color: var(--peach-line) !important;
+  color: var(--ui-text) !important;
+}
+
+.empty-state,
+.no-results,
+.offline-state,
+.update-state,
+.version-ready-state,
+.favorites-empty,
+.history-empty {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(216, 184, 120, 0.18), transparent 38%),
+    linear-gradient(145deg, rgba(255, 250, 244, 0.94), rgba(246, 231, 214, 0.88)) !important;
+  border: 1px solid var(--peach-line) !important;
+  color: var(--ui-text) !important;
+}
+
+.text-gradient-animated,
+.navbar-brand-mark,
+.brand-mark,
+.glow-turquoise {
+  background: linear-gradient(135deg, var(--peach-coral), var(--peach-rose), var(--peach-gold)) !important;
+  box-shadow: 0 0 24px rgba(216, 154, 167, 0.22) !important;
+}
+
+.pulse-teal,
+.shimmer-teal {
+  --pulse-color: rgba(216, 154, 167, 0.36) !important;
+}
+
+@media (max-width: 768px) {
+  .home-shell,
+  .catalog-section,
+  .questionnaire-modal.mobile-sheet,
+  .pharmacology-modal.mobile-sheet,
+  .modal-content.mobile-sheet {
+    background:
+      radial-gradient(circle at 14% -4%, rgba(232, 160, 140, 0.2), transparent 32%),
+      linear-gradient(160deg, var(--peach-cream), var(--peach-cream-2)) !important;
+  }
+
+  .mobile-bottom-bar {
+    border-radius: 24px 24px 0 0 !important;
+    padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)) !important;
+  }
+
+  .premium-command-hero,
+  .disease-card,
+  .home-destination-card,
+  .premium-tool-card,
+  .version-checker,
+  .q-card,
+  .medication-card {
+    border-radius: 24px !important;
+  }
+
+  .modal-header,
+  .modal-tabs,
+  .pharma-tabs,
+  .q-header {
+    box-shadow: 0 10px 24px rgba(88, 55, 48, 0.08) !important;
+  }
+}
+
+/* Premium Peach V5 terminal override: must remain last to beat legacy mobile sheet rules. */
+.catalog-section .catalog-header,
+.catalog-shell .catalog-header,
+main .catalog-header {
+  background: radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.86), transparent 42%), linear-gradient(145deg, rgba(255, 250, 244, 0.96), rgba(249, 232, 220, 0.92)) !important;
+  border: 1px solid rgba(185, 120, 134, 0.22) !important;
+  color: var(--peach-cocoa) !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+.catalog-section .catalog-eyebrow,
+.catalog-section .catalog-title,
+.catalog-section .catalog-description,
+.catalog-shell .catalog-eyebrow,
+.catalog-shell .catalog-title,
+.catalog-shell .catalog-description {
+  color: var(--peach-cocoa) !important;
+  opacity: 1 !important;
+  filter: none !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.catalog-section .catalog-description,
+.catalog-shell .catalog-description {
+  color: var(--peach-cocoa-soft) !important;
+}
+
+.modal-content.mobile-sheet .modal-header,
+.modal-content.mobile-sheet .modal-quick-strip,
+.modal-content.mobile-sheet .modal-quick-strip.is-collapsed,
+.modal-content.mobile-sheet .modal-tabs,
+.questionnaire-modal.mobile-sheet .modal-header,
+.questionnaire-modal.mobile-sheet .modal-tabs,
+.pharmacology-modal.mobile-sheet .modal-header,
+.pharmacology-modal.mobile-sheet .pharma-tabs {
+  background: radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.72), transparent 36%), linear-gradient(145deg, rgba(255, 250, 244, 0.98), rgba(249, 232, 220, 0.95)) !important;
+  border-color: rgba(185, 120, 134, 0.22) !important;
+  color: var(--peach-cocoa) !important;
+}
+
+.modal-content.mobile-sheet .tab-btn,
+.modal-content.mobile-sheet .modal-tab,
+.questionnaire-modal.mobile-sheet .tab-btn,
+.pharmacology-modal.mobile-sheet .pharma-tab,
+.modal-content.mobile-sheet .tab-btn:not(.active) {
+  background: rgba(255, 250, 244, 0.92) !important;
+  border-color: rgba(185, 120, 134, 0.24) !important;
+  color: var(--peach-cocoa) !important;
+}
+
+.modal-content.mobile-sheet .tab-btn.active,
+.modal-content.mobile-sheet .modal-tab.active,
+.questionnaire-modal.mobile-sheet .tab-btn.active,
+.pharmacology-modal.mobile-sheet .pharma-tab.active {
+  background: linear-gradient(135deg, rgba(232, 160, 140, 0.9), rgba(216, 154, 167, 0.86)) !important;
+  border-color: rgba(185, 120, 134, 0.38) !important;
+  color: var(--peach-cocoa) !important;
+}
+
+.catalog-section .search-input,
+.catalog-section .search-input-wrapper,
+.catalog-section .category-chip,
+.catalog-section .filter-chip {
+  color: var(--peach-cocoa) !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: currentColor !important;
 }

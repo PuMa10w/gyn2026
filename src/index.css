@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
   --safe-top: env(safe-area-inset-top, 0px);
@@ -9,9 +9,9 @@
   --nav-height: auto;
 
   /* Ultra Premium Colors - Turquoise, Emerald, Gold */
-  --color-turquoise: #14b8a6;
-  --color-emerald: #10b981;
-  --color-gold: #f59e0b;
+  --color-turquoise: #D89AA7;
+  --color-emerald: #B97886;
+  --color-gold: #D8B878;
   
   --accent-rose: #a8737e;
   --accent-rose-strong: #7f5560;
@@ -28,8 +28,8 @@
   --bg-panel-solid: #fffaf5;
   --bg-muted: #f2ebe4;
   --bg-hero:
-    radial-gradient(circle at top left, rgba(20, 184, 166, 0.18), transparent 34%),
-    radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 28%),
+    radial-gradient(circle at top left, rgba(232, 160, 140, 0.18), transparent 34%),
+    radial-gradient(circle at top right, rgba(185, 120, 134, 0.12), transparent 28%),
     linear-gradient(180deg, #f7f2ec 0%, #f4eee8 48%, #f1ebe5 100%);
 
   --text-primary: #2f2930;
@@ -53,7 +53,7 @@
   
   /* Premium Gradients - Turquoise, Emerald, Gold */
   --gradient-turquoise-emerald: linear-gradient(135deg, var(--color-turquoise), var(--color-emerald), var(--color-gold));
-  --gradient-premium: linear-gradient(135deg, #14b8a6 0%, #10b981 50%, #f59e0b 100%);
+  --gradient-premium: linear-gradient(135deg, #D89AA7 0%, #B97886 50%, #D8B878 100%);
   
   --overlay-backdrop: rgba(36, 28, 32, 0.34);
 }
@@ -74,8 +74,8 @@
   --bg-panel-solid: #241d22;
   --bg-muted: #211a1f;
   --bg-hero:
-    radial-gradient(circle at top left, rgba(20, 184, 166, 0.12), transparent 34%),
-    radial-gradient(circle at top right, rgba(16, 185, 129, 0.08), transparent 28%),
+    radial-gradient(circle at top left, rgba(232, 160, 140, 0.12), transparent 34%),
+    radial-gradient(circle at top right, rgba(185, 120, 134, 0.08), transparent 28%),
     linear-gradient(180deg, #141013 0%, #171216 52%, #191418 100%);
 
   --text-primary: #f5eee8;
@@ -97,8 +97,8 @@
   --gradient-copper: linear-gradient(135deg, #d4a56a 0%, #c9874a 40%, #d4a56a 100%);
   --gradient-champagne: linear-gradient(135deg, #c9a882 0%, #a88b64 50%, #c9a882 100%);
   
-  --gradient-turquoise-emerald: linear-gradient(135deg, #14b8a6 0%, #10b981 50%, #f59e0b 100%);
-  --gradient-premium: linear-gradient(135deg, #14b8a6 0%, #10b981 50%, #f59e0b 100%);
+  --gradient-turquoise-emerald: linear-gradient(135deg, #D89AA7 0%, #B97886 50%, #D8B878 100%);
+  --gradient-premium: linear-gradient(135deg, #D89AA7 0%, #B97886 50%, #D8B878 100%);
   
   --overlay-backdrop: rgba(9, 8, 10, 0.72);
 }
@@ -277,11 +277,11 @@ body {
 
 /* ========== PREMIUM GLOW EFFECTS ========== */
 .glow-turquoise {
-  box-shadow: 0 0 40px rgba(20, 184, 166, 0.3);
+  box-shadow: 0 0 40px rgba(216, 154, 167, 0.24);
 }
 
 .glow-emerald {
-  box-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 40px rgba(185, 120, 134, 0.24);
 }
 
 .glow-gold {
@@ -289,7 +289,7 @@ body {
 }
 
 .glow-premium {
-  box-shadow: 0 0 40px rgba(20, 184, 166, 0.2), 0 0 60px rgba(16, 185, 129, 0.15), 0 0 80px rgba(245, 158, 11, 0.1);
+  box-shadow: 0 0 40px rgba(216, 154, 167, 0.18), 0 0 60px rgba(185, 120, 134, 0.12), 0 0 80px rgba(216, 184, 120, 0.14);
 }
 
 /* ========== GRADIENT TEXT ========== */
@@ -318,8 +318,8 @@ body {
 .shimmer {
   position: relative;
   overflow: hidden;
-  background: rgba(100, 210, 255, 0.1);
-  border: 1px solid rgba(100, 210, 255, 0.3);
+  background: rgba(216, 184, 120, 0.14);
+  border: 1px solid rgba(216, 184, 120, 0.32);
   transition: all 0.3s ease;
 }
 
@@ -339,7 +339,7 @@ body {
 }
 
 .shimmer:hover {
-  box-shadow: 0 0 20px rgba(100, 210, 255, 0.4);
+  box-shadow: 0 0 20px rgba(216, 154, 167, 0.30);
   transform: translateY(-2px);
 }
 
@@ -357,8 +357,8 @@ body {
   position: relative;
   padding: 12px 32px;
   border-radius: 9999px;
-  border: 1px solid rgba(20, 184, 166, 0.3);
-  background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(16, 185, 129, 0.08));
+  border: 1px solid rgba(216, 154, 167, 0.24);
+  background: linear-gradient(135deg, rgba(216, 154, 167, 0.14), rgba(185, 120, 134, 0.08));
   color: var(--text-primary);
   font-weight: 600;
   cursor: pointer;
@@ -381,7 +381,7 @@ body {
 }
 
 .btn-premium:hover {
-  box-shadow: 0 0 30px rgba(20, 184, 166, 0.4);
+  box-shadow: 0 0 30px rgba(216, 154, 167, 0.32);
   transform: translateY(-2px);
 }
 
@@ -800,7 +800,7 @@ body {
 .premium-button--primary {
   background: linear-gradient(135deg, var(--color-turquoise), var(--color-emerald));
   color: #ffffff;
-  box-shadow: 0 14px 28px rgba(20, 184, 166, 0.2);
+  box-shadow: 0 14px 28px rgba(216, 154, 167, 0.18);
 }
 
 .premium-button--secondary {
@@ -861,8 +861,8 @@ body {
   transform: translateX(-50%);
   width: 30px;
   height: 30px;
-  border: 3px solid rgba(100, 210, 255, 0.3);
-  border-top-color: #64d2ff;
+  border: 3px solid rgba(216, 184, 120, 0.32);
+  border-top-color: #B97886;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -870,3 +870,4 @@ body {
 @keyframes spin {
   to { transform: translateX(-50%) rotate(360deg); }
 }
+

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import { useModalBehavior } from '../hooks/useModalBehavior';

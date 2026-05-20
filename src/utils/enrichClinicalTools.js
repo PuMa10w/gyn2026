@@ -188,11 +188,15 @@ const buildQuestionnaireGuidelineFallback = (questionnaire) => [
   },
 ];
 
-export const enrichQuestionnaire = (questionnaire) => {
+export const enrichQuestionnaire = (rawQuestionnaire) => {
+  const questionnaire = deepRepair(rawQuestionnaire);
   const profile = questionnaireProfiles[questionnaire.id] ?? {};
 
   return {
     ...questionnaire,
+    scoring: typeof questionnaire.scoring === 'function'
+      ? (answers) => deepRepair(questionnaire.scoring(answers))
+      : questionnaire.scoring,
     clinicalPurpose: {
       screening: withListFallback(questionnaire.clinicalPurpose?.screening, profile.purpose ?? ['Скрининг симптомов и первичная клиническая маршрутизация.']),
       severityAssessment: withListFallback(questionnaire.clinicalPurpose?.severityAssessment, ['Оценка выраженности симптомов по суммарному баллу.']),

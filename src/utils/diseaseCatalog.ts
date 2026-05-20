@@ -1,4 +1,4 @@
-﻿import type { CategoryId, Disease, TabType } from '../types';
+import type { CategoryId, Disease, TabType } from '../types';
 import { isObstetricsLabel, repairText } from './textRepair';
 
 type NonAllCategory = Exclude<CategoryId, 'all'>;

@@ -1,4 +1,4 @@
-﻿import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import './index.css';
@@ -237,7 +237,7 @@ function App() {
 
         {/* 3D Particle Background (Wow-effect) */}
         <Suspense fallback={null}>
-          <Particle3DBackground particleCount={prefersReducedMotion ? 0 : isMobileViewport ? 26 : 80} color="#14b8a6" />
+          <Particle3DBackground particleCount={prefersReducedMotion ? 0 : isMobileViewport ? 26 : 80} color="#D89AA7" />
         </Suspense>
 
         <BackgroundEffects />
@@ -362,4 +362,3 @@ function App() {
 }
 
 export default App;
-

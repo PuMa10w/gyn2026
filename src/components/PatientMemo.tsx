@@ -17,7 +17,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
   if (!disease) {
     return (
       <div className={`patient-memo glass ${className}`} style={{ padding: '20px', borderRadius: '16px', textAlign: 'center' }}>
-        <p style={{ opacity: 0.6 }}>📝 Выберите заболевание, чтобы сформировать памятку для пациента</p>
+        <p style={{ opacity: 0.6 }}>рџ“ќ Выберите заболевание, чтобы сформировать памятку для пациента</p>
       </div>
     );
   }
@@ -35,7 +35,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
     // Создаем новое окно с печатной версией
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
-      alert('Разрешите всплывающие окна для печати');
+      alert('Р азрешите всплывающие окна для печати');
       setIsGenerating(false);
       return;
     }
@@ -60,7 +60,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
             background: #f9f9f9;
           }
           .header { 
-            background: linear-gradient(135deg, #14b8a6, #10b981); 
+            background: linear-gradient(135deg, #D89AA7, #B97886); 
             color: white; 
             padding: 30px; 
             border-radius: 12px; 
@@ -75,9 +75,9 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
             border-radius: 8px; 
             margin-bottom: 20px; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-left: 4px solid #14b8a6;
+            border-left: 4px solid #D89AA7;
           }
-          h2 { color: #14b8a6; margin-top: 0; font-size: 18px; }
+          h2 { color: #D89AA7; margin-top: 0; font-size: 18px; }
           .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
           .card { 
             background: #f0f9f9; 
@@ -90,7 +90,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
           li { margin-bottom: 8px; }
           .warning { 
             background: #fef3c7; 
-            border-left: 4px solid #f59e0b; 
+            border-left: 4px solid #D8B878; 
             padding: 15px; 
             border-radius: 8px;
             margin-top: 20px;
@@ -112,24 +112,24 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
       </head>
       <body>
         <div class="header">
-          <h1>📋 Памятка пациента</h1>
+          <h1>рџ“‹ Памятка пациента</h1>
           <div class="icd">МКБ-10: ${disease.subtitle || 'N/A'} • ${disease.name}</div>
         </div>
 
         <div class="section">
-          <h2>📝 Что это такое?</h2>
+          <h2>рџ“ќ Что это такое?</h2>
           <p>${disease.definition || 'Информация отсутствует'}</p>
         </div>
 
         ${disease.epidemiology ? `
         <div class="section">
-          <h2>📊 Эпидемиология</h2>
+          <h2>рџ“Љ Эпидемиология</h2>
           <p>${disease.epidemiology}</p>
         </div>
         ` : ''}
 
         <div class="section">
-          <h2>🩺 Основные симптомы</h2>
+          <h2>рџ©є Основные симптомы</h2>
           <ul>
             ${disease.symptoms.map(s => `<li>${s}</li>`).join('')}
           </ul>
@@ -137,7 +137,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
 
         ${treatmentSteps.length > 0 ? `
         <div class="section">
-          <h2>💊 Основные методы лечения</h2>
+          <h2>рџ’Љ Основные методы лечения</h2>
           <div class="card-grid">
             ${treatmentSteps.slice(0, 4).map(t => `
               <div class="card">
@@ -151,7 +151,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
 
         ${disease.patientCounseling && disease.patientCounseling.length > 0 ? `
         <div class="section">
-          <h2>💬 Что важно знать</h2>
+          <h2>рџ’¬ Что важно знать</h2>
           <ul>
             ${disease.patientCounseling.map(item => `<li>${item}</li>`).join('')}
           </ul>
@@ -159,7 +159,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
         ` : ''}
 
         <div class="warning">
-          ⚠️ <strong>Важно:</strong> Данная памятка носит информационный характер. 
+          вљ пёЏ <strong>Важно:</strong> Данная памятка носит информационный характер. 
           Не занимайтесь самолечением — строго следуйте назначениям вашего лечащего врача!
         </div>
 
@@ -169,7 +169,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
 
         <div class="no-print" style="text-align: center; margin-top: 30px;">
           <button onclick="window.print()" style="
-            background: linear-gradient(135deg, #14b8a6, #10b981);
+            background: linear-gradient(135deg, #D89AA7, #B97886);
             color: white;
             border: none;
             padding: 12px 30px;
@@ -177,7 +177,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({
             font-size: 16px;
             cursor: pointer;
             margin-right: 10px;
-          ">🖨️ Распечатать / Сохранить как PDF</button>
+          ">рџ–ЁпёЏ Р аспечатать / Сохранить как PDF</button>
           <button onclick="window.close()" style="
             background: #f3f4f6;
             color: #374151;
@@ -232,7 +232,7 @@ ${treatmentSteps.map(t => `${t.step}: ${t.detail}`).join('\n') || 'Нет дан
       animate={{ opacity: 1, y: 0 }}
     >
       <h3 className="text-gradient" style={{ marginTop: 0, marginBottom: '16px' }}>
-        📝 Умный экспорт (Памятка пациента)
+        рџ“ќ Умный экспорт (Памятка пациента)
       </h3>
 
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
@@ -242,7 +242,7 @@ ${treatmentSteps.map(t => `${t.step}: ${t.detail}`).join('\n') || 'Нет дан
           shimmer={true}
           disabled={isGenerating}
         >
-          {isGenerating ? '⏳ Генерирую...' : '🖨️ Печать / PDF'}
+          {isGenerating ? '⏳ Генерирую...' : 'рџ–ЁпёЏ Печать / PDF'}
         </PremiumButton>
 
         <PremiumButton
@@ -250,7 +250,7 @@ ${treatmentSteps.map(t => `${t.step}: ${t.detail}`).join('\n') || 'Нет дан
           variant="secondary"
           size="sm"
         >
-          📋 Копировать текст
+          рџ“‹ Копировать текст
         </PremiumButton>
       </div>
 
@@ -260,13 +260,13 @@ ${treatmentSteps.map(t => `${t.step}: ${t.detail}`).join('\n') || 'Нет дан
         borderRadius: '12px',
         fontSize: '14px',
       }}>
-        <p style={{ margin: '0 0 8px 0', fontWeight: 'bold' }}>📋 Памятка включает:</p>
+        <p style={{ margin: '0 0 8px 0', fontWeight: 'bold' }}>рџ“‹ Памятка включает:</p>
         <ul style={{ margin: 0, paddingLeft: '20px', opacity: 0.8 }}>
           <li>Определение заболевания</li>
           <li>Эпидемиология</li>
           <li>Список симптомов</li>
           <li>Методы лечения</li>
-          <li>Рекомендации для пациента</li>
+          <li>Р екомендации для пациента</li>
         </ul>
       </div>
 

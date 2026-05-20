@@ -26,9 +26,9 @@ const baseMedications = [
       notFirstLineWhen: ["Тромбоз в анамнезе", "Тяжелые заболевания печени"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Безопасность подтверждена при угрозе выкидыша", "Не имеет андрогенных свойств"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Проникает в грудное молоко в минимальных количествах"]
     },
     monitoring: {
@@ -110,7 +110,7 @@ const baseMedications = [
     dosage: {
       standard: "2.5-5 мг/день"
     },
-    indications: ["Бесплодие", "Эндометриоз", "Рак молочной железы"],
+    indications: ["Бесплодие", "Эндометриоз", "ак молочной железы"],
     contraindications: ["Беременность", "Печеночная недостаточность"],
     sideEffects: ["Приливы", "Артралгия", "Усталость", "Остеопороз"],
     interactions: [
@@ -137,7 +137,7 @@ const baseMedications = [
     comparativeRole: {
       preferredOver: "Кломифен — при ожирении и резистентности к кломифену",
       lessUsefulThan: "Кломифен — при нормальном ИМТ",
-      chooseWhen: ["СПКЯ + ожирение", "Резистентность к кломифену"]
+      chooseWhen: ["СПКЯ + ожирение", "езистентность к кломифену"]
     },
     guidelineBasis: [
       { organization: "ASRM", title: "Letrozole for ovulation induction", documentType: "Practice Committee Opinion", scope: "СПКЯ, бесплодие", status: "latest available" }
@@ -173,7 +173,7 @@ const baseMedications = [
     contraindications: ["Почечная недостаточность", "Печеночная недостаточность", "Беременность", "Алкоголизм"],
     sideEffects: ["Тошнота", "Диарея", "Металлический привкус", "Дефицит B12"],
     interactions: [
-      { drug: "Алкоголь", effect: "Риск лактатацидоза", level: "high" }
+      { drug: "Алкоголь", effect: "иск лактатацидоза", level: "high" }
     ],
     firstLineStatus: {
       role: "first-line",
@@ -183,7 +183,7 @@ const baseMedications = [
     pregnancyLactation: {
       pregnancyStatus: "Осторожно",
       pregnancyNotes: ["При СПКЯ может использоваться до беременности", "При беременности — инсулин"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Проникает в молоко, но безопасен"]
     },
     monitoring: {
@@ -219,7 +219,7 @@ const baseMedications = [
     contraindications: ["Тромбоз", "Почечная недостаточность", "Судороги"],
     sideEffects: ["Тошнота", "Диарея", "Головная боль", "Тромбоз"],
     interactions: [
-      { drug: "Эстрогены", effect: "Риск тромбоза", level: "high" }
+      { drug: "Эстрогены", effect: "иск тромбоза", level: "high" }
     ],
     firstLineStatus: {
       role: "first-line",
@@ -227,9 +227,9 @@ const baseMedications = [
       notFirstLineWhen: ["Тромбоз", "Почечная недостаточность"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Безопасен при беременности", "Используется при ППК"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Проникает в молоко, безопасен"]
     },
     clinicalUseCases: [
@@ -244,7 +244,7 @@ const baseMedications = [
         importantNotes: ["1 г в/в в первые 3 часа после родов"]
       }
     ],
-    majorPracticePoints: ["Раннее применение важно", "Максимум 8 г/сутки"],
+    majorPracticePoints: ["аннее применение важно", "Максимум 8 г/сутки"],
     guidelineBasis: [
       { organization: "WHO", title: "Tranexamic acid in postpartum hemorrhage", documentType: "Guideline", scope: "ППК", status: "latest available" }
     ]
@@ -270,7 +270,7 @@ const baseMedications = [
     pregnancyLactation: {
       pregnancyStatus: "Осторожно",
       pregnancyNotes: ["Категория B, используется при хламидиозе", "Предпочтительнее амоксициллина при хламидиозе"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Проникает в молоко, безопасен"]
     },
     clinicalUseCases: [
@@ -282,7 +282,7 @@ const baseMedications = [
       {
         scenario: "ВЗОМТ",
         whyChosen: "Покрытие хламидии и анаэробов",
-        importantNotes: ["В комбинации с цефтриаксоном", "500 мг x 3 дня"]
+        importantNotes: ["Р ’ комбинации с цефтриаксоном", "500 мг x 3 дня"]
       }
     ],
     majorPracticePoints: ["Однократный прием при неосложненном хламидиозе", "Лечение партнеров обязательно", "Не использовать при гонорее"],
@@ -352,7 +352,7 @@ const baseMedications = [
       notFirstLineWhen: ["Тяжелая почечная недостаточность", "Пороки сердца"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Безопасен при гиперпролактинемии", "Можно использовать при планировании беременности"],
       lactationStatus: "Противопоказан",
       lactationNotes: ["Подавляет лактацию"]
@@ -394,14 +394,14 @@ const baseMedications = [
       notFirstLineWhen: ["Почечная недостаточность", "Миастения"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Золотой стандарт профилактики эклампсии", "Не влияет на плод при правильном дозировании"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Проникает в молоко, безопасен"]
     },
     monitoring: {
-      beforeStart: ["Суточный диурез", "Креатинин", "Рефлексы"],
-      duringTreatment: ["Рефлексы (снижение — признак передозировки)", "Частота дыхания", "Диурез"],
+      beforeStart: ["Суточный диурез", "Креатинин", "ефлексы"],
+      duringTreatment: ["ефлексы (снижение — признак передозировки)", "Частота дыхания", "Диурез"],
       stopOrReviewIf: ["Частота дыхания < 12/мин", "Отсутствие рефлексов", "Диурез < 30 мл/ч"]
     },
     clinicalUseCases: [
@@ -449,9 +449,9 @@ const baseMedications = [
       notFirstLineWhen: ["Гипотензия", "Тяжелый аортальный стеноз"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Безопасен при беременности", "Не оказывает тератогенного эффекта"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Минимально проникает в молоко"]
     },
     monitoring: {
@@ -467,7 +467,7 @@ const baseMedications = [
       },
       {
         scenario: "Токолиз",
-        whyChosen: "Расслабление матки",
+        whyChosen: "асслабление матки",
         importantNotes: ["10 мг x 4 раза в день"]
       }
     ],
@@ -502,7 +502,7 @@ const baseMedications = [
     pregnancyLactation: {
       pregnancyStatus: "Противопоказан",
       pregnancyNotes: ["Не использовать при беременности", "Только в послеродовом периоде"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Не влияет на лактацию"]
     },
     monitoring: {
@@ -616,7 +616,7 @@ const baseMedications = [
     },
     indications: ["Экстренная контрацепция (до 72 ч)"],
     contraindications: ["Беременность"],
-    sideEffects: ["Тошнота", "Рвота", "Головная боль", "Усталость", "Нарушение цикла"],
+    sideEffects: ["Тошнота", "вота", "Головная боль", "Усталость", "Нарушение цикла"],
     interactions: []
   },
   {
@@ -630,7 +630,7 @@ const baseMedications = [
     },
     indications: ["Медикаментозный аборт (до 63 дней)", "Индукция родов"],
     contraindications: ["Хроническая надпочечная недостаточность", "Тяжелая анемия", "Инфекция"],
-    sideEffects: ["Кровотечение", "Боли внизу живота", "Тошнота", "Рвота", "Диарея"],
+    sideEffects: ["Кровотечение", "Боли внизу живота", "Тошнота", "вота", "Диарея"],
     interactions: [
       { drug: "НПВС", effect: "Снижение эффективности", level: "high" }
     ]
@@ -647,7 +647,7 @@ const baseMedications = [
     },
     indications: ["Медикаментозный аборт", "Послеродовое кровотечение", "Индукция родов"],
     contraindications: ["Беременность (кроме индукции)", "Астма"],
-    sideEffects: ["Тошнота", "Рвота", "Диарея", "Лихорадка", "Озноб"],
+    sideEffects: ["Тошнота", "вота", "Диарея", "Лихорадка", "Озноб"],
     interactions: [
       { drug: "Окситоцин", effect: "Усиление сокращений", level: "medium" }
     ],
@@ -659,7 +659,7 @@ const baseMedications = [
     pregnancyLactation: {
       pregnancyStatus: "Только по показаниям",
       pregnancyNotes: ["Используется для индукции родов", "Профилактика ППК"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Минимально проникает в молоко"]
     },
     clinicalUseCases: [
@@ -731,9 +731,9 @@ const baseMedications = [
       notFirstLineWhen: ["Аллергия на цефалоспорины"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Категория B", "Безопасен при беременности"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Минимально проникает в молоко"]
     },
     clinicalUseCases: [
@@ -794,7 +794,7 @@ const baseMedications = [
     pregnancyLactation: {
       pregnancyStatus: "Осторожно",
       pregnancyNotes: ["Избегать в первом триместре", "Безопасен во 2-3 триместрах"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Проникает в молоко — избегать при грудном вскармливании"]
     },
     clinicalUseCases: [
@@ -898,7 +898,7 @@ const baseMedications = [
     },
     indications: ["Гиперпролактинемия", "Пролактинома", "Подавление лактации"],
     contraindications: ["Тяжелая почечная недостаточность", "ИБС"],
-    sideEffects: ["Тошнота", "Рвота", "Головная боль", "Головокружение", "Гипотензия"],
+    sideEffects: ["Тошнота", "вота", "Головная боль", "Головокружение", "Гипотензия"],
     interactions: [
       { drug: "Антипсихотики", effect: "Снижение эффективности", level: "medium" }
     ]
@@ -943,7 +943,7 @@ const baseMedications = [
       patch: "1.5-3 мг/сут"
     },
     indications: ["Снижение либидо", "ПНЯ", "Дефицит андрогенов"],
-    contraindications: ["Рак молочной железы", "Рак простаты", "Беременность"],
+    contraindications: ["ак молочной железы", "ак простаты", "Беременность"],
     sideEffects: ["Акне", "Гирсутизм", "Снижение голоса", "Агрессия"],
     interactions: []
   },
@@ -956,7 +956,7 @@ const baseMedications = [
     dosage: {
       implant: "3.6 мг п/к каждые 28 дней или 10.8 мг каждые 12 недель"
     },
-    indications: ["Эндометриоз", "Миома матки", "Рак молочной железы", "Рак простаты"],
+    indications: ["Эндометриоз", "Миома матки", "ак молочной железы", "ак простаты"],
     contraindications: ["Беременность", "Лактация"],
     sideEffects: ["Приливы", "Снижение либидо", "Сухость влагалища", "Головная боль", "Перепады настроения"],
     interactions: []
@@ -970,7 +970,7 @@ const baseMedications = [
     dosage: {
       depot: "3.75 мг в/м ежемесячно или 11.25 мг каждые 3 месяца"
     },
-    indications: ["Эндометриоз", "Миома матки", "Рак молочной железы", "Рак простаты"],
+    indications: ["Эндометриоз", "Миома матки", "ак молочной железы", "ак простаты"],
     contraindications: ["Беременность", "Лактация"],
     sideEffects: ["Приливы", "Снижение либидо", "Сухость влагалища", "Головная боль", "Тошнота"],
     interactions: []
@@ -984,7 +984,7 @@ const baseMedications = [
     dosage: {
       depot: "3.75 мг в/м ежемесячно"
     },
-    indications: ["Эндометриоз", "Миома матки", "Рак молочной железы", "Бесплодие (ЭКО)"],
+    indications: ["Эндометриоз", "Миома матки", "ак молочной железы", "Бесплодие (ЭКО)"],
     contraindications: ["Беременность", "Лактация"],
     sideEffects: ["Приливы", "Снижение либидо", "Головная боль", "Перепады настроения"],
     interactions: []
@@ -1000,7 +1000,7 @@ const baseMedications = [
     },
     indications: ["Контролируемая стимуляция овуляции (ЭКО)"],
     contraindications: ["Беременность", "Лактация", "Тяжелая почечная недостаточность"],
-    sideEffects: ["Тошнота", "Головная боль", "Реакции в месте инъекции"],
+    sideEffects: ["Тошнота", "Головная боль", "еакции в месте инъекции"],
     interactions: []
   },
   {
@@ -1072,7 +1072,7 @@ const baseMedications = [
     },
     indications: ["Профилактика преэклампсии", "Привычное невынашивание (АФС)", "Профилактика тромбозов"],
     contraindications: ["Язвенная болезнь", "Бронхиальная астма", "Беременность (3 триместр)"],
-    sideEffects: ["Тошнота", "Изжога", "Риск кровотечения", "Бронхоспазм"],
+    sideEffects: ["Тошнота", "Изжога", "иск кровотечения", "Бронхоспазм"],
     interactions: [
       { drug: "Антикоагулянты", effect: "Усиление риска кровотечения", level: "high" },
       { drug: "НПВС", effect: "Усиление риска кровотечения", level: "medium" }
@@ -1135,9 +1135,9 @@ const baseMedications = [
       notFirstLineWhen: ["Бронхиальная астма", "Сердечная недостаточность"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Безопасен при беременности", "Не имеет тератогенного эффекта"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Проникает в молоко, безопасен"]
     },
     monitoring: {
@@ -1211,9 +1211,9 @@ const baseMedications = [
       notFirstLineWhen: ["Системные инфекции", "Сахарный диабет (относительно)"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Ускоряет созревание лёгких плода", "Снижает перинатальную смертность"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Минимально проникает в молоко"]
     },
     monitoring: {
@@ -1254,7 +1254,7 @@ const baseMedications = [
     },
     indications: ["Послеродовое кровотечение", "Атонрия матки"],
     contraindications: ["Беременность (до родов)", "Астма", "Активное заболевание лёгких"],
-    sideEffects: ["Тошнота", "Рвота", "Диарея", "Лихорадка", "Бронхоспазм"],
+    sideEffects: ["Тошнота", "вота", "Диарея", "Лихорадка", "Бронхоспазм"],
     interactions: [],
     firstLineStatus: {
       role: "second-line",
@@ -1264,7 +1264,7 @@ const baseMedications = [
     pregnancyLactation: {
       pregnancyStatus: "Только послеродовый период",
       pregnancyNotes: ["Используется только при ППК"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Минимально проникает в молоко"]
     },
     clinicalUseCases: [
@@ -1301,9 +1301,9 @@ const baseMedications = [
       notFirstLineWhen: ["Беременность > 33 недель", "Внутриматочная инфекция"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
       pregnancyNotes: ["Специфический блокатор окситоцина", "Эффективен до 33 недель"],
-      lactationStatus: "Разрешен",
+      lactationStatus: "азрешен",
       lactationNotes: ["Минимально проникает в молоко"]
     },
     clinicalUseCases: [
@@ -1340,9 +1340,9 @@ const baseMedications = [
       notFirstLineWhen: ["Сердечные заболевания", "Диабет", "Тиреотоксикоз"]
     },
     pregnancyLactation: {
-      pregnancyStatus: "Разрешен",
-      pregnancyNotes: ["Рекомендован при бронхиальной астме", "Бета-2-агонист"],
-      lactationStatus: "Разрешен",
+      pregnancyStatus: "азрешен",
+      pregnancyNotes: ["екомендован при бронхиальной астме", "Бета-2-агонист"],
+      lactationStatus: "азрешен",
       lactationNotes: ["Проникает в молоко"]
     },
     clinicalUseCases: [
@@ -1365,7 +1365,7 @@ const baseMedications = [
     },
     indications: ["Угроза преждевременных родов", "Многоводие", "Боль", "Воспаление"],
     contraindications: ["Беременность (> 32 недель — риск для плода)", "Язвенная болезнь", "Почечная недостаточность"],
-    sideEffects: ["Тошнота", "Изжога", "Головная боль", "Задержка жидкости", "Риск для плода (почки, сердце)"],
+    sideEffects: ["Тошнота", "Изжога", "Головная боль", "Задержка жидкости", "иск для плода (почки, сердце)"],
     interactions: []
   },
   {
@@ -1388,7 +1388,7 @@ const baseMedications = [
   },
   {
     id: "anti-d-immunoglobulin",
-    name: "Анти-D иммуноглобулин (Рогам)",
+    name: "Анти-D иммуноглобулин (огам)",
     nameEn: "Anti-D Immunoglobulin",
     category: "Иммуноглобулины",
     forms: ["Инъекции"],
@@ -1413,7 +1413,7 @@ const baseMedications = [
     },
     indications: ["Индукция родов", "Созревание шейки матки"],
     contraindications: ["Кесарево сечение в анамнезе", "Поперечное предлежание", "Предлежание плаценты"],
-    sideEffects: ["Тошнота", "Рвота", "Диарея", "Гиперстимуляция матки", "Лихорадка"],
+    sideEffects: ["Тошнота", "вота", "Диарея", "Гиперстимуляция матки", "Лихорадка"],
     interactions: []
   },
   {
@@ -1561,7 +1561,7 @@ const baseMedications = [
     dosage: {
       standard: "10 мг 3-4 раза/день"
     },
-    indications: ["Тошнота", "Рвота", "Гастропарез", "Лактация (для увеличения)"],
+    indications: ["Тошнота", "вота", "Гастропарез", "Лактация (для увеличения)"],
     contraindications: ["Пролактинома", "Удлинение интервала QT"],
     sideEffects: ["Головная боль", "Сухость во рту", "Галакторея", "Аритмии"],
     interactions: [
@@ -1579,7 +1579,7 @@ const baseMedications = [
     },
     indications: ["Послеродовое кровотечение", "Атония матки"],
     contraindications: ["Гипертензия", "Сепсис", "Беременность (не в родах)"],
-    sideEffects: ["Гипертензия", "Тошнота", "Рвота", "Головная боль", "Судороги"],
+    sideEffects: ["Гипертензия", "Тошнота", "вота", "Головная боль", "Судороги"],
     interactions: [
       { drug: "Сосудосуживающие", effect: "Усиление эффекта", level: "high" }
     ]
@@ -1595,7 +1595,7 @@ const baseMedications = [
     },
     indications: ["Послеродовое кровотечение"],
     contraindications: ["Гипертензия", "Сепсис", "ИБС"],
-    sideEffects: ["Тошнота", "Рвота", "Гипертензия", "Головная боль"],
+    sideEffects: ["Тошнота", "вота", "Гипертензия", "Головная боль"],
     interactions: []
   },
   {
@@ -1656,7 +1656,7 @@ export const drugInteractions = {
     },
     low: {
       label: "Низкий риск",
-      color: "#27ae60",
+      color: "#B9DCC7",
       description: "Взаимодействие возможно, но клинически значимо редко"
     }
   },
@@ -1745,7 +1745,7 @@ const rawCommonRegimens = [
     },
     indications: ["Неосложнённый цистит", "Профилактика ИМП"],
     contraindications: ["Беременность", "Почечная недостаточность", "Анурия"],
-    sideEffects: ["Тошнота", "Рвота", "Головная боль", "Гематурия", "Полинейропатия"],
+    sideEffects: ["Тошнота", "вота", "Головная боль", "Гематурия", "Полинейропатия"],
     interactions: [
       { drug: "Пробенецид", effect: "Снижение экскреции", level: "medium" },
       { drug: "Антациды", effect: "Снижение всасывания", level: "medium" }
@@ -1806,7 +1806,7 @@ const rawCommonRegimens = [
     name: "Миконазол",
     nameEn: "Miconazole",
     category: "Антимикотические",
-    forms: ["Крем", "Свечи", "Раствор"],
+    forms: ["Крем", "Свечи", "аствор"],
     dosage: {
       candidacy: "100 мг вагинальные свечи, 7 дней"
     },
@@ -1822,7 +1822,7 @@ const rawCommonRegimens = [
     name: "Клотримазол",
     nameEn: "Clotrimazole",
     category: "Антимикотические",
-    forms: ["Крем", "Свечи", "Раствор"],
+    forms: ["Крем", "Свечи", "аствор"],
     dosage: {
       candidacy: "100 мг вагинальные свечи, 6 дней"
     },
@@ -1870,7 +1870,7 @@ const rawCommonRegimens = [
       { day: "1", drug: "Нифедипин", dose: "20 мг", note: "Начальная доза, затем 10-20 мг каждые 4-6 часов" },
       { day: "1", drug: "Бетаметазон", note: "12 мг в/м, 2 дозы с интервалом 24 ч" },
       { day: "1", drug: "Сульфат магния", note: "4-6 г в/в, затем 1-2 г/ч (при < 32 нед.)" },
-      { day: "1-48", drug: "Антибиотики", note: "Ампициллин (при ППРОМ)" }
+      { day: "1-48", drug: "Антибиотики", note: "Ампициллин (при ПП ОМ)" }
     ]
   },
   {
@@ -1978,7 +1978,7 @@ const rawCommonRegimens = [
       { day: "1", drug: "Нифедипин", note: "10 мг × 4 раза/день" },
       { day: "1", drug: "Бетаметазон", note: "12 мг × 2 дозы" },
       { day: "1", drug: "Магния сульфат", note: "4-6 г в/в, затем 1-2 г/ч (< 32 нед.)" },
-      { day: "1-2", drug: "Антибиотики", note: "Ампициллин (при ППРОМ)" }
+      { day: "1-2", drug: "Антибиотики", note: "Ампициллин (при ПП ОМ)" }
     ]
   },
   {

@@ -73,7 +73,7 @@ export const PubMedFeed: React.FC<PubMedFeedProps> = ({
     setIsLoading(true);
     
     // Симуляция запроса к PubMed API
-    // Реальный запрос: fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${diseaseName}&retmode=json`)
+    // Р еальный запрос: fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${diseaseName}&retmode=json`)
     setTimeout(() => {
       const results = MOCK_PAPERS[diseaseName] || [
         {
@@ -106,7 +106,7 @@ export const PubMedFeed: React.FC<PubMedFeedProps> = ({
       animate={{ opacity: 1, y: 0 }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h4 style={{ margin: 0, color: '#64d2ff' }}>📡 Свежие публикации</h4>
+        <h4 style={{ margin: 0, color: '#B97886' }}>рџ“Ў Свежие публикации</h4>
         <PremiumButton
           onClick={searchPapers}
           variant="primary"
@@ -114,7 +114,7 @@ export const PubMedFeed: React.FC<PubMedFeedProps> = ({
           shimmer={true}
           disabled={isLoading}
         >
-          {isLoading ? '⏳ Поиск...' : '🔍 Найти статьи'}
+          {isLoading ? '⏳ Поиск...' : 'рџ”Ќ Найти статьи'}
         </PremiumButton>
       </div>
 
@@ -196,7 +196,7 @@ export const PubMedFeed: React.FC<PubMedFeedProps> = ({
           ))}
           
           <p style={{ fontSize: '11px', opacity: 0.4, textAlign: 'center', marginTop: '8px' }}>
-            📖 Данные предоставлены PubMed (NCBI). Нажмите на статью для перехода.
+            рџ“– Данные предоставлены PubMed (NCBI). Нажмите на статью для перехода.
           </p>
         </motion.div>
       )}

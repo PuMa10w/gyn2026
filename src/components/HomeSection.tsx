@@ -1,4 +1,4 @@
-﻿import React, { useId } from 'react';
+import React, { useId } from 'react';
 import { motion } from 'framer-motion';
 import { PremiumBadge, PremiumCard } from './PremiumPrimitives';
 import type { HistoryItem } from '../hooks/useHistory';
@@ -161,4 +161,3 @@ const HomeSection = React.memo(function HomeSection({
 });
 
 export default HomeSection;
-
