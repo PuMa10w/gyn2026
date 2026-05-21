@@ -84,6 +84,70 @@ const assertNoMojibake = async (page, label) => {
   }
 };
 
+const assertReadableText = async (page, label, selectors) => {
+  const failures = await page.evaluate((entries) => {
+    const parseRgb = (value) => {
+      const match = value.match(/rgba?\(([^)]+)\)/);
+      if (!match) return null;
+      const parts = match[1].split(',').map((part) => Number.parseFloat(part));
+      const [r, g, b] = parts;
+      const alpha = parts.length > 3 ? parts[3] : 1;
+      return [r, g, b, alpha];
+    };
+    const luminance = ([r, g, b]) => {
+      const channel = [r, g, b].map((value) => {
+        const normalized = value / 255;
+        return normalized <= 0.03928 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+      });
+      return channel[0] * 0.2126 + channel[1] * 0.7152 + channel[2] * 0.0722;
+    };
+    const contrast = (fg, bg) => {
+      const l1 = luminance(fg);
+      const l2 = luminance(bg);
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    };
+    const findSolidBackground = (el) => {
+      let current = el;
+      while (current && current !== document.documentElement) {
+        const style = getComputedStyle(current);
+        const parsed = parseRgb(style.backgroundColor);
+        if (parsed && (parsed[3] ?? 1) > 0.2) return { color: parsed, css: style.backgroundColor };
+        current = current.parentElement;
+      }
+      const bodyStyle = getComputedStyle(document.body);
+      const bodyBg = parseRgb(bodyStyle.backgroundColor);
+      if (bodyBg && (bodyBg[3] ?? 1) > 0.2) return { color: bodyBg, css: bodyStyle.backgroundColor };
+      return { color: [255, 240, 229, 1], css: 'rgb(255, 240, 229)' };
+    };
+    const visible = (el) => {
+      const rect = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      return rect.width > 4 && rect.height > 4 && style.visibility !== 'hidden' && style.display !== 'none' && Number.parseFloat(style.opacity || '1') > 0.2;
+    };
+
+    return entries.flatMap(({ selector, minContrast }) =>
+      [...document.querySelectorAll(selector)]
+        .filter(visible)
+        .slice(0, 8)
+        .map((el) => {
+          const style = getComputedStyle(el);
+          const fg = parseRgb(style.color);
+          const bg = findSolidBackground(el);
+          if (!fg || !bg) return null;
+          const ratio = contrast(fg, bg.color);
+          return ratio < minContrast
+            ? { selector, ratio: Number(ratio.toFixed(2)), text: (el.textContent || '').trim().slice(0, 80), color: style.color, background: bg.css }
+            : null;
+        })
+        .filter(Boolean)
+    );
+  }, selectors);
+
+  if (failures.length > 0) {
+    throw new Error(`${label}: readability contrast failures ${JSON.stringify(failures)}`);
+  }
+};
+
 const assertVisibleAndClickable = async (locator, label) => {
   await locator.waitFor({ state: 'visible', timeout: 8000 });
   const box = await locator.boundingBox();
@@ -172,6 +236,10 @@ for (const deviceName of deviceNames) {
   await capture(page, deviceName, 'home', { fullPage: true });
   await assertNoHorizontalOverflow(page, `${deviceName} home`);
   await assertNoMojibake(page, `${deviceName} home`);
+  await assertReadableText(page, `${deviceName} home`, [
+    { selector: '.navbar-brand-copy strong, .navbar-actions .premium-button, .mobile-bottom-label', minContrast: 4.2 },
+    { selector: '.premium-command-copy h2, .premium-command-copy p, .analytics-dashboard h4', minContrast: 4.2 },
+  ]);
   await assertVisibleAndClickable(page.locator('.mobile-bottom-bar').first(), `${deviceName} bottom bar`);
 
   await clickByText(page, 'Гинекология', `${deviceName} bottom gynecology`);
@@ -179,6 +247,9 @@ for (const deviceName of deviceNames) {
   await capture(page, deviceName, 'catalog');
   await assertNoHorizontalOverflow(page, `${deviceName} catalog`);
   await assertNoMojibake(page, `${deviceName} catalog`);
+  await assertReadableText(page, `${deviceName} catalog`, [
+    { selector: '.catalog-title, .catalog-description, .search-input, .category-chip, .card-title, .card-desc, .card-subtitle', minContrast: 4.2 },
+  ]);
 
   const categoryFilter = page.locator('.category-filter').first();
   await categoryFilter.evaluate((el) => { el.scrollLeft = el.scrollWidth; });
@@ -210,6 +281,9 @@ for (const deviceName of deviceNames) {
   await capture(page, deviceName, 'disease-modal');
   await assertNoHorizontalOverflow(page, `${deviceName} disease modal`);
   await assertNoMojibake(page, `${deviceName} disease modal`);
+  await assertReadableText(page, `${deviceName} disease modal`, [
+    { selector: '.modal-title, .modal-icd, .modal-quick-strip, .modal-tabs .tab-btn, .modal-body p, .modal-body li', minContrast: 4.2 },
+  ]);
   await closeTopModal(page, `${deviceName} disease modal`);
 
   await clickByText(page, 'Акушерство', `${deviceName} bottom obstetrics`);

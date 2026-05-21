@@ -13,6 +13,7 @@ const allowedFiles = new Set([
 const textExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.json', '.html', '.css', '.md', '.cjs', '.mjs']);
 const legacyEnglishPattern = /Premium Clinical|Clinical command|TRUST LAYER|GYNA/g;
 const obviousBrokenPattern = new RegExp([
+  '[\\u0420\\u0421\\u0432][\\u00a0\\u00a4\\u00a9\\u00ae\\u00b0\\u00b7\\u0402-\\u040f\\u0452-\\u045f\\u2018-\\u201d\\u2020-\\u2022\\u20ac\\u2122]',
   '\\u0420\\u045f',
   '\\u0420\\u00a0',
   '\\u0420\\u2014',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavItem {
@@ -52,36 +52,14 @@ const navItems: NavItem[] = [
 ];
 
 export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, onNavigate }) => {
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setIsVisible(currentScrollY < lastScrollY || currentScrollY < 50);
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
   return (
-    <AnimatePresence>
-      {isVisible && (
+    <AnimatePresence initial={false}>
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
+          initial={{ y: 24, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          exit={{ y: 24, opacity: 0 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
           className="mobile-bottom-bar"
-          style={{
-            backdropFilter: 'blur(40px)',
-            WebkitBackdropFilter: 'blur(40px)',
-            background: 'rgba(28, 28, 30, 0.7)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            paddingBottom: 'var(--safe-bottom)',
-          }}
         >
           <div className="mobile-bottom-items">
             {navItems.map((item) => {
@@ -92,7 +70,7 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
                   onClick={() => onNavigate(item.path)}
                   className={`mobile-bottom-item ${isActive ? 'is-active' : ''}`}
                   whileTap={{ scale: 0.96 }}
-                  animate={isActive ? { scale: [1, 1.03, 1], transition: { duration: 0.24 } } : {}}
+                  animate={isActive ? { opacity: 1 } : { opacity: 0.92 }}
                   aria-label={item.label}
                   aria-current={isActive ? 'page' : undefined}
                 >
@@ -112,7 +90,6 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
             })}
           </div>
         </motion.div>
-      )}
     </AnimatePresence>
   );
 };

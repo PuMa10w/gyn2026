@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useHistory } from '../hooks/useHistory';
 import { useFavorites } from '../hooks/useFavorites';
+import { repairText } from '../utils/textRepair';
 
 interface AnalyticsDashboardProps {
   className?: string;
@@ -19,7 +20,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     history.forEach((item) => {
       const key = item.id;
       if (!counts[key]) {
-        counts[key] = { name: item.name, count: 0, icd: item.subtitle || '' };
+        counts[key] = { name: repairText(item.name), count: 0, icd: repairText(item.subtitle || '') };
       }
       counts[key].count += 1;
     });

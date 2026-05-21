@@ -29,22 +29,81 @@ const selectors = [
   '.version-checker',
 ];
 
+const mojibakePattern = new RegExp('(?:[РС][\\u00a0\\u00a4\\u00a9\\u00ae\\u00b0\\u00b7\\u0402-\\u040f\\u0452-\\u045f\\u2018-\\u201d\\u2020-\\u2022\\u20ac\\u2122])|(?:в[\\u0402-\\u040f\\u0452-\\u045f\\u2018-\\u201d\\u2020-\\u2022\\u20ac\\u2122])|\\u00d0|\\u00d1|\\ufffd');
+const removedSharePattern = /\bQR\b|QR-код/i;
+
 const browser = await chromium.launch({ executablePath: process.env.CHROME_EXECUTABLE || undefined, headless: true });
 const page = await browser.newPage(device);
 const findings = [];
 
+const waitForApp = async () => {
+  await page.waitForSelector('#root, #main-content, main', { state: 'visible', timeout: 30000 });
+  await page.waitForFunction(() => document.body.innerText.trim().length > 40, null, { timeout: 30000 });
+};
+
+const clickByText = async (texts, label) => {
+  const patterns = texts.map((text) => text instanceof RegExp ? text : new RegExp(text, 'i'));
+  for (const pattern of patterns) {
+    const locator = page.getByRole('button', { name: pattern }).first();
+    if (await locator.count()) {
+      await locator.click({ timeout: 5000 }).catch(() => undefined);
+      return true;
+    }
+  }
+
+  const clicked = await page.evaluate((patternSources) => {
+    const patterns = patternSources.map((source) => new RegExp(source, 'i'));
+    const candidates = Array.from(document.querySelectorAll('button, [role="button"], a, .mobile-bottom-item'));
+    const visible = candidates.filter((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = window.getComputedStyle(element);
+      return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+    });
+    const target = visible.find((element) => patterns.some((pattern) => pattern.test(element.textContent ?? element.getAttribute('aria-label') ?? '')));
+    target?.click();
+    return Boolean(target);
+  }, patterns.map((pattern) => pattern.source));
+
+  if (!clicked) {
+    findings.push({ flow: label, selector: 'navigation', property: 'click', value: 'missing target', text: texts.join(', ') });
+  }
+  return clicked;
+};
+
+const openHome = async (suffix = 'home') => {
+  await page.goto(`${baseUrl}/?pastel=${Date.now()}-${suffix}`, { waitUntil: 'networkidle' });
+  await waitForApp();
+  if (!(await page.locator('.home-shell, .premium-command-hero').first().isVisible().catch(() => false))) {
+    await clickByText(['Главная'], 'home-navigation');
+  }
+  await page.locator('.home-shell, .premium-command-hero, #main-content').first().waitFor({ state: 'visible', timeout: 30000 });
+};
+
 const inspect = async (label) => {
-  const result = await page.evaluate(({ selectors, bannedLegacyRgb }) => {
+  const result = await page.evaluate(({ selectors, bannedLegacyRgb, mojibakeSource, removedShareSource }) => {
     const findings = [];
-    const removedSharePattern = new RegExp(`\\b${'Q'}${'R'}\\b|${'Q'}${'R'}-код`);
-    if (removedSharePattern.test(document.body.innerText)) {
+    const mojibakePattern = new RegExp(mojibakeSource);
+    const removedSharePattern = new RegExp(removedShareSource, 'i');
+    const bodyText = document.body.innerText;
+
+    if (removedSharePattern.test(bodyText)) {
       findings.push({
         selector: 'body',
         property: 'text',
-        value: 'removed share block is visible',
-        text: 'Удалённый блок шаринга должен отсутствовать в пользовательском интерфейсе',
+        value: 'removed QR block is visible',
+        text: 'QR-раздел должен отсутствовать в пользовательском интерфейсе',
       });
     }
+
+    if (mojibakePattern.test(bodyText)) {
+      findings.push({
+        selector: 'body',
+        property: 'text',
+        value: 'visible mojibake',
+        text: bodyText.match(mojibakePattern)?.[0] ?? '',
+      });
+    }
+
     for (const selector of selectors) {
       const elements = Array.from(document.querySelectorAll(selector)).filter((element) => {
         const rect = element.getBoundingClientRect();
@@ -74,34 +133,38 @@ const inspect = async (label) => {
       }
     }
     return findings;
-  }, { selectors, bannedLegacyRgb });
+  }, {
+    selectors,
+    bannedLegacyRgb,
+    mojibakeSource: mojibakePattern.source,
+    removedShareSource: removedSharePattern.source,
+  });
 
   findings.push(...result.map((finding) => ({ flow: label, ...finding })));
 };
 
-await page.goto(`${baseUrl}/?pastel=${Date.now()}`, { waitUntil: 'networkidle' });
-await page.locator('.home-shell').waitFor({ state: 'visible' });
+await openHome('start');
 await inspect('home');
 
-await page.getByRole('button', { name: 'Гинекология' }).first().click();
-await page.locator('.disease-card').first().waitFor({ state: 'visible' });
+await clickByText(['Гинекология'], 'catalog-navigation');
+await page.locator('.disease-card').first().waitFor({ state: 'visible', timeout: 30000 });
 await inspect('catalog');
 
-await page.locator('.disease-card-action').first().click();
-await page.getByTestId('disease-modal').waitFor({ state: 'visible' });
-await page.getByRole('tab', { name: 'УЗИ' }).click().catch(() => undefined);
+await page.locator('.disease-card-action, .disease-card').first().click();
+await page.getByTestId('disease-modal').waitFor({ state: 'visible', timeout: 30000 });
+await clickByText(['УЗИ'], 'disease-modal-ultrasound');
 await inspect('disease-modal-ultrasound');
 
 await page.keyboard.press('Escape').catch(() => undefined);
-await page.goto(`${baseUrl}/?pastel=${Date.now()}-questionnaire`, { waitUntil: 'networkidle' });
-await page.getByRole('button', { name: /Открыть опросники|Шкалы/ }).first().click();
-await page.locator('.questionnaire-modal').waitFor({ state: 'visible' });
+await openHome('questionnaire');
+await clickByText([/Открыть опросники|Шкалы/], 'questionnaire-navigation');
+await page.locator('.questionnaire-modal, [data-testid="questionnaire-modal"]').waitFor({ state: 'visible', timeout: 30000 });
 await inspect('questionnaire');
 
 await page.keyboard.press('Escape').catch(() => undefined);
-await page.goto(`${baseUrl}/?pastel=${Date.now()}-pharma`, { waitUntil: 'networkidle' });
-await page.getByRole('button', { name: /Открыть фармакологию|Фарма/ }).first().click();
-await page.locator('.pharmacology-modal').waitFor({ state: 'visible' });
+await openHome('pharma');
+await clickByText([/Открыть фармакологию|Фарма/], 'pharmacology-navigation');
+await page.locator('.pharmacology-modal, [data-testid="pharmacology-modal"]').waitFor({ state: 'visible', timeout: 30000 });
 await inspect('pharmacology');
 
 await browser.close();
