@@ -1,109 +1,65 @@
-const { createCanvas, registerFont } = require('canvas');
+const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-// Размеры для iPhone (как в index.html)
+const publicDir = path.join(__dirname, '..', 'public');
 const splashSizes = [
-  { width: 1125, height: 2436, name: 'splash-1125x2436' },   // iPhone X
-  { width: 750, height: 1334, name: 'splash-750x1334' },     // iPhone 8,7,6s,6
-  { width: 1242, height: 2208, name: 'splash-1242x2208' },   // iPhone 8+,7+,6s+,6+
+  { width: 1125, height: 2436, name: 'splash-1125x2436' },
+  { width: 750, height: 1334, name: 'splash-750x1334' },
+  { width: 1242, height: 2208, name: 'splash-1242x2208' },
 ];
-
-// Apple Touch Icon
 const iconSizes = [
   { width: 180, height: 180, name: 'apple-touch-icon' },
+  { width: 192, height: 192, name: 'logo192' },
+  { width: 512, height: 512, name: 'logo512' },
 ];
 
-// Градиент (как в проекте: Turquoise, Emerald, Gold)
-const gradientColors = ['#D89AA7', '#B97886', '#D8B878'];
+const faviconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+  + '<defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FFF1E8"/><stop offset="0.48" stop-color="#EBCDBA"/><stop offset="1" stop-color="#B97886"/></linearGradient>'
+  + '<linearGradient id="mark" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#2B2023"/><stop offset="0.62" stop-color="#5C3941"/><stop offset="1" stop-color="#B97886"/></linearGradient></defs>'
+  + '<rect width="512" height="512" rx="120" fill="url(#bg)"/><rect x="56" y="64" width="400" height="384" rx="96" fill="url(#mark)" stroke="#D8B878" stroke-width="8"/>'
+  + '<text x="256" y="290" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="142" font-weight="900" fill="#FFF8F1" letter-spacing="-10">GYN</text>'
+  + '<path d="M170 344 C205 382 307 382 342 344" fill="none" stroke="#D8B878" stroke-width="14" stroke-linecap="round" opacity="0.9"/></svg>';
 
-// Функция для создания градиента
-function createGradient(ctx, width, height) {
-  const gradient = ctx.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, gradientColors[0]);
-  gradient.addColorStop(0.5, gradientColors[1]);
-  gradient.addColorStop(1, gradientColors[2]);
-  return gradient;
+function html(width, height, type) {
+  const panelInset = type === 'icon' ? '10%' : '18% 10%';
+  const panelRadius = type === 'icon' ? '28%' : '64px';
+  const border = Math.max(4, Math.round(width * 0.014));
+  const shadowY = Math.round(height * 0.025);
+  const shadowBlur = Math.round(width * 0.12);
+  const wordSize = type === 'icon' ? Math.round(width * 0.29) : Math.round(width * 0.19);
+  const lineWidth = type === 'icon' ? Math.round(width * 0.34) : Math.round(width * 0.24);
+  const lineHeight = Math.max(5, Math.round(width * 0.012));
+  const lineMargin = Math.round(width * 0.04);
+  const subtitleMargin = Math.round(width * 0.045);
+  const subtitleSize = Math.round(width * 0.035);
+  return '<!doctype html><html><head><meta charset="utf-8"><style>'
+    + 'html,body{margin:0;width:' + width + 'px;height:' + height + 'px;overflow:hidden}'
+    + 'body{background:radial-gradient(circle at 18% 6%,rgba(255,248,241,.95),transparent 30%),linear-gradient(145deg,#fff1e8,#ead0bc 56%,#d89aa7);font-family:Georgia,Times New Roman,serif}'
+    + '.screen{width:100vw;height:100vh;display:grid;place-items:center;position:relative}'
+    + '.screen:before{content:"";position:absolute;inset:' + panelInset + ';border-radius:' + panelRadius + ';background:linear-gradient(145deg,#2b2023,#5c3941 58%,#b97886);border:' + border + 'px solid rgba(216,184,120,.72);box-shadow:0 ' + shadowY + 'px ' + shadowBlur + 'px rgba(43,32,35,.24),inset 0 1px 0 rgba(255,255,255,.18)}'
+    + '.brand{position:relative;text-align:center;color:#fff8f1;text-shadow:0 8px 28px rgba(0,0,0,.22)}'
+    + '.word{font-size:' + wordSize + 'px;font-weight:900;letter-spacing:-.075em;line-height:.9}'
+    + '.line{width:' + lineWidth + 'px;height:' + lineHeight + 'px;margin:' + lineMargin + 'px auto 0;border-radius:999px;background:#d8b878;opacity:.94}'
+    + '.subtitle{margin-top:' + subtitleMargin + 'px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:' + subtitleSize + 'px;font-weight:700;letter-spacing:.04em;color:rgba(255,248,241,.82)}'
+    + '</style></head><body><div class="screen"><div class="brand"><div class="word">GYN</div><div class="line"></div>'
+    + (type === 'splash' ? '<div class="subtitle">клинический PWA</div>' : '')
+    + '</div></div></body></html>';
 }
 
-// Генерация splash-экрана
-function generateSplashImage(size) {
-  const canvas = createCanvas(size.width, size.height);
-  const ctx = canvas.getContext('2d');
-
-  // Фон (градиент)
-  ctx.fillStyle = createGradient(ctx, size.width, size.height);
-  ctx.fillRect(0, 0, size.width, size.height);
-
-  // Логотип / Текст "GYN"
-  const fontSize = Math.min(size.width, size.height) / 8; // Адаптивный размер шрифта
-  ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-  ctx.fillStyle = 'white';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  
-  // Тень для текста (эффект премиум)
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-  ctx.shadowBlur = 20;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 4;
-  
-  ctx.fillText('GYN', size.width / 2, size.height / 2);
-  
-  // Подпись (небольшая)
-  const subFontSize = fontSize / 3;
-  ctx.font = `${subFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-  ctx.shadowBlur = 10;
-  ctx.fillText('Акушерство и Гинекология', size.width / 2, size.height / 2 + fontSize);
-
-  // Сохраняем
-  const buffer = canvas.toBuffer('image/png');
-  const filePath = path.join(__dirname, '..', 'public', `${size.name}.png`);
-  
-  // Создаем директорию если нужно
-  const dir = path.dirname(filePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-    
-  fs.writeFileSync(filePath, buffer);
-  console.log(`✅ Создан: ${filePath}`);
+async function screenshotPng(page, size, type) {
+  await page.setViewportSize({ width: size.width, height: size.height });
+  await page.setContent(html(size.width, size.height, type), { waitUntil: 'load' });
+  await page.screenshot({ path: path.join(publicDir, size.name + '.png'), fullPage: false });
+  console.log('created ' + size.name + '.png');
 }
 
-// Генерация иконки (квадратная, упрощённая)
-function generateIcon(size) {
-  const canvas = createCanvas(size.width, size.height);
-  const ctx = canvas.getContext('2d');
-
-  // Фон (градиент)
-  ctx.fillStyle = createGradient(ctx, size.width, size.height);
-  ctx.fillRect(0, 0, size.width, size.height);
-
-  // Текст "GYN" (меньше, по центру)
-  const fontSize = size.width / 2.5;
-  ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-  ctx.fillStyle = 'white';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 2;
-  
-  ctx.fillText('GYN', size.width / 2, size.height / 2);
-
-  // Сохраняем
-  const buffer = canvas.toBuffer('image/png');
-  const filePath = path.join(__dirname, '..', 'public', `${size.name}.png`);
-  fs.writeFileSync(filePath, buffer);
-  console.log(`✅ Создана иконка: ${filePath}`);
-}
-
-// Генерируем всё
-console.log('Генерация splash-экранов для iOS...');
-splashSizes.forEach(size => generateSplashImage(size));
-console.log('\nГенерация Apple Touch Icon...');
-iconSizes.forEach(size => generateIcon(size));
-
-console.log('\nГотово! Все изображения созданы в /public/');
+(async () => {
+  fs.mkdirSync(publicDir, { recursive: true });
+  fs.writeFileSync(path.join(publicDir, 'favicon.svg'), faviconSvg, 'utf8');
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage({ deviceScaleFactor: 1 });
+  for (const size of iconSizes) await screenshotPng(page, size, 'icon');
+  for (const size of splashSizes) await screenshotPng(page, size, 'splash');
+  await browser.close();
+})();

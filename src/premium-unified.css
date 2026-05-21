@@ -928,6 +928,1231 @@ main .catalog-header {
   -webkit-text-fill-color: currentColor !important;
 }
 
+/* Ultra Premium V7 final terminal layer: this must be the last block in the file. */
+:root {
+  --v7-bg: #fff2e8;
+  --v7-surface: #fffaf4;
+  --v7-panel: #f4dfcf;
+  --v7-text: #2b2023;
+  --v7-muted: #67525a;
+  --v7-rose: #d996a2;
+  --v7-coral: #e8a08c;
+  --v7-border: rgba(185, 120, 134, 0.34);
+  --v7-shadow: 0 18px 46px rgba(88, 55, 48, 0.14);
+  --v7-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.navbar.glass,
+.navbar {
+  background: linear-gradient(145deg, rgba(244, 223, 207, 0.96), rgba(255, 250, 244, 0.92)) !important;
+  border-color: rgba(185, 120, 134, 0.3) !important;
+  box-shadow: var(--v7-shadow) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.navbar-brand-mark,
+.text-gradient-animated.navbar-brand-mark {
+  background: linear-gradient(135deg, var(--v7-coral), var(--v7-rose), #d8b878) !important;
+  color: #fffaf4 !important;
+  -webkit-text-fill-color: #fffaf4 !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.03em !important;
+  text-shadow: 0 1px 0 rgba(88, 55, 48, 0.16) !important;
+}
+
+.catalog-section .catalog-header,
+.catalog-shell .catalog-header,
+main .catalog-header {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 250, 244, 0.62), transparent 38%),
+    linear-gradient(145deg, #f2d8c7, #f8e7dc 58%, #f0d0c4) !important;
+  border: 1px solid rgba(185, 120, 134, 0.34) !important;
+  box-shadow: 0 22px 52px rgba(88, 55, 48, 0.14) !important;
+  color: var(--v7-text) !important;
+}
+
+.catalog-section .catalog-title,
+.catalog-shell .catalog-title,
+.catalog-section .catalog-description,
+.catalog-shell .catalog-description {
+  color: var(--v7-text) !important;
+  display: block !important;
+  max-height: none !important;
+  overflow: visible !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+}
+
+.catalog-section .catalog-description,
+.catalog-shell .catalog-description {
+  color: var(--v7-muted) !important;
+}
+
+.catalog-controls,
+.search-input-wrapper,
+.category-filter {
+  background: rgba(255, 250, 244, 0.78) !important;
+  border-color: rgba(185, 120, 134, 0.3) !important;
+  box-shadow: 0 14px 34px rgba(88, 55, 48, 0.09) !important;
+}
+
+.catalog-section .search-input,
+.pharmacology-modal .search-input,
+.pharmacology-modal select {
+  background: #fffaf4 !important;
+  border: 1px solid rgba(185, 120, 134, 0.38) !important;
+  color: var(--v7-text) !important;
+  font-weight: 700 !important;
+}
+
+.category-chip,
+.catalog-section .category-chip,
+.modal-content.mobile-sheet .tab-btn,
+.pharmacology-modal.mobile-sheet .pharma-tab {
+  background: linear-gradient(145deg, #fffaf4, #f4dfcf) !important;
+  border: 1px solid rgba(185, 120, 134, 0.36) !important;
+  color: var(--v7-text) !important;
+  box-shadow: 0 10px 24px rgba(88, 55, 48, 0.08) !important;
+}
+
+.category-chip.active,
+.catalog-section .category-chip.active,
+.modal-content.mobile-sheet .tab-btn.active,
+.pharmacology-modal.mobile-sheet .pharma-tab.active {
+  background: linear-gradient(135deg, #e7a092, #d996a2) !important;
+  border-color: rgba(185, 120, 134, 0.55) !important;
+  color: var(--v7-text) !important;
+  box-shadow: 0 14px 30px rgba(185, 120, 134, 0.22) !important;
+}
+
+.card-primary-action {
+  display: none !important;
+}
+
+.disease-card-action {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: transparent !important;
+  cursor: pointer !important;
+  z-index: 1 !important;
+}
+
+.favorite-button,
+.disease-card-favorite {
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+.modal-content.mobile-sheet .modal-header,
+.modal-content.mobile-sheet .modal-quick-strip,
+.modal-content.mobile-sheet .modal-quick-strip.is-collapsed,
+.modal-content.mobile-sheet .modal-tabs,
+.pharmacology-modal.mobile-sheet .modal-header,
+.pharmacology-modal.mobile-sheet .pharma-tabs {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 250, 244, 0.7), transparent 38%),
+    linear-gradient(145deg, #f6dfd2, #fff7ef) !important;
+  border-color: rgba(185, 120, 134, 0.34) !important;
+  box-shadow: 0 12px 30px rgba(88, 55, 48, 0.11) !important;
+}
+
+.modal-quick-chip,
+.modal-quick-toggle,
+.modal-clinical-action,
+.pharma-count-badge,
+.med-open-indicator {
+  background: #fffaf4 !important;
+  border: 1px solid rgba(185, 120, 134, 0.36) !important;
+  color: var(--v7-text) !important;
+  box-shadow: 0 10px 22px rgba(88, 55, 48, 0.08) !important;
+}
+
+@media (max-width: 768px) {
+  .App {
+    --header-height: 84px !important;
+  }
+
+  .page-content {
+    padding-top: calc(var(--safe-top) + 5.6rem) !important;
+  }
+
+  .navbar-inner {
+    padding: 0.72rem 0.82rem !important;
+    gap: 0.55rem !important;
+  }
+
+  .navbar-topline {
+    margin-bottom: 0 !important;
+    gap: 0.58rem !important;
+  }
+
+  .navbar-brand {
+    gap: 0.65rem !important;
+  }
+
+  .navbar-brand-mark,
+  .text-gradient-animated.navbar-brand-mark {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    border-radius: 18px !important;
+    font-size: 0.94rem !important;
+    padding: 0 !important;
+  }
+
+  .navbar-brand-copy strong {
+    font-size: 1rem !important;
+    line-height: 1 !important;
+  }
+
+  .navbar-brand-copy span {
+    display: none !important;
+  }
+
+  .navbar-actions {
+    gap: 0.45rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .navbar-actions .premium-button:nth-of-type(n + 3),
+  .nav-row-primary {
+    display: none !important;
+  }
+
+  .navbar-actions .premium-button,
+  .navbar-theme-toggle {
+    min-height: 42px !important;
+    padding: 0.62rem 0.78rem !important;
+    border-radius: 18px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .catalog-shell {
+    padding: 0.7rem 0.85rem 0.8rem !important;
+    gap: 0.72rem !important;
+  }
+
+  .catalog-section .catalog-header,
+  .catalog-shell .catalog-header {
+    min-height: 0 !important;
+    padding: 1.1rem 1.05rem !important;
+    border-radius: 24px !important;
+  }
+
+  .catalog-section .catalog-eyebrow,
+  .catalog-shell .catalog-eyebrow {
+    font-size: 0.74rem !important;
+    letter-spacing: 0.22em !important;
+  }
+
+  .catalog-section .catalog-title,
+  .catalog-shell .catalog-title {
+    font-size: clamp(2rem, 8.8vw, 2.62rem) !important;
+    line-height: 0.96 !important;
+    margin-bottom: 0.55rem !important;
+  }
+
+  .catalog-section .catalog-description,
+  .catalog-shell .catalog-description {
+    font-size: 0.98rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .catalog-controls {
+    width: 100% !important;
+    max-width: calc(100vw - 1.7rem) !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    gap: 0.65rem !important;
+    padding: 0.65rem !important;
+    border-radius: 22px !important;
+  }
+
+  .catalog-controls .search-container,
+  .catalog-controls .search-input-wrapper,
+  .catalog-controls .search-input {
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    width: min(100%, calc(100vw - 4.8rem)) !important;
+    max-width: calc(100vw - 4.8rem) !important;
+  }
+
+  .search-input-wrapper,
+  .catalog-section .search-input {
+    min-height: 48px !important;
+    border-radius: 18px !important;
+  }
+
+  .category-filter,
+  .category-chips {
+    min-height: 54px !important;
+    padding: 0.35rem !important;
+  }
+
+  .category-chip,
+  .catalog-section .category-chip {
+    min-height: 44px !important;
+    padding: 0.7rem 1rem !important;
+    font-size: 0.95rem !important;
+    white-space: nowrap !important;
+  }
+
+  .modal-content.mobile-sheet .modal-header {
+    min-height: auto !important;
+    padding: 1.05rem 4.6rem 0.95rem 1rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .modal-content.mobile-sheet .modal-title {
+    font-size: 1.05rem !important;
+    line-height: 1.1 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .modal-content.mobile-sheet .tab-btn,
+  .pharmacology-modal.mobile-sheet .pharma-tab {
+    min-height: 46px !important;
+    padding: 0.72rem 1rem !important;
+    border-radius: 20px !important;
+    font-size: 0.98rem !important;
+    font-weight: 850 !important;
+    white-space: nowrap !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-header-v7 {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 1rem 4.4rem 0.82rem 1rem !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-header-v7 .modal-section-kicker {
+    font-size: 0.82rem !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.22rem !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-header-v7 .modal-title {
+    max-width: 13.5rem !important;
+    font-size: 1.52rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-header-v7 .modal-icd {
+    max-width: 13.5rem !important;
+    font-size: 0.82rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .pharma-count-badge {
+    position: static !important;
+    justify-self: start !important;
+    min-height: 40px !important;
+    margin-top: 0.55rem !important;
+    padding: 0.55rem 0.9rem !important;
+    border-radius: 18px !important;
+    font-size: 0.96rem !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 0.45rem !important;
+    padding: 0.58rem 0.75rem !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-tab {
+    flex: 0 0 auto !important;
+    min-width: max-content !important;
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 0.58rem 0.8rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none) and (pointer: coarse) {
+  .disease-card:hover,
+  .medication-card:hover,
+  .regimen-card:hover,
+  .premium-button:hover {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar,
+  .navbar.glass {
+    position: sticky !important;
+    top: calc(var(--safe-top) + 0.35rem) !important;
+    left: auto !important;
+    right: auto !important;
+    width: calc(100% - 1rem) !important;
+    margin: 0.35rem auto 0.55rem !important;
+  }
+
+  .page-content {
+    padding-top: 0.45rem !important;
+  }
+
+  .navbar-inner {
+    padding: 0.62rem 0.7rem 0.68rem !important;
+  }
+
+  .navbar-topline {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .navbar-brand-mark,
+  .text-gradient-animated.navbar-brand-mark {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 17px !important;
+  }
+
+  .navbar-actions {
+    order: 2 !important;
+    display: flex !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    gap: 0.35rem !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .navbar-theme-toggle {
+    display: none !important;
+  }
+
+  .navbar-brand-copy {
+    display: none !important;
+  }
+
+  .navbar .premium-button,
+  .navbar-actions .premium-button,
+  .navbar-theme-toggle {
+    min-height: 40px !important;
+    height: 40px !important;
+    padding: 0 0.62rem !important;
+    border-radius: 17px !important;
+    font-size: 0.8rem !important;
+    line-height: 1 !important;
+  }
+
+  .navbar-actions .premium-button {
+    flex: 0 0 72px !important;
+    width: 72px !important;
+    min-width: 72px !important;
+    max-width: 72px !important;
+  }
+
+  .catalog-section .catalog-header,
+  .catalog-shell .catalog-header {
+    padding: 0.82rem 0.95rem !important;
+    border-radius: 22px !important;
+  }
+
+  .catalog-section .catalog-title,
+  .catalog-shell .catalog-title {
+    font-size: clamp(1.72rem, 7.4vw, 2.18rem) !important;
+    margin-bottom: 0.34rem !important;
+  }
+
+  .catalog-section .catalog-description,
+  .catalog-shell .catalog-description {
+    font-size: 0.88rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .catalog-controls {
+    background: #fff4ec !important;
+    border: 1px solid rgba(185, 120, 134, 0.36) !important;
+    box-shadow: 0 12px 28px rgba(88, 55, 48, 0.12) !important;
+    padding: 0.5rem !important;
+    gap: 0.42rem !important;
+  }
+
+  .search-container,
+  .search-input-wrapper,
+  .search-input,
+  .category-filter,
+  .category-chips,
+  .category-chip {
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .catalog-controls .search-input-wrapper,
+  .catalog-controls .search-input {
+    min-height: 44px !important;
+    height: 44px !important;
+  }
+
+  .catalog-controls .category-filter,
+  .catalog-controls .category-chips {
+    min-height: 46px !important;
+    height: 46px !important;
+  }
+
+  .catalog-controls .category-chip {
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 0.55rem 0.82rem !important;
+  }
+
+  .catalog-controls .search-input::placeholder {
+    color: rgba(103, 82, 90, 0.86) !important;
+  }
+}
+
+/* Ultra Premium V7 readability patch: strict peach, less blur, stronger iPhone contrast. */
+:root {
+  --v7-bg: #fff2e8;
+  --v7-surface: #fffaf4;
+  --v7-surface-strong: #f4dfcf;
+  --v7-panel: #f7e6d8;
+  --v7-text: #2b2023;
+  --v7-text-muted: #67525a;
+  --v7-rose: #d996a2;
+  --v7-rose-strong: #b97886;
+  --v7-coral: #e8a08c;
+  --v7-gold: #d8b878;
+  --v7-border: rgba(185, 120, 134, 0.34);
+  --v7-shadow: 0 18px 46px rgba(88, 55, 48, 0.14);
+  --v7-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme='light'] body,
+body:not([data-theme='dark']) {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(232, 160, 140, 0.24), transparent 34%),
+    linear-gradient(180deg, var(--v7-bg), #f8e2d2) !important;
+}
+
+.navbar,
+.navbar.glass {
+  background: linear-gradient(145deg, rgba(244, 223, 207, 0.96), rgba(255, 250, 244, 0.92)) !important;
+  border-color: rgba(185, 120, 134, 0.3) !important;
+  box-shadow: 0 16px 42px rgba(88, 55, 48, 0.12) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.navbar-brand-mark {
+  color: #fffaf4 !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.03em !important;
+  text-shadow: 0 1px 0 rgba(88, 55, 48, 0.16) !important;
+}
+
+.catalog-shell {
+  gap: 1rem !important;
+}
+
+.catalog-section .catalog-header,
+.catalog-shell .catalog-header,
+main .catalog-header {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 250, 244, 0.62), transparent 38%),
+    linear-gradient(145deg, #f2d8c7, #f8e7dc 58%, #f0d0c4) !important;
+  border: 1px solid rgba(185, 120, 134, 0.34) !important;
+  box-shadow: 0 22px 52px rgba(88, 55, 48, 0.14) !important;
+  color: var(--v7-text) !important;
+}
+
+.catalog-section .catalog-title,
+.catalog-shell .catalog-title {
+  color: var(--v7-text) !important;
+}
+
+.catalog-section .catalog-description,
+.catalog-shell .catalog-description {
+  color: var(--v7-text-muted) !important;
+  display: block !important;
+  max-height: none !important;
+  overflow: visible !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+}
+
+.catalog-controls,
+.search-input-wrapper,
+.category-filter {
+  background: rgba(255, 250, 244, 0.76) !important;
+  border-color: rgba(185, 120, 134, 0.28) !important;
+  box-shadow: 0 14px 34px rgba(88, 55, 48, 0.09) !important;
+}
+
+.catalog-section .search-input,
+.pharmacology-modal .search-input,
+.pharmacology-modal select {
+  background: #fffaf4 !important;
+  border: 1px solid rgba(185, 120, 134, 0.38) !important;
+  color: var(--v7-text) !important;
+  font-weight: 700 !important;
+}
+
+.catalog-section .search-input::placeholder,
+.pharmacology-modal .search-input::placeholder {
+  color: rgba(103, 82, 90, 0.72) !important;
+}
+
+.category-chip,
+.catalog-section .category-chip,
+.modal-content.mobile-sheet .tab-btn,
+.pharmacology-modal.mobile-sheet .pharma-tab {
+  background: linear-gradient(145deg, #fffaf4, #f4dfcf) !important;
+  border: 1px solid rgba(185, 120, 134, 0.36) !important;
+  color: var(--v7-text) !important;
+  box-shadow: 0 10px 24px rgba(88, 55, 48, 0.08) !important;
+}
+
+.category-chip.active,
+.catalog-section .category-chip.active,
+.modal-content.mobile-sheet .tab-btn.active,
+.pharmacology-modal.mobile-sheet .pharma-tab.active {
+  background: linear-gradient(135deg, #e7a092, #d996a2) !important;
+  border-color: rgba(185, 120, 134, 0.55) !important;
+  color: #2b2023 !important;
+  box-shadow: 0 14px 30px rgba(185, 120, 134, 0.22) !important;
+}
+
+.card-primary-action {
+  display: none !important;
+}
+
+.disease-card-action {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: transparent !important;
+  cursor: pointer !important;
+  z-index: 1 !important;
+}
+
+.favorite-button,
+.disease-card-favorite {
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+.disease-card {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 250, 244, 0.78), transparent 36%),
+    linear-gradient(145deg, #fff8f1, #f6dfd2) !important;
+  border-color: rgba(185, 120, 134, 0.24) !important;
+  box-shadow: 0 18px 44px rgba(88, 55, 48, 0.1) !important;
+}
+
+.disease-card-title,
+.disease-card-summary,
+.disease-card .clinical-summary,
+.disease-card .card-description {
+  color: var(--v7-text) !important;
+}
+
+.modal-content.mobile-sheet .modal-header,
+.modal-content.mobile-sheet .modal-quick-strip,
+.modal-content.mobile-sheet .modal-quick-strip.is-collapsed,
+.modal-content.mobile-sheet .modal-tabs,
+.pharmacology-modal.mobile-sheet .modal-header,
+.pharmacology-modal.mobile-sheet .pharma-tabs {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 250, 244, 0.7), transparent 38%),
+    linear-gradient(145deg, #f6dfd2, #fff7ef) !important;
+  border-color: rgba(185, 120, 134, 0.34) !important;
+  box-shadow: 0 12px 30px rgba(88, 55, 48, 0.11) !important;
+}
+
+.modal-quick-chip,
+.modal-quick-toggle,
+.modal-clinical-action,
+.pharma-count-badge,
+.med-open-indicator {
+  background: #fffaf4 !important;
+  border: 1px solid rgba(185, 120, 134, 0.36) !important;
+  color: var(--v7-text) !important;
+  box-shadow: 0 10px 22px rgba(88, 55, 48, 0.08) !important;
+}
+
+.modal-content.mobile-sheet .modal-body,
+.pharmacology-modal.mobile-sheet .pharma-content {
+  background: linear-gradient(180deg, #fff4ec, #f7e1d2) !important;
+}
+
+.pharmacology-modal .medication-card,
+.pharmacology-modal .regimen-card,
+.pharma-empty-state {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 250, 244, 0.76), transparent 34%),
+    linear-gradient(145deg, #fffaf4, #f5dfd0) !important;
+  border: 1px solid rgba(185, 120, 134, 0.28) !important;
+  color: var(--v7-text) !important;
+  box-shadow: 0 16px 38px rgba(88, 55, 48, 0.1) !important;
+}
+
+@media (max-width: 768px) {
+  .page-transition {
+    transition: opacity 200ms var(--v7-ease), transform 220ms var(--v7-ease) !important;
+  }
+
+  .navbar-inner {
+    padding: 0.9rem 0.9rem 0.85rem !important;
+    gap: 0.65rem !important;
+  }
+
+  .navbar-topline {
+    margin-bottom: 0 !important;
+  }
+
+  .navbar-brand-mark {
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px !important;
+    border-radius: 20px !important;
+    font-size: 1rem !important;
+  }
+
+  .navbar-brand-text span {
+    display: none !important;
+  }
+
+  .navbar-brand-copy span {
+    display: none !important;
+  }
+
+  .navbar-actions {
+    gap: 0.55rem !important;
+  }
+
+  .navbar-actions .premium-button:nth-of-type(n + 3) {
+    display: none !important;
+  }
+
+  .nav-row-primary {
+    display: none !important;
+  }
+
+  .catalog-shell {
+    padding: 1rem 1rem 0.9rem !important;
+    gap: 0.85rem !important;
+  }
+
+  .catalog-section .catalog-header,
+  .catalog-shell .catalog-header {
+    min-height: 0 !important;
+    padding: 1.45rem 1.35rem !important;
+    border-radius: 28px !important;
+  }
+
+  .catalog-section .catalog-title,
+  .catalog-shell .catalog-title {
+    font-size: clamp(2.25rem, 10vw, 3.05rem) !important;
+    line-height: 0.94 !important;
+    margin-bottom: 0.7rem !important;
+  }
+
+  .catalog-section .catalog-description,
+  .catalog-shell .catalog-description {
+    font-size: 1.06rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .catalog-controls {
+    gap: 0.7rem !important;
+    padding: 0.7rem !important;
+    border-radius: 24px !important;
+    width: 100% !important;
+    max-width: calc(100vw - 2rem) !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .catalog-controls .search-container,
+  .catalog-controls .search-input-wrapper,
+  .catalog-controls .search-input {
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    width: min(100%, calc(100vw - 4.8rem)) !important;
+    max-width: calc(100vw - 4.8rem) !important;
+  }
+
+  .search-input-wrapper,
+  .catalog-section .search-input {
+    min-height: 48px !important;
+    border-radius: 18px !important;
+  }
+
+  .category-filter,
+  .category-chips {
+    min-height: 54px !important;
+    padding: 0.35rem !important;
+  }
+
+  .category-chip,
+  .catalog-section .category-chip {
+    min-height: 44px !important;
+    padding: 0.7rem 1rem !important;
+    font-size: 0.95rem !important;
+    white-space: nowrap !important;
+  }
+
+  .modal-content.mobile-sheet .modal-header {
+    min-height: auto !important;
+    padding: 1.05rem 4.6rem 0.95rem 1rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .modal-content.mobile-sheet .modal-title-group {
+    min-width: 0 !important;
+    gap: 0.7rem !important;
+  }
+
+  .modal-content.mobile-sheet .modal-icon-wrapper {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 18px !important;
+  }
+
+  .modal-content.mobile-sheet .modal-title {
+    font-size: 1.05rem !important;
+    line-height: 1.1 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .modal-content.mobile-sheet .modal-icd {
+    font-size: 0.86rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 11rem !important;
+  }
+
+  .modal-clinical-actions {
+    position: absolute !important;
+    right: 4.05rem !important;
+    top: 1.05rem !important;
+  }
+
+  .modal-clinical-action {
+    min-height: 44px !important;
+    max-width: 108px !important;
+    padding: 0 0.82rem !important;
+    border-radius: 18px !important;
+    font-size: 0.88rem !important;
+  }
+
+  .modal-content.mobile-sheet .modal-close,
+  .pharmacology-modal.mobile-sheet .modal-close {
+    top: 1rem !important;
+    right: 0.9rem !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 18px !important;
+    background: #fffaf4 !important;
+    border: 1px solid rgba(185, 120, 134, 0.36) !important;
+    color: var(--v7-text) !important;
+  }
+
+  .modal-content.mobile-sheet .modal-quick-strip {
+    padding: 0.85rem 1rem !important;
+  }
+
+  .modal-content.mobile-sheet .modal-quick-meta {
+    gap: 0.55rem !important;
+  }
+
+  .modal-quick-chip,
+  .modal-quick-toggle {
+    min-height: 42px !important;
+    border-radius: 18px !important;
+    padding: 0.62rem 0.82rem !important;
+    font-size: 0.9rem !important;
+    white-space: nowrap !important;
+  }
+
+  .modal-content.mobile-sheet .modal-tabs,
+  .pharmacology-modal.mobile-sheet .pharma-tabs {
+    padding: 0.75rem 0.9rem !important;
+    gap: 0.55rem !important;
+  }
+
+  .modal-content.mobile-sheet .tab-btn,
+  .pharmacology-modal.mobile-sheet .pharma-tab {
+    min-height: 46px !important;
+    padding: 0.72rem 1rem !important;
+    border-radius: 20px !important;
+    font-size: 0.98rem !important;
+    font-weight: 850 !important;
+    white-space: nowrap !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-header-v7 {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 1.25rem 4.6rem 0.95rem 1rem !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-header-v7 .modal-section-kicker {
+    font-size: 0.95rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-header-v7 .modal-title {
+    font-size: 1.45rem !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-header-v7 .modal-icd {
+    max-width: 13.5rem !important;
+  }
+
+  .pharma-count-badge {
+    position: static !important;
+    justify-self: start !important;
+    min-height: 40px !important;
+    margin-top: 0.55rem !important;
+    padding: 0.55rem 0.9rem !important;
+    border-radius: 18px !important;
+    font-size: 0.96rem !important;
+  }
+
+  .pharmacology-modal.mobile-sheet .pharma-content {
+    padding-top: 1rem !important;
+  }
+
+  .medication-card,
+  .regimen-card {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none) and (pointer: coarse) {
+  .disease-card:hover,
+  .medication-card:hover,
+  .regimen-card:hover,
+  .premium-button:hover {
+    transform: none !important;
+  }
+}
+
+/* Ultra Premium V7: strict peach contrast layer. Keep this block last. */
+:root {
+  --v7-bg: #fff1e8;
+  --v7-surface: #f4ddca;
+  --v7-surface-strong: #ead0bc;
+  --v7-text: #2b2023;
+  --v7-text-muted: #60464c;
+  --v7-rose: #b97886;
+  --v7-coral: #df927d;
+  --v7-gold: #c49a52;
+  --v7-border: rgba(120, 72, 74, 0.26);
+  --v7-shadow: 0 18px 46px rgba(92, 54, 45, 0.16);
+  --v7-shadow-soft: 0 10px 28px rgba(92, 54, 45, 0.1);
+}
+
+body:not([data-theme='dark']) .navbar.glass,
+body:not([data-theme='dark']) .navbar-inner {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 248, 241, 0.92), transparent 34%),
+    linear-gradient(145deg, rgba(244, 221, 202, 0.96), rgba(234, 208, 188, 0.94)) !important;
+  border-color: var(--v7-border) !important;
+  box-shadow: var(--v7-shadow-soft) !important;
+}
+
+.navbar-brand {
+  gap: 0.7rem !important;
+}
+
+.navbar-brand-mark {
+  min-width: 3.15rem !important;
+  min-height: 3.15rem !important;
+  border-radius: 1.05rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background:
+    linear-gradient(145deg, #2b2023, #5c3941 52%, #b97886) !important;
+  color: #fff8f1 !important;
+  -webkit-text-fill-color: #fff8f1 !important;
+  border: 1px solid rgba(216, 184, 120, 0.44) !important;
+  box-shadow: 0 12px 28px rgba(43, 32, 35, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.04em !important;
+  animation: none !important;
+}
+
+.navbar-brand-copy strong,
+.navbar-brand-copy span {
+  color: var(--v7-text) !important;
+  -webkit-text-fill-color: var(--v7-text) !important;
+  text-shadow: none !important;
+}
+
+.navbar-brand-copy span {
+  color: var(--v7-text-muted) !important;
+  -webkit-text-fill-color: var(--v7-text-muted) !important;
+}
+
+.catalog-section .catalog-header,
+.catalog-shell .catalog-header,
+main .catalog-header {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255, 248, 241, 0.66), transparent 36%),
+    linear-gradient(145deg, #efd7c2, #e7c8b5 58%, #f2dccb) !important;
+  border: 1px solid var(--v7-border) !important;
+  box-shadow: var(--v7-shadow) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.catalog-section .catalog-eyebrow,
+.catalog-section .catalog-title,
+.catalog-section .catalog-description,
+.catalog-shell .catalog-eyebrow,
+.catalog-shell .catalog-title,
+.catalog-shell .catalog-description {
+  color: var(--v7-text) !important;
+  -webkit-text-fill-color: var(--v7-text) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+.catalog-section .catalog-description,
+.catalog-shell .catalog-description {
+  color: var(--v7-text-muted) !important;
+  -webkit-text-fill-color: var(--v7-text-muted) !important;
+  font-weight: 650 !important;
+}
+
+.disease-card {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 248, 241, 0.82), transparent 40%),
+    linear-gradient(145deg, #f5dfce, #edd2bf) !important;
+  border: 1px solid rgba(120, 72, 74, 0.22) !important;
+  box-shadow: 0 16px 36px rgba(92, 54, 45, 0.12) !important;
+}
+
+.disease-card:hover {
+  box-shadow: 0 18px 42px rgba(92, 54, 45, 0.16) !important;
+}
+
+.card-primary-action {
+  display: none !important;
+}
+
+.card-title,
+.card-desc,
+.card-subtitle,
+.card-icd-badge {
+  color: var(--v7-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.card-desc {
+  color: var(--v7-text-muted) !important;
+}
+
+.modal-content.mobile-sheet .modal-header,
+.modal-content.mobile-sheet .modal-quick-strip,
+.modal-content.mobile-sheet .modal-quick-strip.is-collapsed,
+.modal-content.mobile-sheet .modal-tabs,
+.questionnaire-modal.mobile-sheet .modal-header,
+.questionnaire-modal.mobile-sheet .modal-tabs,
+.pharmacology-modal.mobile-sheet .modal-header,
+.pharmacology-modal.mobile-sheet .pharma-tabs {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 248, 241, 0.74), transparent 36%),
+    linear-gradient(145deg, #efd7c2, #e7c8b5) !important;
+  border-color: rgba(120, 72, 74, 0.28) !important;
+  color: var(--v7-text) !important;
+  box-shadow: 0 10px 28px rgba(92, 54, 45, 0.14) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.modal-title,
+.modal-icd,
+.modal-section-kicker,
+.modal-quick-chip,
+.modal-quick-toggle {
+  color: var(--v7-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+}
+
+.modal-icd,
+.modal-section-kicker {
+  color: var(--v7-text-muted) !important;
+}
+
+.modal-quick-chip {
+  background: rgba(255, 248, 241, 0.78) !important;
+  border: 1px solid rgba(120, 72, 74, 0.24) !important;
+  font-weight: 800 !important;
+}
+
+.modal-content.mobile-sheet .tab-btn,
+.modal-content.mobile-sheet .modal-tab,
+.questionnaire-modal.mobile-sheet .tab-btn,
+.pharmacology-modal.mobile-sheet .pharma-tab,
+.modal-content.mobile-sheet .tab-btn:not(.active) {
+  background: #f6e3d4 !important;
+  border: 1px solid rgba(120, 72, 74, 0.28) !important;
+  color: var(--v7-text) !important;
+  -webkit-text-fill-color: var(--v7-text) !important;
+  box-shadow: 0 8px 18px rgba(92, 54, 45, 0.08) !important;
+}
+
+.modal-content.mobile-sheet .tab-btn.active,
+.modal-content.mobile-sheet .modal-tab.active,
+.questionnaire-modal.mobile-sheet .tab-btn.active,
+.pharmacology-modal.mobile-sheet .pharma-tab.active {
+  background: linear-gradient(135deg, var(--v7-coral), var(--v7-rose)) !important;
+  border-color: rgba(120, 72, 74, 0.38) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+.pharma-header-v7 {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+}
+
+.pharma-count-badge,
+.med-open-indicator,
+.pharma-result-summary {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 72, 74, 0.24);
+  background: rgba(255, 248, 241, 0.76);
+  color: var(--v7-text);
+  font-weight: 850;
+}
+
+.pharma-count-badge {
+  padding: 0.55rem 0.78rem;
+  white-space: nowrap;
+}
+
+.pharma-result-summary {
+  margin: 0.65rem 0 0.85rem;
+  padding: 0.48rem 0.72rem;
+  color: var(--v7-text-muted);
+}
+
+.med-card-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.med-open-indicator {
+  padding: 0.42rem 0.62rem;
+  font-size: 0.78rem;
+  color: var(--v7-rose);
+}
+
+.pharma-empty-state {
+  padding: 1rem;
+  border-radius: 24px;
+  border: 1px solid rgba(120, 72, 74, 0.22);
+  background: linear-gradient(145deg, #f6e3d4, #edcfbd);
+  color: var(--v7-text);
+  box-shadow: var(--v7-shadow-soft);
+}
+
+.pharma-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.pharmacology-modal.mobile-sheet .pharma-content {
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding-bottom: calc(7rem + env(safe-area-inset-bottom)) !important;
+}
+
+.pharmacology-modal.mobile-sheet .regimen-table,
+.pharmacology-modal.mobile-sheet .regimen-table tbody,
+.pharmacology-modal.mobile-sheet .regimen-table tr,
+.pharmacology-modal.mobile-sheet .regimen-table td {
+  display: block !important;
+  width: 100% !important;
+}
+
+.pharmacology-modal.mobile-sheet .regimen-table thead {
+  display: none !important;
+}
+
+.pharmacology-modal.mobile-sheet .regimen-table tr {
+  margin: 0 0 0.75rem !important;
+  border-radius: 18px !important;
+  padding: 0.75rem !important;
+  background: rgba(255, 248, 241, 0.72) !important;
+}
+
+@media (max-width: 768px) {
+  .disease-card:hover,
+  .medication-card:hover,
+  .regimen-card:hover {
+    transform: none !important;
+  }
+
+  .catalog-section .catalog-header,
+  .catalog-shell .catalog-header {
+    padding: 1rem !important;
+    border-radius: 24px !important;
+  }
+
+  .pharma-header-v7 {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Ultra Premium V6: clinical action cluster in disease sheets. */
 .modal-clinical-actions {
   display: flex;

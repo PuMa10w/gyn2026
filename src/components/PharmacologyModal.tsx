@@ -10,7 +10,49 @@ interface PharmacologyModalProps {
   onClose: () => void;
 }
 
-const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
+interface PharmacologyBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class PharmacologyErrorBoundary extends React.Component<React.PropsWithChildren<PharmacologyModalProps>, PharmacologyBoundaryState> {
+  constructor(props: React.PropsWithChildren<PharmacologyModalProps>) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): PharmacologyBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo): void {
+    console.error('PharmacologyModal caught:', error, info);
+  }
+
+  render() {
+    if (!this.state.hasError) return this.props.children;
+
+    return (
+      <div className="modal-overlay" role="presentation">
+        <div className="modal-content pharmacology-modal mobile-sheet pharma-error-shell" role="dialog" aria-modal="true" aria-labelledby="pharma-error-title">
+          <button type="button" className="modal-close" onClick={this.props.onClose} aria-label="Закрыть фармакологию">×</button>
+          <section className="pharma-empty-state pharma-error-state">
+            <span className="catalog-status-eyebrow">Фармакология</span>
+            <h2 id="pharma-error-title">Раздел временно не отобразился</h2>
+            <p>Мы не прячем ошибку пустым экраном. Обновите данные приложения или перезагрузите страницу, чтобы подтянуть актуальный модуль фармакологии.</p>
+            <div className="pharma-empty-actions">
+              <PremiumButton onClick={() => window.location.reload()} variant="primary" shimmer={false}>Обновить страницу</PremiumButton>
+              <PremiumButton onClick={this.props.onClose} variant="ghost" shimmer={false}>Закрыть</PremiumButton>
+            </div>
+            {this.state.error ? <small className="pharma-error-detail">{this.state.error.message}</small> : null}
+          </section>
+        </div>
+      </div>
+    );
+  }
+}
+
+const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose }) => {
   const titleId = useId();
   const searchId = useId();
   const interactionSearchId = useId();
@@ -29,6 +71,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
   const medicationEntries = medications as Medication[];
   const regimenEntries = commonRegimens as Regimen[];
   const text = (value: unknown): string => repairText(value);
+  const hasMedicationDataset = medicationEntries.length > 0;
 
   const interactionEntries = medicationEntries.flatMap((medication) =>
     (medication.interactions ?? []).map((interaction, index) => ({
@@ -124,11 +167,15 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
             ×
           </PremiumButton>
 
-          <div className="modal-header">
+          <div className="modal-header pharma-header-v7">
             <div>
+              <span className="modal-section-kicker">Клинический справочник</span>
               <h2 className="modal-title" id={titleId}>Фармакология</h2>
               <div className="modal-icd" id={subtitleId}>Препараты, взаимодействия и готовые схемы</div>
             </div>
+            <span className="pharma-count-badge" aria-label={`В базе ${medicationEntries.length} препаратов`}>
+              {medicationEntries.length} препаратов
+            </span>
           </div>
 
           <div className="pharma-tabs" role="tablist" aria-label="Разделы фармакологии">
@@ -190,19 +237,30 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
               <input
                 id={searchId}
                 type="text"
-                className="search-input"
+                className="search-input pharma-search-input"
                 aria-label="Поиск препарата"
-                placeholder="Поиск препарата..."
+                placeholder="Поиск препарата, группы или латинского названия..."
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
               />
+              <div className="pharma-result-summary" aria-live="polite">
+                Показано {filteredMeds.length} из {medicationEntries.length}
+              </div>
 
+              {!hasMedicationDataset ? (
+                <section className="pharma-empty-state" role="status">
+                  <span className="catalog-status-eyebrow">База препаратов</span>
+                  <h3>Данные фармакологии не загрузились</h3>
+                  <p>Раздел не должен оставаться пустым. Обновите PWA-кэш или перезагрузите страницу, чтобы подтянуть свежую базу.</p>
+                  <PremiumButton onClick={() => window.location.reload()} variant="primary" shimmer={false}>Обновить данные</PremiumButton>
+                </section>
+              ) : (
               <div className="medications-grid">
                 {filteredMeds.map((med) => (
                   <motion.article
                     key={med.id}
                     className="medication-card"
-                    whileHover={{ scale: 1.01 }}
+                    whileHover={isMobile ? undefined : { y: -2 }}
                     onClick={() => setSelectedMed(selectedMed?.id === med.id ? null : med)}
                     onKeyDown={(event) =>
                       handleCardKeyDown(event, () => setSelectedMed(selectedMed?.id === med.id ? null : med))
@@ -213,8 +271,13 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                     aria-controls={`med-details-${med.id}`}
                     aria-label={`Открыть детали препарата: ${text(med.name)}`}
                   >
-                    <div className="med-name">{text(med.name)}</div>
-                    <div className="med-category">{text(med.category)}</div>
+                    <div className="med-card-topline">
+                      <div>
+                        <div className="med-name">{text(med.name)}</div>
+                        <div className="med-category">{text(med.category)}</div>
+                      </div>
+                      <span className="med-open-indicator">{selectedMed?.id === med.id ? 'Скрыть' : 'Подробнее'}</span>
+                    </div>
 
                     {selectedMed?.id === med.id && (
                       <motion.div
@@ -343,6 +406,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
                   </motion.div>
                 )}
               </div>
+              )}
             </div>
           )}
 
@@ -443,7 +507,7 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
             <div className="pharma-content" id={`${titleId}-regimens-panel`} role="tabpanel" aria-labelledby={`${titleId}-regimens-tab`}>
               <div className="regimens-list">
                 {regimenEntries.map((regimen) => (
-                  <motion.div key={regimen.id} className="regimen-card" whileHover={{ scale: 1.01 }}>
+                  <motion.div key={regimen.id} className="regimen-card" whileHover={isMobile ? undefined : { y: -2 }}>
                     <div className="regimen-card-header">
                       <h3 className="regimen-title">{text(regimen.name)}</h3>
                       <div className="regimen-steps-count">{regimen.steps.length} шага</div>
@@ -477,5 +541,11 @@ const PharmacologyModal: React.FC<PharmacologyModalProps> = ({ onClose }) => {
     </AnimatePresence>
   );
 };
+
+const PharmacologyModal: React.FC<PharmacologyModalProps> = (props) => (
+  <PharmacologyErrorBoundary onClose={props.onClose}>
+    <PharmacologyModalContent {...props} />
+  </PharmacologyErrorBoundary>
+);
 
 export default PharmacologyModal;

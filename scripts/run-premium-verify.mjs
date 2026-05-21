@@ -16,6 +16,7 @@ const preServerSteps = [
 
 const browserSteps = [
   ['iPhone audit', npmCmd, ['run', 'audit:iphone']],
+  ['pharmacology iPhone audit', npmCmd, ['run', 'audit:pharma:iphone']],
   ['iPhone overlap audit', npmCmd, ['run', 'audit:iphone:overlap']],
   ['pastel audit', npmCmd, ['run', 'audit:pastel']],
   ['accessibility audit', npmCmd, ['run', 'audit:a11y']],

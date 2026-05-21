@@ -111,7 +111,6 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
           </PremiumBadge>
           {item.lastReviewed ? <PremiumBadge tone="neutral">Обновлено {formatReviewed(item.lastReviewed)}</PremiumBadge> : null}
         </div>
-        <span className="card-primary-action">Открыть клиническую карточку</span>
       </div>
     </motion.article>
   );

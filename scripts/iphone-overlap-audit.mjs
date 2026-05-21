@@ -83,6 +83,7 @@ for (const deviceName of deviceNames) {
   await page.locator('.category-filter').first().evaluate((element) => {
     element.scrollLeft = element.scrollWidth;
   });
+  await page.locator('.category-filter').first().scrollIntoViewIfNeeded();
   await assertNoOverlap(page, `${deviceName} catalog chips`);
 
   await page.locator('.disease-card-action').first().click();

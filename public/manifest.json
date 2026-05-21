@@ -6,9 +6,10 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any"
     },
     {
       "src": "logo192.png",
@@ -33,9 +34,13 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#100d10",
-  "background_color": "#100d10",
-  "categories": ["medical", "health", "education"],
+  "theme_color": "#EAD0BC",
+  "background_color": "#FFF1E8",
+  "categories": [
+    "medical",
+    "health",
+    "education"
+  ],
   "iarc_rating_id": "Mature",
   "prefer_related_applications": false,
   "shortcuts": [
@@ -44,21 +49,39 @@
       "short_name": "Гинекология",
       "description": "Открыть каталог гинекологических нозологий",
       "url": "./?tab=gynecology",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "Акушерство",
       "short_name": "Акушерство",
       "description": "Открыть каталог акушерских состояний",
       "url": "./?tab=obstetrics",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "Избранное",
       "short_name": "Избранное",
       "description": "Открыть сохранённые клинические карточки",
       "url": "./?tab=favorites",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ],
   "apple_mobile_web_app_capable": "yes",

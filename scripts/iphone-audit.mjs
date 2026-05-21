@@ -24,7 +24,7 @@ const assertNoHorizontalOverflow = async (page, label) => {
     const doc = document.documentElement;
     const width = doc.clientWidth;
     const allowedHorizontalScroller = (el) =>
-      Boolean(el.closest('.category-filter, .category-chips, .search-suggestions, .modal-tabs, .modal-quick-meta, .q-severity-bar'));
+      Boolean(el.closest('.category-filter, .category-chips, .search-suggestions, .modal-tabs, .pharma-tabs, .modal-quick-meta, .q-severity-bar'));
     const offenders = [...document.querySelectorAll('body *')]
       .filter((el) => !allowedHorizontalScroller(el))
       .map((el) => {
@@ -93,7 +93,20 @@ const assertVisibleAndClickable = async (locator, label) => {
 };
 
 const clickByText = async (page, text, label) => {
-  const target = page.getByRole('button', { name: text }).first();
+  const matches = page.getByRole('button', { name: text });
+  const count = await matches.count();
+  let target = null;
+
+  for (let index = 0; index < count; index += 1) {
+    const candidate = matches.nth(index);
+    if (await candidate.isVisible()) {
+      target = candidate;
+      break;
+    }
+  }
+
+  target ??= page.locator('button:visible').filter({ hasText: text }).first();
+
   await assertVisibleAndClickable(target, label);
   await target.click();
 };

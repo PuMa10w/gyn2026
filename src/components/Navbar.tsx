@@ -38,7 +38,7 @@ const Navbar = React.memo(function Navbar({
       animate={{ opacity: 1, y: 0 }}
       transition={navTransition}
       aria-label="Главная навигация"
-      style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)' }}
+      style={{ backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}
     >
       <div className="navbar-inner">
         <div className="navbar-topline">
@@ -48,9 +48,9 @@ const Navbar = React.memo(function Navbar({
             onClick={() => onTabChange('home')}
             aria-label="Перейти на главную"
           >
-            <span className="navbar-brand-mark text-gradient-animated">GYN</span>
+            <span className="navbar-brand-mark text-gradient-animated" aria-hidden="true">GYN</span>
             <span className="navbar-brand-copy">
-              <strong>Клинический справочник</strong>
+              <strong>GYN Clinical</strong>
               <span>гинекология и акушерство</span>
             </span>
           </button>

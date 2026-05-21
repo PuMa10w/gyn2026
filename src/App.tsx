@@ -24,7 +24,27 @@ import type { CategoryId, Disease, TabType } from './types';
 // Lazy-loaded components
 const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
 const Questionnaire = lazy(() => import('./components/Questionnaire'));
-const PharmacologyModal = lazy(() => import('./components/PharmacologyModal'));
+const PharmacologyLoadFallback = ({ onClose }: { onClose: () => void }) => (
+  <div className="modal-overlay" role="presentation">
+    <div className="modal-content pharmacology-modal mobile-sheet pharma-error-shell" role="dialog" aria-modal="true" aria-labelledby="pharma-load-error-title">
+      <button type="button" className="modal-close" onClick={onClose} aria-label="Закрыть фармакологию">×</button>
+      <section className="pharma-empty-state pharma-error-state">
+        <span className="catalog-status-eyebrow">Фармакология</span>
+        <h2 id="pharma-load-error-title">Нужна перезагрузка модуля</h2>
+        <p>Похоже, iPhone держит старый PWA-кэш. Обновите страницу, чтобы загрузить актуальную фармакологию.</p>
+        <button type="button" className="premium-button premium-button--primary" onClick={() => window.location.reload()}>
+          Обновить страницу
+        </button>
+      </section>
+    </div>
+  </div>
+);
+const PharmacologyModal = lazy(() =>
+  import('./components/PharmacologyModal').catch((error) => {
+    console.error('Failed to load PharmacologyModal:', error);
+    return { default: PharmacologyLoadFallback };
+  }),
+);
 const MobileBottomBar = lazy(() => import('./components/MobileBottomBar').then(m => ({ default: m.MobileBottomBar })));
 const Particle3DBackground = lazy(() => import('./components/Particle3DBackground').then(m => ({ default: m.Particle3DBackground })));
 const ToastContainer = lazy(() => import('./components/ToastSystem').then(m => ({ default: m.ToastContainer })));

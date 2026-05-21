@@ -51,6 +51,7 @@
     "audit:icd": "node scripts/audit-icd.mjs",
     "audit:mojibake:source": "node scripts/source-mojibake-audit.mjs",
     "audit:iphone": "node scripts/iphone-audit.mjs",
+    "audit:pharma:iphone": "node scripts/pharma-iphone-audit.mjs",
     "audit:iphone:overlap": "node scripts/iphone-overlap-audit.mjs",
     "audit:pastel": "node scripts/pastel-consistency-audit.mjs",
     "audit:a11y": "node scripts/accessibility-smoke.mjs",
