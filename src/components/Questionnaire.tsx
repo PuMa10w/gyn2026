@@ -4,6 +4,7 @@ import { PremiumButton } from './PremiumButton';
 import { questionnaires } from '../data/questionnaires';
 import { useModalBehavior } from '../hooks/useModalBehavior';
 import type { QuestionnaireData, ScoringResult, QuestionnaireHistory } from '../types';
+import { repairText } from '../utils/textRepair';
 
 const QUESTIONNAIRE_HISTORY_KEY = 'questionnaire-history';
 
@@ -15,6 +16,39 @@ const renderCompactList = (items?: string[]): React.ReactNode =>
       ))}
     </ul>
   ) : null;
+
+const normalizeHistory = (items: unknown): QuestionnaireHistory[] =>
+  Array.isArray(items)
+    ? items.map((entry) => {
+        const item = entry as QuestionnaireHistory;
+        return {
+          ...item,
+          name: repairText(item.name),
+          fullName: repairText(item.fullName),
+          level: repairText(item.level),
+          severity: repairText(item.severity),
+          date: repairText(item.date),
+        };
+      })
+    : [];
+
+const severityBucket = (severity: string): keyof NonNullable<QuestionnaireData['nextStepByScore']> => {
+  if (severity === 'critical') return 'critical';
+  if (severity === 'severe') return 'high';
+  if (severity === 'moderate') return 'intermediate';
+  return 'low';
+};
+
+const buildUrgentCriteria = (questionnaire: QuestionnaireData, result: ScoringResult): string[] => {
+  if (questionnaire.urgentCriteria?.length) return questionnaire.urgentCriteria.map(repairText);
+  if (result.severity === 'critical' || result.severity === 'severe') {
+    return [
+      'Быстрое ухудшение состояния, выраженная боль, обморок или кровотечение требуют срочной очной оценки.',
+      'Если результат противоречит клинической картине, ориентируйтесь на безопасность пациентки, а не только на баллы.',
+    ];
+  }
+  return ['При появлении красных флагов балл шкалы не заменяет срочную медицинскую оценку.'];
+};
 
 interface QuestionnaireProps {
   onClose: () => void;
@@ -34,11 +68,17 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   const [copied, setCopied] = useState(false);
   const [history, setHistory] = useState<QuestionnaireHistory[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem(QUESTIONNAIRE_HISTORY_KEY) || '[]');
+      return normalizeHistory(JSON.parse(localStorage.getItem(QUESTIONNAIRE_HISTORY_KEY) || '[]'));
     } catch {
       return [];
     }
   });
+
+  useEffect(() => {
+    if (history.length > 0) {
+      localStorage.setItem(QUESTIONNAIRE_HISTORY_KEY, JSON.stringify(history));
+    }
+  }, [history]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -96,7 +136,6 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
     const updatedHistory = [historyEntry, ...history].slice(0, 20);
     setHistory(updatedHistory);
-    localStorage.setItem(QUESTIONNAIRE_HISTORY_KEY, JSON.stringify(updatedHistory));
   };
 
   const clearHistory = (): void => {
@@ -119,7 +158,9 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
     const summary = [
       `${selectedQ.name}: ${result.level}`,
       `Баллы: ${score} из ${maxScore}`,
-      `Интерпретация: ${result.recommendation}`,
+      `Профессиональное заключение: ${result.recommendation}`,
+      `Следующие шаги: ${(selectedQ.nextStepByScore?.[severityBucket(result.severity)] ?? []).slice(0, 3).join('; ') || 'сверить с клинической картиной и планом врача'}`,
+      `Ограничения: ${(selectedQ.limitations ?? []).slice(0, 2).join('; ') || 'шкала не заменяет очную диагностику'}`,
       `Динамика: ${dynamicsLabel}`,
       `Дата: ${new Date().toLocaleDateString('ru-RU')}`,
     ].join('\n');
@@ -471,6 +512,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               Итог шкалы требует клинической интерпретации вместе с анамнезом, осмотром,
               факторами риска и клинической безопасностью пациентки.
             </p>
+            {selectedQ.resultSummaryTemplate ? <p>{selectedQ.resultSummaryTemplate}</p> : null}
           </div>
 
           <div className="q-recommendation">
@@ -486,11 +528,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           <div className="q-clinical-panel">
             <h4>Следующие шаги</h4>
             {renderCompactList([
-              ...(selectedQ.nextStepByScore?.low ?? []),
-              ...(selectedQ.nextStepByScore?.intermediate ?? []),
-              ...(selectedQ.nextStepByScore?.high ?? []),
-              ...(result.severity === 'critical' ? selectedQ.nextStepByScore?.critical ?? [] : []),
+              ...(selectedQ.nextStepByScore?.[severityBucket(result.severity)] ?? []),
+              ...(result.severity === 'critical' ? selectedQ.nextStepByScore?.high ?? [] : []),
             ].slice(0, 5))}
+          </div>
+
+          <div className="q-clinical-panel q-urgent-panel">
+            <h4>Когда действовать срочно</h4>
+            {renderCompactList(buildUrgentCriteria(selectedQ, result))}
           </div>
 
           <div className="q-clinical-panel">

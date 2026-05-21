@@ -151,8 +151,8 @@ const failures = [];
 for (const section of sections) {
   if (section.scannedFiles === 0) failures.push(`${section.kind}: chunk directory is empty or missing`);
   if (section.uniqueCodes === 0) failures.push(`${section.kind}: no ICD codes found`);
-  if (strict && section.coverage < 35) {
-    failures.push(`${section.kind}: clinically relevant ICD coverage is below 35% (${section.coverage}%)`);
+  if (strict && section.missingClinicallyRelevant.length > 0) {
+    failures.push(`${section.kind}: missing clinically relevant ICD codes: ${section.missingClinicallyRelevant.join(', ')}`);
   }
 }
 

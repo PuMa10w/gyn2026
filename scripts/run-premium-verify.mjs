@@ -3,7 +3,8 @@ import { spawn } from 'node:child_process';
 const isWindows = process.platform === 'win32';
 const npmCmd = isWindows ? 'npm.cmd' : 'npm';
 const nodeCmd = isWindows ? 'node.exe' : 'node';
-const auditBaseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4173';
+const auditBaseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4183';
+const auditUrl = new URL(auditBaseUrl);
 
 const preServerSteps = [
   ['typecheck', npmCmd, ['run', 'typecheck']],
@@ -18,6 +19,8 @@ const browserSteps = [
   ['visible mojibake audit', npmCmd, ['run', 'audit:visible:mojibake']],
   ['iPhone audit', npmCmd, ['run', 'audit:iphone']],
   ['pharmacology iPhone audit', npmCmd, ['run', 'audit:pharma:iphone']],
+  ['questionnaires iPhone audit', npmCmd, ['run', 'audit:questionnaires:iphone']],
+  ['atlas iPhone audit', npmCmd, ['run', 'audit:atlas:iphone']],
   ['iPhone overlap audit', npmCmd, ['run', 'audit:iphone:overlap']],
   ['pastel audit', npmCmd, ['run', 'audit:pastel']],
   ['accessibility audit', npmCmd, ['run', 'audit:a11y']],
@@ -72,22 +75,21 @@ for (const [label, command, args] of preServerSteps) {
   await runStep(label, command, args);
 }
 
-const shouldReuseServer = await isServerAvailable(auditBaseUrl);
 let server = null;
 
-if (shouldReuseServer) {
-  console.log(`\n[verify:premium] reusing existing audit server at ${auditBaseUrl}`);
-} else {
-  console.log(`\n[verify:premium] starting static audit server at ${auditBaseUrl}`);
-  server = spawn(nodeCmd, ['scripts/serve-dist-audit.cjs'], {
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: false,
-    env: { ...process.env, HOST: '127.0.0.1', PORT: '4173' },
-  });
-
-  server.stdout.on('data', (chunk) => process.stdout.write(`[audit-server] ${chunk}`));
-  server.stderr.on('data', (chunk) => process.stderr.write(`[audit-server] ${chunk}`));
+if (await isServerAvailable(auditBaseUrl)) {
+  throw new Error(`Audit port is already serving at ${auditBaseUrl}. Stop the old preview or set AUDIT_BASE_URL to a free port so verify:premium checks the fresh dist.`);
 }
+
+console.log(`\n[verify:premium] starting fresh static audit server at ${auditBaseUrl}`);
+server = spawn(nodeCmd, ['scripts/serve-dist-audit.cjs'], {
+  stdio: ['ignore', 'pipe', 'pipe'],
+  shell: false,
+  env: { ...process.env, HOST: auditUrl.hostname, PORT: auditUrl.port || '4183' },
+});
+
+server.stdout.on('data', (chunk) => process.stdout.write(`[audit-server] ${chunk}`));
+server.stderr.on('data', (chunk) => process.stderr.write(`[audit-server] ${chunk}`));
 
 try {
   await waitForServer(auditBaseUrl);

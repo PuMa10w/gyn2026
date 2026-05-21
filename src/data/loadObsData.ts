@@ -30,6 +30,7 @@ const obsChunkLoaders = [
   () => import('./obsChunks/obsChunk25'),
   () => import('./obsChunks/obsChunk26'),
   () => import('./obsChunks/obsChunk27'),
+  () => import('./obsChunks/obsChunk28'),
 ];
 
 export async function loadObsData(): Promise<Disease[]> {

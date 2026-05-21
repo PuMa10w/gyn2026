@@ -1594,3 +1594,178 @@ html[data-theme='light'] .modal-content.mobile-sheet .anatomy-scene-tab.is-activ
     line-height: 1.12 !important;
   }
 }
+
+/* Ultra Premium V10: scenario pharmacology, questionnaire conclusions and atlas scene polish. */
+.pharma-scenario-rail {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0.35rem 0 0.8rem;
+  margin: 0.25rem 0 0.85rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.pharma-scenario-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.pharma-scenario-chip {
+  flex: 0 0 auto;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(185, 120, 134, 0.24);
+  background: rgba(255, 250, 245, 0.88);
+  color: #2b2023;
+  padding: 0.58rem 0.82rem;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(92, 58, 64, 0.07);
+  scroll-snap-align: start;
+}
+
+.pharma-scenario-chip small {
+  min-width: 1.55rem;
+  min-height: 1.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(216, 184, 120, 0.22);
+  color: #5d3f27;
+  font-size: 0.75rem;
+}
+
+.pharma-scenario-chip.is-active {
+  background: linear-gradient(135deg, #efb59f, #d996a2);
+  border-color: rgba(185, 120, 134, 0.46);
+  box-shadow: 0 12px 26px rgba(185, 120, 134, 0.2);
+}
+
+.q-urgent-panel {
+  border-left: 4px solid #c76f7a !important;
+  background: linear-gradient(135deg, rgba(255, 245, 245, 0.96), rgba(255, 250, 245, 0.88)) !important;
+}
+
+.q-result .q-clinical-panel,
+.q-result .q-recommendation,
+.q-result .q-answers-summary {
+  color: #2b2023 !important;
+}
+
+.anatomy-scene-chip,
+.anatomy-action-button,
+.anatomy-sheet-link {
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(185, 120, 134, 0.24);
+  background: rgba(255, 250, 245, 0.9);
+  color: #2b2023;
+  font-weight: 800;
+  padding: 0.58rem 0.82rem;
+  box-shadow: 0 8px 18px rgba(92, 58, 64, 0.07);
+}
+
+.anatomy-scene-chip.is-active,
+.anatomy-action-button.is-primary,
+.anatomy-sheet-link {
+  background: linear-gradient(135deg, #efb59f, #d996a2);
+  border-color: rgba(185, 120, 134, 0.46);
+}
+
+.anatomy-scene-rail {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.anatomy-scene-rail::-webkit-scrollbar {
+  display: none;
+}
+
+html:not([data-theme='dark']) .pharma-scenario-chip,
+html:not([data-theme='dark']) .anatomy-scene-chip,
+html:not([data-theme='dark']) .anatomy-action-button,
+html:not([data-theme='dark']) .anatomy-sheet-link,
+html[data-theme='light'] .pharma-scenario-chip,
+html[data-theme='light'] .anatomy-scene-chip,
+html[data-theme='light'] .anatomy-action-button,
+html[data-theme='light'] .anatomy-sheet-link {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+@media (max-width: 768px) {
+  .pharma-scenario-rail {
+    margin-inline: -0.15rem;
+    padding-inline: 0.1rem 1rem;
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 1.4rem), transparent 100%);
+  }
+
+  .anatomy-atlas-layout {
+    gap: 0.9rem !important;
+  }
+
+  .anatomy-scene-rail {
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 1.4rem), transparent 100%);
+  }
+}
+
+/* Ultra Premium V10.1: slimmer iPhone bottom rail after visual QA. */
+@media (max-width: 768px) {
+  .mobile-bottom-bar {
+    left: max(0.5rem, env(safe-area-inset-left)) !important;
+    right: max(0.5rem, env(safe-area-inset-right)) !important;
+    bottom: calc(0.42rem + env(safe-area-inset-bottom)) !important;
+    min-height: 56px !important;
+    padding: 0.24rem !important;
+    border: 1px solid rgba(185, 120, 134, 0.22) !important;
+    border-radius: 28px !important;
+    background: rgba(255, 250, 245, 0.92) !important;
+    box-shadow: 0 14px 34px rgba(92, 58, 64, 0.14) !important;
+  }
+
+  .mobile-bottom-items {
+    max-width: none !important;
+    gap: 0.08rem !important;
+  }
+
+  .mobile-bottom-item {
+    min-height: 48px !important;
+    border-radius: 22px !important;
+    padding: 0.22rem 0.12rem 0.42rem !important;
+    font-size: clamp(0.68rem, 3.1vw, 0.78rem) !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .mobile-bottom-item.is-active {
+    background: linear-gradient(135deg, rgba(255, 244, 236, 0.94), rgba(246, 231, 214, 0.78)) !important;
+  }
+
+  .mobile-bottom-label {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .mobile-bottom-active-line {
+    left: 26% !important;
+    right: 26% !important;
+    bottom: 0.32rem !important;
+  }
+
+  main,
+  .home-shell,
+  .catalog-section,
+  .bookmarks-panel,
+  .analytics-dashboard {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+  }
+}

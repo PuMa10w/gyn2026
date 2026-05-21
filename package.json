@@ -62,7 +62,9 @@
     "verify:release": "npm run verify:premium",
     "audit:visual:iphone": "node scripts/iphone-visual-audit.mjs",
     "audit:visible:mojibake": "node scripts/visible-mojibake-audit.mjs",
-    "audit:readability": "node scripts/readability-audit.mjs"
+    "audit:readability": "node scripts/readability-audit.mjs",
+    "audit:questionnaires:iphone": "node scripts/questionnaires-iphone-audit.mjs",
+    "audit:atlas:iphone": "node scripts/atlas-iphone-audit.mjs"
   },
   "eslintConfig": {
     "extends": [

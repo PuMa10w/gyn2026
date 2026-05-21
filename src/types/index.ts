@@ -197,11 +197,51 @@ export type DiseaseSubtitle =
   | 'Гинекология'
   | 'Акушерство';
 
+export type EditorialStatus = 'verified' | 'reviewed' | 'needs-source-review' | 'fallback' | string;
+
+export interface ClinicalPathwayStep {
+  title: string;
+  detail: string;
+  priority?: 'routine' | 'attention' | 'urgent' | string;
+  linkedTab?: string;
+}
+
+export interface DiseaseAtlasHotspotContract {
+  id: string;
+  label: string;
+  organ: string;
+  clinicalMeaning: string;
+  risk: 'routine' | 'attention' | 'urgent' | string;
+  linkedTab?: string;
+}
+
+export interface DiseaseAiPrompts {
+  clinicalPearls?: string[];
+  differential?: string[];
+  workupPlan?: string[];
+  patientMemo?: string[];
+  dischargeSummary?: string[];
+  triage?: string[];
+  followUp?: string[];
+  doctorQuestions?: string[];
+}
+
 export interface Disease {
   id: string;
   name: string;
   icd: string;
   icdDetail?: string;
+  editorialStatus?: EditorialStatus;
+  canonicalIcd?: string;
+  relatedIcdCodes?: string[];
+  duplicateOf?: string;
+  clinicalPathway?: ClinicalPathwayStep[];
+  urgentPathway?: ClinicalPathwayStep[];
+  ultrasoundChecklist?: string[];
+  treatmentPathway?: ClinicalPathwayStep[];
+  atlasScene?: string;
+  atlasHotspots?: DiseaseAtlasHotspotContract[];
+  aiPrompts?: DiseaseAiPrompts;
   subtitle: DiseaseSubtitle;
   description: string;
   icon: string;
@@ -315,6 +355,10 @@ export interface Questionnaire {
   guidelineBasis?: GuidelineReference[];
   sourceQuality?: SourceQuality;
   lastReviewed?: string;
+  resultSummaryTemplate?: string;
+  urgentCriteria?: string[];
+  historyInterpretation?: string[];
+  exportFields?: string[];
 }
 
 export type QuestionnaireData = Questionnaire;
@@ -344,6 +388,7 @@ export interface MedicationInteraction {
   drug: string;
   effect: string;
   level: 'low' | 'medium' | 'high' | string;
+  severityNotes?: string[];
 }
 
 export interface Medication {
@@ -374,7 +419,11 @@ export interface Medication {
     duringTreatment?: string[];
     stopOrReviewIf?: string[];
   };
+  scenarioTags?: string[];
+  pregnancyTrimesterNotes?: string[];
+  lactationNotes?: string[];
   monitoringChecklist?: string[];
+  interactionSeverityNotes?: string[];
   pregnancyLactationDecision?: string[];
   regimenComparison?: Array<{
     regimen: string;

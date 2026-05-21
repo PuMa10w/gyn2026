@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useId, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import { useModalBehavior } from '../hooks/useModalBehavior';
@@ -14,6 +14,42 @@ interface PharmacologyBoundaryState {
   hasError: boolean;
   error: Error | null;
 }
+
+const scenarioFilters = [
+  { id: 'all', label: 'Все', keywords: [] },
+  { id: 'infection', label: 'Инфекции', keywords: ['инфек', 'антибиот', 'иппп', 'вагин', 'цервиц', 'pid', 'взомт'] },
+  { id: 'contraception', label: 'Контрацепция', keywords: ['контрац', 'эстроген', 'гестаген', 'левоноргестрел', 'вмс'] },
+  { id: 'endometriosis', label: 'Эндометриоз', keywords: ['эндометриоз', 'диеногест', 'гнрг'] },
+  { id: 'pcos', label: 'СПКЯ', keywords: ['спкя', 'инсулин', 'метформин', 'гиперандроген'] },
+  { id: 'bleeding', label: 'АМК', keywords: ['кровотеч', 'амк', 'транексам', 'анем', 'желез'] },
+  { id: 'pregnancy', label: 'Беременность', keywords: ['беремен', 'преэкламп', 'гестацион', 'плод', 'акушер'] },
+  { id: 'lactation', label: 'Лактация', keywords: ['лактац', 'груд', 'молок', 'послерод'] },
+  { id: 'hypertension', label: 'Гипертензия', keywords: ['гипертенз', 'давлен', 'преэкламп', 'лабеталол', 'нифедипин'] },
+  { id: 'diabetes', label: 'Диабет', keywords: ['диабет', 'глюкоз', 'инсулин'] },
+  { id: 'tocolysis', label: 'Токолиз', keywords: ['токолиз', 'угроза преждеврем', 'нифедипин', 'атозибан'] },
+  { id: 'postpartum', label: 'Послеродовый', keywords: ['послерод', 'после родов', 'лактац', 'кровотеч'] },
+] as const;
+
+type ScenarioId = typeof scenarioFilters[number]['id'];
+
+const medicationScenarioTags = (medication: Medication): string[] => {
+  const explicit = medication.scenarioTags?.map((tag) => repairText(tag).toLowerCase()) ?? [];
+  const haystack = [
+    medication.name,
+    medication.nameEn,
+    medication.category,
+    ...(medication.indications ?? []),
+    ...(medication.majorPracticePoints ?? []),
+    ...(medication.clinicalUseCases ?? []).flatMap((useCase) => [useCase.scenario, useCase.whyChosen, ...(useCase.importantNotes ?? [])]),
+  ]
+    .map(repairText)
+    .join(' ')
+    .toLowerCase();
+
+  return scenarioFilters
+    .filter((filter) => filter.id !== 'all' && (explicit.includes(filter.id) || filter.keywords.some((keyword) => haystack.includes(keyword))))
+    .map((filter) => filter.id);
+};
 
 class PharmacologyErrorBoundary extends React.Component<React.PropsWithChildren<PharmacologyModalProps>, PharmacologyBoundaryState> {
   constructor(props: React.PropsWithChildren<PharmacologyModalProps>) {
@@ -67,6 +103,7 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
   const [interactionSearchTerm, setInteractionSearchTerm] = useState('');
   const [firstDrug, setFirstDrug] = useState('');
   const [secondDrug, setSecondDrug] = useState('');
+  const [activeScenario, setActiveScenario] = useState<ScenarioId>('all');
 
   const medicationEntries = medications as Medication[];
   const regimenEntries = commonRegimens as Regimen[];
@@ -85,11 +122,34 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
   const normalizedMedicationSearch = searchTerm.trim().toLowerCase();
   const normalizedInteractionSearch = interactionSearchTerm.trim().toLowerCase();
 
-  const filteredMeds: Medication[] = medicationEntries.filter((med) =>
-    text(med.name).toLowerCase().includes(normalizedMedicationSearch) ||
-    text(med.nameEn).toLowerCase().includes(normalizedMedicationSearch) ||
-    text(med.category).toLowerCase().includes(normalizedMedicationSearch),
+  const medicationScenarioMap = useMemo(
+    () => new Map(medicationEntries.map((medication) => [medication.id, medicationScenarioTags(medication)])),
+    [medicationEntries],
   );
+
+  const scenarioCounts = useMemo(() => {
+    const counts = new Map<ScenarioId, number>(scenarioFilters.map((filter) => [filter.id, 0]));
+    counts.set('all', medicationEntries.length);
+    medicationEntries.forEach((medication) => {
+      medicationScenarioMap.get(medication.id)?.forEach((tag) => {
+        counts.set(tag as ScenarioId, (counts.get(tag as ScenarioId) ?? 0) + 1);
+      });
+    });
+    return counts;
+  }, [medicationEntries, medicationScenarioMap]);
+
+  const filteredMeds: Medication[] = medicationEntries.filter((med) => {
+    const haystack = [
+      text(med.name),
+      text(med.nameEn),
+      text(med.category),
+      ...(med.indications ?? []).map(text),
+      ...(med.clinicalUseCases ?? []).map((useCase) => text(useCase.scenario)),
+    ].join(' ').toLowerCase();
+    const matchesSearch = !normalizedMedicationSearch || haystack.includes(normalizedMedicationSearch);
+    const matchesScenario = activeScenario === 'all' || medicationScenarioMap.get(med.id)?.includes(activeScenario);
+    return matchesSearch && matchesScenario;
+  });
 
   const filteredInteractions = interactionEntries.filter(({ medicationName, interaction }) => {
     if (!normalizedInteractionSearch) {
@@ -245,6 +305,25 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
               />
               <div className="pharma-result-summary" aria-live="polite">
                 Показано {filteredMeds.length} из {medicationEntries.length}
+                {activeScenario !== 'all' ? ` · фильтр: ${scenarioFilters.find((filter) => filter.id === activeScenario)?.label}` : ''}
+              </div>
+
+              <div className="pharma-scenario-rail" aria-label="Клинические сценарии фармакологии">
+                {scenarioFilters.map((filter) => (
+                  <button
+                    key={filter.id}
+                    type="button"
+                    className={`pharma-scenario-chip ${activeScenario === filter.id ? 'is-active' : ''}`}
+                    onClick={() => {
+                      setActiveScenario(filter.id);
+                      setSelectedMed(null);
+                    }}
+                    aria-pressed={activeScenario === filter.id}
+                  >
+                    <span>{filter.label}</span>
+                    <small>{scenarioCounts.get(filter.id) ?? 0}</small>
+                  </button>
+                ))}
               </div>
 
               {!hasMedicationDataset ? (

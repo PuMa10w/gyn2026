@@ -4,7 +4,18 @@ import * as THREE from 'three';
 import type { Disease } from '../types';
 import { isObstetricsLabel, repairText } from '../utils/textRepair';
 
-type AtlasScene = 'overview' | 'uterus' | 'ovary' | 'tube' | 'pregnancy' | 'oncology' | 'ultrasound';
+type AtlasScene =
+  | 'overview'
+  | 'uterus'
+  | 'endometrium'
+  | 'cervix'
+  | 'ovary'
+  | 'tube'
+  | 'pregnancy'
+  | 'placenta'
+  | 'labor'
+  | 'oncology'
+  | 'ultrasound';
 type AtlasRisk = 'routine' | 'attention' | 'urgent';
 type LinkedModalTab = 'quick' | 'diagnostics' | 'ultrasound' | 'treatment' | 'management' | 'patient-memo';
 
@@ -28,9 +39,13 @@ interface Organ3DViewerProps {
 const sceneLabels: Record<AtlasScene, string> = {
   overview: 'Обзор',
   uterus: 'Матка',
+  endometrium: 'Эндометрий',
+  cervix: 'Шейка',
   ovary: 'Яичники',
   tube: 'Трубы',
   pregnancy: 'Беременность',
+  placenta: 'Плацента',
+  labor: 'Роды',
   oncology: 'Онкогинекология',
   ultrasound: 'УЗИ-срез',
 };
@@ -89,6 +104,46 @@ const sceneHotspots: Record<AtlasScene, AnatomyHotspot[]> = {
       risk: 'routine',
       position: [0.05, 0.62, 0.96],
       linkedTab: 'diagnostics',
+    },
+  ],
+  endometrium: [
+    {
+      id: 'endometrium-thickness',
+      label: 'Толщина эндометрия',
+      organ: 'эндометрий',
+      clinicalMeaning: 'Связана с фазой цикла, АМК, гиперплазией, бесплодием и риском неоплазии в постменопаузе.',
+      risk: 'attention',
+      position: [0.02, 0.46, 1.02],
+      linkedTab: 'ultrasound',
+    },
+    {
+      id: 'endometrium-focal-lesion',
+      label: 'Фокус в полости',
+      organ: 'полость матки',
+      clinicalMeaning: 'Полип или субмукозный узел требует сопоставления с кровотечением, возрастом и репродуктивными планами.',
+      risk: 'routine',
+      position: [0.18, 0.62, 1.08],
+      linkedTab: 'diagnostics',
+    },
+  ],
+  cervix: [
+    {
+      id: 'cervix-screening-zone',
+      label: 'Зона трансформации',
+      organ: 'шейка матки',
+      clinicalMeaning: 'Ключевая область для ВПЧ-ассоциированной патологии, цитологии, кольпоскопии и биопсии.',
+      risk: 'attention',
+      position: [0, -0.66, 0.82],
+      linkedTab: 'diagnostics',
+    },
+    {
+      id: 'cervix-length-risk',
+      label: 'Длина шейки',
+      organ: 'шейка матки',
+      clinicalMeaning: 'В акушерстве короткая шейка меняет маршрут наблюдения и профилактики преждевременных родов.',
+      risk: 'urgent',
+      position: [0, -0.92, 0.92],
+      linkedTab: 'management',
     },
   ],
   ovary: [
@@ -160,6 +215,46 @@ const sceneHotspots: Record<AtlasScene, AnatomyHotspot[]> = {
       linkedTab: 'management',
     },
   ],
+  placenta: [
+    {
+      id: 'placenta-location',
+      label: 'Локализация плаценты',
+      organ: 'плацента',
+      clinicalMeaning: 'Низкое расположение или предлежание влияет на осмотр, риск кровотечения и план родоразрешения.',
+      risk: 'attention',
+      position: [0.38, -0.18, 1.02],
+      linkedTab: 'ultrasound',
+    },
+    {
+      id: 'placenta-abruption',
+      label: 'Отслойка',
+      organ: 'плацента',
+      clinicalMeaning: 'Боль, гипертонус, кровотечение и нарушение состояния плода требуют срочного акушерского алгоритма.',
+      risk: 'urgent',
+      position: [-0.24, -0.04, 1.03],
+      linkedTab: 'quick',
+    },
+  ],
+  labor: [
+    {
+      id: 'labor-descent',
+      label: 'Продвижение головки',
+      organ: 'родовой канал',
+      clinicalMeaning: 'При затяжных родах оценивают динамику раскрытия, станцию, позицию и признаки клинического несоответствия.',
+      risk: 'attention',
+      position: [0, -1.16, 0.78],
+      linkedTab: 'management',
+    },
+    {
+      id: 'labor-fetal-distress',
+      label: 'Дистресс плода',
+      organ: 'плод',
+      clinicalMeaning: 'Патологическая КТГ меняет тактику и может потребовать ускорения родоразрешения.',
+      risk: 'urgent',
+      position: [0.26, -0.2, 1.08],
+      linkedTab: 'quick',
+    },
+  ],
   oncology: [
     {
       id: 'cervix-risk',
@@ -200,8 +295,13 @@ const getDiseaseScene = (disease?: Disease, organType?: Organ3DViewerProps['orga
     return 'overview';
   }
 
+  if (disease.atlasScene && disease.atlasScene in sceneLabels) return disease.atlasScene as AtlasScene;
   const text = repairText(`${disease.name} ${disease.subtitle} ${disease.icd} ${disease.description}`).toLowerCase();
-  if (disease.icd?.startsWith('O') || isObstetricsLabel(disease.subtitle) || /беремен|плацент|род|шейк.*матк|ицн|преэкламп/.test(text)) return 'pregnancy';
+  if (/род|затяжн|роды|родоразреш/.test(text) || /^O6|^O7/.test(disease.icd ?? '')) return 'labor';
+  if (/плацент|кровотеч.*беремен|предлеж|отслойк/.test(text) || ['O44', 'O45', 'O46'].some((code) => disease.icd?.startsWith(code))) return 'placenta';
+  if (/шейк|цервик|cin|дисплаз|ицн/.test(text)) return 'cervix';
+  if (/эндометр|полип|гиперплаз|амк|кровотеч/.test(text)) return 'endometrium';
+  if (disease.icd?.startsWith('O') || isObstetricsLabel(disease.subtitle) || /беремен|преэкламп/.test(text)) return 'pregnancy';
   if (/рак|cin|дисплаз|неоплаз|онко|злокаче|карцин/.test(text)) return 'oncology';
   if (/внематоч|труб|сальпинг|гидросальпинкс/.test(text)) return 'tube';
   if (/яичник|кист|спкя|апоплекс|перекрут|овари/.test(text)) return 'ovary';
@@ -352,7 +452,7 @@ const addBasePelvis = (group: THREE.Group, scene: AtlasScene) => {
   rightLigament.position.set(0.86, 0.22, -0.02);
   group.add(leftLigament, rightLigament);
 
-  if (scene === 'pregnancy') {
+  if (scene === 'pregnancy' || scene === 'placenta' || scene === 'labor') {
     const sac = new THREE.Mesh(new THREE.SphereGeometry(0.3, 32, 20), makeMaterial('#F8D6C7', 0.78));
     sac.scale.set(0.78, 0.92, 0.42);
     sac.position.set(-0.05, 0.2, 0.76);
@@ -360,6 +460,61 @@ const addBasePelvis = (group: THREE.Group, scene: AtlasScene) => {
     placenta.scale.set(1.35, 0.62, 0.22);
     placenta.position.set(0.34, -0.18, 0.82);
     group.add(sac, placenta);
+  }
+
+  if (scene === 'endometrium') {
+    const thickenedLayer = new THREE.Mesh(new THREE.SphereGeometry(0.45, 48, 22), makeMaterial('#FFF0E8', 0.94));
+    thickenedLayer.scale.set(0.44, 0.98, 0.1);
+    thickenedLayer.position.set(0, 0.34, 0.92);
+    thickenedLayer.name = 'Акцентированный эндометрий';
+    const focalLesion = new THREE.Mesh(new THREE.SphereGeometry(0.075, 22, 14), makeMaterial('#D8B878', 0.95));
+    focalLesion.position.set(0.18, 0.56, 1.02);
+    focalLesion.name = 'Фокальное образование в полости';
+    group.add(thickenedLayer, focalLesion);
+  }
+
+  if (scene === 'cervix') {
+    const transformationZone = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.025, 16, 48), makeMaterial('#D8B878', 0.96));
+    transformationZone.rotation.x = Math.PI / 2;
+    transformationZone.position.set(0, -0.68, 0.45);
+    transformationZone.name = 'Зона трансформации';
+    const cervixLengthLine = createTube([
+      new THREE.Vector3(0.2, -0.42, 0.62),
+      new THREE.Vector3(0.2, -0.96, 0.62),
+    ], '#C84F5F', 0.018);
+    cervixLengthLine.name = 'Маркер длины шейки';
+    group.add(transformationZone, cervixLengthLine);
+  }
+
+  if (scene === 'placenta') {
+    const placentaBed = new THREE.Mesh(new THREE.SphereGeometry(0.28, 40, 20), makeMaterial('#B97886', 0.96));
+    placentaBed.scale.set(1.55, 0.62, 0.2);
+    placentaBed.position.set(0.18, -0.1, 1.0);
+    placentaBed.name = 'Плацентарная площадка';
+    const abruptionZone = new THREE.Mesh(new THREE.SphereGeometry(0.12, 28, 14), makeMaterial('#C84F5F', 0.88));
+    abruptionZone.scale.set(1.1, 0.42, 0.12);
+    abruptionZone.position.set(-0.24, -0.02, 1.1);
+    abruptionZone.name = 'Маркер отслойки';
+    group.add(placentaBed, abruptionZone);
+  }
+
+  if (scene === 'labor') {
+    const birthCanal = createTube([
+      new THREE.Vector3(0, -0.48, 0.34),
+      new THREE.Vector3(0, -0.86, 0.46),
+      new THREE.Vector3(0, -1.22, 0.62),
+    ], '#E8A08C', 0.09);
+    birthCanal.name = 'Родовой канал';
+    const fetalHead = new THREE.Mesh(new THREE.SphereGeometry(0.18, 32, 22), makeMaterial('#F8D6C7', 0.95));
+    fetalHead.position.set(0, -1.06, 0.78);
+    fetalHead.name = 'Предлежащая часть';
+    const descentArrow = createTube([
+      new THREE.Vector3(0.34, -0.32, 1.0),
+      new THREE.Vector3(0.18, -0.76, 0.9),
+      new THREE.Vector3(0.04, -1.14, 0.78),
+    ], '#D8B878', 0.028);
+    descentArrow.name = 'Направление продвижения';
+    group.add(birthCanal, fetalHead, descentArrow);
   }
 
   if (scene === 'ovary') {
@@ -414,7 +569,19 @@ export const Organ3DViewer: React.FC<Organ3DViewerProps> = ({
 
   const defaultScene = useMemo(() => getDiseaseScene(disease, organType), [disease, organType]);
   const displayDisease = repairText(disease?.name ?? 'женская анатомия');
-  const hotspots = sceneHotspots[selectedScene];
+  const hotspots = useMemo<AnatomyHotspot[]>(() => {
+    const baseHotspots = sceneHotspots[selectedScene];
+    const diseaseHotspots = disease?.atlasHotspots?.map((hotspot, index) => ({
+      id: hotspot.id || `disease-hotspot-${index}`,
+      label: repairText(hotspot.label),
+      organ: repairText(hotspot.organ),
+      clinicalMeaning: repairText(hotspot.clinicalMeaning),
+      risk: (hotspot.risk === 'urgent' || hotspot.risk === 'attention' || hotspot.risk === 'routine' ? hotspot.risk : 'attention') as AtlasRisk,
+      position: [0.18 + index * 0.12, 0.28 - index * 0.08, 1.12] as [number, number, number],
+      linkedTab: hotspot.linkedTab as LinkedModalTab | undefined,
+    })) ?? [];
+    return [...baseHotspots, ...diseaseHotspots];
+  }, [disease?.atlasHotspots, selectedScene]);
 
   useEffect(() => {
     setSelectedScene(defaultScene);
