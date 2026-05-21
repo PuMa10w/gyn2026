@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 
@@ -185,7 +185,7 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
 
       {installPrompt && (
         <div className="version-ready-state version-install-state">
-          <span>Можно установить GYN как приложение на iPhone/рабочий стол.</span>
+          <span>Можно установить GYN как приложение на iPhone или рабочий стол.</span>
           <PremiumButton onClick={installPwa} variant="secondary" size="sm" shimmer={false}>
             Установить PWA
           </PremiumButton>

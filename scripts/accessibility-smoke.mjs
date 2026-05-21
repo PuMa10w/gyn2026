@@ -98,7 +98,7 @@ await page.locator('.home-destination-card').first().click();
 await page.locator('.disease-card').first().waitFor({ state: 'visible' });
 await runPageChecks(page, 'catalog');
 
-await page.locator('.disease-card-action').first().click();
+await page.locator('.disease-card').first().click();
 await page.getByTestId('disease-modal').waitFor({ state: 'visible' });
 await runPageChecks(page, 'disease-modal');
 await page.locator('[data-testid="disease-modal"] .modal-close').first().click();

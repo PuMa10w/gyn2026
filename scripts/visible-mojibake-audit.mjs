@@ -10,7 +10,9 @@ const findings = [];
 
 page.on('pageerror', (error) => findings.push({ flow: 'pageerror', message: error.message }));
 page.on('console', (message) => {
-  if (['error'].includes(message.type())) findings.push({ flow: 'console', message: message.text() });
+  const text = message.text();
+  const isExpectedNetworkNoise = /Failed to load resource: net::ERR_(NETWORK_ACCESS_DENIED|FAILED|BLOCKED_BY_CLIENT)/i.test(text);
+  if (['error'].includes(message.type()) && !isExpectedNetworkNoise) findings.push({ flow: 'console', message: text });
 });
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

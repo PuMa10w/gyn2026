@@ -228,7 +228,9 @@ for (const deviceName of deviceNames) {
   allMessages.push({ device: deviceName, messages });
 
   page.on('console', (message) => {
-    if (['error'].includes(message.type())) messages.push({ type: message.type(), text: message.text() });
+    const text = message.text();
+    const isExpectedNetworkNoise = /Failed to load resource: net::ERR_(NETWORK_ACCESS_DENIED|FAILED|BLOCKED_BY_CLIENT)/i.test(text);
+    if (['error'].includes(message.type()) && !isExpectedNetworkNoise) messages.push({ type: message.type(), text });
   });
   page.on('pageerror', (error) => messages.push({ type: 'pageerror', text: error.message }));
 
@@ -269,7 +271,7 @@ for (const deviceName of deviceNames) {
   }, null, { timeout: 8000 });
   await search.fill('');
 
-  await page.locator('.disease-card-action').first().click();
+  await page.locator('.disease-card').first().click();
   await page.getByTestId('disease-modal').waitFor({ state: 'visible', timeout: 8000 });
   await page.waitForTimeout(650);
   await assertModalFromTop(page, `${deviceName} disease modal`);

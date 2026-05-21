@@ -107,7 +107,7 @@ for (const deviceName of deviceNames) {
   await page.locator('.category-filter').first().scrollIntoViewIfNeeded();
   await assertNoOverlap(page, `${deviceName} catalog chips`);
 
-  await page.locator('.disease-card-action').first().click();
+  await page.locator('.disease-card').first().click();
   await page.getByTestId('disease-modal').waitFor({ state: 'visible', timeout: 8000 });
   await sleep(500);
   await assertNoOverlap(page, `${deviceName} disease modal top`);

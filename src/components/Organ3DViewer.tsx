@@ -249,6 +249,16 @@ const addBasePelvis = (group: THREE.Group, scene: AtlasScene) => {
   const endometriumMaterial = makeMaterial('#FFF2EC', 0.86);
   const tubeMaterial = makeMaterial('#E8B7AA', 0.9);
   const ovaryMaterial = makeMaterial('#E3A08D', 0.92);
+  const ligamentMaterial = makeMaterial('#F1CBBB', 0.22);
+  ligamentMaterial.side = THREE.DoubleSide;
+
+  const pelvicGlow = new THREE.Mesh(
+    new THREE.TorusGeometry(1.72, 0.012, 12, 96),
+    new THREE.MeshBasicMaterial({ color: '#F4C5B4', transparent: true, opacity: 0.26 }),
+  );
+  pelvicGlow.rotation.x = Math.PI / 2;
+  pelvicGlow.position.set(0, 0.02, -0.03);
+  group.add(pelvicGlow);
 
   const uterus = new THREE.Mesh(new THREE.SphereGeometry(0.72, 48, 32), uterusMaterial);
   uterus.scale.set(scene === 'pregnancy' ? 1.18 : 0.82, scene === 'pregnancy' ? 1.35 : 1.08, 0.52);
@@ -256,17 +266,38 @@ const addBasePelvis = (group: THREE.Group, scene: AtlasScene) => {
   uterus.name = 'Матка';
   group.add(uterus);
 
+  const serosa = new THREE.Mesh(new THREE.SphereGeometry(0.735, 64, 36), makeMaterial('#F6C8B8', 0.18));
+  serosa.scale.copy(uterus.scale).multiplyScalar(1.015);
+  serosa.position.copy(uterus.position);
+  serosa.name = 'Серозный контур матки';
+  group.add(serosa);
+
   const endometrium = new THREE.Mesh(new THREE.SphereGeometry(0.42, 40, 20), endometriumMaterial);
   endometrium.scale.set(0.55, 0.86, 0.08);
   endometrium.position.set(0, scene === 'pregnancy' ? 0.16 : 0.28, 0.55);
   endometrium.name = 'Эндометрий';
   group.add(endometrium);
 
+  const cavityLine = createTube([
+    new THREE.Vector3(0, scene === 'pregnancy' ? 0.66 : 0.72, 0.72),
+    new THREE.Vector3(0, scene === 'pregnancy' ? 0.28 : 0.34, 0.82),
+    new THREE.Vector3(0, scene === 'pregnancy' ? -0.18 : -0.08, 0.7),
+  ], '#FFF7EF', 0.018);
+  cavityLine.name = 'Полость матки';
+  group.add(cavityLine);
+
   const cervix = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.28, 0.62, 36), cervixMaterial);
   cervix.rotation.x = Math.PI / 2;
   cervix.position.set(0, scene === 'pregnancy' ? -0.9 : -0.68, 0.12);
   cervix.name = 'Шейка матки';
   group.add(cervix);
+
+  const cervicalCanal = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.66, 24), makeMaterial('#FFF7EF', 0.88));
+  cervicalCanal.rotation.x = Math.PI / 2;
+  cervicalCanal.position.copy(cervix.position);
+  cervicalCanal.position.z += 0.02;
+  cervicalCanal.name = 'Цервикальный канал';
+  group.add(cervicalCanal);
 
   const leftTube = createTube([
     new THREE.Vector3(-0.45, 0.55, 0.08),
@@ -282,6 +313,17 @@ const addBasePelvis = (group: THREE.Group, scene: AtlasScene) => {
   rightTube.name = 'Правая маточная труба';
   group.add(leftTube, rightTube);
 
+  [-1, 1].forEach((side) => {
+    for (let index = 0; index < 5; index += 1) {
+      const fimbria = createTube([
+        new THREE.Vector3(side * 1.14, 0.33, 0.11),
+        new THREE.Vector3(side * (1.3 + index * 0.018), 0.18 + index * 0.055, 0.12),
+      ], '#F0B8AA', 0.018);
+      fimbria.name = side < 0 ? 'Левые фимбрии' : 'Правые фимбрии';
+      group.add(fimbria);
+    }
+  });
+
   const ovaryGeometry = new THREE.SphereGeometry(0.25, 32, 22);
   const leftOvary = new THREE.Mesh(ovaryGeometry.clone(), ovaryMaterial);
   leftOvary.scale.set(1.18, 0.86, 0.72);
@@ -290,6 +332,25 @@ const addBasePelvis = (group: THREE.Group, scene: AtlasScene) => {
   rightOvary.scale.set(1.18, 0.86, 0.72);
   rightOvary.position.set(1.38, 0.22, 0.08);
   group.add(leftOvary, rightOvary);
+
+  [-1.38, 1.38].forEach((x) => {
+    for (let index = 0; index < 5; index += 1) {
+      const follicle = new THREE.Mesh(new THREE.SphereGeometry(0.026, 16, 10), makeMaterial('#FFF7EF', 0.7));
+      follicle.position.set(x + (Math.cos(index * 1.4) * 0.11), 0.22 + (Math.sin(index * 1.8) * 0.07), 0.26);
+      follicle.name = 'Фолликул';
+      group.add(follicle);
+    }
+  });
+
+  const leftLigament = new THREE.Mesh(new THREE.CircleGeometry(0.62, 48), ligamentMaterial);
+  leftLigament.scale.set(1.15, 0.42, 1);
+  leftLigament.rotation.set(Math.PI / 2, 0, -0.2);
+  leftLigament.position.set(-0.86, 0.22, -0.02);
+  const rightLigament = leftLigament.clone();
+  rightLigament.material = ligamentMaterial.clone();
+  rightLigament.rotation.set(Math.PI / 2, 0, 0.2);
+  rightLigament.position.set(0.86, 0.22, -0.02);
+  group.add(leftLigament, rightLigament);
 
   if (scene === 'pregnancy') {
     const sac = new THREE.Mesh(new THREE.SphereGeometry(0.3, 32, 20), makeMaterial('#F8D6C7', 0.78));
@@ -324,11 +385,17 @@ const addBasePelvis = (group: THREE.Group, scene: AtlasScene) => {
 const createHotspotMesh = (hotspot: AnatomyHotspot) => {
   const color = hotspot.risk === 'urgent' ? '#C84F5F' : hotspot.risk === 'attention' ? '#D996A2' : '#D8B878';
   const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(0.07, 20, 14),
+    new THREE.SphereGeometry(0.085, 28, 18),
     new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.95 }),
   );
   mesh.position.set(...hotspot.position);
   mesh.userData.hotspotId = hotspot.id;
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(0.135, 0.008, 8, 36),
+    new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.55 }),
+  );
+  ring.rotation.x = Math.PI / 2;
+  mesh.add(ring);
   return mesh;
 };
 

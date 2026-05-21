@@ -250,6 +250,20 @@ main,
   background: linear-gradient(135deg, #fffaf5, #f6e7d6) !important;
 }
 
+.catalog-controls {
+  background:
+    linear-gradient(135deg, rgba(246, 231, 214, 0.98), rgba(239, 214, 199, 0.96)),
+    #f1ddcf !important;
+  border-color: rgba(185, 120, 134, 0.34) !important;
+  box-shadow: 0 18px 42px rgba(92, 58, 64, 0.13) !important;
+}
+
+.catalog-controls .search-input-wrapper {
+  background: linear-gradient(135deg, #fff8f2, #f2ddcf) !important;
+  border-color: rgba(185, 120, 134, 0.42) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 10px 24px rgba(92, 58, 64, 0.09) !important;
+}
+
 .catalog-title,
 .catalog-description,
 .card-title,
@@ -274,7 +288,7 @@ main,
 .search-input,
 .search-input input,
 input[type='search'] {
-  background: #fffdf9 !important;
+  background: #fff8f2 !important;
   color: var(--color-text) !important;
   border-color: var(--color-border-strong) !important;
 }
@@ -282,7 +296,35 @@ input[type='search'] {
 .search-input::placeholder,
 .search-input input::placeholder,
 input[type='search']::placeholder {
-  color: rgba(103, 82, 90, 0.86) !important;
+  color: rgba(82, 61, 67, 0.92) !important;
+}
+
+.search-suggestions {
+  gap: 0.55rem !important;
+  padding: 0.08rem 0.08rem 0.14rem !important;
+}
+
+.search-suggestion-chip {
+  min-height: 46px !important;
+  padding: 0.58rem 0.78rem !important;
+  border: 1px solid rgba(144, 84, 96, 0.42) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(135deg, rgba(255, 248, 242, 0.98), rgba(241, 219, 207, 0.96)),
+    #f1ddcf !important;
+  color: #2b2023 !important;
+  box-shadow: 0 10px 22px rgba(92, 58, 64, 0.11) !important;
+}
+
+.search-suggestion-chip span {
+  color: #2b2023 !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.search-suggestion-chip small {
+  color: #5f4850 !important;
+  font-weight: 750 !important;
 }
 
 .category-filter,
@@ -762,5 +804,793 @@ input[type='search']::placeholder {
 @media (max-width: 768px) {
   .navbar-actions {
     display: none !important;
+  }
+}
+
+/* V9 readability hotfix: disease modal content must stay light and readable in light theme. */
+body:not([data-theme='dark']) .modal-content.mobile-sheet,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-body {
+  background: linear-gradient(180deg, #fff7f0 0%, #fffaf5 45%, #f8e8dc 100%) !important;
+  color: #2b2023 !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .immediate-action-card,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .source-confidence-card,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-timeline-card,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .diagnostics-hero,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-list,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .patient-memo,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .memo-card {
+  background:
+    linear-gradient(135deg, rgba(255, 250, 245, 0.98), rgba(246, 231, 214, 0.88)),
+    #fffaf5 !important;
+  border: 1px solid rgba(185, 120, 134, 0.24) !important;
+  color: #2b2023 !important;
+  box-shadow: 0 14px 34px rgba(92, 58, 64, 0.11) !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide:first-of-type,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card {
+  background:
+    linear-gradient(90deg, rgba(217, 150, 162, 0.14) 0 5px, transparent 5px),
+    linear-gradient(135deg, #fffaf5, #f8e8dc) !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert {
+  background:
+    linear-gradient(90deg, rgba(200, 79, 95, 0.96) 0 5px, transparent 5px),
+    linear-gradient(135deg, #fff5f5, #fffafa) !important;
+  border: 1px solid rgba(200, 79, 95, 0.28) !important;
+  color: #2b2023 !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .immediate-action-card *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .source-confidence-card *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-timeline-card *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .diagnostics-hero *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-list *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .patient-memo *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .memo-card * {
+  color: #2b2023 !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet p,
+body:not([data-theme='dark']) .modal-content.mobile-sheet li,
+body:not([data-theme='dark']) .modal-content.mobile-sheet dd,
+body:not([data-theme='dark']) .modal-content.mobile-sheet small,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-note,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-region {
+  color: #5f4850 !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet h2,
+body:not([data-theme='dark']) .modal-content.mobile-sheet h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet h4,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-title,
+body:not([data-theme='dark']) .modal-content.mobile-sheet dt {
+  color: #2b2023 !important;
+  font-weight: 900 !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h4,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .risk-urgent h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .risk-urgent h4 {
+  color: #a53643 !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-grid {
+  gap: 0.85rem !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tabs {
+  background: rgba(246, 231, 214, 0.94) !important;
+  border-color: rgba(185, 120, 134, 0.24) !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tab {
+  background: rgba(255, 250, 245, 0.92) !important;
+  color: #46373d !important;
+  border-color: rgba(185, 120, 134, 0.28) !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tab.active {
+  background: linear-gradient(135deg, #f4c5b4, #e8a08c) !important;
+  color: #2b2023 !important;
+  border-color: rgba(185, 120, 134, 0.52) !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .tab-content h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item dt {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  margin: 0 0 0.78rem !important;
+  padding: 0.46rem 0.82rem !important;
+  border: 1px solid rgba(185, 120, 134, 0.28) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 245, 0.98), rgba(246, 211, 198, 0.92)),
+    #f6e7d6 !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+  box-shadow: 0 8px 18px rgba(92, 58, 64, 0.08) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+  opacity: 1 !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .tab-content h3 *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card h3 *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide h3 *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card h3 *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card h3 *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title *,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item dt * {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h3,
+body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert .structured-item-title {
+  background:
+    linear-gradient(135deg, rgba(255, 245, 245, 0.98), rgba(248, 217, 219, 0.94)),
+    #fff5f5 !important;
+  color: #8f2432 !important;
+  -webkit-text-fill-color: #8f2432 !important;
+  border-color: rgba(200, 79, 95, 0.36) !important;
+}
+
+/* Home update panel: keep PWA status in the same peach premium language as the dashboard. */
+body:not([data-theme='dark']) .version-checker {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.72), transparent 36%),
+    linear-gradient(145deg, #fff5ed 0%, #f8e4d5 54%, #f0d3c1 100%) !important;
+  border: 1px solid rgba(185, 120, 134, 0.24) !important;
+  color: #2b2023 !important;
+  box-shadow: 0 18px 48px rgba(92, 58, 64, 0.13) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+body:not([data-theme='dark']) .version-checker *,
+body:not([data-theme='dark']) .version-checker h4,
+body:not([data-theme='dark']) .version-checker p,
+body:not([data-theme='dark']) .version-checker li,
+body:not([data-theme='dark']) .version-checker span,
+body:not([data-theme='dark']) .version-checker strong {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+body:not([data-theme='dark']) .version-kicker {
+  display: inline-flex !important;
+  width: fit-content !important;
+  margin-bottom: 0.38rem !important;
+  padding: 0.28rem 0.6rem !important;
+  border: 1px solid rgba(216, 184, 120, 0.4) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 250, 245, 0.72) !important;
+  color: #7a5b2a !important;
+  -webkit-text-fill-color: #7a5b2a !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+body:not([data-theme='dark']) .version-checker-head {
+  align-items: center !important;
+  gap: 0.8rem !important;
+}
+
+body:not([data-theme='dark']) .version-checker-head h4 {
+  margin: 0 !important;
+  font-size: 1.18rem !important;
+  line-height: 1.15 !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+body:not([data-theme='dark']) .version-meta-grid > div,
+body:not([data-theme='dark']) .version-update-card,
+body:not([data-theme='dark']) .version-ready-state,
+body:not([data-theme='dark']) .version-error-state {
+  background:
+    linear-gradient(135deg, rgba(255, 250, 245, 0.9), rgba(246, 231, 214, 0.72)),
+    #fffaf5 !important;
+  border: 1px solid rgba(185, 120, 134, 0.22) !important;
+  color: #2b2023 !important;
+  box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08) !important;
+}
+
+body:not([data-theme='dark']) .version-meta-grid span,
+body:not([data-theme='dark']) .version-update-title span,
+body:not([data-theme='dark']) .version-update-card p {
+  color: #5f4850 !important;
+  -webkit-text-fill-color: #5f4850 !important;
+}
+
+body:not([data-theme='dark']) .version-meta-grid strong,
+body:not([data-theme='dark']) .version-update-title strong {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+body:not([data-theme='dark']) .version-actions .premium-button,
+body:not([data-theme='dark']) .version-checker-head .premium-button {
+  min-height: 44px !important;
+  border-radius: 18px !important;
+  border-color: rgba(185, 120, 134, 0.28) !important;
+  background: rgba(255, 250, 245, 0.82) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+  box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08) !important;
+}
+
+body:not([data-theme='dark']) .version-actions .premium-button--primary {
+  background: linear-gradient(135deg, #f4c5b4, #d996a2) !important;
+  border-color: rgba(185, 120, 134, 0.38) !important;
+}
+
+@media (max-width: 768px) {
+  body:not([data-theme='dark']) .version-checker {
+    margin-inline: 0.7rem !important;
+    padding: 1rem !important;
+    border-radius: 24px !important;
+  }
+
+  body:not([data-theme='dark']) .version-meta-grid {
+    gap: 0.65rem !important;
+  }
+}
+
+/* Version checker final override: theme lives on <html>, not <body>. */
+html:not([data-theme='dark']) .version-checker.glass,
+html:not([data-theme='dark']) main .version-checker.glass,
+html[data-theme='light'] .version-checker.glass,
+html[data-theme='light'] main .version-checker.glass {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.78), transparent 36%),
+    linear-gradient(145deg, #fff4ec 0%, #f9e8dc 58%, #f6e7d6 100%) !important;
+  border: 1px solid rgba(185, 120, 134, 0.2) !important;
+  color: #2b2023 !important;
+  box-shadow: 0 18px 48px rgba(92, 58, 64, 0.13) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html[data-theme='dark'] .version-checker.glass,
+html[data-theme='dark'] main .version-checker.glass {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(232, 160, 140, 0.18), transparent 38%),
+    linear-gradient(145deg, #3a272b 0%, #2f2024 58%, #271a1e 100%) !important;
+  border: 1px solid rgba(232, 160, 140, 0.24) !important;
+  color: #fff7ef !important;
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.28) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(112%) !important;
+  backdrop-filter: blur(18px) saturate(112%) !important;
+}
+
+html:not([data-theme='dark']) .version-checker.glass *,
+html[data-theme='light'] .version-checker.glass * {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html[data-theme='dark'] .version-checker.glass * {
+  color: #fff7ef !important;
+  -webkit-text-fill-color: #fff7ef !important;
+}
+
+html:not([data-theme='dark']) .version-checker.glass .version-kicker,
+html[data-theme='light'] .version-checker.glass .version-kicker {
+  background: rgba(255, 250, 245, 0.78) !important;
+  border-color: rgba(216, 184, 120, 0.42) !important;
+  color: #7a5b2a !important;
+  -webkit-text-fill-color: #7a5b2a !important;
+}
+
+html[data-theme='dark'] .version-checker.glass .version-kicker {
+  background: rgba(232, 160, 140, 0.14) !important;
+  border-color: rgba(216, 184, 120, 0.28) !important;
+  color: #e1c57f !important;
+  -webkit-text-fill-color: #e1c57f !important;
+}
+
+html:not([data-theme='dark']) .version-checker.glass .version-meta-grid > div,
+html:not([data-theme='dark']) .version-checker.glass .version-update-card,
+html:not([data-theme='dark']) .version-checker.glass .version-ready-state,
+html:not([data-theme='dark']) .version-checker.glass .version-error-state,
+html[data-theme='light'] .version-checker.glass .version-meta-grid > div,
+html[data-theme='light'] .version-checker.glass .version-update-card,
+html[data-theme='light'] .version-checker.glass .version-ready-state,
+html[data-theme='light'] .version-checker.glass .version-error-state {
+  background:
+    linear-gradient(135deg, rgba(255, 250, 245, 0.94), rgba(249, 232, 220, 0.88)),
+    #fff4ec !important;
+  border: 1px solid rgba(185, 120, 134, 0.18) !important;
+  box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08) !important;
+}
+
+html[data-theme='dark'] .version-checker.glass .version-meta-grid > div,
+html[data-theme='dark'] .version-checker.glass .version-update-card,
+html[data-theme='dark'] .version-checker.glass .version-ready-state,
+html[data-theme='dark'] .version-checker.glass .version-error-state {
+  background:
+    linear-gradient(135deg, rgba(70, 49, 49, 0.84), rgba(49, 34, 38, 0.82)),
+    #3a272b !important;
+  border: 1px solid rgba(232, 160, 140, 0.22) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2) !important;
+}
+
+html:not([data-theme='dark']) .version-checker.glass .version-actions .premium-button--primary,
+html[data-theme='light'] .version-checker.glass .version-actions .premium-button--primary {
+  background: linear-gradient(135deg, #f4c5b4, #d996a2) !important;
+  border-color: rgba(185, 120, 134, 0.38) !important;
+}
+
+/* Click-safe disease cards: the whole card is the button, no invisible overlay traps. */
+.disease-card {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  display: block !important;
+  width: 100% !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  font: inherit !important;
+}
+
+.disease-card-action {
+  display: none !important;
+}
+
+.disease-card .favorite-btn {
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+/* Clinical utility tabs should match sources/overview cards, not dark legacy glass. */
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-tool-surface,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-template-assistant,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-atlas-shell,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .symptom-checker,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .pubmed-feed,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-tool-surface,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-template-assistant,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-atlas-shell,
+html[data-theme='light'] .modal-content.mobile-sheet .symptom-checker,
+html[data-theme='light'] .modal-content.mobile-sheet .pubmed-feed {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.72), transparent 34%),
+    linear-gradient(145deg, #fffaf5, #f8e8dc) !important;
+  border: 1px solid rgba(185, 120, 134, 0.24) !important;
+  color: #2b2023 !important;
+  box-shadow: 0 16px 38px rgba(92, 58, 64, 0.12) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-tool-surface *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-template-assistant *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-atlas-shell *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .symptom-checker *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .pubmed-feed *,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-tool-surface *,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-template-assistant *,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-atlas-shell *,
+html[data-theme='light'] .modal-content.mobile-sheet .symptom-checker *,
+html[data-theme='light'] .modal-content.mobile-sheet .pubmed-feed * {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+.clinical-tool-header,
+.clinical-tool-header-row {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.clinical-tool-header-row {
+  grid-template-columns: 1fr auto;
+  align-items: start;
+}
+
+.clinical-tool-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.28rem 0.62rem;
+  border: 1px solid rgba(216, 184, 120, 0.4);
+  border-radius: 999px;
+  background: rgba(255, 250, 245, 0.74);
+  color: #7a5b2a !important;
+  -webkit-text-fill-color: #7a5b2a !important;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.clinical-tool-header h3,
+.clinical-tool-header h4 {
+  margin: 0;
+  font-size: clamp(1.2rem, 5vw, 1.7rem);
+}
+
+.clinical-tool-header p,
+.clinical-tool-note,
+.clinical-tool-empty {
+  color: #5f4850 !important;
+  -webkit-text-fill-color: #5f4850 !important;
+  line-height: 1.58;
+}
+
+.symptom-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+
+.symptom-chip,
+.symptom-open-link {
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(185, 120, 134, 0.24);
+  background: rgba(255, 250, 245, 0.76);
+  color: #2b2023;
+  font-weight: 820;
+  padding: 0.55rem 0.82rem;
+}
+
+.symptom-chip.is-selected,
+.symptom-open-link {
+  background: linear-gradient(135deg, #f4c5b4, #d996a2);
+  border-color: rgba(185, 120, 134, 0.45);
+}
+
+.clinical-tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.symptom-results,
+.clinical-tool-loading,
+.clinical-tool-empty,
+.pubmed-paper-card {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1rem;
+  border-radius: 22px;
+  border: 1px solid rgba(185, 120, 134, 0.2);
+  background: rgba(255, 250, 245, 0.74);
+  box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08);
+}
+
+.symptom-result-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.55rem;
+  align-items: center;
+  padding: 0.78rem;
+  border-radius: 18px;
+  border: 1px solid rgba(185, 120, 134, 0.18);
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.symptom-result-card.is-top {
+  border-color: rgba(216, 184, 120, 0.44);
+  background: rgba(255, 246, 224, 0.64);
+}
+
+.symptom-result-card span,
+.symptom-score {
+  color: #5f4850 !important;
+  -webkit-text-fill-color: #5f4850 !important;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.pubmed-paper-list {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.pubmed-paper-main {
+  appearance: none;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+}
+
+.pubmed-paper-main h4 {
+  margin: 0 0 0.4rem;
+  line-height: 1.35;
+}
+
+.pubmed-paper-main span,
+.pubmed-paper-main small,
+.pubmed-abstract {
+  color: #5f4850 !important;
+  -webkit-text-fill-color: #5f4850 !important;
+}
+
+/* 3D atlas premium detail layer. */
+.anatomy-atlas-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.anatomy-atlas-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(216, 154, 167, 0.16), transparent 30%),
+    radial-gradient(circle at 80% 12%, rgba(216, 184, 120, 0.14), transparent 28%);
+}
+
+.anatomy-atlas-viewport {
+  min-height: 460px !important;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(216, 154, 167, 0.28), transparent 32%),
+    radial-gradient(circle at 50% 72%, rgba(216, 184, 120, 0.14), transparent 36%),
+    linear-gradient(145deg, #fff8f2, #f3ddcf) !important;
+}
+
+.anatomy-atlas-stage {
+  min-height: 440px !important;
+}
+
+.anatomy-hotspot-card {
+  transition: transform var(--motion-fast), border-color var(--motion-fast), box-shadow var(--motion-fast);
+}
+
+.anatomy-hotspot-card:hover,
+.anatomy-hotspot-card.is-selected {
+  transform: translateY(-1px);
+  border-color: rgba(185, 120, 134, 0.56) !important;
+  box-shadow: 0 12px 28px rgba(92, 58, 64, 0.13), 0 0 0 3px rgba(232, 160, 140, 0.16) !important;
+}
+
+.anatomy-hotspot-card.risk-urgent {
+  background: linear-gradient(135deg, rgba(255, 245, 245, 0.92), rgba(255, 250, 245, 0.78)) !important;
+}
+
+.anatomy-hotspot-card.risk-attention {
+  background: linear-gradient(135deg, rgba(255, 244, 236, 0.94), rgba(255, 250, 245, 0.76)) !important;
+}
+
+.anatomy-hotspot-card.risk-routine {
+  background: linear-gradient(135deg, rgba(255, 248, 232, 0.94), rgba(255, 250, 245, 0.76)) !important;
+}
+
+@media (max-width: 768px) {
+  .clinical-tool-header-row {
+    grid-template-columns: 1fr;
+  }
+
+  .anatomy-atlas-viewport {
+    min-height: 380px !important;
+  }
+
+  .anatomy-atlas-stage {
+    min-height: 360px !important;
+  }
+}
+/* Final readability pass for PWA panel and clinical utility sections. */
+html:not([data-theme='dark']) main .version-checker.glass,
+html[data-theme='light'] main .version-checker.glass {
+  opacity: 1 !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.82), transparent 34%),
+    linear-gradient(145deg, #fff7f1 0%, #f6dfd0 100%) !important;
+  border: 1px solid rgba(185, 120, 134, 0.28) !important;
+  box-shadow: 0 18px 44px rgba(92, 58, 64, 0.14) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html:not([data-theme='dark']) main .version-checker.glass *,
+html[data-theme='light'] main .version-checker.glass * {
+  opacity: 1 !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html:not([data-theme='dark']) main .version-checker.glass .version-kicker,
+html[data-theme='light'] main .version-checker.glass .version-kicker {
+  background: rgba(255, 250, 245, 0.88) !important;
+  border: 1px solid rgba(216, 184, 120, 0.48) !important;
+  color: #7a5b2a !important;
+  -webkit-text-fill-color: #7a5b2a !important;
+}
+
+html:not([data-theme='dark']) main .version-checker.glass .version-meta-grid > div,
+html:not([data-theme='dark']) main .version-checker.glass .version-update-card,
+html:not([data-theme='dark']) main .version-checker.glass .version-ready-state,
+html:not([data-theme='dark']) main .version-checker.glass .version-error-state,
+html[data-theme='light'] main .version-checker.glass .version-meta-grid > div,
+html[data-theme='light'] main .version-checker.glass .version-update-card,
+html[data-theme='light'] main .version-checker.glass .version-ready-state,
+html[data-theme='light'] main .version-checker.glass .version-error-state {
+  background: rgba(255, 250, 245, 0.82) !important;
+  border: 1px solid rgba(185, 120, 134, 0.2) !important;
+  box-shadow: 0 10px 24px rgba(92, 58, 64, 0.07) !important;
+}
+
+html:not([data-theme='dark']) main .version-checker.glass .premium-button,
+html[data-theme='light'] main .version-checker.glass .premium-button {
+  background: rgba(255, 250, 245, 0.92) !important;
+  border: 1px solid rgba(185, 120, 134, 0.24) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html:not([data-theme='dark']) main .version-checker.glass .version-actions .premium-button--primary,
+html[data-theme='light'] main .version-checker.glass .version-actions .premium-button--primary {
+  background: linear-gradient(135deg, #efb59f, #d996a2) !important;
+  border-color: rgba(185, 120, 134, 0.42) !important;
+  box-shadow: 0 12px 28px rgba(185, 120, 134, 0.22) !important;
+}
+
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-template-output,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-template-empty,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-template-loading,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-atlas-panel,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-hotspot-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-atlas-fallback,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-atlas-skeleton,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-template-output,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-template-empty,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-template-loading,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-atlas-panel,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-hotspot-card,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-atlas-fallback,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-atlas-skeleton {
+  background: rgba(255, 250, 245, 0.84) !important;
+  border: 1px solid rgba(185, 120, 134, 0.2) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+  box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08) !important;
+}
+
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-template-button,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-template-copy,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-atlas-action,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-scene-tab,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-template-button,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-template-copy,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-atlas-action,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-scene-tab {
+  background: rgba(255, 250, 245, 0.9) !important;
+  border: 1px solid rgba(185, 120, 134, 0.24) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-template-button.is-active,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .anatomy-scene-tab.is-active,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-template-button.is-active,
+html[data-theme='light'] .modal-content.mobile-sheet .anatomy-scene-tab.is-active {
+  background: linear-gradient(135deg, #efb59f, #d996a2) !important;
+  border-color: rgba(185, 120, 134, 0.42) !important;
+}
+/* iPhone-safe clinical tools: no text/button overflow inside DiseaseModal. */
+.modal-content.mobile-sheet .modal-body,
+.modal-content.mobile-sheet .tab-content,
+.modal-content.mobile-sheet .clinical-template-assistant,
+.modal-content.mobile-sheet .anatomy-atlas-shell,
+.modal-content.mobile-sheet .symptom-checker,
+.modal-content.mobile-sheet .pubmed-feed {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-assistant *,
+.modal-content.mobile-sheet .anatomy-atlas-shell *,
+.modal-content.mobile-sheet .symptom-checker *,
+.modal-content.mobile-sheet .pubmed-feed * {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-header h3,
+.modal-content.mobile-sheet .anatomy-atlas-header h3,
+.modal-content.mobile-sheet .clinical-tool-header h3,
+.modal-content.mobile-sheet .clinical-tool-header h4 {
+  font-size: clamp(1.25rem, 7vw, 2rem) !important;
+  line-height: 1.08 !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-header p,
+.modal-content.mobile-sheet .anatomy-atlas-header p,
+.modal-content.mobile-sheet .clinical-tool-header p,
+.modal-content.mobile-sheet .clinical-template-disclaimer,
+.modal-content.mobile-sheet .clinical-template-empty,
+.modal-content.mobile-sheet .pubmed-abstract {
+  font-size: clamp(0.95rem, 4.4vw, 1.08rem) !important;
+  line-height: 1.55 !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.65rem !important;
+  overflow: visible !important;
+  padding-bottom: 0.2rem !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-button,
+.modal-content.mobile-sheet .clinical-template-copy,
+.modal-content.mobile-sheet .anatomy-scene-tab,
+.modal-content.mobile-sheet .anatomy-atlas-action,
+.modal-content.mobile-sheet .symptom-chip,
+.modal-content.mobile-sheet .symptom-open-link {
+  min-height: 44px !important;
+  white-space: normal !important;
+  text-align: center !important;
+  font-size: clamp(0.86rem, 3.7vw, 0.98rem) !important;
+  line-height: 1.18 !important;
+  padding: 0.62rem 0.72rem !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-output pre {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  font-size: 0.94rem !important;
+  line-height: 1.55 !important;
+}
+
+@media (max-width: 430px) {
+  .modal-content.mobile-sheet .clinical-template-assistant,
+  .modal-content.mobile-sheet .anatomy-atlas-shell,
+  .modal-content.mobile-sheet .symptom-checker,
+  .modal-content.mobile-sheet .pubmed-feed {
+    padding: 1rem !important;
+    border-radius: 24px !important;
+  }
+
+  .modal-content.mobile-sheet .clinical-template-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .modal-content.mobile-sheet .modal-tabs .tab-button,
+  .modal-content.mobile-sheet .modal-tabs button {
+    min-height: 42px !important;
+    padding: 0.58rem 0.82rem !important;
+    font-size: 0.86rem !important;
+    line-height: 1.12 !important;
   }
 }

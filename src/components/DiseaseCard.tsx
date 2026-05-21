@@ -50,11 +50,12 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
   const name = repairText(item.name);
 
   const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     event.stopPropagation();
     onToggleFavorite(item.id);
   };
 
-  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       onClick(item);
@@ -69,16 +70,13 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
       animate="visible"
       variants={cardVariants}
       whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.985 }}
       onClick={() => onClick(item)}
+      onKeyDown={handleCardKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`${name}, код ${icdLabel}. Открыть подробности.`}
     >
-      <button
-        type="button"
-        className="disease-card-action"
-        onClick={() => onClick(item)}
-        onKeyDown={handleCardKeyDown}
-        aria-label={`${name}, код ${icdLabel}. Открыть подробности.`}
-      />
-
       <header className="card-header">
         <div className="card-meta-row">
           <span className="card-subtitle">{subtitle}</span>
