@@ -1,4 +1,4 @@
-import { chromium, devices } from 'playwright';
+﻿import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const device = devices['iPhone SE'] ?? { viewport: { width: 375, height: 667 }, isMobile: true };
@@ -29,7 +29,7 @@ const selectors = [
   '.version-checker',
 ];
 
-const mojibakePattern = new RegExp('(?:[РС][\\u00a0\\u00a4\\u00a9\\u00ae\\u00b0\\u00b7\\u0402-\\u040f\\u0452-\\u045f\\u2018-\\u201d\\u2020-\\u2022\\u20ac\\u2122])|(?:в[\\u0402-\\u040f\\u0452-\\u045f\\u2018-\\u201d\\u2020-\\u2022\\u20ac\\u2122])|\\u00d0|\\u00d1|\\ufffd');
+const mojibakePattern = new RegExp('(?:[\\u0420\\u0421][\\u00a0\\u00a4\\u00a9\\u00ae\\u00b0\\u00b7\\u0402-\\u040f\\u0452-\\u045f\\u2018-\\u201d\\u2020-\\u2022\\u20ac\\u2122])|(?:\\u0420\\u0406[\\u0402-\\u040f\\u0452-\\u045f\\u2018-\\u201d\\u2020-\\u2022\\u20ac\\u2122])|\\u00d0|\\u00d1|\\ufffd');
 const removedSharePattern = /\bQR\b|QR-код/i;
 
 const browser = await chromium.launch({ executablePath: process.env.CHROME_EXECUTABLE || undefined, headless: true });
@@ -43,11 +43,14 @@ const waitForApp = async () => {
 
 const clickByText = async (texts, label) => {
   const patterns = texts.map((text) => text instanceof RegExp ? text : new RegExp(text, 'i'));
+
   for (const pattern of patterns) {
-    const locator = page.getByRole('button', { name: pattern }).first();
-    if (await locator.count()) {
-      await locator.click({ timeout: 5000 }).catch(() => undefined);
-      return true;
+    const locators = await page.getByRole('button', { name: pattern }).all();
+    for (const locator of locators) {
+      if (await locator.isVisible().catch(() => false)) {
+        await locator.click({ timeout: 5000 });
+        return true;
+      }
     }
   }
 
@@ -59,7 +62,10 @@ const clickByText = async (texts, label) => {
       const style = window.getComputedStyle(element);
       return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
     });
-    const target = visible.find((element) => patterns.some((pattern) => pattern.test(element.textContent ?? element.getAttribute('aria-label') ?? '')));
+    const target = visible.find((element) => patterns.some((pattern) => {
+      const text = `${element.textContent ?? ''} ${element.getAttribute('aria-label') ?? ''}`;
+      return pattern.test(text);
+    }));
     target?.click();
     return Boolean(target);
   }, patterns.map((pattern) => pattern.source));
@@ -70,8 +76,14 @@ const clickByText = async (texts, label) => {
   return clicked;
 };
 
+const openOverflowAction = async (actionPattern, label) => {
+  await clickByText([/Открыть быстрые действия/i, /⋯/], `${label}-overflow`);
+  await page.waitForTimeout(120);
+  return clickByText([actionPattern], label);
+};
+
 const openHome = async (suffix = 'home') => {
-  await page.goto(`${baseUrl}/?pastel=${Date.now()}-${suffix}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/?pastel=${Date.now()}-${suffix}`, { waitUntil: 'domcontentloaded' });
   await waitForApp();
   if (!(await page.locator('.home-shell, .premium-command-hero').first().isVisible().catch(() => false))) {
     await clickByText(['Главная'], 'home-navigation');
@@ -157,13 +169,13 @@ await inspect('disease-modal-ultrasound');
 
 await page.keyboard.press('Escape').catch(() => undefined);
 await openHome('questionnaire');
-await clickByText([/Открыть опросники|Шкалы/], 'questionnaire-navigation');
+await openOverflowAction(/Шкалы|Опросники/i, 'questionnaire-navigation');
 await page.locator('.questionnaire-modal, [data-testid="questionnaire-modal"]').waitFor({ state: 'visible', timeout: 30000 });
 await inspect('questionnaire');
 
 await page.keyboard.press('Escape').catch(() => undefined);
 await openHome('pharma');
-await clickByText([/Открыть фармакологию|Фарма/], 'pharmacology-navigation');
+await openOverflowAction(/Фарма|Фармакология/i, 'pharmacology-navigation');
 await page.locator('.pharmacology-modal, [data-testid="pharmacology-modal"]').waitFor({ state: 'visible', timeout: 30000 });
 await inspect('pharmacology');
 
@@ -175,3 +187,4 @@ if (findings.length) {
 }
 
 console.log(JSON.stringify({ ok: true, checkedSelectors: selectors.length, flows: 5 }, null, 2));
+

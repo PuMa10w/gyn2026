@@ -1,4 +1,4 @@
-import { chromium, devices } from 'playwright';
+﻿import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const deviceNames = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
@@ -19,6 +19,33 @@ await ensureServer(baseUrl);
 const browser = await chromium.launch({ executablePath: process.env.CHROME_EXECUTABLE || undefined, headless: true });
 const results = [];
 
+async function clickVisibleButton(page, pattern, label) {
+  const matches = page.getByRole('button', { name: pattern });
+  const count = await matches.count();
+  for (let index = 0; index < count; index += 1) {
+    const candidate = matches.nth(index);
+    if (await candidate.isVisible().catch(() => false)) {
+      await candidate.click({ timeout: 6000 });
+      return;
+    }
+  }
+
+  const clicked = await page.evaluate((source) => {
+    const re = new RegExp(source, 'i');
+    const candidates = Array.from(document.querySelectorAll('button, [role="button"], a'));
+    const target = candidates.find((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      const text = `${element.textContent || ''} ${element.getAttribute('aria-label') || ''}`;
+      return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden' && re.test(text);
+    });
+    target?.click();
+    return Boolean(target);
+  }, pattern.source);
+
+  if (!clicked) throw new Error(`${label}: button not found`);
+}
+
 for (const deviceName of deviceNames) {
   const page = await browser.newPage(devices[deviceName]);
   const messages = [];
@@ -27,8 +54,9 @@ for (const deviceName of deviceNames) {
   });
   page.on('pageerror', (error) => messages.push(error.message));
 
-  await page.goto(baseUrl + '/?pharmaAudit=' + Date.now() + '-' + deviceName.replace(/\s+/g, '-'), { waitUntil: 'networkidle' });
-  await page.getByRole('button', { name: /фарм/i }).first().click();
+  await page.goto(baseUrl + '/?pharmaAudit=' + Date.now() + '-' + deviceName.replace(/\s+/g, '-'), { waitUntil: 'domcontentloaded' });
+  await clickVisibleButton(page, /Открыть быстрые действия/i, deviceName + ' quick menu');
+  await clickVisibleButton(page, /Фарма|фарм/i, deviceName + ' pharmacology');
   await page.locator('.pharmacology-modal').waitFor({ state: 'visible', timeout: 10000 });
   await page.locator('.medication-card').first().waitFor({ state: 'visible', timeout: 10000 });
 
@@ -58,3 +86,4 @@ for (const deviceName of deviceNames) {
 
 await browser.close();
 console.log(JSON.stringify({ ok: true, results }, null, 2));
+

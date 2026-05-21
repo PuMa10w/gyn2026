@@ -1,4 +1,4 @@
-import { chromium, devices } from 'playwright';
+﻿import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const deviceNames = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
@@ -66,14 +66,35 @@ const assertNoOverlap = async (page, label) => {
 };
 
 const clickButton = async (page, name) => {
-  const button = page.getByRole('button', { name, exact: false }).first();
-  await button.waitFor({ state: 'visible', timeout: 8000 });
-  await button.click();
+  const buttons = page.getByRole('button', { name, exact: false });
+  const count = await buttons.count();
+  for (let index = 0; index < count; index += 1) {
+    const button = buttons.nth(index);
+    if (await button.isVisible().catch(() => false)) {
+      await button.click({ timeout: 8000 });
+      await sleep(350);
+      return;
+    }
+  }
+
+  const clicked = await page.evaluate((source) => {
+    const re = new RegExp(source, 'i');
+    const target = Array.from(document.querySelectorAll('button, [role="button"], a')).find((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      const text = `${element.textContent || ''} ${element.getAttribute('aria-label') || ''}`;
+      return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden' && re.test(text);
+    });
+    target?.click();
+    return Boolean(target);
+  }, typeof name === 'string' ? name : name.source);
+
+  if (!clicked) throw new Error(`Button not found: ${String(name)}`);
 };
 
 for (const deviceName of deviceNames) {
   const page = await browser.newPage(devices[deviceName]);
-  await page.goto(`${baseUrl}/?overlapAudit=${Date.now()}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/?overlapAudit=${Date.now()}`, { waitUntil: 'domcontentloaded' });
   await assertNoOverlap(page, `${deviceName} home`);
 
   await clickButton(page, 'Гинекология');
@@ -98,9 +119,10 @@ for (const deviceName of deviceNames) {
   await page.locator('.modal-close').first().click();
   await page.locator('.modal-content').first().waitFor({ state: 'hidden', timeout: 8000 }).catch(() => undefined);
 
-  await page.goto(`${baseUrl}/?overlapAuditQuestionnaire=${Date.now()}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/?overlapAuditQuestionnaire=${Date.now()}`, { waitUntil: 'domcontentloaded' });
   await assertNoOverlap(page, `${deviceName} home before questionnaire`);
-  await page.getByRole('button', { name: /Шкалы|опросники/i }).first().click();
+  await clickButton(page, /Открыть быстрые действия/i);
+  await clickButton(page, /Шкалы/i);
   await page.locator('.questionnaire-modal').waitFor({ state: 'visible', timeout: 8000 });
   await assertNoOverlap(page, `${deviceName} questionnaire list`);
   await page.locator('.q-card').first().click();
@@ -109,9 +131,10 @@ for (const deviceName of deviceNames) {
   await page.locator('.modal-close').first().click();
   await page.locator('.questionnaire-modal').first().waitFor({ state: 'hidden', timeout: 8000 }).catch(() => undefined);
 
-  await page.goto(`${baseUrl}/?overlapAuditPharma=${Date.now()}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/?overlapAuditPharma=${Date.now()}`, { waitUntil: 'domcontentloaded' });
   await assertNoOverlap(page, `${deviceName} home before pharmacology`);
-  await page.getByRole('button', { name: /Фарма|фармакологию|Фармакология/i }).first().click();
+  await clickButton(page, /Открыть быстрые действия/i);
+  await clickButton(page, /Фарма/i);
   await page.locator('.pharmacology-modal').waitFor({ state: 'visible', timeout: 8000 });
   await assertNoOverlap(page, `${deviceName} pharmacology`);
   await page.close();
@@ -119,3 +142,4 @@ for (const deviceName of deviceNames) {
 
 await browser.close();
 console.log(JSON.stringify({ ok: true, devices: deviceNames }, null, 2));
+

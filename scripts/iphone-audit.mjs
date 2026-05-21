@@ -1,4 +1,4 @@
-import { chromium, devices } from 'playwright';
+﻿import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const deviceNames = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
@@ -65,7 +65,7 @@ const assertNoMojibake = async (page, label) => {
     const mojibakeChars = '\u0080-\u00a0\u0402\u0403\u201A\u0453\u201E\u2026\u2020\u2021\u20AC\u2030\u0409\u2039\u040A\u040C\u040B\u040F\u0452\u2018\u2019\u201C\u201D\u2022\u2013\u2014\u2122\u0459\u203A\u045A\u045C\u045B\u045F';
     const patterns = [
       /\uFFFD/g,
-      new RegExp(`[РСГв][${mojibakeChars}]`, 'g'),
+      new RegExp(`[\\u0420\\u0421\\u0413\\u0432][${mojibakeChars}]`, 'g'),
       /В[©®]/g,
       new RegExp('\\u043f\\u0457\\u0405', 'g'),
       new RegExp(`Premium ${'Clinical'}|Clinical ${'command'}|TRUST ${'LAYER'}|GYN${'A'}`, 'g'),
@@ -232,7 +232,7 @@ for (const deviceName of deviceNames) {
   });
   page.on('pageerror', (error) => messages.push({ type: 'pageerror', text: error.message }));
 
-  await page.goto(`${baseUrl}/?iphoneAudit=${Date.now()}-${slug(deviceName)}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/?iphoneAudit=${Date.now()}-${slug(deviceName)}`, { waitUntil: 'domcontentloaded' });
   await capture(page, deviceName, 'home', { fullPage: true });
   await assertNoHorizontalOverflow(page, `${deviceName} home`);
   await assertNoMojibake(page, `${deviceName} home`);
@@ -298,7 +298,8 @@ for (const deviceName of deviceNames) {
   await clickByText(page, 'Главная', `${deviceName} bottom home`);
   await page.locator('.home-shell').first().waitFor({ state: 'visible', timeout: 8000 });
 
-  await page.getByRole('button', { name: /Открыть опросники|Шкалы/ }).first().click();
+  await clickByText(page, /Открыть быстрые действия/i, `${deviceName} quick menu questionnaires`);
+  await clickByText(page, /Шкалы/i, `${deviceName} open questionnaires`);
   await page.locator('.questionnaire-modal').waitFor({ state: 'visible', timeout: 8000 });
   await page.waitForTimeout(650);
   await assertModalFromTop(page, `${deviceName} questionnaire list`);
@@ -310,7 +311,8 @@ for (const deviceName of deviceNames) {
   await assertNoMojibake(page, `${deviceName} questionnaire`);
   await closeTopModal(page, `${deviceName} questionnaire`);
 
-  await page.getByRole('button', { name: /Открыть фармакологию|Фарма/ }).first().click();
+  await clickByText(page, /Открыть быстрые действия/i, `${deviceName} quick menu pharmacology`);
+  await clickByText(page, /Фарма/i, `${deviceName} open pharmacology`);
   await page.locator('.pharmacology-modal').waitFor({ state: 'visible', timeout: 8000 });
   await page.waitForTimeout(650);
   await page.locator('.pharmacology-modal .search-input').first().fill('прогестерон');
@@ -347,3 +349,4 @@ if (browserErrors.length > 0) {
 }
 
 console.log(JSON.stringify({ ok: true, devices: deviceNames, messages: allMessages, screenshots }, null, 2));
+

@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState, useCallback } from 'react';
+import React, { useEffect, useId, useState, useCallback, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { gynIcons, obsIcons } from './Icons';
 import { useModalBehavior } from '../hooks/useModalBehavior';
@@ -121,6 +121,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
   const descriptionId = useId();
   const panelId = `${titleId}-${activeTab}-panel`;
   const { modalRef, closeButtonRef, handleModalKeyDown } = useModalBehavior(onClose);
+  const tabsRef = useRef<HTMLDivElement>(null);
   
   const IconComponent = isObstetricsLabel(item.subtitle)
     ? (obsIcons as Record<string, React.ReactNode>)[item.icon]
@@ -157,6 +158,11 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
       setIsQuickStripExpanded(false);
     }
   }, [activeTab, isMobile]);
+
+  useEffect(() => {
+    const activeButton = tabsRef.current?.querySelector<HTMLButtonElement>('[aria-selected="true"]');
+    activeButton?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, [activeTab]);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     const touch = e.touches[0];
@@ -1158,7 +1164,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
       case '3d-atlas':
         return (
           <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
-            <Organ3DViewer organType="uterus" />
+            <Organ3DViewer disease={item} organType="uterus" onNavigateTab={(tab) => setActiveTab(tab)} />
           </motion.div>
         );
       case 'symptom-checker':
@@ -1277,7 +1283,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             {item.clinicalSummary?.quickSummary && <p className="modal-quick-summary">{normalizeText(item.clinicalSummary.quickSummary)}</p>}
           </div>
 
-          <div className="modal-tabs" role="tablist" aria-label="Разделы карточки">
+          <div ref={tabsRef} className="modal-tabs" role="tablist" aria-label="Разделы карточки">
             {tabs.map((tab) => (
               <button
                 key={tab.id}

@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+﻿import fs from 'fs/promises';
 import path from 'path';
 import { chromium, devices } from 'playwright';
 let canvasTools = null;
@@ -17,13 +17,47 @@ const goldenDir = path.join('artifacts', 'iphone-visual-golden');
 const slug = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const clickVisibleButton = async (page, pattern, label) => {
+  const candidates = await page.getByRole('button', { name: pattern }).all();
+  for (const locator of candidates) {
+    if (await locator.isVisible().catch(() => false)) {
+      await locator.click({ timeout: 5000 });
+      return;
+    }
+  }
+
+  const clicked = await page.evaluate((source) => {
+    const pattern = new RegExp(source, 'i');
+    const candidates = Array.from(document.querySelectorAll('button, [role="button"], a'));
+    const visible = candidates.filter((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = window.getComputedStyle(element);
+      return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+    });
+    const target = visible.find((element) => {
+      const text = `${element.textContent ?? ''} ${element.getAttribute('aria-label') ?? ''}`;
+      return pattern.test(text);
+    });
+    target?.click();
+    return Boolean(target);
+  }, pattern.source);
+
+  if (!clicked) throw new Error(`${label}: visible button not found`);
+};
+
+const openOverflowAction = async (page, actionPattern, label) => {
+  await clickVisibleButton(page, /Открыть быстрые действия|⋯/i, `${label}-overflow`);
+  await page.waitForTimeout(120);
+  await clickVisibleButton(page, actionPattern, label);
+};
+
 const flows = [
   { name: 'home', threshold: 0.08, run: async (page) => page.locator('.home-shell').waitFor({ state: 'visible' }) },
   {
     name: 'catalog',
     threshold: 0.07,
     run: async (page) => {
-      await page.getByRole('button', { name: 'Гинекология' }).first().click();
+      await clickVisibleButton(page, /Гинекология/i, 'catalog-navigation');
       await page.locator('.disease-card').first().waitFor({ state: 'visible' });
     },
   },
@@ -31,7 +65,7 @@ const flows = [
     name: 'disease-modal',
     threshold: 0.045,
     run: async (page) => {
-      await page.locator('.disease-card-action').first().click();
+      await page.locator('.disease-card-action, .disease-card').first().click();
       await page.getByTestId('disease-modal').waitFor({ state: 'visible' });
       await page.getByRole('tab', { name: 'Диагностика' }).click();
     },
@@ -41,10 +75,10 @@ const flows = [
     threshold: 0.055,
     reset: async (page) => {
       await page.keyboard.press('Escape').catch(() => undefined);
-      await page.goto(`${baseUrl}/?visual=${Date.now()}-questionnaire`, { waitUntil: 'networkidle' });
+      await page.goto(`${baseUrl}/?visual=${Date.now()}-questionnaire`, { waitUntil: 'domcontentloaded' });
     },
     run: async (page) => {
-      await page.getByRole('button', { name: /Открыть опросники|Шкалы/ }).first().click();
+      await openOverflowAction(page, /Шкалы|Опросники/i, 'questionnaire-navigation');
       await page.locator('.questionnaire-modal').waitFor({ state: 'visible' });
     },
   },
@@ -53,10 +87,10 @@ const flows = [
     threshold: 0.055,
     reset: async (page) => {
       await page.keyboard.press('Escape').catch(() => undefined);
-      await page.goto(`${baseUrl}/?visual=${Date.now()}-pharma`, { waitUntil: 'networkidle' });
+      await page.goto(`${baseUrl}/?visual=${Date.now()}-pharma`, { waitUntil: 'domcontentloaded' });
     },
     run: async (page) => {
-      await page.getByRole('button', { name: /Открыть фармакологию|Фарма/ }).first().click();
+      await openOverflowAction(page, /Фарма|Фармакология/i, 'pharmacology-navigation');
       await page.locator('.pharmacology-modal').waitFor({ state: 'visible' });
     },
   },
@@ -97,7 +131,7 @@ const results = [];
 
 for (const deviceName of deviceNames) {
   const page = await browser.newPage(devices[deviceName]);
-  await page.goto(`${baseUrl}/?visual=${Date.now()}-${slug(deviceName)}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/?visual=${Date.now()}-${slug(deviceName)}`, { waitUntil: 'domcontentloaded' });
 
   for (const flow of flows) {
     if (flow.reset) await flow.reset(page);
@@ -140,3 +174,4 @@ if (failed.length) {
 }
 
 console.log(JSON.stringify({ ok: true, update, results }, null, 2));
+

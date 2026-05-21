@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { PremiumButton } from './PremiumButton';
+import { repairText } from '../utils/textRepair';
 
 interface AIClinicalAssistantProps {
   diseaseName: string;
@@ -8,6 +8,15 @@ interface AIClinicalAssistantProps {
   treatment: Array<{ step: string; detail: string }>;
   onGenerate?: (text: string) => void;
 }
+
+type TemplateKey = 'clinical-pearls' | 'patient-instructions' | 'discharge-summary' | 'quick-consult';
+
+const templateLabels: Record<TemplateKey, string> = {
+  'clinical-pearls': 'Клинические акценты',
+  'patient-instructions': 'Памятка пациентке',
+  'discharge-summary': 'Краткое заключение',
+  'quick-consult': 'Быстрая консультация',
+};
 
 export const AIClinicalAssistant: React.FC<AIClinicalAssistantProps> = ({
   diseaseName,
@@ -17,125 +26,99 @@ export const AIClinicalAssistant: React.FC<AIClinicalAssistantProps> = ({
 }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedText, setGeneratedText] = useState('');
-  const [activeTemplate, setActiveTemplate] = useState<string>('');
+  const [activeTemplate, setActiveTemplate] = useState<TemplateKey>('clinical-pearls');
 
-  const templates = {
-    'clinical-pearls': `Клинические акценты по ${diseaseName}:
-1. Всегда оценивайте ${symptoms.slice(0, 2).join(' и ')} как приоритетные симптомы
-2. При выявлении показаний немедленно переходите к ${treatment[0]?.step || 'лечению'}
-3. Важно дифференцировать с похожими состояниями`,
+  const cleanDiseaseName = repairText(diseaseName || 'клинической ситуации');
+  const cleanSymptoms = symptoms.map(repairText).filter(Boolean);
+  const cleanTreatment = treatment.map((entry) => ({ step: repairText(entry.step), detail: repairText(entry.detail) }));
 
-    'patient-instructions': `Памятка пациенту при ${diseaseName}:
-• При появлении ${symptoms[0]} обратитесь к врачу
-• Соблюдайте предписанную схему: ${treatment[0]?.detail || 'лечение'}
-• Не прекращайте прием препаратов без консультации
-• Плановый осмотр через 2-4 недели`,
+  const templates = useMemo<Record<TemplateKey, string>>(() => {
+    const symptomLead = cleanSymptoms.slice(0, 3).join(', ') || 'ключевые симптомы и факторы риска';
+    const firstStep = cleanTreatment[0]?.step || 'диагностика и выбор тактики';
+    const firstDetail = cleanTreatment[0]?.detail || 'сверка с актуальными клиническими рекомендациями';
 
-    'discharge-summary': `Выписной эпикриз по ${diseaseName}:
-Диагноз: ${diseaseName}
-Жалобы: ${symptoms.join(', ')}
-Проведенное лечение: ${treatment.map(t => t.step).join(', ')}
-Рекомендации: Наблюдение у гинеколога, контроль эффективности терапии`,
+    return {
+      'clinical-pearls': `Клинические акценты по теме: ${cleanDiseaseName}\n\n1. Сначала оцените красные флаги, беременность, выраженность боли/кровотечения и гемодинамику.\n2. Приоритетные признаки: ${symptomLead}.\n3. Базовая тактика: ${firstStep}.\n4. Если источник или ситуация неочевидны, сверяйте решение с актуальными клиническими рекомендациями.`,
+      'patient-instructions': `Памятка пациентке: ${cleanDiseaseName}\n\n• Обратитесь к врачу при усилении боли, кровотечения, температуре, обмороке или ухудшении самочувствия.\n• Соблюдайте назначенную схему: ${firstDetail}.\n• Не прекращайте лечение и не меняйте дозировки без консультации.\n• Запланируйте контрольный осмотр в срок, указанный врачом.`,
+      'discharge-summary': `Краткое клиническое заключение\n\nТема: ${cleanDiseaseName}\nЖалобы/ориентиры: ${symptomLead}\nПроведённая или планируемая тактика: ${cleanTreatment.map((entry) => entry.step).join(', ') || 'требует уточнения'}\nРекомендации: наблюдение у профильного специалиста, контроль эффективности терапии и повторная оценка при ухудшении.`,
+      'quick-consult': `Быстрая консультация: ${cleanDiseaseName}\n\nЧто уточнить сейчас: беременность, длительность симптомов, интенсивность боли/кровотечения, температура, лекарственные риски.\nПервая линия маршрутизации: ${firstStep}.\nКогда срочно: нестабильность, подозрение на острое состояние, выраженная анемия, септические признаки или быстрое ухудшение.`,
+    };
+  }, [cleanDiseaseName, cleanSymptoms, cleanTreatment]);
 
-    'quick-consult': `Краткая консультация по ${diseaseName}:
-Ключевые симптомы: ${symptoms.slice(0, 3).join(', ')}
-Первая линия: ${treatment[0]?.step || 'диагностика и лечение'}
-Важно: При отсутствии эффекта в течение 48-72 часов - эскалация тактики`,
-  };
-
-  const handleGenerate = (templateKey: string) => {
+  const handleGenerate = (templateKey: TemplateKey) => {
     setIsGenerating(true);
     setActiveTemplate(templateKey);
-    
-    // Симуляция "AI" генерации с задержкой
-    setTimeout(() => {
-      const text = templates[templateKey as keyof typeof templates] || 'Выберите шаблон для генерации';
+
+    window.setTimeout(() => {
+      const text = templates[templateKey];
       setGeneratedText(text);
       setIsGenerating(false);
-      if (onGenerate) {
-        onGenerate(text);
-      }
-    }, 800);
+      onGenerate?.(text);
+    }, 320);
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(generatedText);
+  const handleCopy = async () => {
+    if (!generatedText) return;
+    await navigator.clipboard?.writeText(generatedText);
   };
 
   return (
-    <motion.div
-      className="ai-assistant glass"
-      style={{
-        backdropFilter: 'blur(40px)',
-        WebkitBackdropFilter: 'blur(40px)',
-        padding: '20px',
-        borderRadius: '16px',
-        marginTop: '20px',
-      }}
-      initial={{ opacity: 0, y: 20 }}
+    <motion.section
+      className="clinical-template-assistant"
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5 }}
+      transition={{ duration: 0.22 }}
     >
-      <h3 className="text-gradient" style={{ marginBottom: '16px' }}>🤖 AI Clinical Assistant</h3>
-      
-      <div className="ai-templates" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-        {Object.keys(templates).map((key) => (
-          <PremiumButton
+      <header className="clinical-template-header">
+        <span className="clinical-template-eyebrow">Клинический шаблон</span>
+        <h3>Помощник формулировок</h3>
+        <p>
+          Быстро собирает аккуратный черновик для консультации, памятки или заключения. Текст требует врачебной
+          проверки и сверки с актуальными рекомендациями.
+        </p>
+      </header>
+
+      <div className="clinical-template-grid" aria-label="Шаблоны клинического текста">
+        {(Object.keys(templateLabels) as TemplateKey[]).map((key) => (
+          <button
             key={key}
+            type="button"
+            className={`clinical-template-button ${activeTemplate === key ? 'is-active' : ''}`}
             onClick={() => handleGenerate(key)}
-            variant={activeTemplate === key ? 'primary' : 'secondary'}
-            size="sm"
-            shimmer={activeTemplate === key}
             disabled={isGenerating}
           >
-            {key === 'clinical-pearls' && '💡 Клинические акценты'}
-            {key === 'patient-instructions' && '📋 Памятка пациенту'}
-            {key === 'discharge-summary' && '📄 Выписной эпикриз'}
-            {key === 'quick-consult' && '⚡ Краткая консультация'}
-          </PremiumButton>
+            {templateLabels[key]}
+          </button>
         ))}
       </div>
 
-      {isGenerating && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          style={{ textAlign: 'center', padding: '20px' }}
-        >
-          <div className="loading-spinner" style={{ margin: '0 auto 12px' }} />
-          <p>AI генерирует текст...</p>
-        </motion.div>
-      )}
+      {isGenerating ? (
+        <div className="clinical-template-loading" role="status">
+          <span className="clinical-template-spinner" />
+          <p>Готовим клинический черновик...</p>
+        </div>
+      ) : null}
 
-      {generatedText && !isGenerating && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+      {generatedText && !isGenerating ? (
+        <motion.article
+          className="clinical-template-output"
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          style={{
-            background: 'rgba(255,255,255,0.05)',
-            padding: '16px',
-            borderRadius: '12px',
-            marginTop: '12px',
-            whiteSpace: 'pre-wrap',
-          }}
         >
-          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{generatedText}</pre>
-          <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
-            <PremiumButton
-              onClick={handleCopy}
-              variant="ghost"
-              size="sm"
-              shimmer={false}
-            >
-              📋 Копировать
-            </PremiumButton>
-          </div>
-        </motion.div>
+          <pre>{generatedText}</pre>
+          <button type="button" className="clinical-template-copy" onClick={handleCopy}>
+            Копировать
+          </button>
+        </motion.article>
+      ) : (
+        <div className="clinical-template-empty">
+          Выберите шаблон, чтобы получить структурированный текст для текущей клинической карточки.
+        </div>
       )}
 
-      <p style={{ fontSize: '12px', opacity: 0.6, marginTop: '12px' }}>
-        * Генерация на основе шаблонов клинических данных. Для полноценной AI-генерации требуется подключение к LLM API.
+      <p className="clinical-template-disclaimer">
+        Это не автономная AI-диагностика. Шаблон помогает оформить мысль, но клиническое решение остаётся за специалистом.
       </p>
-    </motion.div>
+    </motion.section>
   );
 };

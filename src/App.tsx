@@ -1,9 +1,11 @@
 import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import './styles/design-tokens.css';
 import './index.css';
 import './App.css';
 import './premium-unified.css';
+import './styles/ultra-premium-v9.css';
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import CatalogSection from './components/CatalogSection';

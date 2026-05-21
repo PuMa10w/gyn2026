@@ -1,4 +1,4 @@
-import { chromium, devices } from 'playwright';
+﻿import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const browser = await chromium.launch({
@@ -7,6 +7,40 @@ const browser = await chromium.launch({
 });
 
 const checks = [];
+
+const clickVisibleButton = async (page, pattern, label) => {
+  const candidates = await page.getByRole('button', { name: pattern }).all();
+  for (const locator of candidates) {
+    if (await locator.isVisible().catch(() => false)) {
+      await locator.click({ timeout: 5000 });
+      return;
+    }
+  }
+
+  const clicked = await page.evaluate((source) => {
+    const pattern = new RegExp(source, 'i');
+    const candidates = Array.from(document.querySelectorAll('button, [role="button"], a'));
+    const visible = candidates.filter((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = window.getComputedStyle(element);
+      return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+    });
+    const target = visible.find((element) => {
+      const text = `${element.textContent ?? ''} ${element.getAttribute('aria-label') ?? ''}`;
+      return pattern.test(text);
+    });
+    target?.click();
+    return Boolean(target);
+  }, pattern.source);
+
+  if (!clicked) throw new Error(`${label}: visible button not found`);
+};
+
+const openOverflowAction = async (page, actionPattern, label) => {
+  await clickVisibleButton(page, /Открыть быстрые действия|⋯/i, `${label}-overflow`);
+  await page.waitForTimeout(120);
+  await clickVisibleButton(page, actionPattern, label);
+};
 
 const runPageChecks = async (page, label) => {
   const result = await page.evaluate(() => {
@@ -57,7 +91,7 @@ const runPageChecks = async (page, label) => {
 };
 
 const page = await browser.newPage(devices['iPhone 13'] ?? { viewport: { width: 390, height: 844 } });
-await page.goto(`${baseUrl}/?a11ySmoke=${Date.now()}`, { waitUntil: 'networkidle' });
+await page.goto(`${baseUrl}/?a11ySmoke=${Date.now()}`, { waitUntil: 'domcontentloaded' });
 await runPageChecks(page, 'home');
 
 await page.locator('.home-destination-card').first().click();
@@ -69,14 +103,15 @@ await page.getByTestId('disease-modal').waitFor({ state: 'visible' });
 await runPageChecks(page, 'disease-modal');
 await page.locator('[data-testid="disease-modal"] .modal-close').first().click();
 
-await page.locator('.navbar-actions button').nth(0).click();
+await openOverflowAction(page, /Шкалы|Опросники/i, 'questionnaire-modal-open');
 await page.locator('.questionnaire-modal').waitFor({ state: 'visible' });
 await runPageChecks(page, 'questionnaire-modal');
 await page.locator('.questionnaire-modal .modal-close').first().click();
 
-await page.locator('.navbar-actions button').nth(1).click();
+await openOverflowAction(page, /Фарма|Фармакология/i, 'pharmacology-modal-open');
 await page.locator('.pharmacology-modal').waitFor({ state: 'visible' });
 await runPageChecks(page, 'pharmacology-modal');
 
 await browser.close();
 console.log(JSON.stringify({ ok: true, checks }, null, 2));
+

@@ -15,12 +15,14 @@ const preServerSteps = [
 ];
 
 const browserSteps = [
+  ['visible mojibake audit', npmCmd, ['run', 'audit:visible:mojibake']],
   ['iPhone audit', npmCmd, ['run', 'audit:iphone']],
   ['pharmacology iPhone audit', npmCmd, ['run', 'audit:pharma:iphone']],
   ['iPhone overlap audit', npmCmd, ['run', 'audit:iphone:overlap']],
   ['pastel audit', npmCmd, ['run', 'audit:pastel']],
   ['accessibility audit', npmCmd, ['run', 'audit:a11y']],
   ['visual iPhone audit', npmCmd, ['run', 'audit:visual:iphone']],
+  ['readability audit', npmCmd, ['run', 'audit:readability']],
 ];
 
 function runStep(label, command, args, options = {}) {
@@ -57,19 +59,35 @@ async function waitForServer(url, timeoutMs = 15000) {
   throw new Error(`Audit server did not become ready at ${url}`);
 }
 
+async function isServerAvailable(url) {
+  try {
+    const response = await fetch(url, { cache: 'no-store' });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 for (const [label, command, args] of preServerSteps) {
   await runStep(label, command, args);
 }
 
-console.log(`\n[verify:premium] starting static audit server at ${auditBaseUrl}`);
-const server = spawn(nodeCmd, ['scripts/serve-dist-audit.cjs'], {
-  stdio: ['ignore', 'pipe', 'pipe'],
-  shell: false,
-  env: { ...process.env, HOST: '127.0.0.1', PORT: '4173' },
-});
+const shouldReuseServer = await isServerAvailable(auditBaseUrl);
+let server = null;
 
-server.stdout.on('data', (chunk) => process.stdout.write(`[audit-server] ${chunk}`));
-server.stderr.on('data', (chunk) => process.stderr.write(`[audit-server] ${chunk}`));
+if (shouldReuseServer) {
+  console.log(`\n[verify:premium] reusing existing audit server at ${auditBaseUrl}`);
+} else {
+  console.log(`\n[verify:premium] starting static audit server at ${auditBaseUrl}`);
+  server = spawn(nodeCmd, ['scripts/serve-dist-audit.cjs'], {
+    stdio: ['ignore', 'pipe', 'pipe'],
+    shell: false,
+    env: { ...process.env, HOST: '127.0.0.1', PORT: '4173' },
+  });
+
+  server.stdout.on('data', (chunk) => process.stdout.write(`[audit-server] ${chunk}`));
+  server.stderr.on('data', (chunk) => process.stderr.write(`[audit-server] ${chunk}`));
+}
 
 try {
   await waitForServer(auditBaseUrl);
@@ -77,7 +95,7 @@ try {
     await runStep(label, command, args);
   }
 } finally {
-  server.kill();
+  server?.kill();
 }
 
 console.log('\n[verify:premium] all gates passed');
