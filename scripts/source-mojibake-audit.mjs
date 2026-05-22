@@ -5,7 +5,7 @@ import { repairText } from '../src/utils/textRepair.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scanRoots = ['src', 'public', 'scripts'];
-const rootFiles = ['index.html', 'package.json', 'vite.config.js'];
+const rootFiles = ['index.html', 'package.json', 'package-lock.json', 'vite.config.js', 'vite.config.ts'];
 const allowedFiles = new Set([
   path.join(root, 'src', 'utils', 'textRepair.ts'),
   path.join(root, 'scripts', 'source-mojibake-audit.mjs'),
@@ -54,7 +54,13 @@ const findings = [];
 
 for (const file of files) {
   if (allowedFiles.has(file)) continue;
-  const content = await fs.readFile(file, 'utf8');
+  let content = '';
+  try {
+    content = await fs.readFile(file, 'utf8');
+  } catch (error) {
+    if (error?.code === 'ENOENT') continue;
+    throw error;
+  }
   const lines = content.split(/\r?\n/);
 
   lines.forEach((line, index) => {

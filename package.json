@@ -64,7 +64,10 @@
     "audit:visible:mojibake": "node scripts/visible-mojibake-audit.mjs",
     "audit:readability": "node scripts/readability-audit.mjs",
     "audit:questionnaires:iphone": "node scripts/questionnaires-iphone-audit.mjs",
-    "audit:atlas:iphone": "node scripts/atlas-iphone-audit.mjs"
+    "audit:atlas:iphone": "node scripts/atlas-iphone-audit.mjs",
+    "audit:pwa:freshness": "node scripts/pwa-freshness-audit.mjs",
+    "audit:security:static": "node scripts/security-static-audit.mjs",
+    "audit:iphone:clinical-tools": "node scripts/clinical-tools-iphone-audit.mjs"
   },
   "eslintConfig": {
     "extends": [

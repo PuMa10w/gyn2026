@@ -258,9 +258,11 @@ function App() {
         </a>
 
         {/* 3D Particle Background (Wow-effect) */}
-        <Suspense fallback={null}>
-          <Particle3DBackground particleCount={prefersReducedMotion ? 0 : isMobileViewport ? 26 : 80} color="#D89AA7" />
-        </Suspense>
+        {!isMobileViewport ? (
+          <Suspense fallback={null}>
+            <Particle3DBackground particleCount={prefersReducedMotion ? 0 : 80} color="#D89AA7" />
+          </Suspense>
+        ) : null}
 
         <BackgroundEffects />
 

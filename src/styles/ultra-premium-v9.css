@@ -2007,7 +2007,7 @@ html[data-theme='light'] .anatomy-sheet-link {
 .premium-error-card h1 {
   margin: 0.35rem 0 0.65rem;
   color: #2b2023;
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(2rem, 9vw, 3rem);
   line-height: 0.98;
 }

@@ -10,6 +10,7 @@ const selectors = [
   ['.mobile-bottom-label', 3.0],
   ['.content-card, .structured-item, .guideline-card', 3.2],
   ['.anatomy-atlas-shell, .clinical-template-assistant', 3.2],
+  ['.version-checker, .pubmed-feed, .symptom-checker, .premium-error-container', 3.2],
 ];
 
 const browser = await chromium.launch({ executablePath: process.env.CHROME_EXECUTABLE || undefined, headless: true });

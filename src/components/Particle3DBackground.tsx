@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
 interface Particle3DBackgroundProps {
   className?: string;
@@ -12,125 +13,107 @@ export const Particle3DBackground: React.FC<Particle3DBackgroundProps> = ({
   color = '#D89AA7',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    // Проверяем, загружен ли уже Three.js
-    if ((window as any).THREE) {
-      initThree();
-      return;
+    const container = containerRef.current;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (import.meta.env.MODE === 'test') {
+      return undefined;
     }
 
-    // Загружаем Three.js с CDN (как в Voice Remover)
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-    script.onload = () => {
-      setIsLoaded(true);
-      initThree();
+    const probe = document.createElement('canvas');
+    const hasWebGl = Boolean(probe.getContext('webgl2') || probe.getContext('webgl'));
+
+    if (!container || reducedMotion || particleCount <= 0 || !hasWebGl) {
+      return undefined;
+    }
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 1000);
+    let renderer: THREE.WebGLRenderer;
+
+    try {
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: !window.matchMedia('(max-width: 768px)').matches,
+        powerPreference: 'low-power',
+      });
+    } catch {
+      return undefined;
+    }
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    let frameId = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setClearColor(0x000000, 0);
+    renderer.domElement.className = 'particle-canvas';
+    container.appendChild(renderer.domElement);
+
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+
+    for (let index = 0; index < particleCount * 3; index += 1) {
+      positions[index] = (Math.random() - 0.5) * 10;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const material = new THREE.PointsMaterial({
+      size: 0.028,
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: 0.42,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+    camera.position.z = 3;
+
+    const resize = () => {
+      const width = Math.max(container.clientWidth, 1);
+      const height = Math.max(container.clientHeight, 1);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
     };
-    document.head.appendChild(script);
+
+    const onPointerMove = (event: PointerEvent) => {
+      pointerX = (event.clientX / window.innerWidth) * 2 - 1;
+      pointerY = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    const animate = () => {
+      particles.rotation.y += 0.00045 + pointerX * 0.00018;
+      particles.rotation.x += 0.00022 + pointerY * 0.00012;
+      renderer.render(scene, camera);
+      frameId = window.requestAnimationFrame(animate);
+    };
+
+    resize();
+    animate();
+    window.addEventListener('resize', resize);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
 
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = '';
-      }
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('pointermove', onPointerMove);
+      renderer.domElement.remove();
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
     };
-
-    function initThree() {
-      const THREE = (window as any).THREE;
-      if (!THREE || !containerRef.current) return;
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        75,
-        containerRef.current.clientWidth / containerRef.current.clientHeight,
-        0.1,
-        1000
-      );
-
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-      renderer.setClearColor(0x000000, 0);
-      containerRef.current.appendChild(renderer.domElement);
-
-      // Создаем частицы
-      const particlesGeometry = new THREE.BufferGeometry();
-      const particlesCount = particleCount;
-      const posArray = new Float32Array(particlesCount * 3);
-
-      for (let i = 0; i < particlesCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 10;
-      }
-
-      particlesGeometry.setAttribute(
-        'position',
-        new THREE.BufferAttribute(posArray, 3)
-      );
-
-      // Материал частиц
-      const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.03,
-        color: new THREE.Color(color),
-        transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending,
-      });
-
-      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-      scene.add(particlesMesh);
-
-      camera.position.z = 3;
-
-      // Анимация
-      let mouseX = 0;
-      let mouseY = 0;
-
-      document.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-      });
-
-      const animate = () => {
-        requestAnimationFrame(animate);
-
-        particlesMesh.rotation.y += 0.0005;
-        particlesMesh.rotation.x += 0.0003;
-
-        // Эффект следования за мышью
-        particlesMesh.rotation.y += mouseX * 0.0005;
-        particlesMesh.rotation.x += mouseY * 0.0005;
-
-        renderer.render(scene, camera);
-      };
-
-      animate();
-
-      // Обработка ресайза
-      const handleResize = () => {
-        if (!containerRef.current) return;
-        camera.aspect = containerRef.current.clientWidth / containerRef.current.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-      };
-
-      window.addEventListener('resize', handleResize);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        if (containerRef.current) {
-          containerRef.current.innerHTML = '';
-        }
-      };
-    }
   }, [particleCount, color]);
 
   return (
     <div
       ref={containerRef}
       className={`fixed inset-0 pointer-events-none z-0 ${className}`}
-      style={{ opacity: 0.4 }}
+      style={{ opacity: 0.32 }}
+      aria-hidden="true"
     />
   );
 };

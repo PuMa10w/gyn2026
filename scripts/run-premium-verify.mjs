@@ -13,6 +13,8 @@ const preServerSteps = [
   ['ICD strict', npmCmd, ['run', 'audit:icd', '--', '--strict']],
   ['source mojibake', npmCmd, ['run', 'audit:mojibake:source']],
   ['build', npmCmd, ['run', 'build']],
+  ['PWA freshness', npmCmd, ['run', 'audit:pwa:freshness']],
+  ['static security', npmCmd, ['run', 'audit:security:static']],
 ];
 
 const browserSteps = [
@@ -21,6 +23,7 @@ const browserSteps = [
   ['pharmacology iPhone audit', npmCmd, ['run', 'audit:pharma:iphone']],
   ['questionnaires iPhone audit', npmCmd, ['run', 'audit:questionnaires:iphone']],
   ['atlas iPhone audit', npmCmd, ['run', 'audit:atlas:iphone']],
+  ['clinical tools iPhone audit', npmCmd, ['run', 'audit:iphone:clinical-tools']],
   ['iPhone overlap audit', npmCmd, ['run', 'audit:iphone:overlap']],
   ['pastel audit', npmCmd, ['run', 'audit:pastel']],
   ['accessibility audit', npmCmd, ['run', 'audit:a11y']],
