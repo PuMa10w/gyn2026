@@ -2047,3 +2047,379 @@ html[data-theme='light'] .anatomy-sheet-link {
   overflow-wrap: anywhere;
   font-size: 0.82rem;
 }
+
+/* Ultra Clinical V12: medical worktool stabilization layer. */
+:root {
+  --clinical-worktool-surface: rgba(255, 250, 245, 0.96);
+  --clinical-worktool-surface-strong: rgba(246, 231, 214, 0.96);
+  --clinical-worktool-text: #2b2023;
+  --clinical-worktool-muted: #514047;
+  --clinical-worktool-border: rgba(185, 120, 134, 0.28);
+  --clinical-worktool-shadow: 0 14px 36px rgba(92, 58, 64, 0.12);
+}
+
+[data-theme='dark'] {
+  --clinical-worktool-surface: rgba(47, 35, 38, 0.96);
+  --clinical-worktool-surface-strong: rgba(59, 43, 47, 0.96);
+  --clinical-worktool-text: #fff7ef;
+  --clinical-worktool-muted: #ead4c9;
+  --clinical-worktool-border: rgba(232, 160, 140, 0.28);
+  --clinical-worktool-shadow: 0 16px 42px rgba(0, 0, 0, 0.26);
+}
+
+.clinical-template-assistant,
+.anatomy-atlas-shell,
+.symptom-checker,
+.pubmed-feed,
+.clinical-tool-card,
+.clinical-tool-error,
+.pubmed-empty,
+.pubmed-error,
+.version-checker.glass {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.5), transparent 34%),
+    linear-gradient(145deg, var(--clinical-worktool-surface), var(--clinical-worktool-surface-strong)) !important;
+  border: 1px solid var(--clinical-worktool-border) !important;
+  box-shadow: var(--clinical-worktool-shadow) !important;
+  color: var(--clinical-worktool-text) !important;
+  -webkit-text-fill-color: var(--clinical-worktool-text) !important;
+}
+
+.clinical-template-assistant p,
+.anatomy-atlas-shell p,
+.symptom-checker p,
+.pubmed-feed p,
+.clinical-tool-card p,
+.clinical-tool-error p,
+.pubmed-empty p,
+.pubmed-error p,
+.version-checker.glass p,
+.version-checker.glass span,
+.version-checker.glass small {
+  color: var(--clinical-worktool-muted) !important;
+  -webkit-text-fill-color: var(--clinical-worktool-muted) !important;
+}
+
+.clinical-template-assistant h3,
+.anatomy-atlas-shell h3,
+.symptom-checker h3,
+.pubmed-feed h3,
+.clinical-tool-card h3,
+.clinical-tool-error h3,
+.version-checker.glass h4,
+.version-checker.glass strong {
+  color: var(--clinical-worktool-text) !important;
+  -webkit-text-fill-color: var(--clinical-worktool-text) !important;
+}
+
+.modal-content.mobile-sheet .modal-quick-strip,
+.modal-content.mobile-sheet .modal-tabs,
+.questionnaire-modal.mobile-sheet .modal-tabs,
+.pharmacology-modal.mobile-sheet .pharma-tabs {
+  background:
+    linear-gradient(135deg, rgba(255, 250, 245, 0.97), rgba(246, 231, 214, 0.94)) !important;
+  border-color: var(--clinical-worktool-border) !important;
+}
+
+[data-theme='dark'] .modal-content.mobile-sheet .modal-quick-strip,
+[data-theme='dark'] .modal-content.mobile-sheet .modal-tabs,
+[data-theme='dark'] .questionnaire-modal.mobile-sheet .modal-tabs,
+[data-theme='dark'] .pharmacology-modal.mobile-sheet .pharma-tabs {
+  background:
+    linear-gradient(135deg, rgba(47, 35, 38, 0.98), rgba(59, 43, 47, 0.94)) !important;
+}
+
+.modal-content.mobile-sheet .tab-btn,
+.modal-content.mobile-sheet .modal-tab,
+.questionnaire-modal.mobile-sheet .tab-btn,
+.pharmacology-modal.mobile-sheet .pharma-tab {
+  min-height: 44px !important;
+  color: var(--clinical-worktool-text) !important;
+  -webkit-text-fill-color: var(--clinical-worktool-text) !important;
+  background: rgba(255, 250, 245, 0.9) !important;
+  border: 1px solid var(--clinical-worktool-border) !important;
+}
+
+[data-theme='dark'] .modal-content.mobile-sheet .tab-btn,
+[data-theme='dark'] .modal-content.mobile-sheet .modal-tab,
+[data-theme='dark'] .questionnaire-modal.mobile-sheet .tab-btn,
+[data-theme='dark'] .pharmacology-modal.mobile-sheet .pharma-tab {
+  background: rgba(59, 43, 47, 0.92) !important;
+}
+
+.modal-content.mobile-sheet .tab-btn.active,
+.modal-content.mobile-sheet .modal-tab.active,
+.pharmacology-modal.mobile-sheet .pharma-tab.active {
+  background: linear-gradient(135deg, #efb59f, #d996a2) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+  border-color: rgba(185, 120, 134, 0.48) !important;
+}
+
+.clinical-template-button,
+.clinical-template-copy,
+.anatomy-scene-chip,
+.anatomy-action-button,
+.anatomy-sheet-link,
+.symptom-chip,
+.symptom-open-link {
+  min-height: 44px !important;
+  touch-action: manipulation !important;
+}
+
+.clinical-template-output,
+.clinical-template-empty,
+.clinical-template-loading,
+.anatomy-atlas-panel,
+.anatomy-hotspot-card,
+.pubmed-card,
+.pubmed-empty,
+.pubmed-error,
+.clinical-tool-card,
+.clinical-tool-error {
+  background: rgba(255, 250, 245, 0.78) !important;
+  border: 1px solid var(--clinical-worktool-border) !important;
+  color: var(--clinical-worktool-text) !important;
+}
+
+[data-theme='dark'] .clinical-template-output,
+[data-theme='dark'] .clinical-template-empty,
+[data-theme='dark'] .clinical-template-loading,
+[data-theme='dark'] .anatomy-atlas-panel,
+[data-theme='dark'] .anatomy-hotspot-card,
+[data-theme='dark'] .pubmed-card,
+[data-theme='dark'] .pubmed-empty,
+[data-theme='dark'] .pubmed-error,
+[data-theme='dark'] .clinical-tool-card,
+[data-theme='dark'] .clinical-tool-error {
+  background: rgba(59, 43, 47, 0.78) !important;
+}
+
+@media (max-width: 768px) {
+  .page-content,
+  main,
+  .home-shell,
+  .catalog-section,
+  .bookmarks-panel,
+  .analytics-dashboard,
+  .site-footer {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .modal-content.mobile-sheet .modal-body,
+  .questionnaire-modal.mobile-sheet .modal-body,
+  .pharmacology-modal.mobile-sheet .pharma-content {
+    scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .modal-content.mobile-sheet .tab-content {
+    padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Ultra Clinical V12.1: force readable clinical sheets across html/body theme placement. */
+html:not([data-theme='dark']) .modal-content.mobile-sheet,
+html[data-theme='light'] .modal-content.mobile-sheet,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .modal-body,
+html[data-theme='light'] .modal-content.mobile-sheet .modal-body {
+  background: linear-gradient(180deg, #fff7f0 0%, #fffaf5 52%, #f8e8dc 100%) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .immediate-action-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .source-confidence-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-timeline-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .diagnostics-hero,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-list,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .patient-memo,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .memo-card,
+html[data-theme='light'] .modal-content.mobile-sheet .content-card,
+html[data-theme='light'] .modal-content.mobile-sheet .content-card-wide,
+html[data-theme='light'] .modal-content.mobile-sheet .structured-item,
+html[data-theme='light'] .modal-content.mobile-sheet .guideline-card,
+html[data-theme='light'] .modal-content.mobile-sheet .quick-card,
+html[data-theme='light'] .modal-content.mobile-sheet .quick-summary-card,
+html[data-theme='light'] .modal-content.mobile-sheet .immediate-action-card,
+html[data-theme='light'] .modal-content.mobile-sheet .source-confidence-card,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-timeline-card,
+html[data-theme='light'] .modal-content.mobile-sheet .diagnostics-hero,
+html[data-theme='light'] .modal-content.mobile-sheet .metric-list,
+html[data-theme='light'] .modal-content.mobile-sheet .metric-item,
+html[data-theme='light'] .modal-content.mobile-sheet .patient-memo,
+html[data-theme='light'] .modal-content.mobile-sheet .memo-card {
+  background: linear-gradient(135deg, rgba(255, 250, 245, 0.99), rgba(246, 231, 214, 0.92)) !important;
+  border: 1px solid rgba(185, 120, 134, 0.26) !important;
+  box-shadow: 0 14px 34px rgba(92, 58, 64, 0.1) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card *,
+html[data-theme='light'] .modal-content.mobile-sheet .content-card *,
+html[data-theme='light'] .modal-content.mobile-sheet .structured-item *,
+html[data-theme='light'] .modal-content.mobile-sheet .guideline-card *,
+html[data-theme='light'] .modal-content.mobile-sheet .quick-card * {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+html:not([data-theme='dark']) .modal-content.mobile-sheet p,
+html:not([data-theme='dark']) .modal-content.mobile-sheet li,
+html:not([data-theme='dark']) .modal-content.mobile-sheet dd,
+html:not([data-theme='dark']) .modal-content.mobile-sheet small,
+html[data-theme='light'] .modal-content.mobile-sheet p,
+html[data-theme='light'] .modal-content.mobile-sheet li,
+html[data-theme='light'] .modal-content.mobile-sheet dd,
+html[data-theme='light'] .modal-content.mobile-sheet small {
+  color: #4f3d43 !important;
+  -webkit-text-fill-color: #4f3d43 !important;
+}
+
+html:not([data-theme='dark']) .modal-content.mobile-sheet h2,
+html:not([data-theme='dark']) .modal-content.mobile-sheet h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet h4,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title,
+html[data-theme='light'] .modal-content.mobile-sheet h2,
+html[data-theme='light'] .modal-content.mobile-sheet h3,
+html[data-theme='light'] .modal-content.mobile-sheet h4,
+html[data-theme='light'] .modal-content.mobile-sheet .structured-item-title {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+/* Ultra Clinical V12.2: dark theme must override legacy body:not(...) light rules. */
+html[data-theme='dark'] .modal-content.mobile-sheet,
+html[data-theme='dark'] .modal-content.mobile-sheet .modal-body {
+  background: linear-gradient(180deg, #2b2023 0%, #35262b 52%, #422f35 100%) !important;
+  color: #fff7ef !important;
+  -webkit-text-fill-color: #fff7ef !important;
+}
+
+html[data-theme='dark'] .modal-content.mobile-sheet .content-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .content-card-wide,
+html[data-theme='dark'] .modal-content.mobile-sheet .structured-item,
+html[data-theme='dark'] .modal-content.mobile-sheet .guideline-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .quick-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .quick-summary-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .immediate-action-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .source-confidence-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .clinical-timeline-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .diagnostics-hero,
+html[data-theme='dark'] .modal-content.mobile-sheet .metric-list,
+html[data-theme='dark'] .modal-content.mobile-sheet .metric-item,
+html[data-theme='dark'] .modal-content.mobile-sheet .patient-memo,
+html[data-theme='dark'] .modal-content.mobile-sheet .memo-card {
+  background: linear-gradient(135deg, rgba(59, 43, 47, 0.98), rgba(47, 35, 38, 0.94)) !important;
+  border: 1px solid rgba(232, 160, 140, 0.28) !important;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28) !important;
+  color: #fff7ef !important;
+  -webkit-text-fill-color: #fff7ef !important;
+}
+
+html[data-theme='dark'] .modal-content.mobile-sheet .content-card *,
+html[data-theme='dark'] .modal-content.mobile-sheet .structured-item *,
+html[data-theme='dark'] .modal-content.mobile-sheet .guideline-card *,
+html[data-theme='dark'] .modal-content.mobile-sheet .quick-card * {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+html[data-theme='dark'] .modal-content.mobile-sheet p,
+html[data-theme='dark'] .modal-content.mobile-sheet li,
+html[data-theme='dark'] .modal-content.mobile-sheet dd,
+html[data-theme='dark'] .modal-content.mobile-sheet small {
+  color: #ead4c9 !important;
+  -webkit-text-fill-color: #ead4c9 !important;
+}
+
+html[data-theme='dark'] .modal-content.mobile-sheet h2,
+html[data-theme='dark'] .modal-content.mobile-sheet h3,
+html[data-theme='dark'] .modal-content.mobile-sheet h4,
+html[data-theme='dark'] .modal-content.mobile-sheet .structured-item-title {
+  color: #fff7ef !important;
+  -webkit-text-fill-color: #fff7ef !important;
+}
+
+html[data-theme='dark'] .clinical-template-assistant,
+html[data-theme='dark'] .anatomy-atlas-shell,
+html[data-theme='dark'] .symptom-checker,
+html[data-theme='dark'] .pubmed-feed,
+html[data-theme='dark'] .version-checker.glass {
+  color: #fff7ef !important;
+  -webkit-text-fill-color: #fff7ef !important;
+}
+
+/* Ultra Clinical V12.3: expose solid background-color for automated and Safari contrast computation. */
+html:not([data-theme='dark']) .modal-content.mobile-sheet,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .modal-body,
+html[data-theme='light'] .modal-content.mobile-sheet,
+html[data-theme='light'] .modal-content.mobile-sheet .modal-body,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .immediate-action-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .source-confidence-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-timeline-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .diagnostics-hero,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-list,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item,
+html[data-theme='light'] .modal-content.mobile-sheet .content-card,
+html[data-theme='light'] .modal-content.mobile-sheet .content-card-wide,
+html[data-theme='light'] .modal-content.mobile-sheet .structured-item,
+html[data-theme='light'] .modal-content.mobile-sheet .guideline-card,
+html[data-theme='light'] .modal-content.mobile-sheet .quick-card,
+html[data-theme='light'] .modal-content.mobile-sheet .quick-summary-card,
+html[data-theme='light'] .modal-content.mobile-sheet .immediate-action-card,
+html[data-theme='light'] .modal-content.mobile-sheet .source-confidence-card,
+html[data-theme='light'] .modal-content.mobile-sheet .clinical-timeline-card,
+html[data-theme='light'] .modal-content.mobile-sheet .diagnostics-hero,
+html[data-theme='light'] .modal-content.mobile-sheet .metric-list,
+html[data-theme='light'] .modal-content.mobile-sheet .metric-item,
+html:not([data-theme='dark']) .clinical-template-assistant,
+html:not([data-theme='dark']) .anatomy-atlas-shell,
+html:not([data-theme='dark']) .symptom-checker,
+html:not([data-theme='dark']) .pubmed-feed,
+html:not([data-theme='dark']) .version-checker.glass,
+html[data-theme='light'] .clinical-template-assistant,
+html[data-theme='light'] .anatomy-atlas-shell,
+html[data-theme='light'] .symptom-checker,
+html[data-theme='light'] .pubmed-feed,
+html[data-theme='light'] .version-checker.glass {
+  background-color: #fffaf5 !important;
+}
+
+html[data-theme='dark'] .modal-content.mobile-sheet,
+html[data-theme='dark'] .modal-content.mobile-sheet .modal-body,
+html[data-theme='dark'] .modal-content.mobile-sheet .content-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .content-card-wide,
+html[data-theme='dark'] .modal-content.mobile-sheet .structured-item,
+html[data-theme='dark'] .modal-content.mobile-sheet .guideline-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .quick-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .quick-summary-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .immediate-action-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .source-confidence-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .clinical-timeline-card,
+html[data-theme='dark'] .modal-content.mobile-sheet .diagnostics-hero,
+html[data-theme='dark'] .modal-content.mobile-sheet .metric-list,
+html[data-theme='dark'] .modal-content.mobile-sheet .metric-item,
+html[data-theme='dark'] .clinical-template-assistant,
+html[data-theme='dark'] .anatomy-atlas-shell,
+html[data-theme='dark'] .symptom-checker,
+html[data-theme='dark'] .pubmed-feed,
+html[data-theme='dark'] .version-checker.glass {
+  background-color: #3b2b2f !important;
+}

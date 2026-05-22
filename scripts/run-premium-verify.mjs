@@ -12,7 +12,9 @@ const preServerSteps = [
   ['content strict', npmCmd, ['run', 'audit:content', '--', '--strict']],
   ['ICD strict', npmCmd, ['run', 'audit:icd', '--', '--strict']],
   ['source mojibake', npmCmd, ['run', 'audit:mojibake:source']],
+  ['source UTF-8 UI', npmCmd, ['run', 'audit:source:utf8-ui']],
   ['build', npmCmd, ['run', 'build']],
+  ['bundle budget', npmCmd, ['run', 'audit:bundle:budget']],
   ['PWA freshness', npmCmd, ['run', 'audit:pwa:freshness']],
   ['static security', npmCmd, ['run', 'audit:security:static']],
 ];

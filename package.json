@@ -69,7 +69,9 @@
     "audit:security:static": "node scripts/security-static-audit.mjs",
     "audit:iphone:clinical-tools": "node scripts/clinical-tools-iphone-audit.mjs",
     "audit:cards:open": "node scripts/cards-open-audit.mjs",
-    "audit:workflow:iphone": "node scripts/workflow-iphone-audit.mjs"
+    "audit:workflow:iphone": "node scripts/workflow-iphone-audit.mjs",
+    "audit:source:utf8-ui": "node scripts/source-utf8-ui-audit.mjs",
+    "audit:bundle:budget": "node scripts/bundle-budget-audit.mjs"
   },
   "eslintConfig": {
     "extends": [
