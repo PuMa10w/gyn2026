@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { repairText } from '../utils/textRepair';
 
 type HistorySubtitle = 'Гинекология' | 'Акушерство';
 
@@ -15,10 +16,19 @@ export interface HistoryItem extends HistoryDisease {
 
 const getLegacyId = (diseaseId: string) => diseaseId.split('__')[0];
 
+const normalizeHistoryItem = (item: HistoryItem): HistoryItem => ({
+  ...item,
+  id: repairText(item.id),
+  name: repairText(item.name),
+  icd: repairText(item.icd),
+  subtitle: item.subtitle ? (repairText(item.subtitle) as HistorySubtitle) : undefined,
+});
+
 export function useHistory() {
   const [history, setHistory] = useState<HistoryItem[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem('disease-history') || '[]') as HistoryItem[];
+      const parsed = JSON.parse(localStorage.getItem('disease-history') || '[]') as HistoryItem[];
+      return Array.isArray(parsed) ? parsed.map(normalizeHistoryItem).slice(0, 10) : [];
     } catch {
       return [];
     }
@@ -30,10 +40,11 @@ export function useHistory() {
 
   const addToHistory = (disease: HistoryDisease) => {
     setHistory((prev) => {
-      const legacyId = getLegacyId(disease.id);
-      const filtered = prev.filter((item) => item.id !== disease.id && item.id !== legacyId);
+      const normalizedDisease = normalizeHistoryItem({ ...disease, timestamp: Date.now() });
+      const legacyId = getLegacyId(normalizedDisease.id);
+      const filtered = prev.filter((item) => item.id !== normalizedDisease.id && item.id !== legacyId);
       const updated = [
-        { id: disease.id, name: disease.name, icd: disease.icd, subtitle: disease.subtitle, timestamp: Date.now() },
+        normalizedDisease,
         ...filtered,
       ].slice(0, 10);
       return updated;

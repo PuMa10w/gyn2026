@@ -3,7 +3,7 @@
 const baseUrl = process.env.AUDIT_URL ?? process.env.AUDIT_BASE_URL ?? 'http://127.0.0.1:4173';
 const device = devices['iPhone 13'] ?? { viewport: { width: 390, height: 844 }, isMobile: true };
 const targetTabs = ['AI помощник', '3D атлас', 'AI-диагност', 'PubMed'];
-const maxCards = Number.parseInt(process.env.CLINICAL_TOOLS_CARD_LIMIT || '20', 10);
+const maxCards = Number.parseInt(process.env.CLINICAL_TOOLS_CARD_LIMIT || '30', 10);
 const browser = await chromium.launch({ executablePath: process.env.CHROME_EXECUTABLE || undefined, headless: true });
 const context = await browser.newContext(device);
 const page = await context.newPage();
@@ -65,6 +65,12 @@ for (let index = 0; index < maxCards; index += 1) {
     }
   }
 
+  await closeModal();
+
+  const reopenCard = page.locator('.disease-card').nth(index);
+  await reopenCard.scrollIntoViewIfNeeded();
+  await reopenCard.click();
+  await page.locator('.modal-content, [role="dialog"]').first().waitFor({ state: 'visible', timeout: 12000 });
   await closeModal();
 }
 

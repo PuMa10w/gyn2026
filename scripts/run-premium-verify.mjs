@@ -24,6 +24,8 @@ const browserSteps = [
   ['questionnaires iPhone audit', npmCmd, ['run', 'audit:questionnaires:iphone']],
   ['atlas iPhone audit', npmCmd, ['run', 'audit:atlas:iphone']],
   ['clinical tools iPhone audit', npmCmd, ['run', 'audit:iphone:clinical-tools']],
+  ['cards open audit', npmCmd, ['run', 'audit:cards:open']],
+  ['workflow iPhone audit', npmCmd, ['run', 'audit:workflow:iphone']],
   ['iPhone overlap audit', npmCmd, ['run', 'audit:iphone:overlap']],
   ['pastel audit', npmCmd, ['run', 'audit:pastel']],
   ['accessibility audit', npmCmd, ['run', 'audit:a11y']],

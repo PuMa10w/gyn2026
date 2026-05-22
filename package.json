@@ -67,7 +67,9 @@
     "audit:atlas:iphone": "node scripts/atlas-iphone-audit.mjs",
     "audit:pwa:freshness": "node scripts/pwa-freshness-audit.mjs",
     "audit:security:static": "node scripts/security-static-audit.mjs",
-    "audit:iphone:clinical-tools": "node scripts/clinical-tools-iphone-audit.mjs"
+    "audit:iphone:clinical-tools": "node scripts/clinical-tools-iphone-audit.mjs",
+    "audit:cards:open": "node scripts/cards-open-audit.mjs",
+    "audit:workflow:iphone": "node scripts/workflow-iphone-audit.mjs"
   },
   "eslintConfig": {
     "extends": [
