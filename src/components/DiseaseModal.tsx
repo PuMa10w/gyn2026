@@ -15,6 +15,52 @@ interface DiseaseModalProps {
   onClose: () => void;
 }
 
+interface ClinicalToolBoundaryProps {
+  label: string;
+  children: React.ReactNode;
+}
+
+interface ClinicalToolBoundaryState {
+  hasError: boolean;
+}
+
+class ClinicalToolBoundary extends React.Component<ClinicalToolBoundaryProps, ClinicalToolBoundaryState> {
+  constructor(props: ClinicalToolBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): ClinicalToolBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+    console.error(`[DiseaseModal] ${this.props.label} failed`, error, errorInfo);
+  }
+
+  handleRetry = () => {
+    this.setState({ hasError: false });
+  };
+
+  render() {
+    if (!this.state.hasError) return this.props.children;
+
+    return (
+      <section className="clinical-tool-fallback" role="alert">
+        <span className="clinical-tool-kicker">Раздел временно недоступен</span>
+        <h3>{this.props.label}</h3>
+        <p>
+          Карточка открыта, но этот дополнительный инструмент не смог загрузиться. Основные разделы диагностики,
+          УЗИ, лечения и источников остаются доступны.
+        </p>
+        <button type="button" className="clinical-tool-retry" onClick={this.handleRetry}>
+          Повторить загрузку
+        </button>
+      </section>
+    );
+  }
+}
+
 const guidelineMeta = [
   { key: 'eau', title: 'Европа', org: 'EAU / ESHRE / ESGE', badgeClass: 'badge-eau' },
   { key: 'acog', title: 'США', org: 'ACOG', badgeClass: 'badge-acog' },
@@ -1158,19 +1204,25 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
       case 'ai-assistant':
         return (
           <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
-            <AIClinicalAssistant diseaseName={item.name} symptoms={item.symptoms} treatment={buildTreatmentSteps(item.treatment)} />
+            <ClinicalToolBoundary label="AI помощник">
+              <AIClinicalAssistant diseaseName={item.name} symptoms={item.symptoms} treatment={buildTreatmentSteps(item.treatment)} />
+            </ClinicalToolBoundary>
           </motion.div>
         );
       case '3d-atlas':
         return (
           <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
-            <Organ3DViewer disease={item} organType="uterus" onNavigateTab={(tab) => setActiveTab(tab)} />
+            <ClinicalToolBoundary label="3D атлас">
+              <Organ3DViewer disease={item} organType="uterus" onNavigateTab={(tab) => setActiveTab(tab)} />
+            </ClinicalToolBoundary>
           </motion.div>
         );
       case 'symptom-checker':
         return (
           <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
-            <SymptomChecker />
+            <ClinicalToolBoundary label="AI-диагност">
+              <SymptomChecker />
+            </ClinicalToolBoundary>
           </motion.div>
         );
       case 'patient-memo':
@@ -1182,7 +1234,9 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
       case 'pubmed':
         return (
           <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
-            <PubMedFeed diseaseName={item.name} />
+            <ClinicalToolBoundary label="PubMed">
+              <PubMedFeed diseaseName={item.name} />
+            </ClinicalToolBoundary>
           </motion.div>
         );
       default:

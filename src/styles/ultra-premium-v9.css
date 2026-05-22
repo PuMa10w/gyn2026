@@ -765,6 +765,204 @@ input[type='search']::placeholder {
   }
 }
 
+/* Ultra Premium V10.2: annotation fixes for PWA, AI and 3D clinical tools. */
+html main .version-checker.glass,
+body main .version-checker.glass,
+html[data-theme='light'] main .version-checker.glass,
+body:not([data-theme='dark']) main .version-checker.glass,
+html[data-theme='dark'] main .version-checker.glass,
+body[data-theme='dark'] main .version-checker.glass {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.82), transparent 34%),
+    linear-gradient(145deg, #fff7f1 0%, #f6e4d5 52%, #efd3c8 100%) !important;
+  border: 1px solid rgba(185, 120, 134, 0.26) !important;
+  box-shadow: 0 18px 44px rgba(92, 58, 64, 0.16) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html main .version-checker.glass *,
+body main .version-checker.glass * {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+html main .version-checker.glass .version-kicker,
+body main .version-checker.glass .version-kicker {
+  background: rgba(255, 250, 245, 0.9) !important;
+  border: 1px solid rgba(216, 184, 120, 0.5) !important;
+  color: #7a5b2a !important;
+  -webkit-text-fill-color: #7a5b2a !important;
+}
+
+html main .version-checker.glass .version-meta-grid > div,
+html main .version-checker.glass .version-update-card,
+html main .version-checker.glass .version-ready-state,
+html main .version-checker.glass .version-error-state,
+body main .version-checker.glass .version-meta-grid > div,
+body main .version-checker.glass .version-update-card,
+body main .version-checker.glass .version-ready-state,
+body main .version-checker.glass .version-error-state {
+  background: linear-gradient(135deg, rgba(255, 250, 245, 0.94), rgba(249, 232, 220, 0.78)) !important;
+  border: 1px solid rgba(185, 120, 134, 0.22) !important;
+  box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08) !important;
+}
+
+html main .version-checker.glass .premium-button,
+body main .version-checker.glass .premium-button {
+  background: rgba(255, 250, 245, 0.94) !important;
+  border: 1px solid rgba(185, 120, 134, 0.26) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+  box-shadow: 0 8px 18px rgba(92, 58, 64, 0.08) !important;
+}
+
+html main .version-checker.glass .version-actions .premium-button--primary,
+body main .version-checker.glass .version-actions .premium-button--primary {
+  background: linear-gradient(135deg, #efb59f, #d996a2) !important;
+  border-color: rgba(185, 120, 134, 0.42) !important;
+  box-shadow: 0 12px 28px rgba(185, 120, 134, 0.22) !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-assistant,
+.modal-content.mobile-sheet .anatomy-atlas-shell,
+.modal-content.mobile-sheet .symptom-checker,
+.modal-content.mobile-sheet .pubmed-feed,
+.modal-content.mobile-sheet .clinical-tool-fallback {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.9), transparent 34%),
+    linear-gradient(145deg, #fffaf5 0%, #fff4ec 54%, #f8e4d8 100%) !important;
+  border: 1px solid rgba(185, 120, 134, 0.22) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+  box-shadow: 0 18px 40px rgba(92, 58, 64, 0.12) !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-assistant *,
+.modal-content.mobile-sheet .anatomy-atlas-shell *,
+.modal-content.mobile-sheet .symptom-checker *,
+.modal-content.mobile-sheet .pubmed-feed *,
+.modal-content.mobile-sheet .clinical-tool-fallback * {
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-eyebrow,
+.modal-content.mobile-sheet .clinical-tool-eyebrow,
+.modal-content.mobile-sheet .clinical-tool-kicker,
+.modal-content.mobile-sheet .anatomy-atlas-eyebrow,
+.modal-content.mobile-sheet .anatomy-hotspot-meta {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  border: 1px solid rgba(216, 184, 120, 0.48);
+  background: rgba(255, 250, 245, 0.9) !important;
+  color: #7a5b2a !important;
+  -webkit-text-fill-color: #7a5b2a !important;
+  padding: 0.34rem 0.62rem;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.modal-content.mobile-sheet .clinical-template-output,
+.modal-content.mobile-sheet .clinical-template-empty,
+.modal-content.mobile-sheet .clinical-template-loading,
+.modal-content.mobile-sheet .clinical-tool-empty,
+.modal-content.mobile-sheet .clinical-tool-loading,
+.modal-content.mobile-sheet .symptom-results,
+.modal-content.mobile-sheet .pubmed-paper-card,
+.modal-content.mobile-sheet .pubmed-abstract,
+.modal-content.mobile-sheet .anatomy-atlas-panel,
+.modal-content.mobile-sheet .anatomy-atlas-fallback,
+.modal-content.mobile-sheet .anatomy-atlas-skeleton,
+.modal-content.mobile-sheet .anatomy-hotspot-sheet {
+  background: rgba(255, 250, 245, 0.9) !important;
+  border: 1px solid rgba(185, 120, 134, 0.2) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+  box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08) !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-button,
+.modal-content.mobile-sheet .clinical-template-copy,
+.modal-content.mobile-sheet .clinical-tool-retry,
+.modal-content.mobile-sheet .symptom-chip,
+.modal-content.mobile-sheet .symptom-open-link,
+.modal-content.mobile-sheet .pubmed-paper-main,
+.modal-content.mobile-sheet .anatomy-scene-chip,
+.modal-content.mobile-sheet .anatomy-action-button,
+.modal-content.mobile-sheet .anatomy-sheet-link {
+  background: rgba(255, 250, 245, 0.94) !important;
+  border: 1px solid rgba(185, 120, 134, 0.24) !important;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+  box-shadow: 0 8px 18px rgba(92, 58, 64, 0.07) !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-button.is-active,
+.modal-content.mobile-sheet .symptom-chip.is-selected,
+.modal-content.mobile-sheet .anatomy-scene-chip.is-active,
+.modal-content.mobile-sheet .anatomy-action-button.is-primary,
+.modal-content.mobile-sheet .anatomy-sheet-link,
+.modal-content.mobile-sheet .clinical-tool-retry {
+  background: linear-gradient(135deg, #efb59f, #d996a2) !important;
+  border-color: rgba(185, 120, 134, 0.42) !important;
+  box-shadow: 0 12px 28px rgba(185, 120, 134, 0.2) !important;
+}
+
+.modal-content.mobile-sheet .clinical-template-output pre {
+  background: rgba(255, 248, 244, 0.88) !important;
+  border-radius: 18px;
+  padding: 0.9rem;
+  color: #2b2023 !important;
+  -webkit-text-fill-color: #2b2023 !important;
+}
+
+.modal-content.mobile-sheet .anatomy-atlas-viewport {
+  background:
+    radial-gradient(circle at 50% 24%, rgba(255, 255, 255, 0.74), transparent 34%),
+    linear-gradient(160deg, rgba(255, 250, 245, 0.96), rgba(246, 219, 207, 0.84)) !important;
+  border: 1px solid rgba(185, 120, 134, 0.2) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 14px 32px rgba(92, 58, 64, 0.1) !important;
+}
+
+.modal-content.mobile-sheet .anatomy-hotspot-card {
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+
+.modal-content.mobile-sheet .anatomy-hotspot-card.risk-urgent {
+  border-color: rgba(199, 111, 122, 0.38) !important;
+  background: linear-gradient(135deg, #fff5f5, #fffaf5) !important;
+}
+
+.modal-content.mobile-sheet .anatomy-hotspot-card.risk-attention {
+  border-color: rgba(217, 150, 162, 0.4) !important;
+  background: linear-gradient(135deg, #fff4ec, #fffaf5) !important;
+}
+
+.modal-content.mobile-sheet .anatomy-hotspot-card.risk-routine {
+  border-color: rgba(216, 184, 120, 0.38) !important;
+  background: linear-gradient(135deg, #fff8e8, #fffaf5) !important;
+}
+
+.modal-content.mobile-sheet .clinical-tool-fallback {
+  padding: 1.1rem;
+  border-radius: 24px;
+}
+
+@media (max-width: 430px) {
+  .modal-content.mobile-sheet .anatomy-atlas-viewport {
+    min-height: 430px !important;
+  }
+
+  .modal-content.mobile-sheet .anatomy-atlas-stage {
+    min-height: 410px !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .clinical-template-spinner,
   .anatomy-atlas-skeleton .atlas-skeleton-orbit {
