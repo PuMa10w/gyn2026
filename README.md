@@ -1,130 +1,80 @@
-# Gyn & Obs
+# GYN
 
-Клинический справочник по гинекологии и акушерству на `React + Vite + TypeScript`.
+Клинический iPhone-first PWA-справочник по гинекологии и акушерству на React, Vite и TypeScript.
 
-Приложение включает:
-- каталог нозологий по гинекологии и акушерству
-- поиск по диагнозам, симптомам и МКБ
-- избранное и историю просмотров
-- модуль опросников
-- фармакологический раздел с препаратами, взаимодействиями и схемами
-- PWA-сборку через `vite-plugin-pwa`
+## Production
 
-## Запуск
+Основной production-домен после миграции: `https://gyn-premium.pages.dev`.
 
-1. Установить зависимости:
+Старые адреса `https://gynecology.pages.dev` и `https://gyn-76a.pages.dev` больше не считаются основным production target. Они могут показывать старый bundle из-за отдельного Cloudflare Pages project или PWA/service-worker cache.
+
+## Локальный запуск
 
 ```bash
 npm install
-```
-
-2. Запустить dev-сервер:
-
-```bash
 npm run dev
 ```
 
-По умолчанию приложение доступно на `http://localhost:3000`.
+По умолчанию dev-сервер доступен на `http://localhost:3000`.
 
-## Скрипты
+## Проверки качества
 
-- `npm run dev` - локальный Vite dev server
-- `npm run build` - production-сборка в `dist`
-- `npm run preview` - локальный preview production-сборки
-- `npm run typecheck` - проверка TypeScript без генерации файлов
-- `npm run lint` - проверка ESLint по `src`
-- `npm run test:run` - запуск Vitest в non-watch режиме
-- `npm run test:ui` - UI-режим Vitest
+Перед production deploy обязательно запускать:
 
-## Стек
+```bash
+npm.cmd run typecheck
+npm.cmd run test:run
+npm.cmd run audit:content -- --strict
+npm.cmd run audit:icd -- --strict
+npm.cmd run audit:mojibake:source
+npm.cmd run audit:source:utf8-ui
+npm.cmd run build
+npm.cmd run verify:premium
+```
 
-- React 19
-- Vite 6
-- TypeScript
-- Framer Motion
-- Vitest + Testing Library
-- ESLint
-- vite-plugin-pwa
+Дополнительные production/PWA проверки:
+
+```bash
+npm.cmd run audit:pwa:freshness
+npm.cmd run audit:production:freshness
+```
+
+## Production deploy
+
+Deploy выполняется только в Cloudflare Pages project `gyn-premium`:
+
+```bash
+npm.cmd run build
+npm.cmd run deploy:production
+```
+
+`deploy:production` содержит guard и откажется деплоить, если `wrangler.toml` указывает на legacy project `gyn` или другой неправильный target.
+
+После deploy проверить:
+
+```bash
+npx.cmd wrangler pages deployment list --project-name gyn-premium
+npm.cmd run audit:production:freshness
+```
+
+## PWA обновление на iPhone
+
+В приложении PWA-панель показывает реальную сборку `version + commit`. Кнопка `Обновить базу` обновляет service worker, очищает PWA-кэш, добавляет `cacheReset=1` и перезагружает приложение, чтобы iPhone получил свежий bundle.
+
+Cloudflare headers настроены так:
+
+- `/`, `/index.html`, `/sw.js`, `/registerSW.js`, `/manifest.webmanifest` не кэшируются агрессивно.
+- `/assets/*` кэшируются как hashed immutable assets.
 
 ## Архитектура
 
-- `src/App.tsx` - корневая композиция приложения и навигационные состояния
-- `src/components` - UI-компоненты, карточки, модалки, секции
-- `src/hooks` - пользовательские хуки (`theme`, `favorites`, `history`, `catalog`, `modal`)
-- `src/data` - справочники нозологий, опросники и фармакология
-- `src/utils` - категоризация, enrich логика и вспомогательные функции
-- `src/types` - основные типы домена
+- `src/App.tsx` - корневая композиция приложения и маршрутизация разделов.
+- `src/components` - UI-компоненты, карточки, модальные окна и клинические инструменты.
+- `src/hooks` - состояние темы, избранного, истории, каталога и модалок.
+- `src/data` - нозологии, опросники и фармакология.
+- `src/utils` - категоризация, enrichment, repair legacy text и вспомогательная логика.
+- `scripts` - QA-аудиты, iPhone-проверки, PWA freshness и deploy guard.
 
-## Важные модули
+## Рабочее правило
 
-- `useCatalogData` - загрузка и фильтрация каталогов
-- `useModalBehavior` - единое поведение модалок: focus trap, escape, scroll lock
-- `diseaseCatalog.ts` - категоризация нозологий и поиск
-- `pharmacology.js` - препараты, взаимодействия и схемы
-
-## Проверка качества
-
-Перед изменениями и перед коммитом рекомендуется запускать:
-
-```bash
-npm run typecheck
-npm run lint
-npm run test:run
-npm run build
-```
-
-На текущий момент проект покрыт unit/integration тестами для:
-- хуков состояния
-- каталога и поиска
-- карточек и фильтров
-- фармакологии
-- опросников
-- базовых пользовательских сценариев в `App`
-
-## PWA и кеш
-
-Проект использует `vite-plugin-pwa`.
-
-Если после обновления сборки в браузере появляется устаревший интерфейс или ошибка загрузки чанков:
-1. сделать hard refresh
-2. очистить service worker / site data в DevTools
-3. открыть production preview заново
-
-Ручная регистрация старого service worker удалена, используется только PWA-механизм Vite.
-
-## Структура данных
-
-### Нозологии
-- лежат в `src/data/gynChunks/*` и `src/data/obsChunks/*`
-- после загрузки проходят через enrich-слой
-
-### Фармакология
-- `medications` содержит только препараты
-- `commonRegimens` содержит только схемы
-- дубли по `id` отфильтровываются на уровне источника данных
-
-### Опросники
-- лежат в `src/data/questionnaires.js`
-- история сохраняется в `localStorage`
-
-## Контент-стандарты
-
-- `docs/content-blueprint.md` - единая спецификация полей и редакционный стандарт для нозологий, препаратов, опросников и ultrasound-блоков
-- `docs/content-roadmap.md` - приоритеты, спринты и порядок углубления контента по guideline-first модели
-
-## Текущее состояние
-
-Стабилизированы:
-- загрузка чанков и PWA-поведение
-- error/retry для каталогов
-- навигационные переходы между разделами
-- фармакология и взаимодействия
-- общий modal hook
-- история и UX опросников
-- категоризация части спорных диагнозов через explicit overrides
-
-## Следующие шаги
-
-- расширить explicit categorization overrides по всему каталогу
-- при необходимости вынести крупные справочники в более легкий формат доставки
-- добавить e2e smoke tests для production preview
+Не коммитить browser artifacts, временные профили Chrome, screenshots, логи и generated audit reports. Перед commit stage делать только для намеренно изменённых source/config/script файлов.

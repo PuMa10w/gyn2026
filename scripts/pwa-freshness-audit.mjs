@@ -23,6 +23,7 @@ async function readRequired(file) {
 const indexHtml = await readRequired('index.html');
 const manifestText = await readRequired('manifest.webmanifest');
 const swText = await readRequired('sw.js');
+const headersText = await readRequired('_headers');
 
 let manifest = null;
 try {
@@ -70,6 +71,31 @@ for (const asset of assetMatches) {
 
 if (!/cleanupOutdatedCaches|precacheAndRoute|__WB_MANIFEST|workbox/.test(swText)) {
   addFinding('service worker freshness', 'sw.js does not look like a generated Workbox service worker');
+}
+
+function headerBlockFor(route) {
+  const lines = headersText.split(/\r?\n/);
+  const start = lines.findIndex((line) => line.trim() === route);
+  if (start < 0) return '';
+  const block = [];
+  for (let index = start + 1; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (line.trim() === '' || !line.startsWith('  ')) break;
+    block.push(line);
+  }
+  return block.join('\n');
+}
+
+for (const route of ['/', '/index.html', '/sw.js', '/registerSW.js', '/manifest.webmanifest']) {
+  const routeBlock = headerBlockFor(route);
+  if (!/Cache-Control:\s*no-cache,\s*no-store,\s*must-revalidate/i.test(routeBlock)) {
+    addFinding('app shell cache headers', `${route} must be no-cache, no-store, must-revalidate`);
+  }
+}
+
+const assetsBlock = headerBlockFor('/assets/*');
+if (!/Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/i.test(assetsBlock)) {
+  addFinding('asset cache headers', '/assets/* must be public, max-age=31536000, immutable');
 }
 
 const report = {

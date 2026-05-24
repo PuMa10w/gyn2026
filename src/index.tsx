@@ -14,13 +14,18 @@ if (!rootElement) {
 const resetReviewCaches = async () => {
   const params = new URLSearchParams(window.location.search);
   const isReviewSession = params.has('review') || params.has('clean');
+  const isProductionCacheReset = !isReviewSession && params.get('cacheReset') === '1';
 
-  if (!isReviewSession) {
+  if (!isReviewSession && !isProductionCacheReset) {
     return false;
   }
 
-  const cacheToken = params.get('clean') || params.get('review') || 'local-preview';
-  const flag = `gyn-review-cache-reset:${cacheToken}`;
+  const cacheToken = isProductionCacheReset
+    ? `production:${import.meta.env.VITE_APP_COMMIT ?? 'local'}`
+    : params.get('clean') || params.get('review') || 'local-preview';
+  const flag = isProductionCacheReset
+    ? `gyn-production-cache-reset:${cacheToken}`
+    : `gyn-review-cache-reset:${cacheToken}`;
 
   if (window.sessionStorage.getItem(flag)) {
     return false;
@@ -38,7 +43,12 @@ const resetReviewCaches = async () => {
   ]);
 
   const nextUrl = new URL(window.location.href);
-  nextUrl.searchParams.set('cacheReset', '1');
+  if (isProductionCacheReset) {
+    nextUrl.searchParams.delete('cacheReset');
+    nextUrl.searchParams.delete('build');
+  } else {
+    nextUrl.searchParams.set('cacheReset', '1');
+  }
   window.location.replace(nextUrl.toString());
   return true;
 };

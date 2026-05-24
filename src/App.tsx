@@ -23,6 +23,10 @@ import { emptyStateContent, homeActions, sectionMeta } from './config/appContent
 import { isObstetricsLabel, repairText } from './utils/textRepair';
 import type { CategoryId, Disease, TabType } from './types';
 
+const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.0.0';
+const appCommit = import.meta.env.VITE_APP_COMMIT ?? 'local';
+const appBuildTime = import.meta.env.VITE_BUILD_TIME ?? new Date().toISOString();
+
 // Lazy-loaded components
 const DiseaseModal = lazy(() => import('./components/DiseaseModal'));
 const Questionnaire = lazy(() => import('./components/Questionnaire'));
@@ -234,22 +238,24 @@ function App() {
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>GYN — премиальный клинический PWA по гинекологии и акушерству</title>
+        <title>GYN — клинический PWA по гинекологии и акушерству</title>
         <meta
           name="description"
-          content="GYN: премиальный клинический справочник по гинекологии и акушерству с нозологиями, алгоритмами диагностики, лечением, фармакологией, шкалами и iPhone-first PWA интерфейсом."
+          content="GYN: клинический справочник по гинекологии и акушерству с нозологиями, диагностикой, лечением, фармакологией, шкалами и iPhone-first PWA интерфейсом."
         />
         <meta
           name="keywords"
           content="гинекология, акушерство, клинический справочник, нозологии, диагностика, лечение, фармакология, шкалы, PWA"
         />
-        <meta property="og:title" content="GYN — премиальный клинический PWA" />
+        <meta property="og:title" content="GYN — клинический PWA" />
         <meta
           property="og:description"
           content="Гинекология, акушерство, фармакология и клинические шкалы в едином мобильном справочнике."
         />
         <meta property="og:type" content="website" />
         <meta name="theme-color" content="#100d10" />
+        <meta name="gyn-build-commit" content={appCommit} />
+        <meta name="gyn-build-version" content={appVersion} />
       </Helmet>
 
       <div className="App page-transition">
@@ -316,7 +322,7 @@ function App() {
             )}
           </AnimatePresence>
 
-          <VersionChecker currentVersion="1.0.0" />
+          <VersionChecker currentVersion={appVersion} currentCommit={appCommit} buildTime={appBuildTime} />
 
           {!isOnline && (
             <section className="premium-offline-state" role="status" aria-live="polite">

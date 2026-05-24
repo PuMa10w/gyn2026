@@ -1,6 +1,24 @@
 ﻿import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+
+const packageJson = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
+
+function readGitCommit() {
+  try {
+    return execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+  } catch {
+    return process.env.CF_PAGES_COMMIT_SHA?.slice(0, 7) || 'local';
+  }
+}
+
+const appCommit = process.env.CF_PAGES_COMMIT_SHA?.slice(0, 7) || readGitCommit();
+const appVersion = process.env.CF_PAGES_COMMIT_SHA
+  ? `${packageJson.version}+${process.env.CF_PAGES_COMMIT_SHA.slice(0, 7)}`
+  : `${packageJson.version}+${appCommit}`;
+const buildTime = process.env.BUILD_TIME || new Date().toISOString();
 
 export default defineConfig({
   plugins: [
@@ -65,6 +83,11 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+  },
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion),
+    'import.meta.env.VITE_APP_COMMIT': JSON.stringify(appCommit),
+    'import.meta.env.VITE_BUILD_TIME': JSON.stringify(buildTime),
   },
   build: {
     target: 'esnext',
