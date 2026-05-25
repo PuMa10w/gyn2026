@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
+import { repairText } from '../utils/textRepair';
 
 type FavoriteId = string;
 
 const getLegacyId = (diseaseId: string) => diseaseId.split('__')[0];
+const normalizeFavoriteId = (value: unknown): FavoriteId => repairText(String(value ?? '')).trim();
 
 export function useFavorites() {
   const [favorites, setFavorites] = useState<FavoriteId[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem('disease-favorites') || '[]') as FavoriteId[];
+      const parsed = JSON.parse(localStorage.getItem('disease-favorites') || '[]') as unknown[];
+      const normalized = Array.isArray(parsed)
+        ? [...new Set(parsed.map(normalizeFavoriteId).filter(Boolean))]
+        : [];
+      return normalized;
     } catch {
       return [];
     }

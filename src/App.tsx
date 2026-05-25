@@ -6,11 +6,13 @@ import './index.css';
 import './App.css';
 import './premium-unified.css';
 import './styles/ultra-premium-v9.css';
+import './styles/clinical-worktool.css';
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import CatalogSection from './components/CatalogSection';
 import BackgroundEffects from './components/BackgroundEffects';
 import ErrorBoundary from './components/ErrorBoundary';
+import ModalErrorBoundary from './components/ModalErrorBoundary';
 import { AnalyticsDashboard } from './components/AnalyticsDashboard';
 import { VersionChecker } from './components/VersionChecker';
 import { useDebounce } from './hooks/useDebounce';
@@ -345,7 +347,11 @@ function App() {
         </main>
 
         <Suspense fallback={<LoadingSpinner prefersReducedMotion={prefersReducedMotion} />}>
-          {selectedItem && <DiseaseModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
+          {selectedItem && (
+            <ModalErrorBoundary title="Карточка нозологии" onClose={() => setSelectedItem(null)}>
+              <DiseaseModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+            </ModalErrorBoundary>
+          )}
           {showQuestionnaire && <Questionnaire onClose={() => setShowQuestionnaire(false)} />}
           {showPharmacology && <PharmacologyModal onClose={() => setShowPharmacology(false)} />}
         </Suspense>
