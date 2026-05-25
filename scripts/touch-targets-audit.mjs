@@ -52,7 +52,7 @@ const results = await page.evaluate(() => {
 
 await browser.close();
 
-const critical = results.filter((entry) => entry.width < 34 || entry.height < 34);
+const critical = results;
 const report = {
   ok: critical.length === 0,
   baseUrl,

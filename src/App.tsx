@@ -9,6 +9,7 @@ import './styles/ultra-premium-v9.css';
 import './styles/clinical-worktool.css';
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
+import type { WorkbenchCommand } from './components/CommandSearch';
 import CatalogSection from './components/CatalogSection';
 import BackgroundEffects from './components/BackgroundEffects';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -237,6 +238,35 @@ function App() {
     settleViewportScroll();
   };
 
+  const handleCommandSearch = useCallback((command: WorkbenchCommand) => {
+    const cleanQuery = repairText(command.query).trim();
+
+    setShowFavorites(false);
+    setShowHistory(false);
+
+    if (command.route === 'pharmacology') {
+      setShowPharmacology(true);
+      addToast({ message: 'Открыта фармакология', type: 'info', duration: 2400 });
+      return;
+    }
+
+    if (command.route === 'questionnaires') {
+      setShowQuestionnaire(true);
+      addToast({ message: 'Открыты клинические шкалы', type: 'info', duration: 2400 });
+      return;
+    }
+
+    setActiveTab(command.route);
+    setActiveCategory(command.category ?? 'all');
+    setSearchTerm(cleanQuery);
+    settleViewportScroll();
+    addToast({
+      message: `Маршрут: ${repairText(command.label)}`,
+      type: 'success',
+      duration: 2600,
+    });
+  }, [addToast]);
+
   return (
     <ErrorBoundary>
       <Helmet>
@@ -301,6 +331,7 @@ function App() {
                 onFavoritesOpen={handleFavoritesToggle}
                 onHistoryOpen={handleHistoryToggle}
                 favoriteCount={favorites.length}
+                onCommandSearch={handleCommandSearch}
               />
             ) : (
               <CatalogSection

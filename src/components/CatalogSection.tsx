@@ -1,9 +1,40 @@
-import React, { useId } from 'react';
+import React, { useId, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import DiseaseCard from './DiseaseCard';
 import type { CategoryId, Disease } from '../types';
+
+type SortMode = 'relevance' | 'urgent' | 'reviewed' | 'source' | 'alpha';
+
+const sortOptions: Array<{ id: SortMode; label: string }> = [
+  { id: 'relevance', label: 'Релевантность' },
+  { id: 'urgent', label: 'Срочность' },
+  { id: 'reviewed', label: 'Ревизия' },
+  { id: 'source', label: 'Источник' },
+  { id: 'alpha', label: 'А-Я' },
+];
+
+const riskScore = (item: Disease) => {
+  const risk = String(item.overview?.riskLevel ?? item.sourceConfidence?.level ?? '').toLowerCase();
+  if (/critical|сроч|urgent|high/.test(risk)) return 4;
+  if (/moderate|attention|контроль|limited/.test(risk)) return 3;
+  if (/low|routine|план/.test(risk)) return 2;
+  return 1;
+};
+
+const sourceScore = (item: Disease) => {
+  const level = String(item.sourceQuality?.level ?? item.editorialStatus ?? '').toLowerCase();
+  if (level === 'verified') return 4;
+  if (level === 'reviewed') return 3;
+  if (level === 'needs-source-review') return 2;
+  return 1;
+};
+
+const reviewTime = (item: Disease) => {
+  const value = item.lastReviewed ? Date.parse(item.lastReviewed) : 0;
+  return Number.isFinite(value) ? value : 0;
+};
 
 type SectionMeta = {
   eyebrow: string;
@@ -54,8 +85,23 @@ const CatalogSection = React.memo(function CatalogSection({
   emptyState,
 }: CatalogSectionProps) {
   const titleId = useId();
+  const sortLabelId = useId();
+  const [sortMode, setSortMode] = useState<SortMode>('relevance');
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const animDuration = isMobile ? 0.14 : 0.22;
+  const sortedData = useMemo(() => {
+    const entries = filteredData.map((item, index) => ({ item, index }));
+
+    entries.sort((a, b) => {
+      if (sortMode === 'urgent') return riskScore(b.item) - riskScore(a.item) || a.index - b.index;
+      if (sortMode === 'reviewed') return reviewTime(b.item) - reviewTime(a.item) || a.index - b.index;
+      if (sortMode === 'source') return sourceScore(b.item) - sourceScore(a.item) || a.index - b.index;
+      if (sortMode === 'alpha') return a.item.name.localeCompare(b.item.name, 'ru') || a.index - b.index;
+      return a.index - b.index;
+    });
+
+    return entries.map((entry) => entry.item);
+  }, [filteredData, sortMode]);
 
   return (
     <motion.section
@@ -86,6 +132,22 @@ const CatalogSection = React.memo(function CatalogSection({
             categoryCounts={categoryCounts}
             visibleCategories={visibleCategories}
           />
+          <div className="catalog-sort-bar" aria-labelledby={sortLabelId}>
+            <span id={sortLabelId} className="catalog-sort-label">Сортировка</span>
+            <div className="catalog-sort-options" role="group" aria-label="Сортировка клинических карточек">
+              {sortOptions.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={`catalog-sort-chip ${sortMode === option.id ? 'is-active' : ''}`}
+                  aria-pressed={sortMode === option.id}
+                  onClick={() => setSortMode(option.id)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -118,7 +180,7 @@ const CatalogSection = React.memo(function CatalogSection({
 
         {!isDataLoading &&
           !error &&
-          filteredData.map((item, index) => (
+          sortedData.map((item, index) => (
             <DiseaseCard
               key={item.id}
               item={item}
@@ -129,7 +191,7 @@ const CatalogSection = React.memo(function CatalogSection({
             />
           ))}
 
-        {!isDataLoading && !error && filteredData.length === 0 && (
+        {!isDataLoading && !error && sortedData.length === 0 && (
           <motion.div className="empty-state" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
             <span className="empty-eyebrow">{emptyState.eyebrow}</span>
             <h3>{emptyState.title}</h3>

@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
+import { clinicalSourceStack } from '../config/clinicalSourceStack';
 
 interface VersionInfo {
   version: string;
@@ -211,6 +212,16 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
           <span>Сеть</span>
           <strong>{isOnline ? 'онлайн' : 'офлайн'}</strong>
         </div>
+      </div>
+
+      <div className="version-source-stack" aria-label="Редакционный source stack">
+        <span>Source stack</span>
+        <div>
+          {clinicalSourceStack.map((source) => (
+            <abbr key={source.id} title={source.scope}>{source.label}</abbr>
+          ))}
+        </div>
+        <small>Высокорисковые утверждения без точной сверки маркируются как требующие ревизии.</small>
       </div>
 
       {installPrompt && (

@@ -52,16 +52,34 @@ async function closeModal(page) {
 async function auditSection(page, sectionPattern, sectionLabel) {
   await clickVisibleButton(page, sectionPattern, sectionLabel);
   await page.locator('.disease-card').first().waitFor({ state: 'visible', timeout: 30000 });
+  await page.waitForTimeout(250);
   const total = await page.locator('.disease-card').count();
   const limit = Math.min(total, perSectionLimit);
   const failures = [];
 
   for (let index = 0; index < limit; index += 1) {
     try {
-      const card = page.locator('.disease-card').nth(index);
-      await card.scrollIntoViewIfNeeded();
-      const beforeScrollY = await page.evaluate(() => window.scrollY);
-      await card.click({ timeout: 10000 });
+      let beforeScrollY = 0;
+      let opened = false;
+      let lastError = null;
+
+      for (let attempt = 0; attempt < 3 && !opened; attempt += 1) {
+        try {
+          const card = page.locator('.disease-card').nth(index);
+          await card.waitFor({ state: 'visible', timeout: 10000 });
+          await card.scrollIntoViewIfNeeded({ timeout: 10000 });
+          await page.waitForTimeout(80);
+          beforeScrollY = await page.evaluate(() => window.scrollY);
+          await page.locator('.disease-card').nth(index).click({ timeout: 10000 });
+          opened = true;
+        } catch (error) {
+          lastError = error;
+          await page.waitForTimeout(160);
+        }
+      }
+
+      if (!opened) throw lastError ?? new Error('card did not open');
+
       const modal = page.locator('.modal-content, [role="dialog"]').first();
       await modal.waitFor({ state: 'visible', timeout: 12000 });
 

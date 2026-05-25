@@ -141,9 +141,8 @@ describe('App', () => {
     render(<App />);
 
     fireEvent.click(screen.getAllByRole('button', { name: /гинекология/i })[0]);
-    await screen.findAllByText('Эндометриоз');
 
-    const searchInput = screen.getByPlaceholderText(/нозология, симптом, код мкб/i);
+    const searchInput = await screen.findByPlaceholderText(/нозология, симптом, код мкб/i);
     fireEvent.change(searchInput, { target: { value: 'Эндометриоз' } });
 
     await waitFor(expectEndometriosisVisible);
@@ -153,9 +152,8 @@ describe('App', () => {
     render(<App />);
 
     fireEvent.click(screen.getAllByRole('button', { name: /гинекология/i })[0]);
-    await screen.findAllByText('Эндометриоз');
 
-    const searchInput = screen.getByPlaceholderText(/нозология, симптом, код мкб/i) as HTMLInputElement;
+    const searchInput = await screen.findByPlaceholderText(/нозология, симптом, код мкб/i) as HTMLInputElement;
     fireEvent.change(searchInput, { target: { value: 'не найдено' } });
 
     fireEvent.click(screen.getAllByRole('button', { name: /акушерство/i })[0]);
@@ -169,9 +167,8 @@ describe('App', () => {
     render(<App />);
 
     fireEvent.click(screen.getAllByRole('button', { name: /гинекология/i })[0]);
-    await screen.findAllByText('Эндометриоз');
 
-    fireEvent.click(screen.getByRole('button', { name: /добавить эндометриоз в избранное/i }));
+    fireEvent.click(await screen.findByRole('button', { name: /добавить эндометриоз в избранное/i }));
     fireEvent.click(screen.getByRole('button', { name: /^избранное$/i }));
 
     await waitFor(expectEndometriosisVisible);

@@ -1,5 +1,6 @@
 import React, { useId } from 'react';
 import { motion } from 'framer-motion';
+import CommandSearch, { type WorkbenchCommand } from './CommandSearch';
 import { PremiumBadge, PremiumCard } from './PremiumPrimitives';
 import type { HistoryItem } from '../hooks/useHistory';
 import type { TabType } from '../types';
@@ -22,6 +23,7 @@ interface HomeSectionProps {
   onFavoritesOpen: () => void;
   onHistoryOpen: () => void;
   favoriteCount: number;
+  onCommandSearch: (command: WorkbenchCommand) => void;
 }
 
 const sectionNotes = {
@@ -39,6 +41,7 @@ const HomeSection = React.memo(function HomeSection({
   onFavoritesOpen,
   onHistoryOpen,
   favoriteCount,
+  onCommandSearch,
 }: HomeSectionProps) {
   const titleId = useId();
   const primaryActions = actions.slice(0, 2);
@@ -64,6 +67,7 @@ const HomeSection = React.memo(function HomeSection({
             премиальном интерфейсе для работы с телефона.
           </p>
         </div>
+        <CommandSearch onCommand={onCommandSearch} />
         <div className="premium-command-metrics" aria-label="Статус базы">
           <PremiumCard as="div" tone="default" className="premium-command-metric">
             <span>Покрытие базы</span>
