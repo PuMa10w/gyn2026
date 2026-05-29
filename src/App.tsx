@@ -188,12 +188,31 @@ function App() {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
 
+  const closeModalStack = useCallback(() => {
+    setSelectedItem(null);
+    setShowQuestionnaire(false);
+    setShowPharmacology(false);
+  }, []);
+
+  const openQuestionnaire = useCallback(() => {
+    setSelectedItem(null);
+    setShowPharmacology(false);
+    setShowQuestionnaire(true);
+  }, []);
+
+  const openPharmacology = useCallback(() => {
+    setSelectedItem(null);
+    setShowQuestionnaire(false);
+    setShowPharmacology(true);
+  }, []);
+
   const resetCatalogState = () => {
     setSearchTerm('');
     setActiveCategory('all');
   };
 
   const handleTabChange = (tab: TabType) => {
+    closeModalStack();
     setActiveTab(tab);
     setShowFavorites(false);
     setShowHistory(false);
@@ -202,6 +221,7 @@ function App() {
   };
 
   const handleFavoritesToggle = () => {
+    closeModalStack();
     const nextValue = !showFavorites;
     if (activeTab === 'home') setActiveTab('gynecology');
     setShowFavorites(nextValue);
@@ -211,6 +231,7 @@ function App() {
   };
 
   const handleHistoryToggle = () => {
+    closeModalStack();
     const nextValue = !showHistory;
     if (activeTab === 'home') setActiveTab('gynecology');
     setShowHistory(nextValue);
@@ -220,6 +241,8 @@ function App() {
   };
 
   const handleItemClick = (item: Disease) => {
+    setShowQuestionnaire(false);
+    setShowPharmacology(false);
     setSelectedItem(item);
     addToHistory(item);
     addToast({
@@ -231,6 +254,7 @@ function App() {
 
   const handleRecentOpen = (item: (typeof history)[number]) => {
     const targetTab = isObstetricsLabel(item.subtitle) ? 'obstetrics' : 'gynecology';
+    closeModalStack();
     setActiveTab(targetTab);
     setShowFavorites(false);
     setShowHistory(false);
@@ -245,17 +269,18 @@ function App() {
     setShowHistory(false);
 
     if (command.route === 'pharmacology') {
-      setShowPharmacology(true);
+      openPharmacology();
       addToast({ message: 'Открыта фармакология', type: 'info', duration: 2400 });
       return;
     }
 
     if (command.route === 'questionnaires') {
-      setShowQuestionnaire(true);
+      openQuestionnaire();
       addToast({ message: 'Открыты клинические шкалы', type: 'info', duration: 2400 });
       return;
     }
 
+    closeModalStack();
     setActiveTab(command.route);
     setActiveCategory(command.category ?? 'all');
     setSearchTerm(cleanQuery);
@@ -265,7 +290,7 @@ function App() {
       type: 'success',
       duration: 2600,
     });
-  }, [addToast]);
+  }, [addToast, closeModalStack, openPharmacology, openQuestionnaire]);
 
   return (
     <ErrorBoundary>
@@ -307,8 +332,8 @@ function App() {
         <Navbar
           activeTab={activeTab}
           onTabChange={handleTabChange}
-          onQuestionnaires={() => setShowQuestionnaire(true)}
-          onPharmacology={() => setShowPharmacology(true)}
+          onQuestionnaires={openQuestionnaire}
+          onPharmacology={openPharmacology}
           theme={theme}
           toggleTheme={toggleTheme}
           showFavorites={showFavorites}
@@ -324,8 +349,8 @@ function App() {
                 key="home"
                 actions={homeActions}
                 setActiveTab={handleTabChange}
-                openQuestionnaire={() => setShowQuestionnaire(true)}
-                openPharmacology={() => setShowPharmacology(true)}
+                openQuestionnaire={openQuestionnaire}
+                openPharmacology={openPharmacology}
                 recentItems={history.slice(0, 4)}
                 onRecentOpen={handleRecentOpen}
                 onFavoritesOpen={handleFavoritesToggle}
