@@ -17,6 +17,7 @@ import type {
   UltrasoundFinding,
   UltrasoundProtocol,
 } from '../types';
+import { applyClinicalSourceOverlay } from './clinicalSourceOverlay';
 import { repairText } from './textRepair';
 
 type DiseaseInput = Disease & {
@@ -1897,7 +1898,7 @@ export const enrichDisease = (rawDisease: DiseaseInput): Disease => {
     whenBiopsyNeeded: disease.whenBiopsyNeeded?.length ? disease.whenBiopsyNeeded : buildWhenBiopsyNeeded(disease),
   };
 
-  return deepRepair(enriched);
+  return deepRepair(applyClinicalSourceOverlay(enriched));
 };
 
 const slugifyIdPart = (value: string) =>

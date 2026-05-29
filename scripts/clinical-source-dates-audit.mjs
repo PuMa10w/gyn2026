@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { medications } from '../src/data/pharmacology.js';
 import { questionnaires } from '../src/data/questionnaires.js';
+import { applyClinicalSourceOverlay } from '../src/utils/clinicalSourceOverlay.ts';
 import { repairText } from '../src/utils/textRepair.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -50,11 +51,13 @@ const auditItems = (items, label) => {
 
 const [gyn, obs] = await Promise.all([importChunks('gynChunks'), importChunks('obsChunks')]);
 const diseaseItems = [...gyn, ...obs].filter((item) => item?.name);
+const sourceAwareDiseaseItems = diseaseItems.map((item) => applyClinicalSourceOverlay(item));
 const report = {
   ok: medications.every((item) => parseYear(item.lastReviewed)) && questionnaires.every((item) => parseYear(item.lastReviewed)),
   generatedAt: new Date().toISOString(),
   currentYear,
   diseases: auditItems(diseaseItems, 'diseases'),
+  sourceAwareDiseases: auditItems(sourceAwareDiseaseItems, 'source-aware diseases'),
   medications: auditItems(medications, 'medications'),
   questionnaires: auditItems(questionnaires, 'questionnaires'),
 };
@@ -69,6 +72,12 @@ console.log(JSON.stringify({
     withLastReviewed: report.diseases.withLastReviewed,
     missingCount: report.diseases.missingCount,
     staleCount: report.diseases.staleCount,
+  },
+  sourceAwareDiseases: {
+    total: report.sourceAwareDiseases.total,
+    withLastReviewed: report.sourceAwareDiseases.withLastReviewed,
+    missingCount: report.sourceAwareDiseases.missingCount,
+    staleCount: report.sourceAwareDiseases.staleCount,
   },
   medications: {
     total: report.medications.total,

@@ -102,6 +102,36 @@ const COMMANDS: WorkbenchCommand[] = [
     badge: 'Шкалы',
     keywords: ['опросники', 'шкалы', 'phq', 'epds', 'депрессия', 'боль', 'пмс'],
   },
+  {
+    id: 'contraception',
+    label: 'Контрацепция',
+    description: 'КОК, ВМС, экстренная контрацепция, риски и противопоказания',
+    query: 'контрацепция КОК ВМС',
+    route: 'gynecology',
+    category: 'hormonal',
+    badge: 'Сценарий',
+    keywords: ['контрацепция', 'кок', 'вмс', 'левоноргестрел', 'дроспиренон'],
+  },
+  {
+    id: 'gestational-diabetes',
+    label: 'Гестационный диабет',
+    description: 'O24, скрининг, питание, инсулин, мониторинг и роды',
+    query: 'гестационный диабет O24',
+    route: 'obstetrics',
+    category: 'pregnancy',
+    badge: 'Беременность',
+    keywords: ['диабет', 'o24', 'глюкоза', 'инсулин', 'гсд'],
+  },
+  {
+    id: 'postpartum',
+    label: 'Послеродовый период',
+    description: 'Кровотечение, инфекция, лактация, депрессия и follow-up',
+    query: 'послеродовый период кровотечение лактация',
+    route: 'obstetrics',
+    category: 'pregnancy',
+    badge: 'Follow-up',
+    keywords: ['послеродов', 'лактация', 'мастит', 'epds', 'кровотечение'],
+  },
 ];
 
 const normalize = (value: string) => value.toLowerCase().replace(/ё/g, 'е');
@@ -115,7 +145,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
   const hintId = useId();
   const [query, setQuery] = useState(() => {
     try {
-      return localStorage.getItem('gyn-command-search') ?? '';
+      return sessionStorage.getItem('gyn-command-search') ?? '';
     } catch {
       return '';
     }
@@ -123,7 +153,12 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
 
   useEffect(() => {
     try {
-      if (query.trim()) localStorage.setItem('gyn-command-search', query);
+      const trimmed = query.trim();
+      if (!trimmed) {
+        sessionStorage.removeItem('gyn-command-search');
+        return;
+      }
+      if (trimmed.length <= 80) sessionStorage.setItem('gyn-command-search', trimmed);
     } catch {
       // Ignore storage restrictions in private/PWA contexts.
     }
@@ -170,7 +205,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
     >
       <div className="workbench-command-head">
         <span className="workbench-eyebrow">Быстрый приём</span>
-        <h3 id={`${inputId}-title`}>Command Search</h3>
+        <h3 id={`${inputId}-title`}>Клинический поиск</h3>
         <p id={hintId}>Один вход для нозологий, МКБ, УЗИ, препаратов и клинических шкал.</p>
       </div>
 

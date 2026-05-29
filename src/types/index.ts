@@ -289,6 +289,9 @@ export interface Disease {
   sourceQuality?: SourceQuality;
   redFlags?: string[];
   guidelineBasis?: GuidelineReference[];
+  sourceStack?: GuidelineReference[];
+  sourceDate?: string;
+  revisionDue?: string;
   guidelineStatus?: string;
   lastReviewed?: string;
   managementAlgorithm?: DiseaseManagementAlgorithm;

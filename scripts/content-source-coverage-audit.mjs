@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { applyClinicalSourceOverlay } from '../src/utils/clinicalSourceOverlay.ts';
 import { repairText } from '../src/utils/textRepair.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -63,9 +64,13 @@ const priorityScore = (item) => {
 const [gyn, obs] = await Promise.all([importChunks('gynChunks'), importChunks('obsChunks')]);
 const all = [...gyn, ...obs].filter((item) => item?.name);
 const top150 = [...all].sort((a, b) => priorityScore(b) - priorityScore(a)).slice(0, 150);
+const sourceAwareAll = all.map((item) => applyClinicalSourceOverlay(item));
+const sourceAwareTop150 = top150.map((item) => applyClinicalSourceOverlay(item));
 const essentialCoverage = count(all, essentialFields);
 const premiumCoverage = count(all, sourceFields);
 const topCoverage = count(top150, sourceFields);
+const sourceAwareCoverage = count(sourceAwareAll, sourceFields);
+const sourceAwareTopCoverage = count(sourceAwareTop150, sourceFields);
 const missingTop = top150
   .map((item) => ({
     id: item.id,
@@ -85,7 +90,7 @@ const criticalFailures = [
 const report = {
   ok: criticalFailures.length === 0,
   generatedAt: new Date().toISOString(),
-  note: 'This report tracks source-file coverage. Runtime enrichment remains a safety net, not the target state.',
+  note: 'This report separates raw chunk coverage from conservative source-aware editorial overlay coverage. Runtime enrichment remains a safety net, not a substitute for verified clinical source review.',
   essentialThreshold,
   totals: {
     allDiseases: all.length,
@@ -93,9 +98,14 @@ const report = {
   },
   essentialCoverage,
   premiumCoverage,
+  sourceAwareCoverage,
   priorityTop150: {
     ...topCoverage,
     missing: missingTop.slice(0, 80),
+  },
+  sourceAwarePriorityTop150: {
+    ...sourceAwareTopCoverage,
+    editorialStatus: 'needs-source-review unless the raw card already declares a stronger status',
   },
   criticalFailures,
 };
@@ -108,7 +118,8 @@ console.log(JSON.stringify({
   totals: report.totals,
   essentialComplete: essentialCoverage.complete,
   premiumComplete: premiumCoverage.complete,
-  top150Complete: topCoverage.complete,
+  rawTop150Complete: topCoverage.complete,
+  sourceAwareTop150Complete: sourceAwareTopCoverage.complete,
   artifact: 'artifacts/content-source-coverage-audit.json',
 }, null, 2));
 

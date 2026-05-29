@@ -4487,7 +4487,8 @@ input[type='search']::placeholder {
 
 .analytics-dashboard *,
 .premium-recent-panel *,
-.premium-command-hero *,
+.premium-command-copy *,
+.premium-command-metrics *,
 .premium-tool-card *,
 .home-destination-card * {
   color: var(--v8-text) !important;

@@ -99,6 +99,28 @@ function buildSearchableText(item: Disease) {
     entry.scope ?? '',
     ...(entry.usedFor ?? []),
   ]) ?? [];
+  const sourceStack = item.sourceStack?.flatMap((entry) => [
+    entry.organization,
+    entry.title ?? '',
+    entry.documentType ?? '',
+    entry.scope ?? '',
+    ...(entry.usedFor ?? []),
+  ]) ?? [];
+  const pathwayText = [
+    ...(item.clinicalPathway ?? []),
+    ...(item.urgentPathway ?? []),
+    ...(item.treatmentPathway ?? []),
+  ].flatMap((entry) => [entry.title, entry.detail, entry.priority ?? '', entry.linkedTab ?? '']);
+  const atlasText = item.atlasHotspots?.flatMap((entry) => [
+    entry.label,
+    entry.organ,
+    entry.clinicalMeaning,
+    entry.risk,
+    entry.linkedTab ?? '',
+  ]) ?? [];
+  const aiPromptText = item.aiPrompts
+    ? Object.values(item.aiPrompts).flatMap((entry) => entry ?? [])
+    : [];
 
   return [
     item.name,
@@ -131,8 +153,15 @@ function buildSearchableText(item: Disease) {
     ...(item.treatment.surgical ?? []),
     ...(item.contraindicatedOrAvoid ?? []),
     ...(item.patientCounseling ?? []),
+    ...(item.ultrasoundChecklist ?? []),
+    ...pathwayText,
+    ...atlasText,
+    ...aiPromptText,
     ...structuredDifferential,
     ...guidelineBasis,
+    ...sourceStack,
+    item.sourceDate ?? '',
+    item.revisionDue ?? '',
     item.treatment.guidelines.eau,
     item.treatment.guidelines.acog,
     item.treatment.guidelines.ranzcog,
