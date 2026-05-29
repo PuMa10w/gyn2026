@@ -1,4 +1,4 @@
-﻿/* Clinical Workbench V13: final, small, audit-friendly layer. */
+/* Clinical Workbench V13: final, small, audit-friendly layer. */
 :root,
 [data-theme='light'] {
   --worktool-bg: #fff6ef;
@@ -908,4 +908,92 @@ body:not([data-theme='dark']) .mobile-bottom-bar {
   height: 48px !important;
   box-sizing: border-box !important;
   align-items: center !important;
+}
+
+/* V16 clinical workbench guard: one active modal owns the viewport on iPhone. */
+html.modal-open,
+body.modal-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.App.modal-active .mobile-bottom-bar,
+body.modal-open .mobile-bottom-bar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  isolation: isolate;
+  overscroll-behavior: none;
+}
+
+.modal-content.mobile-sheet,
+.questionnaire-modal.mobile-sheet,
+.pharmacology-modal.mobile-sheet {
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.modal-body,
+.questionnaire-body,
+.pharma-content {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-bottom: calc(var(--worktool-bottom-bar) + env(safe-area-inset-bottom) + 2rem);
+}
+
+.empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.empty-state-action {
+  min-height: 44px;
+  border: 1px solid rgba(185, 120, 134, 0.28);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 250, 245, 0.96), rgba(246, 231, 214, 0.92));
+  color: var(--worktool-text);
+  box-shadow: 0 14px 34px rgba(43, 32, 35, 0.08);
+  padding: 0.72rem 1rem;
+  font-weight: 850;
+}
+
+.empty-state-hints {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 34rem;
+  margin: 1rem auto 0;
+  padding: 0;
+  list-style: none;
+  color: var(--worktool-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.empty-state-hints li {
+  border: 1px solid rgba(185, 120, 134, 0.16);
+  border-radius: 16px;
+  background: rgba(255, 250, 245, 0.72);
+  padding: 0.65rem 0.8rem;
+}
+
+[data-theme='dark'] .empty-state-action {
+  border-color: rgba(216, 154, 167, 0.28);
+  background: linear-gradient(135deg, rgba(59, 42, 47, 0.96), rgba(43, 32, 35, 0.96));
+  color: #fffaf5;
+}
+
+[data-theme='dark'] .empty-state-hints li {
+  border-color: rgba(216, 154, 167, 0.18);
+  background: rgba(43, 32, 35, 0.72);
 }

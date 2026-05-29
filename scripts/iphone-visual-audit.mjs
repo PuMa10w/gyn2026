@@ -1,4 +1,4 @@
-﻿import fs from 'fs/promises';
+import fs from 'fs/promises';
 import path from 'path';
 import { chromium, devices } from 'playwright';
 let canvasTools = null;

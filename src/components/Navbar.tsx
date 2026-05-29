@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ThemeMode } from '../hooks/useTheme';
 import type { TabType } from '../types';

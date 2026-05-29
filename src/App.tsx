@@ -135,6 +135,7 @@ function App() {
     : showHistory
       ? emptyStateContent.history
       : emptyStateContent.search;
+  const hasActiveModal = Boolean(selectedItem || showQuestionnaire || showPharmacology);
 
   useEffect(() => {
     let frameId = 0;
@@ -315,7 +316,7 @@ function App() {
         <meta name="gyn-build-version" content={appVersion} />
       </Helmet>
 
-      <div className="App page-transition">
+      <div className={`App page-transition ${hasActiveModal ? 'modal-active' : ''}`.trim()}>
         <a className="skip-link" href="#main-content">
           Перейти к основному содержанию
         </a>

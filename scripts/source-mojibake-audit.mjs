@@ -62,6 +62,16 @@ for (const file of files) {
     if (error?.code === 'ENOENT') continue;
     throw error;
   }
+
+  if (content.charCodeAt(0) === 0xfeff) {
+    findings.push({
+      file: path.relative(root, file),
+      line: 1,
+      match: 'utf8-bom',
+      snippet: 'File starts with UTF-8 BOM; hidden encoding markers are not allowed in UI/source files.',
+    });
+  }
+
   const lines = content.split(/\r?\n/);
 
   lines.forEach((line, index) => {

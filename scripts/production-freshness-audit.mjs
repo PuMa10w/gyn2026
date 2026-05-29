@@ -1,4 +1,4 @@
-﻿import fs from 'node:fs/promises';
+import fs from 'node:fs/promises';
 
 const baseUrl = (process.env.PRODUCTION_URL || 'https://gyn-premium.pages.dev').replace(/\/$/, '');
 const expectedCommit = process.env.EXPECTED_COMMIT || process.env.CF_PAGES_COMMIT_SHA?.slice(0, 7) || '';

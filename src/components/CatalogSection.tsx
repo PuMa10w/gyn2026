@@ -196,6 +196,25 @@ const CatalogSection = React.memo(function CatalogSection({
             <span className="empty-eyebrow">{emptyState.eyebrow}</span>
             <h3>{emptyState.title}</h3>
             <p>{emptyState.description}</p>
+            {(searchTerm.trim() || activeCategory !== 'all') && (
+              <div className="empty-state-actions" aria-label="Быстрые действия поиска">
+                {searchTerm.trim() && (
+                  <button type="button" className="empty-state-action" onClick={() => setSearchTerm('')}>
+                    Очистить поиск
+                  </button>
+                )}
+                {activeCategory !== 'all' && (
+                  <button type="button" className="empty-state-action" onClick={() => setActiveCategory('all')}>
+                    Все разделы
+                  </button>
+                )}
+              </div>
+            )}
+            <ul className="empty-state-hints" aria-label="Подсказки для поиска">
+              <li>Попробуйте код МКБ, например N80 или O46.</li>
+              <li>Ищите по симптому: боль, кровотечение, зуд, беременность.</li>
+              <li>Можно использовать русское или латинское название.</li>
+            </ul>
           </motion.div>
         )}
       </section>

@@ -56,6 +56,16 @@ for (const file of files) {
     throw error;
   }
 
+  if (content.charCodeAt(0) === 0xfeff) {
+    findings.push({
+      file: path.relative(root, file),
+      line: 1,
+      match: 'utf8-bom',
+      userFacing: true,
+      snippet: 'File starts with UTF-8 BOM; remove it to avoid hidden metadata/UI regressions.',
+    });
+  }
+
   content.split(/\r?\n/).forEach((line, index) => {
     const isUserFacing = userFacingLinePattern.test(line);
     const repaired = repairText(line);

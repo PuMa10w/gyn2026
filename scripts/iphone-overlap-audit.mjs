@@ -1,4 +1,4 @@
-﻿import { chromium, devices } from 'playwright';
+import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const deviceNames = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'].filter((name) => devices[name]);

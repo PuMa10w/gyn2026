@@ -1,4 +1,4 @@
-﻿import React, { useId, useMemo } from 'react';
+import React, { useId, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 interface SearchBarProps {

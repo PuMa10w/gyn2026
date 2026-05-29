@@ -1,4 +1,4 @@
-﻿import { chromium, devices } from 'playwright';
+import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL || process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4173';
 const device = devices['iPhone 13'] ?? { viewport: { width: 390, height: 844 }, isMobile: true };
