@@ -25,7 +25,7 @@ if (!fs.existsSync('dist/index.html')) {
 console.log(`[deploy:production] Deploying fresh dist to Cloudflare Pages project "${TARGET_PROJECT}"...`);
 
 const result = spawnSync(
-  'npx.cmd',
+  process.platform === 'win32' ? 'npx.cmd' : 'npx',
   ['wrangler', 'pages', 'deploy', 'dist', '--project-name', TARGET_PROJECT],
   { stdio: 'inherit', shell: true },
 );

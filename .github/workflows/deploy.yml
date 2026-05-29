@@ -1,9 +1,9 @@
-name: Deploy to Cloudflare Pages
+name: Deploy to GYN Premium
 
 on:
   push:
     branches: [master]
-  workflow_dispatch:  # allow manual trigger
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -22,13 +22,13 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Pages project gyn-premium
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler pages deploy dist --project-name=gyn
+        run: npm run deploy:production
