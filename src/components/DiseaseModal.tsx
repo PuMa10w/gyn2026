@@ -1182,6 +1182,15 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                       {guideline.year && <p><strong>Год:</strong> {normalizeText(guideline.year)}</p>}
                       {guideline.title && <p><strong>Документ:</strong> {normalizeText(guideline.title)}</p>}
                       {guideline.documentType && <p><strong>Тип:</strong> {normalizeText(guideline.documentType)}</p>}
+                      {guideline.url && (
+                        <p>
+                          <strong>Ссылка:</strong>{' '}
+                          <a className="guideline-source-link" href={guideline.url} target="_blank" rel="noreferrer">
+                            Открыть официальный источник
+                          </a>
+                        </p>
+                      )}
+                      {guideline.accessedAt && <p><strong>Проверено:</strong> {normalizeText(guideline.accessedAt)}</p>}
                       {guideline.status && <p><strong>Статус:</strong> {normalizeText(guideline.status)}</p>}
                       {guideline.scope && <p>{normalizeText(guideline.scope)}</p>}
                     </article>

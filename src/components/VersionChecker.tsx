@@ -218,7 +218,13 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
         <span>Source stack</span>
         <div>
           {clinicalSourceStack.map((source) => (
-            <abbr key={source.id} title={source.scope}>{source.label}</abbr>
+            source.url ? (
+              <a className="version-source-link" href={source.url} target="_blank" rel="noreferrer" key={source.id}>
+                <abbr title={`${source.scope}. Проверено: ${source.accessedAt}`}>{source.label}</abbr>
+              </a>
+            ) : (
+              <abbr key={source.id} title={source.scope}>{source.label}</abbr>
+            )
           ))}
         </div>
         <small>Высокорисковые утверждения без точной сверки маркируются как требующие ревизии.</small>

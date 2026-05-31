@@ -20,6 +20,8 @@ export interface GuidelineReference {
   year?: number | string;
   title?: string;
   documentType?: string;
+  url?: string;
+  accessedAt?: string;
   scope?: string;
   status?: 'current' | 'latest available active guideline' | 'legacy' | string;
   usedFor?: string[];

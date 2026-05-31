@@ -15,6 +15,16 @@ import { repairText } from './textRepair.ts';
 
 const REVIEW_DATE = '2026-05-29';
 const REVISION_DUE = '2026-08-29';
+const SOURCE_ACCESSED_AT = '2026-05-31';
+
+const SOURCE_URLS = {
+  ACOG: 'https://www.acog.org/clinical',
+  WHO: 'https://www.who.int/health-topics/sexual-and-reproductive-health-and-rights',
+  RCOG_NICE: 'https://www.rcog.org.uk/guidance/browse-all-guidance/green-top-guidelines/',
+  GYN_STACK: 'https://www.eshre.eu/Guidelines-and-Legal/Guidelines/Endometriosis-guideline?ContensisTextOnly=true',
+  CDC_WHO: 'https://www.cdc.gov/std/treatment-guidelines/default.htm',
+  MINZDRAV: 'https://cr.minzdrav.gov.ru/',
+} as const;
 
 const clean = (value: unknown) => repairText(String(value ?? '')).replace(/\s+/g, ' ').trim();
 
@@ -38,6 +48,8 @@ const sourceStackFor = (disease: Disease): GuidelineReference[] => {
           year: '2024-2026',
           title: 'Clinical Guidance по акушерским состояниям',
           documentType: 'clinical guidance',
+          url: SOURCE_URLS.ACOG,
+          accessedAt: SOURCE_ACCESSED_AT,
           scope: 'Диагностика, маршрутизация, ведение беременности и послеродового периода.',
           status: 'latest available active guideline',
           usedFor: ['diagnosis', 'management', 'triage'],
@@ -47,6 +59,8 @@ const sourceStackFor = (disease: Disease): GuidelineReference[] => {
           year: '2024-2026',
           title: 'Sexual and reproductive health guidance',
           documentType: 'guideline',
+          url: SOURCE_URLS.WHO,
+          accessedAt: SOURCE_ACCESSED_AT,
           scope: 'Безопасная маршрутизация, материнские риски и репродуктивное здоровье.',
           status: 'latest available active guideline',
           usedFor: ['triage', 'patient counseling'],
@@ -56,6 +70,8 @@ const sourceStackFor = (disease: Disease): GuidelineReference[] => {
           year: '2024-2026',
           title: 'Green-top Guidelines и NICE maternity guidance',
           documentType: 'guideline',
+          url: SOURCE_URLS.RCOG_NICE,
+          accessedAt: SOURCE_ACCESSED_AT,
           scope: 'Акушерская тактика, осложнения беременности и критерии эскалации.',
           status: 'latest available active guideline',
           usedFor: ['management', 'follow-up'],
@@ -67,6 +83,8 @@ const sourceStackFor = (disease: Disease): GuidelineReference[] => {
           year: '2022-2026',
           title: 'Guideline stack for gynecology care',
           documentType: 'guideline',
+          url: SOURCE_URLS.GYN_STACK,
+          accessedAt: SOURCE_ACCESSED_AT,
           scope: 'Диагностика, лечение, репродуктивное планирование и контроль риска.',
           status: 'latest available active guideline',
           usedFor: ['diagnosis', 'treatment', 'follow-up'],
@@ -76,6 +94,8 @@ const sourceStackFor = (disease: Disease): GuidelineReference[] => {
           year: '2024-2026',
           title: 'Clinical Guidance по гинекологическим состояниям',
           documentType: 'clinical guidance',
+          url: SOURCE_URLS.ACOG,
+          accessedAt: SOURCE_ACCESSED_AT,
           scope: 'Клиническая маршрутизация, дифференциальный диагноз и практические ограничения.',
           status: 'latest available active guideline',
           usedFor: ['diagnosis', 'management'],
@@ -85,6 +105,8 @@ const sourceStackFor = (disease: Disease): GuidelineReference[] => {
           year: '2024-2026',
           title: 'STI and reproductive health guidance',
           documentType: 'guideline',
+          url: SOURCE_URLS.CDC_WHO,
+          accessedAt: SOURCE_ACCESSED_AT,
           scope: 'Инфекции, профилактика, консультирование и безопасные next steps.',
           status: 'latest available active guideline',
           usedFor: ['infection care', 'patient counseling'],
@@ -98,6 +120,8 @@ const sourceStackFor = (disease: Disease): GuidelineReference[] => {
       year: '2024-2026',
       title: 'Рубрикатор клинических рекомендаций',
       documentType: 'national guideline registry',
+      url: SOURCE_URLS.MINZDRAV,
+      accessedAt: SOURCE_ACCESSED_AT,
       scope: 'Локальная сверка маршрутизации, терминологии и требований к очному ведению.',
       status: 'requires source-specific review',
       usedFor: ['localization', 'source review'],

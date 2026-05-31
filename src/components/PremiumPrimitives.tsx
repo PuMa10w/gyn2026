@@ -25,6 +25,16 @@ export const PremiumBadge = ({ tone = 'neutral', className = '', children, ...pr
   </span>
 );
 
+type ClinicalBadgeProps = PremiumBadgeProps & {
+  status?: string;
+};
+
+export const ClinicalBadge = ({ status = 'neutral', className = '', children, ...props }: ClinicalBadgeProps) => (
+  <PremiumBadge className={`clinical-badge clinical-badge--${String(status).replace(/[^a-z0-9-]/gi, '-').toLowerCase()} ${className}`.trim()} {...props}>
+    {children}
+  </PremiumBadge>
+);
+
 type ClinicalCardProps = React.HTMLAttributes<HTMLElement> & {
   as?: 'article' | 'section' | 'div';
   density?: 'comfortable' | 'compact';
@@ -86,6 +96,89 @@ export const LandscapeSplitView = ({ className = '', children, ...props }: React
   <div className={`landscape-split-view ${className}`.trim()} {...props}>
     {children}
   </div>
+);
+
+type ClinicalEmptyStateAction = {
+  label: string;
+  onClick?: () => void;
+  href?: string;
+  ariaLabel?: string;
+};
+
+type ClinicalEmptyStateProps = React.HTMLAttributes<HTMLElement> & {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  hints?: string[];
+  actions?: ClinicalEmptyStateAction[];
+};
+
+export const ClinicalEmptyState = ({
+  eyebrow,
+  title,
+  description,
+  hints = [],
+  actions = [],
+  className = '',
+  ...props
+}: ClinicalEmptyStateProps) => (
+  <section className={`empty-state clinical-empty-state ${className}`.trim()} {...props}>
+    {eyebrow ? <span>{eyebrow}</span> : null}
+    <h3>{title}</h3>
+    {description ? <p>{description}</p> : null}
+    {hints.length > 0 ? (
+      <ul className="empty-state-hints">
+        {hints.map((hint) => (
+          <li key={hint}>{hint}</li>
+        ))}
+      </ul>
+    ) : null}
+    {actions.length > 0 ? (
+      <div className="empty-state-actions">
+        {actions.map((action) =>
+          action.href ? (
+            <a className="empty-state-action" href={action.href} aria-label={action.ariaLabel} key={action.label}>
+              {action.label}
+            </a>
+          ) : (
+            <button className="empty-state-action" type="button" onClick={action.onClick} aria-label={action.ariaLabel} key={action.label}>
+              {action.label}
+            </button>
+          ),
+        )}
+      </div>
+    ) : null}
+  </section>
+);
+
+type ClinicalErrorStateProps = React.HTMLAttributes<HTMLElement> & {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  actionLabel?: string;
+  onAction?: () => void;
+};
+
+export const ClinicalErrorState = ({
+  eyebrow,
+  title,
+  description,
+  actionLabel,
+  onAction,
+  className = '',
+  role = 'alert',
+  ...props
+}: ClinicalErrorStateProps) => (
+  <section className={`catalog-status clinical-error-state ${className}`.trim()} role={role} {...props}>
+    {eyebrow ? <span>{eyebrow}</span> : null}
+    <h3>{title}</h3>
+    {description ? <p>{description}</p> : null}
+    {actionLabel && onAction ? (
+      <button className="empty-state-action" type="button" onClick={onAction}>
+        {actionLabel}
+      </button>
+    ) : null}
+  </section>
 );
 
 type SourceBadgeProps = {
