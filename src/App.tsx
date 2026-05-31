@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import './styles/design-tokens.css';
@@ -24,6 +24,7 @@ import { useHistory } from './hooks/useHistory';
 import { useToast } from './components/ToastSystem';
 import { emptyStateContent, homeActions, sectionMeta } from './config/appContent';
 import { isObstetricsLabel, repairText } from './utils/textRepair';
+import { getActiveModalName, getActiveModalCount } from './utils/modalStackController';
 import type { CategoryId, Disease, TabType } from './types';
 
 const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.0.0';
@@ -104,6 +105,7 @@ function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isOnline, setIsOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
   const [isMobileViewport, setIsMobileViewport] = useState(() => (typeof window === 'undefined' ? false : window.innerWidth <= 768));
+  const catalogScrollRef = useRef(0);
   const prefersReducedMotion = useReducedMotion();
 
   const { theme, toggleTheme } = useTheme();
@@ -135,7 +137,16 @@ function App() {
     : showHistory
       ? emptyStateContent.history
       : emptyStateContent.search;
-  const hasActiveModal = Boolean(selectedItem || showQuestionnaire || showPharmacology);
+  const modalStack = useMemo(
+    () => ({
+      disease: Boolean(selectedItem),
+      questionnaire: showQuestionnaire,
+      pharmacology: showPharmacology,
+    }),
+    [selectedItem, showQuestionnaire, showPharmacology],
+  );
+  const activeModalName = getActiveModalName(modalStack);
+  const hasActiveModal = activeModalName !== null;
 
   useEffect(() => {
     let frameId = 0;
@@ -189,11 +200,35 @@ function App() {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
 
+  const rememberCatalogScroll = useCallback(() => {
+    catalogScrollRef.current = window.scrollY;
+  }, []);
+
+  const restoreCatalogScroll = useCallback(() => {
+    const target = catalogScrollRef.current;
+    const restore = () => window.scrollTo({ top: target, behavior: 'auto' });
+    window.requestAnimationFrame(restore);
+    window.setTimeout(restore, 0);
+    window.setTimeout(restore, 80);
+  }, []);
+
+  useEffect(() => {
+    const activeCount = getActiveModalCount(modalStack);
+    if (activeCount > 1) {
+      console.warn('[GYN] Modal stack invariant recovered: more than one modal requested.', modalStack);
+    }
+  }, [modalStack]);
+
   const closeModalStack = useCallback(() => {
     setSelectedItem(null);
     setShowQuestionnaire(false);
     setShowPharmacology(false);
   }, []);
+
+  const closeDiseaseModal = useCallback(() => {
+    setSelectedItem(null);
+    restoreCatalogScroll();
+  }, [restoreCatalogScroll]);
 
   const openQuestionnaire = useCallback(() => {
     setSelectedItem(null);
@@ -242,6 +277,7 @@ function App() {
   };
 
   const handleItemClick = (item: Disease) => {
+    rememberCatalogScroll();
     setShowQuestionnaire(false);
     setShowPharmacology(false);
     setSelectedItem(item);
@@ -404,13 +440,13 @@ function App() {
         </main>
 
         <Suspense fallback={<LoadingSpinner prefersReducedMotion={prefersReducedMotion} />}>
-          {selectedItem && (
-            <ModalErrorBoundary title="Карточка нозологии" onClose={() => setSelectedItem(null)}>
-              <DiseaseModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+          {activeModalName === 'disease' && selectedItem && (
+            <ModalErrorBoundary title="Карточка нозологии" onClose={closeDiseaseModal}>
+              <DiseaseModal item={selectedItem} onClose={closeDiseaseModal} />
             </ModalErrorBoundary>
           )}
-          {showQuestionnaire && <Questionnaire onClose={() => setShowQuestionnaire(false)} />}
-          {showPharmacology && <PharmacologyModal onClose={() => setShowPharmacology(false)} />}
+          {activeModalName === 'questionnaire' && <Questionnaire onClose={() => setShowQuestionnaire(false)} />}
+          {activeModalName === 'pharmacology' && <PharmacologyModal onClose={() => setShowPharmacology(false)} />}
         </Suspense>
 
         {/* Mobile Bottom Bar */}
