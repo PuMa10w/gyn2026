@@ -136,6 +136,37 @@ const COMMANDS: WorkbenchCommand[] = [
 
 const normalize = (value: string) => value.toLowerCase().replace(/ё/g, 'е');
 
+const freeSearchCommand = (query: string): WorkbenchCommand => ({
+  id: 'free-search',
+  label: query || 'Поиск',
+  description: 'Поиск по каталогу гинекологии',
+  query,
+  route: 'gynecology',
+  category: 'all',
+  badge: 'Поиск',
+  keywords: [],
+});
+
+const pharmaCommand = COMMANDS.find((command) => command.id === 'pharma') ?? {
+  id: 'pharma',
+  label: 'Фармакология',
+  description: 'Сценарии, first-line, беременность, лактация, взаимодействия и схемы',
+  query: 'фармакология препараты схемы',
+  route: 'pharmacology' as const,
+  badge: 'Препараты',
+  keywords: ['фарма', 'препарат', 'лекарство'],
+};
+
+const questionnairesCommand = COMMANDS.find((command) => command.id === 'questionnaires') ?? {
+  id: 'questionnaires',
+  label: 'Опросники',
+  description: 'Клинические шкалы, результат и next steps',
+  query: 'опросники шкалы',
+  route: 'questionnaires' as const,
+  badge: 'Шкалы',
+  keywords: ['опросники', 'шкалы'],
+};
+
 interface CommandSearchProps {
   onCommand: (command: WorkbenchCommand) => void;
 }
@@ -180,18 +211,14 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
       .slice(0, 6);
   }, [query]);
 
+  const trimmedQuery = query.trim();
+  const hasQuery = normalize(trimmedQuery).length >= 2;
+  const hasNoSuggestions = hasQuery && suggestions.length === 0;
+  const fallbackSearchCommand = useMemo(() => freeSearchCommand(trimmedQuery), [trimmedQuery]);
+
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
-    const selected = suggestions[0] ?? {
-      id: 'free-search',
-      label: query.trim() || 'Поиск',
-      description: 'Поиск по каталогу гинекологии',
-      query: query.trim(),
-      route: 'gynecology' as const,
-      category: 'all' as const,
-      badge: 'Поиск',
-      keywords: [],
-    };
+    const selected = suggestions[0] ?? fallbackSearchCommand;
     onCommand(selected);
   };
 
@@ -230,7 +257,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
         </button>
       </form>
 
-      <div className="workbench-command-results" aria-label="Быстрые клинические маршруты">
+      <div className="workbench-command-results" aria-label="Быстрые клинические маршруты" aria-live="polite">
         {suggestions.map((command) => (
           <button key={command.id} type="button" className="workbench-command-card" onClick={() => onCommand(command)}>
             <span className="workbench-command-badge">{command.badge}</span>
@@ -238,6 +265,24 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
             <small>{command.description}</small>
           </button>
         ))}
+        {hasNoSuggestions && (
+          <div className="workbench-command-empty" role="status">
+            <span className="workbench-command-badge">Нет точного совпадения</span>
+            <h4>Продолжить клинический поиск?</h4>
+            <p>Попробуйте код МКБ, симптом, латинское название или перейдите сразу в фарму/шкалы.</p>
+            <div className="workbench-command-empty-actions">
+              <button type="button" onClick={() => onCommand(fallbackSearchCommand)}>
+                Искать в каталоге
+              </button>
+              <button type="button" onClick={() => onCommand(pharmaCommand)}>
+                Фарма
+              </button>
+              <button type="button" onClick={() => onCommand(questionnairesCommand)}>
+                Шкалы
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </motion.section>
   );
