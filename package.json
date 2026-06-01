@@ -78,6 +78,7 @@
     "audit:clinical-source-dates": "node scripts/clinical-source-dates-audit.mjs",
     "audit:touch-targets": "node scripts/touch-targets-audit.mjs",
     "audit:css-debt": "node scripts/css-debt-audit.mjs",
+    "audit:manual:visual-checklist": "node scripts/manual-visual-checklist.mjs",
     "audit:production:freshness": "node scripts/production-freshness-audit.mjs",
     "deploy:production": "node scripts/deploy-production-guard.mjs"
   },

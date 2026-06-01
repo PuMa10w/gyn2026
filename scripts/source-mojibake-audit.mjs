@@ -5,7 +5,7 @@ import { repairText } from '../src/utils/textRepair.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scanRoots = ['src', 'public', 'scripts'];
-const rootFiles = ['index.html', 'package.json', 'package-lock.json', 'vite.config.js', 'vite.config.ts'];
+const rootFiles = ['README.md', 'index.html', 'package.json', 'package-lock.json', 'vite.config.js', 'vite.config.ts'];
 const allowedFiles = new Set([
   path.join(root, 'src', 'utils', 'textRepair.ts'),
   path.join(root, 'scripts', 'source-mojibake-audit.mjs'),

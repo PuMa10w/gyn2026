@@ -10,6 +10,7 @@ const cssFiles = [
   'src/premium-unified.css',
   'src/styles/ultra-premium-v9.css',
   'src/styles/clinical-worktool.css',
+  'src/styles/v1-premium-polish.css',
 ];
 
 const budgets = {

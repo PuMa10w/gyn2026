@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url';
 import { repairText } from '../src/utils/textRepair.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const scanRoots = ['src', 'public'];
-const rootFiles = ['index.html', 'vite.config.js', 'vite.config.ts', 'package.json'];
+const scanRoots = ['src', 'public', 'scripts'];
+const rootFiles = ['README.md', 'index.html', 'vite.config.js', 'vite.config.ts', 'package.json'];
 const textExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.json', '.html', '.css', '.md', '.mjs', '.cjs']);
 const allowedFiles = new Set([
   path.join(root, 'src', 'utils', 'textRepair.ts'),

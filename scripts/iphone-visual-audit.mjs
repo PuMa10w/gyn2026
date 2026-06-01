@@ -51,6 +51,36 @@ const openOverflowAction = async (page, actionPattern, label) => {
   await clickVisibleButton(page, actionPattern, label);
 };
 
+const resetPage = async (page, suffix) => {
+  await page.keyboard.press('Escape').catch(() => undefined);
+  await page.goto(`${baseUrl}/?visual=${Date.now()}-${suffix}`, { waitUntil: 'domcontentloaded' });
+  await forceTheme(page, 'light');
+};
+
+const forceTheme = async (page, theme) => {
+  await page.evaluate((nextTheme) => {
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    document.body.setAttribute('data-theme', nextTheme);
+    localStorage.setItem('gyn-theme', nextTheme);
+  }, theme);
+};
+
+const openCatalog = async (page) => {
+  await clickVisibleButton(page, /Гинекология/i, 'catalog-navigation');
+  await page.locator('.disease-card').first().waitFor({ state: 'visible' });
+};
+
+const openDiseaseModal = async (page) => {
+  await openCatalog(page);
+  await page.locator('.disease-card-action, .disease-card').first().click();
+  await page.getByTestId('disease-modal').waitFor({ state: 'visible' });
+};
+
+const openDiseaseTab = async (page, tabName) => {
+  await page.getByRole('tab', { name: tabName }).click();
+  await page.waitForTimeout(180);
+};
+
 const flows = [
   { name: 'home', threshold: 0.08, run: async (page) => page.locator('.home-shell').waitFor({ state: 'visible' }) },
   {
@@ -64,18 +94,47 @@ const flows = [
   {
     name: 'disease-modal',
     threshold: 0.045,
+    reset: async (page) => resetPage(page, 'disease-modal'),
     run: async (page) => {
-      await page.locator('.disease-card-action, .disease-card').first().click();
-      await page.getByTestId('disease-modal').waitFor({ state: 'visible' });
-      await page.getByRole('tab', { name: 'Диагностика' }).click();
+      await openDiseaseModal(page);
+      await openDiseaseTab(page, 'Диагностика');
+    },
+  },
+  {
+    name: 'clinical-tool-ai',
+    threshold: 0.06,
+    reset: async (page) => resetPage(page, 'clinical-tool-ai'),
+    run: async (page) => {
+      await openDiseaseModal(page);
+      await openDiseaseTab(page, 'AI помощник');
+      await page.locator('.clinical-template-assistant').waitFor({ state: 'visible' });
+    },
+  },
+  {
+    name: 'clinical-tool-3d',
+    threshold: 0.065,
+    reset: async (page) => resetPage(page, 'clinical-tool-3d'),
+    run: async (page) => {
+      await openDiseaseModal(page);
+      await openDiseaseTab(page, '3D атлас');
+      await page.locator('.anatomy-atlas-shell').waitFor({ state: 'visible' });
+    },
+  },
+  {
+    name: 'clinical-tool-pubmed',
+    threshold: 0.06,
+    reset: async (page) => resetPage(page, 'clinical-tool-pubmed'),
+    run: async (page) => {
+      await openDiseaseModal(page);
+      await openDiseaseTab(page, 'PubMed');
+      await page.locator('.pubmed-feed').waitFor({ state: 'visible' });
     },
   },
   {
     name: 'questionnaire',
     threshold: 0.055,
     reset: async (page) => {
-      await page.keyboard.press('Escape').catch(() => undefined);
-      await page.goto(`${baseUrl}/?visual=${Date.now()}-questionnaire`, { waitUntil: 'domcontentloaded' });
+      await resetPage(page, 'questionnaire');
     },
     run: async (page) => {
       await openOverflowAction(page, /Шкалы|Опросники/i, 'questionnaire-navigation');
@@ -86,12 +145,40 @@ const flows = [
     name: 'pharmacology',
     threshold: 0.055,
     reset: async (page) => {
-      await page.keyboard.press('Escape').catch(() => undefined);
-      await page.goto(`${baseUrl}/?visual=${Date.now()}-pharma`, { waitUntil: 'domcontentloaded' });
+      await resetPage(page, 'pharma');
     },
     run: async (page) => {
       await openOverflowAction(page, /Фарма|Фармакология/i, 'pharmacology-navigation');
       await page.locator('.pharmacology-modal').waitFor({ state: 'visible' });
+    },
+  },
+  {
+    name: 'bookmarks-history',
+    threshold: 0.06,
+    reset: async (page) => resetPage(page, 'bookmarks-history'),
+    run: async (page) => {
+      await page.locator('.mobile-bottom-bar').waitFor({ state: 'visible', timeout: 8000 }).catch(() => undefined);
+      await clickVisibleButton(page, /Закладки|Избранное/i, 'bookmarks-navigation');
+      await page.waitForTimeout(260);
+    },
+  },
+  {
+    name: 'dark-home',
+    threshold: 0.08,
+    reset: async (page) => resetPage(page, 'dark-home'),
+    run: async (page) => {
+      await forceTheme(page, 'dark');
+      await page.locator('.home-shell').waitFor({ state: 'visible' });
+    },
+  },
+  {
+    name: 'dark-disease-modal',
+    threshold: 0.065,
+    reset: async (page) => resetPage(page, 'dark-disease-modal'),
+    run: async (page) => {
+      await forceTheme(page, 'dark');
+      await openDiseaseModal(page);
+      await openDiseaseTab(page, 'Лечение');
     },
   },
 ];

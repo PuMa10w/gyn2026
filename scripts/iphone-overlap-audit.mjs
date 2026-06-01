@@ -9,6 +9,24 @@ const browser = await chromium.launch({
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const assertOneActiveLayer = async (page, label) => {
+  const layers = await page.evaluate(() => {
+    const selectors = ['[data-testid="disease-modal"]', '.questionnaire-modal', '.pharmacology-modal'];
+    return selectors
+      .flatMap((selector) => Array.from(document.querySelectorAll(selector)))
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return rect.width > 10 && rect.height > 10 && style.display !== 'none' && style.visibility !== 'hidden';
+      })
+      .map((element) => element.className || element.getAttribute('data-testid') || element.tagName);
+  });
+
+  if (layers.length > 1) {
+    throw new Error(`${label}: multiple active overlays detected ${JSON.stringify(layers)}`);
+  }
+};
+
 const assertNoOverlap = async (page, label) => {
   const result = await page.evaluate(() => {
     const viewportHeight = window.innerHeight;
@@ -92,6 +110,28 @@ const clickButton = async (page, name) => {
   if (!clicked) throw new Error(`Button not found: ${String(name)}`);
 };
 
+const openToolTab = async (page, name, selector, label) => {
+  await page.getByRole('tab', { name }).click();
+  await page.locator(selector).waitFor({ state: 'visible', timeout: 10000 });
+  await sleep(350);
+  await assertOneActiveLayer(page, label);
+  await assertNoOverlap(page, label);
+  await page.locator('.modal-body').evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+  });
+  await sleep(120);
+  await assertNoOverlap(page, `${label} bottom`);
+};
+
+const forceTheme = async (page, theme) => {
+  await page.evaluate((nextTheme) => {
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    document.body.setAttribute('data-theme', nextTheme);
+    localStorage.setItem('gyn-theme', nextTheme);
+  }, theme);
+  await sleep(150);
+};
+
 for (const deviceName of deviceNames) {
   const page = await browser.newPage(devices[deviceName]);
   await page.goto(`${baseUrl}/?overlapAudit=${Date.now()}`, { waitUntil: 'domcontentloaded' });
@@ -107,15 +147,26 @@ for (const deviceName of deviceNames) {
   await page.locator('.category-filter').first().scrollIntoViewIfNeeded();
   await assertNoOverlap(page, `${deviceName} catalog chips`);
 
+  const searchInput = page.locator('input[type="search"], input[placeholder*="МКБ"], input[placeholder*="Нозолог"]').first();
+  if (await searchInput.isVisible().catch(() => false)) {
+    await searchInput.fill('эндометриоз');
+    await sleep(300);
+    await assertNoOverlap(page, `${deviceName} catalog search keyboard`);
+  }
+
   await page.locator('.disease-card').first().click();
   await page.getByTestId('disease-modal').waitFor({ state: 'visible', timeout: 8000 });
   await sleep(500);
+  await assertOneActiveLayer(page, `${deviceName} disease modal layer`);
   await assertNoOverlap(page, `${deviceName} disease modal top`);
   await page.getByRole('tab', { name: 'УЗИ' }).click();
   await page.locator('.modal-body').evaluate((element) => {
     element.scrollTop = element.scrollHeight;
   });
   await assertNoOverlap(page, `${deviceName} disease modal bottom`);
+  await openToolTab(page, 'AI помощник', '.clinical-template-assistant', `${deviceName} AI helper`);
+  await openToolTab(page, '3D атлас', '.anatomy-atlas-shell', `${deviceName} 3D atlas`);
+  await openToolTab(page, 'PubMed', '.pubmed-feed', `${deviceName} PubMed`);
   await page.locator('.modal-close').first().click();
   await page.locator('.modal-content').first().waitFor({ state: 'hidden', timeout: 8000 }).catch(() => undefined);
 
@@ -124,10 +175,15 @@ for (const deviceName of deviceNames) {
   await clickButton(page, /Открыть быстрые действия/i);
   await clickButton(page, /Шкалы/i);
   await page.locator('.questionnaire-modal').waitFor({ state: 'visible', timeout: 8000 });
+  await assertOneActiveLayer(page, `${deviceName} questionnaire layer`);
   await assertNoOverlap(page, `${deviceName} questionnaire list`);
   await page.locator('.q-card').first().click();
   await page.locator('.q-question').waitFor({ state: 'visible', timeout: 8000 });
   await assertNoOverlap(page, `${deviceName} questionnaire question`);
+  await page.locator('.questionnaire-modal').evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+  });
+  await assertNoOverlap(page, `${deviceName} questionnaire bottom`);
   await page.locator('.modal-close').first().click();
   await page.locator('.questionnaire-modal').first().waitFor({ state: 'hidden', timeout: 8000 }).catch(() => undefined);
 
@@ -136,7 +192,18 @@ for (const deviceName of deviceNames) {
   await clickButton(page, /Открыть быстрые действия/i);
   await clickButton(page, /Фарма/i);
   await page.locator('.pharmacology-modal').waitFor({ state: 'visible', timeout: 8000 });
+  await assertOneActiveLayer(page, `${deviceName} pharmacology layer`);
   await assertNoOverlap(page, `${deviceName} pharmacology`);
+
+  await page.goto(`${baseUrl}/?overlapAuditDark=${Date.now()}`, { waitUntil: 'domcontentloaded' });
+  await forceTheme(page, 'dark');
+  await assertNoOverlap(page, `${deviceName} dark home`);
+  await clickButton(page, 'Гинекология');
+  await page.locator('.disease-card').first().waitFor({ state: 'visible', timeout: 8000 });
+  await page.locator('.disease-card').first().click();
+  await page.getByTestId('disease-modal').waitFor({ state: 'visible', timeout: 8000 });
+  await assertOneActiveLayer(page, `${deviceName} dark disease modal layer`);
+  await assertNoOverlap(page, `${deviceName} dark disease modal`);
   await page.close();
 }
 

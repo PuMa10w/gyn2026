@@ -21,6 +21,7 @@ const preServerSteps = [
   ['bundle budget', npmCmd, ['run', 'audit:bundle:budget']],
   ['PWA freshness', npmCmd, ['run', 'audit:pwa:freshness']],
   ['static security', npmCmd, ['run', 'audit:security:static']],
+  ['manual visual checklist artifact', npmCmd, ['run', 'audit:manual:visual-checklist']],
 ];
 
 const browserSteps = [
