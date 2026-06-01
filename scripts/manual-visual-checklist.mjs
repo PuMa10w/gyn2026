@@ -3,9 +3,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const devices = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'];
+const devices = ['iPhone SE', 'iPhone 12', 'iPhone 13', 'iPhone 15 Pro', 'iPhone 15 Pro Max'];
 const orientations = ['portrait', 'landscape'];
 const themes = ['light', 'dark'];
+const passes = ['pass-1', 'pass-2'];
 const screens = [
   'home',
   'pwa-update-panel',
@@ -35,17 +36,20 @@ const criteria = [
   'visual-consistency',
 ];
 
-const matrix = devices.flatMap((device) =>
-  orientations.flatMap((orientation) =>
-    themes.flatMap((theme) =>
-      screens.map((screen) => ({
-        device,
-        orientation,
-        theme,
-        screen,
-        status: 'pending-manual-review',
-        criteria: Object.fromEntries(criteria.map((item) => [item, 'pending'])),
-      })),
+const matrix = passes.flatMap((pass) =>
+  devices.flatMap((device) =>
+    orientations.flatMap((orientation) =>
+      themes.flatMap((theme) =>
+        screens.map((screen) => ({
+          pass,
+          device,
+          orientation,
+          theme,
+          screen,
+          status: 'pending-manual-review',
+          criteria: Object.fromEntries(criteria.map((item) => [item, 'pending'])),
+        })),
+      ),
     ),
   ),
 );
@@ -57,6 +61,7 @@ const report = {
   releaseLine: 'v1.x',
   note: 'Manual release artifact: before production deploy, mark each pending item pass/fail during the final human visual pass.',
   totals: {
+    passes: passes.length,
     devices: devices.length,
     orientations: orientations.length,
     themes: themes.length,

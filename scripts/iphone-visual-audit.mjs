@@ -10,7 +10,7 @@ try {
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const update = process.argv.includes('--update');
-const deviceNames = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
+const deviceNames = ['iPhone SE', 'iPhone 12', 'iPhone 13', 'iPhone 15 Pro', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
 const outDir = path.join('artifacts', 'iphone-visual-current');
 const goldenDir = path.join('artifacts', 'iphone-visual-golden');
 
@@ -84,10 +84,27 @@ const openDiseaseTab = async (page, tabName) => {
 const flows = [
   { name: 'home', threshold: 0.08, run: async (page) => page.locator('.home-shell').waitFor({ state: 'visible' }) },
   {
+    name: 'pwa-update-panel',
+    threshold: 0.07,
+    run: async (page) => {
+      await page.locator('.version-checker').scrollIntoViewIfNeeded();
+      await page.locator('.version-checker').waitFor({ state: 'visible' });
+    },
+  },
+  {
     name: 'catalog',
     threshold: 0.07,
     run: async (page) => {
       await clickVisibleButton(page, /Гинекология/i, 'catalog-navigation');
+      await page.locator('.disease-card').first().waitFor({ state: 'visible' });
+    },
+  },
+  {
+    name: 'obstetrics',
+    threshold: 0.07,
+    reset: async (page) => resetPage(page, 'obstetrics'),
+    run: async (page) => {
+      await clickVisibleButton(page, /Акушерство/i, 'obstetrics-navigation');
       await page.locator('.disease-card').first().waitFor({ state: 'visible' });
     },
   },
@@ -169,6 +186,15 @@ const flows = [
     run: async (page) => {
       await forceTheme(page, 'dark');
       await page.locator('.home-shell').waitFor({ state: 'visible' });
+    },
+  },
+  {
+    name: 'dark-catalog',
+    threshold: 0.075,
+    reset: async (page) => resetPage(page, 'dark-catalog'),
+    run: async (page) => {
+      await forceTheme(page, 'dark');
+      await openCatalog(page);
     },
   },
   {

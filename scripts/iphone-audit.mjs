@@ -24,7 +24,7 @@ const assertNoHorizontalOverflow = async (page, label) => {
     const doc = document.documentElement;
     const width = doc.clientWidth;
     const allowedHorizontalScroller = (el) =>
-      Boolean(el.closest('.category-filter, .category-chips, .search-suggestions, .modal-tabs, .pharma-tabs, .modal-quick-meta, .q-severity-bar'));
+      Boolean(el.closest('.category-filter, .category-chips, .catalog-sort-options, .search-suggestions, .modal-tabs, .pharma-tabs, .modal-quick-meta, .q-severity-bar'));
     const offenders = [...document.querySelectorAll('body *')]
       .filter((el) => !allowedHorizontalScroller(el))
       .map((el) => {
