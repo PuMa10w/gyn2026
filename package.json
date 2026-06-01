@@ -1,6 +1,6 @@
 {
-  "name": "gyn",
-  "version": "0.1.0",
+  "name": "gyn-clinical",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "dependencies": {

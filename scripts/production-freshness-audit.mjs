@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 
-const baseUrl = (process.env.PRODUCTION_URL || 'https://gyn-premium.pages.dev').replace(/\/$/, '');
+const baseUrl = (process.env.PRODUCTION_URL || 'https://gyn-clinical.pages.dev').replace(/\/$/, '');
 const expectedCommit = process.env.EXPECTED_COMMIT || process.env.CF_PAGES_COMMIT_SHA?.slice(0, 7) || '';
 const findings = [];
 
@@ -71,7 +71,9 @@ for (const path of ['/sw.js', '/registerSW.js', '/manifest.webmanifest']) {
   if (path === '/manifest.webmanifest') {
     try {
       const manifest = JSON.parse(text);
-      if (!/гинеколог|акушер/i.test(manifest.description || '')) {
+      const manifestDescription = manifest.description || '';
+      const hasClinicalMetadata = /(?:\u0433\u0438\u043d\u0435\u043a\u043e\u043b\u043e\u0433|\u0430\u043a\u0443\u0448\u0435\u0440)/i.test(manifestDescription);
+      if (!hasClinicalMetadata) {
         addFinding('manifest metadata', manifest.description || '<missing>');
       }
     } catch {

@@ -29,7 +29,7 @@ export default defineConfig({
       manifest: {
         name: 'GYN - клинический справочник',
         short_name: 'GYN',
-        description: 'Премиальный клинический справочник по гинекологии и акушерству',
+        description: 'Профессиональный клинический справочник по гинекологии и акушерству',
         theme_color: '#8d616c',
         background_color: '#fdf2f5',
         display: 'standalone',

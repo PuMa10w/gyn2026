@@ -1,4 +1,4 @@
-name: Deploy to GYN Premium
+name: Deploy to GYN Clinical
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages project gyn-premium
+      - name: Deploy to Cloudflare Pages project gyn-clinical
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

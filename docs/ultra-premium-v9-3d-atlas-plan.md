@@ -4,7 +4,7 @@
 Довести GYN до ultra premium iPhone-first PWA: убрать абракадабру, стабилизировать CSS, сделать все разделы читаемыми, усилить DiseaseModal, фарму, опросники и заменить слабый 3D-модуль полноценным интерактивным атласом женской анатомии.
 
 ## Базовые правила
-- Production: `master` -> Cloudflare Pages project `gynecology` -> `https://gynecology.pages.dev`.
+- Production: `master` -> Cloudflare Pages project `gyn-clinical` -> `https://gyn-clinical.pages.dev`.
 - Основной язык интерфейса: русский.
 - Визуальный стиль: strict peach/beige/rose/champagne с cocoa-контрастом.
 - QR не возвращается.
@@ -35,4 +35,4 @@
 - Фарма не пустая, препараты видны, поиск работает.
 - DiseaseModal открывается сверху, вкладки читаются и скроллятся.
 - 3D-атлас не пустой, работает rotate/zoom/reset/hotspot, есть WebGL fallback.
-- `gynecology.pages.dev` показывает свежую production-сборку.
+- `gyn-clinical.pages.dev` показывает свежую production-сборку.

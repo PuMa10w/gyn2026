@@ -2,6 +2,8 @@
 
 ## Summary
 
+Archive note: this plan predates the clean launch. New production deploys must use Cloudflare Pages project `gyn-clinical` and domain `https://gyn-clinical.pages.dev`.
+
 Goal: turn GYNA into a premium clinical PWA that is trusted, readable, fast, iPhone-first, and guarded by automated checks before deploy.
 
 Premium means:
@@ -48,8 +50,8 @@ Premium means:
 - `npm run preview -- --host 127.0.0.1 --port 4173`
 - `npm run audit:iphone`
 - `npm run audit:a11y`
-- `npx wrangler pages deploy dist --project-name gyn`
-- `npx wrangler pages deployment list --project-name gyn`
+- `npm run deploy:production`
+- `npx wrangler pages deployment list --project-name gyn-clinical`
 
 ## Acceptance Criteria
 
