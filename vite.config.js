@@ -27,7 +27,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'logo192.png', 'logo512.png'],
       manifest: {
-        name: 'GYN - клинический справочник',
+        name: 'GYN Clinical - клинический справочник',
         short_name: 'GYN',
         description: 'Профессиональный клинический справочник по гинекологии и акушерству',
         theme_color: '#8d616c',
