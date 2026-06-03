@@ -145,10 +145,33 @@ const findDuplicateCandidates = (items) =>
     .slice(0, 40);
 
 const essentialThreshold = 80;
+const ratchetBaselines = {
+  essentialComplete: 1261,
+  premiumComplete: 1,
+  rawTop150Complete: 1,
+  sourceAwareTop150Complete: 150,
+};
+
+const ratchetFailures = [
+  essentialCoverage.complete < ratchetBaselines.essentialComplete
+    ? `essentialComplete: ${essentialCoverage.complete} < ${ratchetBaselines.essentialComplete}`
+    : null,
+  premiumCoverage.complete < ratchetBaselines.premiumComplete
+    ? `premiumComplete: ${premiumCoverage.complete} < ${ratchetBaselines.premiumComplete}`
+    : null,
+  topCoverage.complete < ratchetBaselines.rawTop150Complete
+    ? `rawTop150Complete: ${topCoverage.complete} < ${ratchetBaselines.rawTop150Complete}`
+    : null,
+  sourceAwareTopCoverage.complete < ratchetBaselines.sourceAwareTop150Complete
+    ? `sourceAwareTop150Complete: ${sourceAwareTopCoverage.complete} < ${ratchetBaselines.sourceAwareTop150Complete}`
+    : null,
+].filter(Boolean);
+
 const criticalFailures = [
   ...Object.entries(essentialCoverage.fields)
     .filter(([, value]) => value.percent < essentialThreshold)
     .map(([field, value]) => `${field}: ${value.percent}% < ${essentialThreshold}%`),
+  ...ratchetFailures,
 ];
 
 const report = {
@@ -156,6 +179,7 @@ const report = {
   generatedAt: new Date().toISOString(),
   note: 'This report separates raw chunk coverage from conservative source-aware editorial overlay coverage. Runtime enrichment remains a safety net, not a substitute for verified clinical source review.',
   essentialThreshold,
+  ratchetBaselines,
   totals: {
     allDiseases: all.length,
     prioritySample: top150.length,

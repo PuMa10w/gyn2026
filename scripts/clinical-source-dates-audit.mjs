@@ -52,14 +52,41 @@ const auditItems = (items, label) => {
 const [gyn, obs] = await Promise.all([importChunks('gynChunks'), importChunks('obsChunks')]);
 const diseaseItems = [...gyn, ...obs].filter((item) => item?.name);
 const sourceAwareDiseaseItems = diseaseItems.map((item) => applyClinicalSourceOverlay(item));
+const diseaseAudit = auditItems(diseaseItems, 'diseases');
+const sourceAwareDiseaseAudit = auditItems(sourceAwareDiseaseItems, 'source-aware diseases');
+const medicationAudit = auditItems(medications, 'medications');
+const questionnaireAudit = auditItems(questionnaires, 'questionnaires');
+const ratchetBaselines = {
+  rawDiseasesWithLastReviewed: 18,
+  sourceAwareDiseasesWithLastReviewed: 1533,
+  medicationsWithLastReviewed: 566,
+  questionnairesWithLastReviewed: 19,
+};
+const ratchetFailures = [
+  diseaseAudit.withLastReviewed < ratchetBaselines.rawDiseasesWithLastReviewed
+    ? `rawDiseasesWithLastReviewed: ${diseaseAudit.withLastReviewed} < ${ratchetBaselines.rawDiseasesWithLastReviewed}`
+    : null,
+  sourceAwareDiseaseAudit.withLastReviewed < ratchetBaselines.sourceAwareDiseasesWithLastReviewed
+    ? `sourceAwareDiseasesWithLastReviewed: ${sourceAwareDiseaseAudit.withLastReviewed} < ${ratchetBaselines.sourceAwareDiseasesWithLastReviewed}`
+    : null,
+  medicationAudit.withLastReviewed < ratchetBaselines.medicationsWithLastReviewed
+    ? `medicationsWithLastReviewed: ${medicationAudit.withLastReviewed} < ${ratchetBaselines.medicationsWithLastReviewed}`
+    : null,
+  questionnaireAudit.withLastReviewed < ratchetBaselines.questionnairesWithLastReviewed
+    ? `questionnairesWithLastReviewed: ${questionnaireAudit.withLastReviewed} < ${ratchetBaselines.questionnairesWithLastReviewed}`
+    : null,
+].filter(Boolean);
+
 const report = {
-  ok: medications.every((item) => parseYear(item.lastReviewed)) && questionnaires.every((item) => parseYear(item.lastReviewed)),
+  ok: medicationAudit.missingCount === 0 && questionnaireAudit.missingCount === 0 && ratchetFailures.length === 0,
   generatedAt: new Date().toISOString(),
   currentYear,
-  diseases: auditItems(diseaseItems, 'diseases'),
-  sourceAwareDiseases: auditItems(sourceAwareDiseaseItems, 'source-aware diseases'),
-  medications: auditItems(medications, 'medications'),
-  questionnaires: auditItems(questionnaires, 'questionnaires'),
+  ratchetBaselines,
+  ratchetFailures,
+  diseases: diseaseAudit,
+  sourceAwareDiseases: sourceAwareDiseaseAudit,
+  medications: medicationAudit,
+  questionnaires: questionnaireAudit,
 };
 
 await fs.mkdir(path.join(root, 'artifacts'), { recursive: true });
@@ -89,6 +116,7 @@ console.log(JSON.stringify({
     missingCount: report.questionnaires.missingCount,
     staleCount: report.questionnaires.staleCount,
   },
+  ratchetFailures: report.ratchetFailures,
   artifact: 'artifacts/clinical-source-dates-audit.json',
 }, null, 2));
 
