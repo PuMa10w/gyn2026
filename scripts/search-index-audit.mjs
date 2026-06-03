@@ -39,22 +39,43 @@ const collectStrings = (value, result = []) => {
   return result;
 };
 
+const scopeDiseaseDocs = (items, scope) => {
+  const seen = new Map();
+
+  return items.map((item) => {
+    const baseId = String(item.id || item.name || item.icd).trim().replace(/\s+/g, '-');
+    const duplicateIndex = seen.get(baseId) ?? 0;
+    seen.set(baseId, duplicateIndex + 1);
+
+    const scopedCanonicalId = `${baseId}__${scope}`;
+    const scopedId = duplicateIndex === 0 ? scopedCanonicalId : `${baseId}-${duplicateIndex + 1}__${scope}`;
+    const title = repairText(item.name);
+    const icd = repairText(item.icd);
+
+    return {
+      type: 'disease',
+      id: scopedId,
+      canonicalKey: `disease:${normalize(title)}:${normalize(icd)}`,
+      title,
+      icd,
+      text: normalize(collectStrings(item).join(' ')),
+    };
+  });
+};
+
 const [gyn, obs] = await Promise.all([importChunks('gynChunks'), importChunks('obsChunks')]);
-const diseaseDocs = [...gyn, ...obs].map((item) => ({
-  type: 'disease',
-  id: item.id,
-  title: repairText(item.name),
-  text: normalize(collectStrings(item).join(' ')),
-}));
+const diseaseDocs = [...scopeDiseaseDocs(gyn, 'gyn'), ...scopeDiseaseDocs(obs, 'obs')];
 const medicationDocs = medications.map((item) => ({
   type: 'medication',
-  id: item.id,
+  id: String(item.id).trim(),
+  canonicalKey: `medication:${normalize(item.name)}:${normalize(item.id)}`,
   title: repairText(item.name),
   text: normalize(collectStrings(item).join(' ')),
 }));
 const questionnaireDocs = questionnaires.map((item) => ({
   type: 'questionnaire',
-  id: item.id,
+  id: String(item.id).trim(),
+  canonicalKey: `questionnaire:${normalize(item.name)}:${normalize(item.id)}`,
   title: repairText(item.name),
   text: normalize(collectStrings(item).join(' ')),
 }));
@@ -73,6 +94,8 @@ const search = (query) => {
     .split(/\s+/)
     .filter(Boolean)
     .flatMap((term) => [term, ...(aliases[term] ?? [])]);
+  const seenResults = new Set();
+
   return docs
     .map((doc) => ({
       doc,
@@ -80,8 +103,13 @@ const search = (query) => {
     }))
     .filter((entry) => entry.score > 0)
     .sort((a, b) => b.score - a.score)
+    .filter((entry) => {
+      if (seenResults.has(entry.doc.canonicalKey)) return false;
+      seenResults.add(entry.doc.canonicalKey);
+      return true;
+    })
     .slice(0, 8)
-    .map((entry) => ({ type: entry.doc.type, id: entry.doc.id, title: entry.doc.title, score: entry.score }));
+    .map((entry) => ({ type: entry.doc.type, id: entry.doc.id, title: entry.doc.title, icd: entry.doc.icd, score: entry.score }));
 };
 
 const requiredQueries = [
@@ -99,9 +127,20 @@ const requiredQueries = [
 
 const queries = requiredQueries.map((query) => ({ query, results: search(query) }));
 const failures = queries.filter((entry) => entry.results.length === 0);
+const malformedIds = docs
+  .filter((doc) => doc.id !== doc.id.trim() || /\s/.test(doc.id))
+  .slice(0, 20)
+  .map((doc) => ({ type: doc.type, id: doc.id, title: doc.title }));
+const duplicateResultFindings = queries
+  .map((entry) => {
+    const keys = entry.results.map((result) => `${result.type}:${normalize(result.title)}:${normalize(result.icd ?? '')}`);
+    const duplicates = keys.filter((key, index) => keys.indexOf(key) !== index);
+    return { query: entry.query, duplicates: [...new Set(duplicates)] };
+  })
+  .filter((entry) => entry.duplicates.length > 0);
 
 const report = {
-  ok: failures.length === 0,
+  ok: failures.length === 0 && malformedIds.length === 0 && duplicateResultFindings.length === 0,
   generatedAt: new Date().toISOString(),
   totals: {
     diseases: diseaseDocs.length,
@@ -111,6 +150,8 @@ const report = {
   },
   queries,
   failures,
+  malformedIds,
+  duplicateResultFindings,
 };
 
 await fs.mkdir(path.join(root, 'artifacts'), { recursive: true });
