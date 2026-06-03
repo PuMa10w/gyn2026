@@ -50,16 +50,54 @@ const count = (items, fields) => ({
   complete: items.filter((item) => fields.every((field) => hasValue(item[field]))).length,
 });
 
+const normalizeSearchText = (item) =>
+  repairText(`${item.name ?? ''} ${item.icd ?? ''} ${item.icdDetail ?? ''} ${item.subtitle ?? ''} ${item.description ?? ''}`)
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const hasAny = (text, patterns) => patterns.some((pattern) => pattern.test(text));
+
+const clinicalCluster = (item) => {
+  const text = normalizeSearchText(item);
+  const primaryText = repairText(`${item.name ?? ''} ${item.icd ?? ''} ${item.icdDetail ?? ''}`).toLowerCase();
+  if (hasAny(text, [/беремен/, /акушер/, /\bo\d{2}/i, /преэкламп/, /экламп/, /роды/, /плацент/, /послерод/])) return 'obstetrics';
+  if (hasAny(text, [/кровотеч/, /остр(ый|ая|ое|ые|ого|ому|ым|ую)?\b/, /сепсис/, /перекрут/, /внематоч/, /разрыв/])) return 'urgent';
+  if (hasAny(text, [/инфекц/, /воспал/, /вагинит/, /цервицит/, /сальпинг/, /зппп|иппп/, /взомт/])) return 'infection';
+  if (hasAny(primaryText, [/(^|\s)рак(\s|$)/, /онко/, /карцином/, /неоплаз/, /\bc5/i, /\bc6/i, /\bd0/i])) return 'oncology';
+  if (hasAny(text, [/эндометриоз/, /миома/, /аденомиоз/, /бесплод/, /репродук/, /спкя|поликистоз/])) return 'reproductive-endocrine';
+  if (hasAny(text, [/узи/, /эндометр/, /яичник/, /матк/, /шейк/, /кист/])) return 'gynecology-core';
+  return 'general';
+};
+
 const priorityScore = (item) => {
-  const text = repairText(`${item.name} ${item.icd} ${item.description}`).toLowerCase();
+  const text = normalizeSearchText(item);
+  const cluster = clinicalCluster(item);
   let score = 0;
-  if (/рак|онко|c5|c6|d0/.test(text)) score += 4;
-  if (/кровотеч|беремен|преэкламп|экламп|сепсис|перекрут|внематоч/.test(text)) score += 4;
-  if (/эндометриоз|миома|спкя|бесплод|инфекц|взомт/.test(text)) score += 3;
+  if (cluster === 'oncology') score += 5;
+  if (cluster === 'urgent') score += 5;
+  if (cluster === 'obstetrics') score += 4;
+  if (cluster === 'infection') score += 3;
+  if (cluster === 'reproductive-endocrine') score += 3;
+  if (cluster === 'gynecology-core') score += 2;
+  if (/кровотеч|беремен|преэкламп|экламп|сепсис|перекрут|внематоч|(^|\s)рак(\s|$)|онко/.test(text)) score += 2;
   if (item.guidelineBasis?.length) score += 2;
+  if (item.lastReviewed) score += 2;
   if (item.clinicalSummary) score += 1;
   return score;
 };
+
+const summarizeClusters = (items) =>
+  items.reduce((acc, item) => {
+    const cluster = clinicalCluster(item);
+    const current = acc[cluster] ?? { total: 0, rawComplete: 0, sourceAwareComplete: 0 };
+    current.total += 1;
+    if (sourceFields.every((field) => hasValue(item[field]))) current.rawComplete += 1;
+    const sourceAware = applyClinicalSourceOverlay(item);
+    if (sourceFields.every((field) => hasValue(sourceAware[field]))) current.sourceAwareComplete += 1;
+    acc[cluster] = current;
+    return acc;
+  }, {});
 
 const [gyn, obs] = await Promise.all([importChunks('gynChunks'), importChunks('obsChunks')]);
 const all = [...gyn, ...obs].filter((item) => item?.name);
@@ -76,9 +114,35 @@ const missingTop = top150
     id: item.id,
     name: repairText(item.name),
     icd: repairText(item.icd),
+    cluster: clinicalCluster(item),
+    priorityScore: priorityScore(item),
     missing: sourceFields.filter((field) => !hasValue(item[field])),
   }))
   .filter((entry) => entry.missing.length > 0);
+
+const immediateManualReviewQueue = missingTop
+  .filter((entry) => ['oncology', 'urgent', 'obstetrics', 'reproductive-endocrine', 'infection'].includes(entry.cluster))
+  .slice(0, 30);
+
+const findDuplicateCandidates = (items) =>
+  Object.values(
+    items.reduce((acc, item) => {
+      const key = repairText(`${item.id ?? ''}::${item.icd ?? ''}`).toLowerCase();
+      const entry = acc[key] ?? { key, count: 0, cards: [] };
+      entry.count += 1;
+      entry.cards.push({
+        id: item.id,
+        name: repairText(item.name),
+        icd: repairText(item.icd),
+        subtitle: repairText(item.subtitle),
+        cluster: clinicalCluster(item),
+      });
+      acc[key] = entry;
+      return acc;
+    }, {}),
+  )
+    .filter((entry) => entry.count > 1)
+    .slice(0, 40);
 
 const essentialThreshold = 80;
 const criticalFailures = [
@@ -101,10 +165,14 @@ const report = {
   sourceAwareCoverage,
   priorityTop150: {
     ...topCoverage,
+    clusters: summarizeClusters(top150),
+    duplicateCandidates: findDuplicateCandidates(top150),
     missing: missingTop.slice(0, 80),
+    immediateManualReviewQueue,
   },
   sourceAwarePriorityTop150: {
     ...sourceAwareTopCoverage,
+    clusters: summarizeClusters(sourceAwareTop150),
     editorialStatus: 'needs-source-review unless the raw card already declares a stronger status',
   },
   criticalFailures,

@@ -35,10 +35,27 @@ const gynChunkLoaders = [
   () => import('./gynChunks/gynChunk30'),
 ];
 
+function scopeDiseaseIds(diseases: Disease[], scope: 'gyn'): Disease[] {
+  const seen = new Map<string, number>();
+
+  return diseases.map((disease) => {
+    const baseId = String(disease.id || disease.name || disease.icd).trim().replace(/\s+/g, '-');
+    const duplicateIndex = seen.get(baseId) ?? 0;
+    seen.set(baseId, duplicateIndex + 1);
+
+    const scopedCanonicalId = `${baseId}__${scope}`;
+    const scopedUniqueId = duplicateIndex === 0 ? scopedCanonicalId : `${baseId}-${duplicateIndex + 1}__${scope}`;
+
+    return {
+      ...disease,
+      id: scopedUniqueId,
+      canonicalIcd: disease.canonicalIcd ?? disease.icd,
+      duplicateOf: duplicateIndex === 0 ? disease.duplicateOf : disease.duplicateOf ?? scopedCanonicalId,
+    };
+  });
+}
+
 export async function loadGynData(): Promise<Disease[]> {
   const chunks = await Promise.all(gynChunkLoaders.map((loadChunk) => loadChunk()));
-  return enrichDiseases(chunks.flatMap((chunk) => chunk.default as Disease[])).map((disease) => ({
-    ...disease,
-    id: `${disease.id}__gyn`,
-  }));
+  return scopeDiseaseIds(enrichDiseases(chunks.flatMap((chunk) => chunk.default as Disease[])), 'gyn');
 }
