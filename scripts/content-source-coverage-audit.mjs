@@ -147,8 +147,8 @@ const findDuplicateCandidates = (items) =>
 const essentialThreshold = 80;
 const ratchetBaselines = {
   essentialComplete: 1261,
-  premiumComplete: 2,
-  rawTop150Complete: 2,
+  premiumComplete: 3,
+  rawTop150Complete: 3,
   sourceAwareTop150Complete: 150,
 };
 
