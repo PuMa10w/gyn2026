@@ -7,9 +7,9 @@ body,
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
 }
 
-body:not([data-theme='dark']) .App,
-body:not([data-theme='dark']) main,
-body:not([data-theme='dark']) .page-transition {
+html:not([data-theme='dark']) .App,
+html:not([data-theme='dark']) main,
+html:not([data-theme='dark']) .page-transition {
   color: var(--color-text) !important;
 }
 
@@ -769,7 +769,7 @@ input[type='search']::placeholder {
 html main .version-checker.glass,
 body main .version-checker.glass,
 html[data-theme='light'] main .version-checker.glass,
-body:not([data-theme='dark']) main .version-checker.glass,
+html:not([data-theme='dark']) main .version-checker.glass,
 html[data-theme='dark'] main .version-checker.glass,
 body[data-theme='dark'] main .version-checker.glass {
   background:
@@ -1006,26 +1006,26 @@ body main .version-checker.glass .version-actions .premium-button--primary {
 }
 
 /* V9 readability hotfix: disease modal content must stay light and readable in light theme. */
-body:not([data-theme='dark']) .modal-content.mobile-sheet,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-body {
+html:not([data-theme='dark']) .modal-content.mobile-sheet,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .modal-body {
   background: linear-gradient(180deg, #fff7f0 0%, #fffaf5 45%, #f8e8dc 100%) !important;
   color: #2b2023 !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .immediate-action-card,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .source-confidence-card,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-timeline-card,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .diagnostics-hero,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-list,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .patient-memo,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .memo-card {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .immediate-action-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .source-confidence-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-timeline-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .diagnostics-hero,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-list,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .patient-memo,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .memo-card {
   background:
     linear-gradient(135deg, rgba(255, 250, 245, 0.98), rgba(246, 231, 214, 0.88)),
     #fffaf5 !important;
@@ -1034,14 +1034,14 @@ body:not([data-theme='dark']) .modal-content.mobile-sheet .memo-card {
   box-shadow: 0 14px 34px rgba(92, 58, 64, 0.11) !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide:first-of-type,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide:first-of-type,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card {
   background:
     linear-gradient(90deg, rgba(217, 150, 162, 0.14) 0 5px, transparent 5px),
     linear-gradient(135deg, #fffaf5, #f8e8dc) !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert {
   background:
     linear-gradient(90deg, rgba(200, 79, 95, 0.96) 0 5px, transparent 5px),
     linear-gradient(135deg, #fff5f5, #fffafa) !important;
@@ -1049,77 +1049,77 @@ body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert {
   color: #2b2023 !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .immediate-action-card *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .source-confidence-card *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-timeline-card *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .diagnostics-hero *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-list *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .patient-memo *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .memo-card * {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-summary-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .immediate-action-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .source-confidence-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .clinical-timeline-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .diagnostics-hero *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-list *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .patient-memo *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .memo-card * {
   color: #2b2023 !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet p,
-body:not([data-theme='dark']) .modal-content.mobile-sheet li,
-body:not([data-theme='dark']) .modal-content.mobile-sheet dd,
-body:not([data-theme='dark']) .modal-content.mobile-sheet small,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-note,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-region {
+html:not([data-theme='dark']) .modal-content.mobile-sheet p,
+html:not([data-theme='dark']) .modal-content.mobile-sheet li,
+html:not([data-theme='dark']) .modal-content.mobile-sheet dd,
+html:not([data-theme='dark']) .modal-content.mobile-sheet small,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-note,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-region {
   color: #5f4850 !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet h2,
-body:not([data-theme='dark']) .modal-content.mobile-sheet h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet h4,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-title,
-body:not([data-theme='dark']) .modal-content.mobile-sheet dt {
+html:not([data-theme='dark']) .modal-content.mobile-sheet h2,
+html:not([data-theme='dark']) .modal-content.mobile-sheet h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet h4,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-title,
+html:not([data-theme='dark']) .modal-content.mobile-sheet dt {
   color: #2b2023 !important;
   font-weight: 900 !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h4,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .risk-urgent h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .risk-urgent h4 {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h4,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .risk-urgent h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .risk-urgent h4 {
   color: #a53643 !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-grid {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .modal-grid {
   gap: 0.85rem !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tabs {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tabs {
   background: rgba(246, 231, 214, 0.94) !important;
   border-color: rgba(185, 120, 134, 0.24) !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tab {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tab {
   background: rgba(255, 250, 245, 0.92) !important;
   color: #46373d !important;
   border-color: rgba(185, 120, 134, 0.28) !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tab.active {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tab.active {
   background: linear-gradient(135deg, #f4c5b4, #e8a08c) !important;
   color: #2b2023 !important;
   border-color: rgba(185, 120, 134, 0.52) !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .tab-content h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item dt {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .tab-content h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item dt {
   display: inline-flex !important;
   align-items: center !important;
   width: fit-content !important;
@@ -1140,19 +1140,19 @@ body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item dt {
   opacity: 1 !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .tab-content h3 *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card h3 *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide h3 *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card h3 *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card h3 *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title *,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item dt * {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .tab-content h3 *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card h3 *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .content-card-wide h3 *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card h3 *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .guideline-card h3 *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .structured-item-title *,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .metric-item dt * {
   color: #2b2023 !important;
   -webkit-text-fill-color: #2b2023 !important;
 }
 
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h3,
-body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert .structured-item-title {
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert h3,
+html:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert .structured-item-title {
   background:
     linear-gradient(135deg, rgba(255, 245, 245, 0.98), rgba(248, 217, 219, 0.94)),
     #fff5f5 !important;
@@ -1162,7 +1162,7 @@ body:not([data-theme='dark']) .modal-content.mobile-sheet .quick-card-alert .str
 }
 
 /* Home update panel: keep PWA status in the same peach premium language as the dashboard. */
-body:not([data-theme='dark']) .version-checker {
+html:not([data-theme='dark']) .version-checker {
   background:
     radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.72), transparent 36%),
     linear-gradient(145deg, #fff5ed 0%, #f8e4d5 54%, #f0d3c1 100%) !important;
@@ -1173,17 +1173,17 @@ body:not([data-theme='dark']) .version-checker {
   backdrop-filter: none !important;
 }
 
-body:not([data-theme='dark']) .version-checker *,
-body:not([data-theme='dark']) .version-checker h4,
-body:not([data-theme='dark']) .version-checker p,
-body:not([data-theme='dark']) .version-checker li,
-body:not([data-theme='dark']) .version-checker span,
-body:not([data-theme='dark']) .version-checker strong {
+html:not([data-theme='dark']) .version-checker *,
+html:not([data-theme='dark']) .version-checker h4,
+html:not([data-theme='dark']) .version-checker p,
+html:not([data-theme='dark']) .version-checker li,
+html:not([data-theme='dark']) .version-checker span,
+html:not([data-theme='dark']) .version-checker strong {
   color: #2b2023 !important;
   -webkit-text-fill-color: #2b2023 !important;
 }
 
-body:not([data-theme='dark']) .version-kicker {
+html:not([data-theme='dark']) .version-kicker {
   display: inline-flex !important;
   width: fit-content !important;
   margin-bottom: 0.38rem !important;
@@ -1199,12 +1199,12 @@ body:not([data-theme='dark']) .version-kicker {
   text-transform: uppercase !important;
 }
 
-body:not([data-theme='dark']) .version-checker-head {
+html:not([data-theme='dark']) .version-checker-head {
   align-items: center !important;
   gap: 0.8rem !important;
 }
 
-body:not([data-theme='dark']) .version-checker-head h4 {
+html:not([data-theme='dark']) .version-checker-head h4 {
   margin: 0 !important;
   font-size: 1.18rem !important;
   line-height: 1.15 !important;
@@ -1212,10 +1212,10 @@ body:not([data-theme='dark']) .version-checker-head h4 {
   -webkit-text-fill-color: #2b2023 !important;
 }
 
-body:not([data-theme='dark']) .version-meta-grid > div,
-body:not([data-theme='dark']) .version-update-card,
-body:not([data-theme='dark']) .version-ready-state,
-body:not([data-theme='dark']) .version-error-state {
+html:not([data-theme='dark']) .version-meta-grid > div,
+html:not([data-theme='dark']) .version-update-card,
+html:not([data-theme='dark']) .version-ready-state,
+html:not([data-theme='dark']) .version-error-state {
   background:
     linear-gradient(135deg, rgba(255, 250, 245, 0.9), rgba(246, 231, 214, 0.72)),
     #fffaf5 !important;
@@ -1224,21 +1224,21 @@ body:not([data-theme='dark']) .version-error-state {
   box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08) !important;
 }
 
-body:not([data-theme='dark']) .version-meta-grid span,
-body:not([data-theme='dark']) .version-update-title span,
-body:not([data-theme='dark']) .version-update-card p {
+html:not([data-theme='dark']) .version-meta-grid span,
+html:not([data-theme='dark']) .version-update-title span,
+html:not([data-theme='dark']) .version-update-card p {
   color: #5f4850 !important;
   -webkit-text-fill-color: #5f4850 !important;
 }
 
-body:not([data-theme='dark']) .version-meta-grid strong,
-body:not([data-theme='dark']) .version-update-title strong {
+html:not([data-theme='dark']) .version-meta-grid strong,
+html:not([data-theme='dark']) .version-update-title strong {
   color: #2b2023 !important;
   -webkit-text-fill-color: #2b2023 !important;
 }
 
-body:not([data-theme='dark']) .version-actions .premium-button,
-body:not([data-theme='dark']) .version-checker-head .premium-button {
+html:not([data-theme='dark']) .version-actions .premium-button,
+html:not([data-theme='dark']) .version-checker-head .premium-button {
   min-height: 44px !important;
   border-radius: 18px !important;
   border-color: rgba(185, 120, 134, 0.28) !important;
@@ -1248,19 +1248,19 @@ body:not([data-theme='dark']) .version-checker-head .premium-button {
   box-shadow: 0 10px 24px rgba(92, 58, 64, 0.08) !important;
 }
 
-body:not([data-theme='dark']) .version-actions .premium-button--primary {
+html:not([data-theme='dark']) .version-actions .premium-button--primary {
   background: linear-gradient(135deg, #f4c5b4, #d996a2) !important;
   border-color: rgba(185, 120, 134, 0.38) !important;
 }
 
 @media (max-width: 768px) {
-  body:not([data-theme='dark']) .version-checker {
+  html:not([data-theme='dark']) .version-checker {
     margin-inline: 0.7rem !important;
     padding: 1rem !important;
     border-radius: 24px !important;
   }
 
-  body:not([data-theme='dark']) .version-meta-grid {
+  html:not([data-theme='dark']) .version-meta-grid {
     gap: 0.65rem !important;
   }
 }
