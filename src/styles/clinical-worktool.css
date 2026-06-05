@@ -14,7 +14,7 @@
   --worktool-gold: #c59d53;
   --worktool-alert: #bd4053;
   --worktool-shadow: 0 18px 48px rgba(87, 49, 58, 0.14);
-  --worktool-bottom-bar: 58px;
+  --worktool-bottom-bar: 54px;
 }
 
 [data-theme='dark'] {
@@ -990,7 +990,7 @@ body:not([data-theme='dark']) .mobile-bottom-bar {
   }
 
   .modal-title {
-    font-size: clamp(1.1rem, 2.4vw, 1.55rem) !important;
+    font-size: clamp(1rem, 2.15vw, 1.38rem) !important;
   }
 
   .modal-quick-strip {

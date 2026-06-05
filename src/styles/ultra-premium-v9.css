@@ -1918,28 +1918,28 @@ html[data-theme='light'] .anatomy-sheet-link {
 /* Ultra Premium V10.1: slimmer iPhone bottom rail after visual QA. */
 @media (max-width: 768px) {
   .mobile-bottom-bar {
-    left: max(0.5rem, env(safe-area-inset-left)) !important;
-    right: max(0.5rem, env(safe-area-inset-right)) !important;
-    bottom: calc(0.42rem + env(safe-area-inset-bottom)) !important;
-    min-height: 56px !important;
-    padding: 0.24rem !important;
+    left: max(0.32rem, env(safe-area-inset-left)) !important;
+    right: max(0.32rem, env(safe-area-inset-right)) !important;
+    bottom: calc(0.3rem + env(safe-area-inset-bottom)) !important;
+    min-height: 52px !important;
+    padding: 0.16rem !important;
     border: 1px solid rgba(185, 120, 134, 0.22) !important;
-    border-radius: 28px !important;
+    border-radius: 24px !important;
     background: rgba(255, 250, 245, 0.92) !important;
     box-shadow: 0 14px 34px rgba(92, 58, 64, 0.14) !important;
   }
 
   .mobile-bottom-items {
     max-width: none !important;
-    gap: 0.08rem !important;
+    gap: 0 !important;
   }
 
   .mobile-bottom-item {
-    min-height: 48px !important;
-    border-radius: 22px !important;
-    padding: 0.22rem 0.12rem 0.42rem !important;
-    font-size: clamp(0.68rem, 3.1vw, 0.78rem) !important;
-    letter-spacing: -0.02em !important;
+    min-height: 44px !important;
+    border-radius: 18px !important;
+    padding: 0.12rem 0.03rem 0.32rem !important;
+    font-size: clamp(0.58rem, 2.62vw, 0.68rem) !important;
+    letter-spacing: -0.055em !important;
   }
 
   .mobile-bottom-item.is-active {
@@ -1950,13 +1950,13 @@ html[data-theme='light'] .anatomy-sheet-link {
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: clip !important;
-    transform: translateY(-1px) !important;
+    transform: translateY(-0.5px) !important;
   }
 
   .mobile-bottom-active-line {
-    left: 26% !important;
-    right: 26% !important;
-    bottom: 0.32rem !important;
+    left: 32% !important;
+    right: 32% !important;
+    bottom: 0.24rem !important;
   }
 
   main,
@@ -1964,7 +1964,7 @@ html[data-theme='light'] .anatomy-sheet-link {
   .catalog-section,
   .bookmarks-panel,
   .analytics-dashboard {
-    padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
   }
 }
 

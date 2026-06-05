@@ -1213,8 +1213,8 @@ main .catalog-header {
   .modal-content.mobile-sheet .modal-title {
     font-size: 1.05rem !important;
     line-height: 1.1 !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
   }
 
   .modal-content.mobile-sheet .tab-btn,
@@ -1741,8 +1741,8 @@ main .catalog-header {
   .modal-content.mobile-sheet .modal-title {
     font-size: 1.05rem !important;
     line-height: 1.1 !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
   }
 
   .modal-content.mobile-sheet .modal-icd {
@@ -3463,10 +3463,10 @@ main .catalog-header {
   }
 
   .modal-title {
-    white-space: normal !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
-    -webkit-box-orient: vertical !important;
+    white-space: nowrap !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: initial !important;
   }
 
   .modal-content.mobile-sheet .modal-quick-strip {
@@ -4863,7 +4863,7 @@ body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tabs .tab-btn {
   }
 
   .mobile-bottom-label {
-    font-size: 0.72rem !important;
+    font-size: clamp(0.55rem, 2.45vw, 0.64rem) !important;
     line-height: 1.05 !important;
     max-width: 100% !important;
     overflow: hidden !important;
@@ -4894,16 +4894,16 @@ body:not([data-theme='dark']) .modal-content.mobile-sheet .modal-tabs .tab-btn {
   }
 
   .modal-content.mobile-sheet .modal-title {
-    font-size: clamp(1.28rem, 6vw, 1.9rem) !important;
+    font-size: clamp(1.06rem, 5vw, 1.42rem) !important;
     line-height: 1.03 !important;
     max-width: 100% !important;
-    overflow-wrap: anywhere !important;
+    overflow-wrap: normal !important;
   }
 
   .modal-content.mobile-sheet .modal-icd {
     font-size: 0.86rem !important;
     line-height: 1.25 !important;
-    white-space: normal !important;
+    white-space: nowrap !important;
   }
 
   .modal-content.mobile-sheet .modal-clinical-actions {
