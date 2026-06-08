@@ -1,7 +1,8 @@
 import { chromium, devices } from 'playwright';
+import { installModernIPhoneDevices } from './auditDeviceProfiles.mjs';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
-const deviceNames = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
+const deviceNames = installModernIPhoneDevices(devices);
 const browser = await chromium.launch({
   executablePath: process.env.CHROME_EXECUTABLE || undefined,
   headless: true,
@@ -351,4 +352,3 @@ if (browserErrors.length > 0) {
 }
 
 console.log(JSON.stringify({ ok: true, devices: deviceNames, messages: allMessages, screenshots }, null, 2));
-

@@ -1,7 +1,7 @@
 import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? process.env.AUDIT_BASE_URL ?? 'http://127.0.0.1:4173';
-const device = devices['iPhone 13'] ?? { viewport: { width: 390, height: 844 }, isMobile: true };
+const device = devices['iPhone 15 Pro Max'] ?? { viewport: { width: 430, height: 932 }, isMobile: true, hasTouch: true };
 const perSectionLimit = Number.parseInt(process.env.CARDS_OPEN_LIMIT || '50', 10);
 
 async function ensureServer(url) {

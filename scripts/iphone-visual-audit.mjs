@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { chromium, devices } from 'playwright';
+import { desktopBrowserProfiles, installModernIPhoneDevices } from './auditDeviceProfiles.mjs';
 let canvasTools = null;
 try {
   canvasTools = await import('canvas');
@@ -10,9 +11,9 @@ try {
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
 const update = process.argv.includes('--update');
-const deviceNames = ['iPhone SE', 'iPhone 12', 'iPhone 13', 'iPhone 15 Pro', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
-const outDir = path.join('artifacts', 'iphone-visual-current');
-const goldenDir = path.join('artifacts', 'iphone-visual-golden');
+const deviceNames = installModernIPhoneDevices(devices);
+const outDir = path.join('artifacts', 'iphone-modern-visual-current');
+const goldenDir = path.join('artifacts', 'iphone-modern-visual-golden');
 
 const slug = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -242,8 +243,13 @@ await fs.mkdir(goldenDir, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROME_EXECUTABLE || undefined, headless: true });
 const results = [];
 
-for (const deviceName of deviceNames) {
-  const page = await browser.newPage(devices[deviceName]);
+const profiles = [
+  ...deviceNames.map((name) => ({ name, options: devices[name] })),
+  ...desktopBrowserProfiles,
+];
+
+for (const { name: deviceName, options } of profiles) {
+  const page = await browser.newPage(options);
   await page.goto(`${baseUrl}/?visual=${Date.now()}-${slug(deviceName)}`, { waitUntil: 'domcontentloaded' });
 
   for (const flow of flows) {
@@ -287,4 +293,3 @@ if (failed.length) {
 }
 
 console.log(JSON.stringify({ ok: true, update, results }, null, 2));
-

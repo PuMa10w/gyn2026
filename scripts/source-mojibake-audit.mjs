@@ -27,6 +27,7 @@ const obviousBrokenPattern = new RegExp([
   '\\ufffd',
 ].join('|'), 'g');
 const encodedLatinPattern = new RegExp('[\\u00d0\\u00d1\\u00c2\\u00e2][\\u0080-\\u00ff\\u201a-\\u201e\\u2020-\\u2022\\u2013\\u2014\\u2030\\u2039\\u203a\\u20ac\\u2122]', 'g');
+const unexpectedCjkPattern = /[\u3400-\u9fff]/g;
 
 async function walk(dir, files = []) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -82,6 +83,7 @@ for (const file of files) {
     const matches = [
       ...line.matchAll(legacyEnglishPattern),
       ...line.matchAll(obviousBrokenPattern),
+      ...line.matchAll(unexpectedCjkPattern),
       ...(repairChangedLine ? [{ 0: 'repairable mojibake' }] : []),
     ];
 
@@ -94,6 +96,7 @@ for (const file of files) {
         repairedSnippet: repairChangedLine ? repaired.trim().slice(0, 180) : undefined,
       });
     }
+    unexpectedCjkPattern.lastIndex = 0;
   });
 }
 

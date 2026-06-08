@@ -1,7 +1,9 @@
 import { chromium, devices } from 'playwright';
+import { installModernIPhoneDevices } from './auditDeviceProfiles.mjs';
 
 const baseUrl = process.env.AUDIT_URL ?? process.env.AUDIT_BASE_URL ?? 'http://127.0.0.1:4173';
-const deviceNames = (process.env.WORKFLOW_AUDIT_DEVICES || 'iPhone SE,iPhone 13')
+const modernDeviceNames = installModernIPhoneDevices(devices);
+const deviceNames = (process.env.WORKFLOW_AUDIT_DEVICES || modernDeviceNames.join(','))
   .split(',')
   .map((entry) => entry.trim())
   .filter(Boolean);
@@ -84,7 +86,7 @@ async function clickCategoryByIndex(page, index) {
 }
 
 async function runFlowForDevice(browser, deviceName) {
-  const device = devices[deviceName] ?? devices['iPhone SE'] ?? { viewport: { width: 375, height: 667 }, isMobile: true };
+  const device = devices[deviceName] ?? devices['iPhone 15 Pro Max'] ?? { viewport: { width: 430, height: 932 }, isMobile: true, hasTouch: true };
   const page = await browser.newPage(device);
   const messages = [];
   page.on('console', (message) => {

@@ -11,6 +11,7 @@ const cssFiles = [
   'src/styles/ultra-premium-v9.css',
   'src/styles/clinical-worktool.css',
   'src/styles/v1-premium-polish.css',
+  'src/styles/clinical-v1-4-skin.css',
 ];
 
 const budgets = {

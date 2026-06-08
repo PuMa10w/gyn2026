@@ -4421,7 +4421,7 @@
 
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: 0;
   left: 1rem;
   z-index: 1200;
   padding: 0.7rem 0.95rem;
@@ -4430,10 +4430,11 @@
   color: var(--bg-panel-solid);
   text-decoration: none;
   font-weight: 700;
+  transform: translateY(-140%);
 }
 
 .skip-link:focus {
-  top: calc(var(--safe-top) + 0.75rem);
+  transform: translateY(calc(var(--safe-top) + 0.75rem));
 }
 
 .catalog-shell {

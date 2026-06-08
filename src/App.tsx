@@ -1,13 +1,12 @@
 import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import './styles/design-tokens.css';
 import './index.css';
 import './App.css';
 import './premium-unified.css';
 import './styles/ultra-premium-v9.css';
 import './styles/clinical-worktool.css';
-import './styles/v1-premium-polish.css';
+import './styles/clinical-v1-4-skin.css';
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import type { WorkbenchCommand } from './components/CommandSearch';
@@ -105,7 +104,11 @@ function App() {
   const [showPharmacology, setShowPharmacology] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isOnline, setIsOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
-  const [isMobileViewport, setIsMobileViewport] = useState(() => (typeof window === 'undefined' ? false : window.innerWidth <= 768));
+  const [isMobileViewport, setIsMobileViewport] = useState(() =>
+    typeof window === 'undefined'
+      ? false
+      : window.matchMedia('(max-width: 768px), (hover: none) and (pointer: coarse), (orientation: landscape) and (max-height: 540px)').matches,
+  );
   const catalogScrollRef = useRef(0);
   const prefersReducedMotion = useReducedMotion();
 
@@ -185,7 +188,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const mediaQuery = window.matchMedia('(max-width: 768px), (hover: none) and (pointer: coarse), (orientation: landscape) and (max-height: 540px)');
     const updateViewport = () => setIsMobileViewport(mediaQuery.matches);
     updateViewport();
     mediaQuery.addEventListener('change', updateViewport);
@@ -450,21 +453,22 @@ function App() {
           {activeModalName === 'pharmacology' && <PharmacologyModal onClose={() => setShowPharmacology(false)} />}
         </Suspense>
 
-        {/* Mobile Bottom Bar */}
-        <Suspense fallback={null}>
-          <MobileBottomBar
-            currentPath={showFavorites ? '/bookmarks' : `/${activeTab === 'home' ? '' : activeTab}`}
-            onNavigate={(path) => {
-              if (path === '/bookmarks') {
-                handleFavoritesToggle();
-                return;
-              }
+        {isMobileViewport && (
+          <Suspense fallback={null}>
+            <MobileBottomBar
+              currentPath={showFavorites ? '/bookmarks' : `/${activeTab === 'home' ? '' : activeTab}`}
+              onNavigate={(path) => {
+                if (path === '/bookmarks') {
+                  handleFavoritesToggle();
+                  return;
+                }
 
-              const tab = path === '/' ? 'home' : path.replace('/', '') as TabType;
-              handleTabChange(tab);
-            }}
-          />
-        </Suspense>
+                const tab = path === '/' ? 'home' : path.replace('/', '') as TabType;
+                handleTabChange(tab);
+              }}
+            />
+          </Suspense>
+        )}
 
         {/* Toast Container */}
         <Suspense fallback={null}>

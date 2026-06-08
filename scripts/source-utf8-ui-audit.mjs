@@ -25,6 +25,7 @@ const mojibakePattern = new RegExp([
   '\\ufffd',
 ].join('|'), 'g');
 const legacyEnglishPattern = /Premium Clinical|Clinical command center|TRUST LAYER|GYNA/g;
+const unexpectedCjkPattern = /[\u3400-\u9fff]/g;
 
 async function walk(dir, files = []) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -79,6 +80,7 @@ for (const file of files) {
     const matches = [
       ...line.matchAll(legacyEnglishPattern),
       ...line.matchAll(mojibakePattern),
+      ...line.matchAll(unexpectedCjkPattern),
       ...(isUserFacing && changedByRepair ? [{ 0: 'repairable UI text' }] : []),
     ];
 
@@ -94,6 +96,7 @@ for (const file of files) {
     }
     mojibakePattern.lastIndex = 0;
     legacyEnglishPattern.lastIndex = 0;
+    unexpectedCjkPattern.lastIndex = 0;
   });
 }
 

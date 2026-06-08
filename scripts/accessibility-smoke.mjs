@@ -90,7 +90,7 @@ const runPageChecks = async (page, label) => {
   }
 };
 
-const page = await browser.newPage(devices['iPhone 13'] ?? { viewport: { width: 390, height: 844 } });
+const page = await browser.newPage(devices['iPhone 15 Pro Max'] ?? { viewport: { width: 430, height: 932 }, isMobile: true, hasTouch: true });
 await page.goto(`${baseUrl}/?a11ySmoke=${Date.now()}`, { waitUntil: 'domcontentloaded' });
 await runPageChecks(page, 'home');
 
@@ -114,4 +114,3 @@ await runPageChecks(page, 'pharmacology-modal');
 
 await browser.close();
 console.log(JSON.stringify({ ok: true, checks }, null, 2));
-

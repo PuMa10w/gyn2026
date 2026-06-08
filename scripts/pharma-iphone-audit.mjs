@@ -1,7 +1,8 @@
 import { chromium, devices } from 'playwright';
+import { installModernIPhoneDevices } from './auditDeviceProfiles.mjs';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
-const deviceNames = ['iPhone SE', 'iPhone 13', 'iPhone 15 Pro Max'].filter((name) => devices[name]);
+const deviceNames = installModernIPhoneDevices(devices);
 
 async function ensureServer(url) {
   try {
@@ -86,4 +87,3 @@ for (const deviceName of deviceNames) {
 
 await browser.close();
 console.log(JSON.stringify({ ok: true, results }, null, 2));
-

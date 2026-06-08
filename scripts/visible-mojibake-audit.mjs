@@ -1,7 +1,7 @@
 import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL || process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4173';
-const device = devices['iPhone 13'] ?? { viewport: { width: 390, height: 844 }, isMobile: true };
+const device = devices['iPhone 15 Pro Max'] ?? { viewport: { width: 430, height: 932 }, isMobile: true, hasTouch: true };
 const mojibakePattern = new RegExp(['\\u0420\\u0459','\\u0420\\u045f','\\u0420\\u0402','\\u0420\\u2019','\\u0420\\u201d','\\u0420\\u2022','\\u0420\\u0404','\\u0420\\u045c','\\u0420\\u045a','\\u0420\\u040c','\\u0420\\u045b','\\u0420\\u040e','\\u0420\\u040f','\\u0420\\u0407','\\u0421\\u0453','\\u0421\\u201a','\\u0421\\u040a','\\u0421\\u2039','\\u0421\\u0452','\\u0421\\u201c','\\u0421\\u0458','\\u0421\\u0455','\\u0421\\u2020','\\u0421\\u2026','\\u0421\\u0402','\\u0432\\u0402','\\u0432\\u2020','\\u0432\\u045a','\\u0432\\u2122','\\u0440\\u045f','\\u00d0','\\u00d1','\\uFFFD'].join('|'), 'g');
 
 const browser = await chromium.launch({ executablePath: process.env.CHROME_EXECUTABLE || undefined, headless: true });
@@ -95,5 +95,3 @@ if (findings.length) {
 }
 
 console.log(JSON.stringify({ ok: true, flows: ['home', 'gynecology', 'disease-modal', '3d-atlas', 'pharmacology', 'questionnaires'] }, null, 2));
-
-

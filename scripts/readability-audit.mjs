@@ -1,7 +1,7 @@
 import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL || process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4173';
-const device = devices['iPhone SE'] ?? { viewport: { width: 375, height: 667 }, isMobile: true };
+const device = devices['iPhone 15 Pro Max'] ?? { viewport: { width: 430, height: 932 }, isMobile: true, hasTouch: true };
 const selectors = [
   ['.catalog-title, .catalog-description', 4.5, 'catalog copy'],
   ['.search-input, input[type="search"]', 4.5, 'search'],

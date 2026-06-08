@@ -1,7 +1,7 @@
 import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? 'http://127.0.0.1:4173';
-const device = devices['iPhone SE'] ?? { viewport: { width: 375, height: 667 }, isMobile: true };
+const device = devices['iPhone 15 Pro Max'] ?? { viewport: { width: 430, height: 932 }, isMobile: true, hasTouch: true };
 
 const bannedLegacyRgb = [
   '25, 198, 179',
@@ -187,4 +187,3 @@ if (findings.length) {
 }
 
 console.log(JSON.stringify({ ok: true, checkedSelectors: selectors.length, flows: 5 }, null, 2));
-

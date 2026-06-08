@@ -3,7 +3,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const devices = ['iPhone SE', 'iPhone 12', 'iPhone 13', 'iPhone 15 Pro', 'iPhone 15 Pro Max'];
+const devices = [
+  'iPhone 15',
+  'iPhone 15 Pro Max',
+  'iPhone 16',
+  'iPhone 16 Pro Max',
+  'iPhone 17',
+  'iPhone 17 Pro Max',
+  'Desktop 1280',
+  'Desktop 1440',
+  'Desktop 1728',
+];
 const orientations = ['portrait', 'landscape'];
 const themes = ['light', 'dark'];
 const passes = ['pass-1', 'pass-2'];
