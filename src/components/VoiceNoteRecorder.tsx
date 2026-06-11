@@ -32,14 +32,11 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
 
     recognition.onresult = (event: any) => {
       let finalTranscript = '';
-      let interimTranscript = '';
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcriptPart = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
           finalTranscript += transcriptPart;
-        } else {
-          interimTranscript += transcriptPart;
         }
       }
 

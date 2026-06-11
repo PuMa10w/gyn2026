@@ -28,24 +28,14 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onRemove
 };
 
 const ToastItem: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({ toast, onRemove }) => {
-  const [progress, setProgress] = useState(100);
-
   const duration = toast.duration || 5000;
 
   useEffect(() => {
-    const startTime = Date.now();
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
-      setProgress(remaining);
-      
-      if (remaining <= 0) {
-        clearInterval(interval);
-        onRemove(toast.id);
-      }
-    }, 50);
+    const timeout = setTimeout(() => {
+      onRemove(toast.id);
+    }, duration);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(timeout);
   }, [toast.id, duration, onRemove]);
 
   const typeStyles = {
