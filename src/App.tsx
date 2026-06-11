@@ -7,6 +7,7 @@ import './premium-unified.css';
 import './styles/ultra-premium-v9.css';
 import './styles/clinical-worktool.css';
 import './styles/clinical-v1-4-skin.css';
+import './styles/premium-flagship.css';
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import type { WorkbenchCommand } from './components/CommandSearch';
