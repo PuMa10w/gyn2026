@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UroMed Clinic – Desktop Mockup</title>
+  <!-- Import the project CSS (development version) -->
+  <link rel="stylesheet" href="../src/index-flagship.css" />
+  <link rel="stylesheet" href="../src/styles/spacing.css" />
+  <style>
+    body {font-family: var(--type-body-font-family, system-ui), sans-serif; background: var(--color-background); color: var(--color-text-primary);}
+    .mockup-container {max-width: 1200px; margin: 0 auto; padding: var(--spacing-lg-430);}
+    .card-grid {display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--spacing-lg-430); margin-top: var(--spacing-lg-430);}
+    .card {background: var(--color-surface); border: 1px solid var(--color-muted); border-radius: 8px; padding: var(--spacing-md-430); box-shadow: var(--elev-2);
+      display: flex; flex-direction: column; justify-content: space-between;}
+    .card h3 {margin: 0 0 var(--spacing-sm-430); font-size: 1.2rem;}
+    .card p {margin: 0; flex-grow: 1;}
+    .card button {margin-top: var(--spacing-sm-430); padding: var(--spacing-xs-430) var(--spacing-sm-430); background: var(--color-primary); color: var(--color-surface); border: none; border-radius: 4px; cursor: pointer;}
+    .navbar {display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-md-390) var(--spacing-lg-430); background: var(--color-surface); box-shadow: var(--elev-1);}
+    .navbar h1 {margin: 0; font-size: 1.5rem;}
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h1>UroMed Clinic</h1>
+    <nav>
+      <a href="#" style="margin-right: var(--spacing-sm-430);">Главная</a>
+      <a href="#" style="margin-right: var(--spacing-sm-430);">База</a>
+      <a href="#">О нас</a>
+    </nav>
+  </header>
+  <main class="mockup-container">
+    <h2>Библиотека нозологий</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Гиперплазия простаты</h3>
+        <p>Краткое описание состояния, симптомы, риски.</p>
+        <button>Подробнее</button>
+      </div>
+      <div class="card">
+        <h3>Инфекция мочевыводящих путей</h3>
+        <p>Краткое описание, диагностика, лечение.</p>
+        <button>Подробнее</button>
+      </div>
+      <div class="card">
+        <h3>Камни в почках</h3>
+        <p>Информация о причинах, профилактике, процедуре удаления.</p>
+        <button>Подробнее</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

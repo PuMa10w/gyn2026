@@ -1,0 +1,17 @@
+:root {
+  --c-primary: var(--color-primary);
+  --c-primary-soft: var(--color-primary-soft);
+  --c-secondary: var(--color-secondary);
+  --c-secondary-soft: var(--color-secondary-soft);
+  --c-accent: var(--color-accent);
+  --c-accent-soft: var(--color-accent-soft);
+  --c-success: var(--color-success);
+  --c-success-soft: var(--color-success-soft);
+  --c-warning: var(--color-warning);
+  --c-warning-soft: var(--color-warning-soft);
+  --c-danger: var(--color-danger);
+  --c-danger-soft: var(--color-danger-soft);
+}
+[data-theme='dark'] {
+  /* Aliases inherit dark variants automatically */
+}
