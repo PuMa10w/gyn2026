@@ -170,8 +170,18 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
   const tabsRef = useRef<HTMLDivElement>(null);
   
   const IconComponent = isObstetricsLabel(item.subtitle)
-    ? (obsIcons as Record<string, React.ReactNode>)[item.icon]
-    : (gynIcons as Record<string, React.ReactNode>)[item.icon];
+    ? (obsIcons as Record<string, React.ReactNode>)[item.icon] ?? (
+        <svg viewBox="0 0 60 60" className="fallback-icon">
+          <circle cx="30" cy="30" r="20" fill="var(--brand-border)" opacity="0.3" />
+          <text x="30" y="35" textAnchor="middle" fontSize="12" fill="var(--brand-text)">?</text>
+        </svg>
+      )
+    : (gynIcons as Record<string, React.ReactNode>)[item.icon] ?? (
+        <svg viewBox="0 0 60 60" className="fallback-icon">
+          <circle cx="30" cy="30" r="20" fill="var(--brand-border)" opacity="0.3" />
+          <text x="30" y="35" textAnchor="middle" fontSize="12" fill="var(--brand-text)">?</text>
+        </svg>
+      );
   const displayName = repairText(item.name);
   const displaySubtitle = item.icd?.startsWith('O') ? 'Акушерство' : repairText(item.subtitle);
   const icdLabel = repairText(item.icdDetail ?? item.icd);
