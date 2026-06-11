@@ -17,7 +17,7 @@ interface ToastContainerProps {
 
 export const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onRemove }) => {
   return (
-    <div className="fixed top-4 right-4 z-[100] flex flex-col gap-3 max-w-sm w-full">
+    <div className="fixed top-4 right-4 z-[1100] flex flex-col gap-3 max-w-sm w-full">
       <AnimatePresence mode="wait">
         {toasts.map((toast) => (
           <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />

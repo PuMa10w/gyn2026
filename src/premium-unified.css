@@ -423,8 +423,9 @@ body::after,
 
 .modal-overlay {
   background: rgba(5, 4, 6, 0.72) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  z-index: 200 !important;
 }
 
 .modal-content {
@@ -529,6 +530,7 @@ body::after,
   background: rgba(17, 14, 17, 0.9) !important;
   border-top: 1px solid var(--ui-line) !important;
   box-shadow: 0 -14px 34px rgba(0, 0, 0, 0.34) !important;
+  z-index: 100 !important;
 }
 
 .mobile-bottom-item {
