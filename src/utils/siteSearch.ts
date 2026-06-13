@@ -106,10 +106,6 @@ function scoreSearch(terms: string[], haystack: string): number {
 
 // ───── Index data ─────
 
-function isValidDisease(item: Record<string, unknown>): item is Disease {
-  return typeof item.id === 'string' && typeof item.name === 'string';
-}
-
 /** Build a searchable text blob from a Disease */
 function buildDiseaseText(item: Disease): string {
   return [
@@ -180,7 +176,7 @@ export class SiteSearch {
           import('../data/questionnaires').then((m) => m.questionnaires as Questionnaire[]),
         ]);
 
-        this.diseases = [...gynData, ...obsData].filter(isValidDisease);
+        this.diseases = [...gynData, ...obsData].filter((d): d is Disease => !!d.id && !!d.name);
         this.medications = Array.isArray(pharmData) ? pharmData : [];
         this.questionnaires = Array.isArray(qData) ? qData : [];
         this.loaded = true;

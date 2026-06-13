@@ -62,7 +62,7 @@ interface CommandSearchProps {
 export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
   const inputId = useId();
   const hintId = useId();
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [query, setQuery] = useState(() => {
     try {
       return sessionStorage.getItem('gyn-command-search') ?? '';
@@ -96,7 +96,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
     }
 
     setIsSearching(true);
-    clearTimeout(debounceRef.current);
+    clearTimeout(debounceRef.current ?? undefined);
     debounceRef.current = setTimeout(async () => {
       const searchResults = await siteSearch.search(trimmed);
       setResults(searchResults);
@@ -104,7 +104,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
     }, 250);
 
     return () => {
-      clearTimeout(debounceRef.current);
+      clearTimeout(debounceRef.current ?? undefined);
     };
   }, [query]);
 

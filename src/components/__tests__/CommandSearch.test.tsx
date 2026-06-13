@@ -1,7 +1,8 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import CommandSearch from '../CommandSearch';
 import { siteSearch } from '../../utils/siteSearch';
+import type { GroupedResults, SearchResultType } from '../../utils/siteSearch';
 
 // Mock siteSearch to avoid loading real data in tests
 vi.mock('../../utils/siteSearch', () => ({
@@ -27,15 +28,15 @@ describe('CommandSearch', () => {
   });
 
   it('shows grouped results when search returns data', async () => {
-    const mockResults = {
+    const mockResults: GroupedResults = {
       diseases: [
         {
-          type: 'disease',
+          type: 'disease' as SearchResultType,
           id: 'endometriosis__gyn',
           label: 'Эндометриоз',
           description: 'Хроническое эстроген-зависимое заболевание',
           badge: 'N80',
-          route: 'gynecology',
+          route: 'gynecology' as const,
           icd: 'N80',
           subtitle: 'Гинекология',
           query: 'Эндометриоз',
@@ -44,12 +45,12 @@ describe('CommandSearch', () => {
       ],
       medications: [
         {
-          type: 'medication',
+          type: 'medication' as SearchResultType,
           id: 'dienogest',
           label: 'Диеногест',
           description: 'Гормональная терапия — Dienogest',
           badge: 'Препарат',
-          route: 'pharmacology',
+          route: 'pharmacology' as const,
           query: 'Диеногест',
           score: 30,
         },
@@ -122,15 +123,15 @@ describe('CommandSearch', () => {
   });
 
   it('submits the top result on Enter', async () => {
-    const mockResults = {
+    const mockResults: GroupedResults = {
       diseases: [
         {
-          type: 'disease',
+          type: 'disease' as SearchResultType,
           id: 'preeclampsia__obs',
           label: 'Преэклампсия',
           description: 'O14, гипертензия',
           badge: 'O14',
-          route: 'obstetrics',
+          route: 'obstetrics' as const,
           icd: 'O14',
           subtitle: 'Акушерство',
           query: 'Преэклампсия',
