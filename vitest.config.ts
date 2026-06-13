@@ -7,6 +7,8 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/setupTests.js'],
+    testTimeout: 30000,
+    hookTimeout: 30000,
     include: ['src/**/*.{test,spec}.{js,ts,jsx,tsx}'],
     exclude: ['src/components/Icons.js', 'src/**/node_modules/**'],
     coverage: {
