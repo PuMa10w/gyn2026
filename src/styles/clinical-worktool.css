@@ -582,6 +582,53 @@ body:not([data-theme='dark']) .mobile-bottom-bar {
   background: rgba(58, 41, 46, 0.86);
 }
 
+/* ─── Grouped search results ─── */
+
+.workbench-command-group {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.workbench-command-group-label {
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--worktool-muted);
+  padding: 0 0.2rem;
+}
+
+.workbench-command-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0.8rem;
+  color: var(--worktool-muted);
+  font-size: 0.85rem;
+  border: 1px solid var(--worktool-border);
+  border-radius: 20px;
+  background: var(--worktool-surface);
+}
+
+.workbench-command-badge--pharma {
+  border-color: rgba(83, 157, 197, 0.35) !important;
+  color: #5ba3c9 !important;
+}
+
+[data-theme='dark'] .workbench-command-badge--pharma {
+  color: #7bc4e8 !important;
+}
+
+.workbench-command-badge--scale {
+  border-color: rgba(130, 197, 83, 0.35) !important;
+  color: #7ab84a !important;
+}
+
+[data-theme='dark'] .workbench-command-badge--scale {
+  color: #9ed86a !important;
+}
+
 .catalog-sort-bar {
   display: grid;
   gap: 0.45rem;

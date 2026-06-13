@@ -26,6 +26,7 @@ import { useToast } from './components/ToastSystem';
 import { emptyStateContent, homeActions, sectionMeta } from './config/appContent';
 import { isObstetricsLabel, repairText } from './utils/textRepair';
 import { getActiveModalName, getActiveModalCount } from './utils/modalStackController';
+import { siteSearch } from './utils/siteSearch';
 import type { CategoryId, Disease, TabType } from './types';
 
 const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.0.0';
@@ -304,11 +305,44 @@ function App() {
     settleViewportScroll();
   };
 
-  const handleCommandSearch = useCallback((command: WorkbenchCommand) => {
+  const handleCommandSearch = useCallback(async (command: WorkbenchCommand) => {
     const cleanQuery = repairText(command.query).trim();
 
     setShowFavorites(false);
     setShowHistory(false);
+
+    // Direct disease open — find and open the disease modal
+    if (command.directDiseaseId) {
+      const disease = siteSearch.findDiseaseById(command.directDiseaseId);
+      if (disease) {
+        const targetTab = isObstetricsLabel(disease.subtitle) ? 'obstetrics' : 'gynecology';
+        closeModalStack();
+        setActiveTab(targetTab);
+        setActiveCategory('all');
+        setSearchTerm('');
+        // Small delay to let the tab render, then open the modal
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        handleItemClick(disease);
+        addToast({
+          message: `Открыта карточка: ${repairText(disease.name)}`,
+          type: 'success',
+          duration: 2600,
+        });
+        return;
+      }
+      // Fallback: if disease not found, navigate to catalog with name
+      closeModalStack();
+      setActiveTab(command.route === 'obstetrics' ? 'obstetrics' : 'gynecology');
+      setActiveCategory(command.category ?? 'all');
+      setSearchTerm(cleanQuery);
+      settleViewportScroll();
+      addToast({
+        message: `Поиск: ${repairText(command.label)}`,
+        type: 'info',
+        duration: 2600,
+      });
+      return;
+    }
 
     if (command.route === 'pharmacology') {
       openPharmacology();
@@ -332,7 +366,7 @@ function App() {
       type: 'success',
       duration: 2600,
     });
-  }, [addToast, closeModalStack, openPharmacology, openQuestionnaire]);
+  }, [addToast, closeModalStack, openPharmacology, openQuestionnaire, handleItemClick]);
 
   return (
     <ErrorBoundary>

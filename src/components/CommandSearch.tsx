@@ -1,5 +1,7 @@
-import React, { useEffect, useId, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { siteSearch, type SearchResult, type GroupedResults } from '../utils/siteSearch';
+import { repairText } from '../utils/textRepair';
 import type { CategoryId, TabType } from '../types';
 
 export type WorkbenchCommand = {
@@ -11,79 +13,26 @@ export type WorkbenchCommand = {
   category?: CategoryId;
   badge: string;
   keywords: string[];
+  /** If set, opens this specific disease directly */
+  directDiseaseId?: string;
 };
 
-const COMMANDS: WorkbenchCommand[] = [
-  {
-    id: 'endo',
-    label: 'Эндометриоз',
-    description: 'Тазовая боль, бесплодие, УЗИ/МРТ и маршрутизация лечения боли',
-    query: 'эндометриоз N80',
-    route: 'gynecology',
-    category: 'all',
-    badge: 'Нозология',
-    keywords: ['эндометриоз', 'n80', 'тазовая боль', 'узи', 'мрт', 'бесплодие'],
-  },
-  {
-    id: 'pcos',
-    label: 'СПКЯ',
-    description: 'Ановуляция, гиперандрогения, критерии Роттердама и метаболический риск',
-    query: 'СПКЯ E28.2',
-    route: 'gynecology',
-    category: 'hormonal',
-    badge: 'Эндокринология',
-    keywords: ['спкя', 'pcos', 'e28.2', 'ановуляция', 'роттердам', 'гиперандрогения'],
-  },
-  {
-    id: 'cervical-cancer',
-    label: 'Рак шейки матки',
-    description: 'C53, ВПЧ, CIN/HSIL и маршрутизация к онкогинекологу',
-    query: 'рак шейки C53 ВПЧ',
-    route: 'gynecology',
-    category: 'oncology',
-    badge: 'Онкориск',
-    keywords: ['рак шейки', 'c53', 'впч', 'hpv', 'cin', 'hsil', 'онкология'],
-  },
-  {
-    id: 'bleeding',
-    label: 'Кровотечение',
-    description: 'АМК, N92, O46, ургентная оценка и гемостаз',
-    query: 'кровотечение N92 O46',
-    route: 'gynecology',
-    category: 'all',
-    badge: 'Triage',
-    keywords: ['кровотечение', 'амк', 'n92', 'o46', 'ургентно', 'гемостаз'],
-  },
-  {
-    id: 'preeclampsia',
-    label: 'Преэклампсия',
-    description: 'O14, давление, протеинурия, магний и сроки родоразрешения',
-    query: 'преэклампсия O14 давление',
-    route: 'obstetrics',
-    category: 'pregnancy',
-    badge: 'Акушерство',
-    keywords: ['преэклампсия', 'o14', 'давление', 'гипертензия', 'магний', 'hellp'],
-  },
-  {
-    id: 'ultrasound',
-    label: 'УЗИ и заключение',
-    description: 'Протокол, находки, чек-лист заключения и показания к МРТ/КТ',
-    query: 'УЗИ протокол находки заключение',
-    route: 'gynecology',
-    category: 'all',
-    badge: 'Визуализация',
-    keywords: ['узи', 'эхография', 'допплер', 'мрт', 'кт', 'заключение'],
-  },
-  {
-    id: 'infection',
-    label: 'ИППП и воспаление',
-    description: 'Хламидиоз, гонорея, ВЗОМТ, вагинит и партнёр-менеджмент',
-    query: 'инфекции хламидиоз гонорея ВЗОМТ',
-    route: 'gynecology',
-    category: 'infection',
-    badge: 'Инфекции',
-    keywords: ['инфекции', 'иппп', 'хламидиоз', 'гонорея', 'взомт', 'вагинит'],
-  },
+/** Convert a SearchResult to WorkbenchCommand */
+function resultToCommand(result: SearchResult): WorkbenchCommand {
+  return {
+    id: result.id,
+    label: result.label,
+    description: result.description,
+    query: result.query || result.label,
+    route: result.route,
+    badge: result.badge,
+    keywords: [],
+    directDiseaseId: result.type === 'disease' ? result.id : undefined,
+  };
+}
+
+/** Preview commands for empty state */
+const QUICK_COMMANDS: WorkbenchCommand[] = [
   {
     id: 'pharma',
     label: 'Фармакология',
@@ -91,81 +40,20 @@ const COMMANDS: WorkbenchCommand[] = [
     query: 'фармакология препараты схемы',
     route: 'pharmacology',
     badge: 'Препараты',
-    keywords: ['фарма', 'фармакология', 'препарат', 'лекарство', 'схема', 'взаимодействия'],
+    keywords: ['фарма', 'препарат', 'лекарство'],
   },
   {
     id: 'questionnaires',
     label: 'Опросники',
-    description: 'PHQ-9, EPDS, боль, ПМС, качество жизни, результат и next steps',
-    query: 'опросники шкалы PHQ-9 EPDS',
+    description: 'Клинические шкалы, результат и next steps',
+    query: 'опросники шкалы',
     route: 'questionnaires',
     badge: 'Шкалы',
-    keywords: ['опросники', 'шкалы', 'phq', 'epds', 'депрессия', 'боль', 'пмс'],
-  },
-  {
-    id: 'contraception',
-    label: 'Контрацепция',
-    description: 'КОК, ВМС, экстренная контрацепция, риски и противопоказания',
-    query: 'контрацепция КОК ВМС',
-    route: 'gynecology',
-    category: 'hormonal',
-    badge: 'Сценарий',
-    keywords: ['контрацепция', 'кок', 'вмс', 'левоноргестрел', 'дроспиренон'],
-  },
-  {
-    id: 'gestational-diabetes',
-    label: 'Гестационный диабет',
-    description: 'O24, скрининг, питание, инсулин, мониторинг и роды',
-    query: 'гестационный диабет O24',
-    route: 'obstetrics',
-    category: 'pregnancy',
-    badge: 'Беременность',
-    keywords: ['диабет', 'o24', 'глюкоза', 'инсулин', 'гсд'],
-  },
-  {
-    id: 'postpartum',
-    label: 'Послеродовый период',
-    description: 'Кровотечение, инфекция, лактация, депрессия и follow-up',
-    query: 'послеродовый период кровотечение лактация',
-    route: 'obstetrics',
-    category: 'pregnancy',
-    badge: 'Follow-up',
-    keywords: ['послеродов', 'лактация', 'мастит', 'epds', 'кровотечение'],
+    keywords: ['опросники', 'шкалы'],
   },
 ];
 
 const normalize = (value: string) => value.toLowerCase().replace(/ё/g, 'е');
-
-const freeSearchCommand = (query: string): WorkbenchCommand => ({
-  id: 'free-search',
-  label: query || 'Поиск',
-  description: 'Поиск по каталогу гинекологии',
-  query,
-  route: 'gynecology',
-  category: 'all',
-  badge: 'Поиск',
-  keywords: [],
-});
-
-const pharmaCommand = COMMANDS.find((command) => command.id === 'pharma') ?? {
-  id: 'pharma',
-  label: 'Фармакология',
-  description: 'Сценарии, first-line, беременность, лактация, взаимодействия и схемы',
-  query: 'фармакология препараты схемы',
-  route: 'pharmacology' as const,
-  badge: 'Препараты',
-  keywords: ['фарма', 'препарат', 'лекарство'],
-};
-
-const questionnairesCommand = COMMANDS.find((command) => command.id === 'questionnaires') ?? {
-  id: 'questionnaires',
-  label: 'Опросники',
-  description: 'Клинические шкалы, результат и next steps',
-  query: 'опросники шкалы',
-  route: 'questionnaires' as const,
-  badge: 'Шкалы',
-  keywords: ['опросники', 'шкалы'],
-};
 
 interface CommandSearchProps {
   onCommand: (command: WorkbenchCommand) => void;
@@ -174,6 +62,7 @@ interface CommandSearchProps {
 export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
   const inputId = useId();
   const hintId = useId();
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const [query, setQuery] = useState(() => {
     try {
       return sessionStorage.getItem('gyn-command-search') ?? '';
@@ -181,6 +70,8 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
       return '';
     }
   });
+  const [results, setResults] = useState<GroupedResults | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     try {
@@ -195,32 +86,67 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
     }
   }, [query]);
 
-  const suggestions = useMemo(() => {
-    const normalized = normalize(query.trim());
-    if (normalized.length < 2) return COMMANDS.slice(0, 6);
+  // Debounced search
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length < 2) {
+      setResults(null);
+      setIsSearching(false);
+      return;
+    }
 
-    return COMMANDS
-      .map((command) => {
-        const haystack = normalize([command.label, command.description, command.query, ...command.keywords].join(' '));
-        const score = haystack.includes(normalized) ? 2 : normalized.split(/\s+/).filter((part) => haystack.includes(part)).length;
-        return { command, score };
-      })
-      .filter((entry) => entry.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map((entry) => entry.command)
-      .slice(0, 6);
+    setIsSearching(true);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      const searchResults = await siteSearch.search(trimmed);
+      setResults(searchResults);
+      setIsSearching(false);
+    }, 250);
+
+    return () => {
+      clearTimeout(debounceRef.current);
+    };
   }, [query]);
 
   const trimmedQuery = query.trim();
   const hasQuery = normalize(trimmedQuery).length >= 2;
-  const hasNoSuggestions = hasQuery && suggestions.length === 0;
-  const fallbackSearchCommand = useMemo(() => freeSearchCommand(trimmedQuery), [trimmedQuery]);
+  const hasNoResults = hasQuery && results !== null && results.total === 0 && !isSearching;
+  const isFreshSearch = hasQuery && isSearching;
+  const isDataLoading = hasQuery && results === null && isSearching;
 
-  const submit = (event: React.FormEvent) => {
-    event.preventDefault();
-    const selected = suggestions[0] ?? fallbackSearchCommand;
-    onCommand(selected);
-  };
+  // Build display items: grouped results when searching, quick commands when empty
+  const displayItems = useMemo(() => {
+    if (!hasQuery || !results || results.total === 0) return null;
+
+    return results;
+  }, [hasQuery, results]);
+
+  const submit = useCallback(
+    (event: React.FormEvent) => {
+      event.preventDefault();
+      // Pick the best result
+      const allResults: SearchResult[] = [
+        ...(results?.diseases ?? []),
+        ...(results?.medications ?? []),
+        ...(results?.questionnaires ?? []),
+      ];
+      if (allResults.length > 0) {
+        onCommand(resultToCommand(allResults[0]));
+      } else if (trimmedQuery) {
+        // Fallback: navigate to catalog with search term
+        onCommand({
+          id: 'free-search',
+          label: trimmedQuery,
+          description: 'Поиск по каталогу гинекологии',
+          query: trimmedQuery,
+          route: 'gynecology',
+          badge: 'Поиск',
+          keywords: [],
+        });
+      }
+    },
+    [results, trimmedQuery, onCommand],
+  );
 
   return (
     <motion.section
@@ -258,29 +184,123 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
       </form>
 
       <div className="workbench-command-results" aria-label="Быстрые клинические маршруты" aria-live="polite">
-        {suggestions.map((command) => (
-          <button key={command.id} type="button" className="workbench-command-card" onClick={() => onCommand(command)}>
-            <span className="workbench-command-badge">{command.badge}</span>
-            <strong>{command.label}</strong>
-            <small>{command.description}</small>
-          </button>
-        ))}
-        {hasNoSuggestions && (
+        {/* Loading state */}
+        {isDataLoading && (
+          <div className="workbench-command-status" role="status">
+            <span>Загрузка данных поиска…</span>
+          </div>
+        )}
+
+        {/* Fresh search in progress (data already loaded) */}
+        {isFreshSearch && results === null && (
+          <div className="workbench-command-status" role="status">
+            <span>Поиск…</span>
+          </div>
+        )}
+
+        {/* No results */}
+        {hasNoResults && (
           <div className="workbench-command-empty" role="status">
-            <span className="workbench-command-badge">Нет точного совпадения</span>
+            <span className="workbench-command-badge">Нет совпадений</span>
             <h4>Продолжить клинический поиск?</h4>
-            <p>Попробуйте код МКБ, симптом, латинское название или перейдите сразу в фарму/шкалы.</p>
+            <p>
+              Попробуйте код МКБ, симптом, латинское название или перейдите сразу в фарму/шкалы.
+            </p>
             <div className="workbench-command-empty-actions">
-              <button type="button" onClick={() => onCommand(fallbackSearchCommand)}>
+              <button type="button" onClick={() => onCommand({
+                id: 'free-search',
+                label: trimmedQuery,
+                description: 'Поиск по каталогу гинекологии',
+                query: trimmedQuery,
+                route: 'gynecology',
+                badge: 'Поиск',
+                keywords: [],
+              })}>
                 Искать в каталоге
               </button>
-              <button type="button" onClick={() => onCommand(pharmaCommand)}>
+              <button type="button" onClick={() => onCommand(QUICK_COMMANDS[0])}>
                 Фарма
               </button>
-              <button type="button" onClick={() => onCommand(questionnairesCommand)}>
+              <button type="button" onClick={() => onCommand(QUICK_COMMANDS[1])}>
                 Шкалы
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Grouped results: Diseases */}
+        {displayItems && displayItems.diseases.length > 0 && (
+          <div className="workbench-command-group">
+            <span className="workbench-command-group-label">Нозологии ({displayItems.diseases.length})</span>
+            {displayItems.diseases.map((result) => (
+              <button
+                key={result.id}
+                type="button"
+                className="workbench-command-card"
+                onClick={() => onCommand(resultToCommand(result))}
+              >
+                <span className="workbench-command-badge">{result.badge || result.icd}</span>
+                <strong>{result.label}</strong>
+                <small>{result.description}</small>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Grouped results: Medications */}
+        {displayItems && displayItems.medications.length > 0 && (
+          <div className="workbench-command-group">
+            <span className="workbench-command-group-label">Препараты ({displayItems.medications.length})</span>
+            {displayItems.medications.map((result) => (
+              <button
+                key={result.id}
+                type="button"
+                className="workbench-command-card"
+                onClick={() => onCommand(resultToCommand(result))}
+              >
+                <span className="workbench-command-badge workbench-command-badge--pharma">Препарат</span>
+                <strong>{result.label}</strong>
+                <small>{result.description}</small>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Grouped results: Questionnaires */}
+        {displayItems && displayItems.questionnaires.length > 0 && (
+          <div className="workbench-command-group">
+            <span className="workbench-command-group-label">Шкалы ({displayItems.questionnaires.length})</span>
+            {displayItems.questionnaires.map((result) => (
+              <button
+                key={result.id}
+                type="button"
+                className="workbench-command-card"
+                onClick={() => onCommand(resultToCommand(result))}
+              >
+                <span className="workbench-command-badge workbench-command-badge--scale">Шкала</span>
+                <strong>{result.label}</strong>
+                <small>{result.description}</small>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Quick commands shown when idle (no query) */}
+        {!hasQuery && (
+          <div className="workbench-command-group">
+            <span className="workbench-command-group-label">Быстрый доступ</span>
+            {QUICK_COMMANDS.map((command) => (
+              <button
+                key={command.id}
+                type="button"
+                className="workbench-command-card"
+                onClick={() => onCommand(command)}
+              >
+                <span className="workbench-command-badge">{command.badge}</span>
+                <strong>{command.label}</strong>
+                <small>{command.description}</small>
+              </button>
+            ))}
           </div>
         )}
       </div>
