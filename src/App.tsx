@@ -157,6 +157,7 @@ function App() {
 
   useEffect(() => {
     let frameId = 0;
+    let toastListener: EventListener | null = null;
 
     const updateScrollTopVisibility = () => {
       const shouldShow = window.scrollY > 320;
@@ -165,18 +166,23 @@ function App() {
     };
 
     const handleScroll = () => {
-      if (frameId !== 0) return;
-      frameId = window.requestAnimationFrame(updateScrollTopVisibility);
+      if (frameId) cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(updateScrollTopVisibility);
     };
 
-    updateScrollTopVisibility();
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Toast event listener for cross-component communication
+    const handleGynToast = (e: CustomEvent) => {
+      addToast({ message: e.detail.message, type: e.detail.type, duration: e.detail.duration });
+    };
+    toastListener = handleGynToast as EventListener;
+    window.addEventListener('gyn-toast', toastListener);
 
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (frameId !== 0) window.cancelAnimationFrame(frameId);
+      if (toastListener) window.removeEventListener('gyn-toast', toastListener);
     };
-  }, []);
+  }, [addToast]);
 
   useEffect(() => {
     const updateOnlineState = () => setIsOnline(navigator.onLine);
@@ -506,7 +512,7 @@ function App() {
           </Suspense>
         )}
 
-        {/* Toast Container */}
+        {/* Offline PWA Fallback */}
         <Suspense fallback={null}>
           <ToastContainer toasts={toasts} onRemove={removeToast} />
         </Suspense>

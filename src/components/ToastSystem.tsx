@@ -129,6 +129,12 @@ const ToastItem: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({
   );
 };
 
+// Custom event for cross-component toasts
+export const emitToast = (message: string, type: Toast['type'] = 'info', duration = 2400) => {
+  const event = new CustomEvent('gyn-toast', { detail: { message, type, duration } });
+  window.dispatchEvent(event);
+};
+
 // Хук для управления тостами
 export const useToast = () => {
   const [toasts, setToasts] = useState<Toast[]>([]);

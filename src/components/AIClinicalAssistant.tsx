@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { repairText } from '../utils/textRepair';
+import { emitToast } from './ToastSystem';
 
 interface AIClinicalAssistantProps {
   diseaseName: string;
@@ -79,6 +80,7 @@ export const AIClinicalAssistant: React.FC<AIClinicalAssistantProps> = ({
   const handleCopy = async () => {
     if (!generatedText) return;
     await navigator.clipboard?.writeText(generatedText);
+    emitToast('Текст скопирован в буфер обмена', 'success', 2000);
   };
 
   return (
