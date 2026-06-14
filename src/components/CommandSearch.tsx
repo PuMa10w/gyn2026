@@ -236,7 +236,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
               <button
                 key={result.id}
                 type="button"
-                className="workbench-command-card"
+                className="workbench-command-card shimmer"
                 onClick={() => onCommand(resultToCommand(result))}
               >
                 <span className="workbench-command-badge">{result.badge || result.icd}</span>
@@ -255,7 +255,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
               <button
                 key={result.id}
                 type="button"
-                className="workbench-command-card"
+                className="workbench-command-card shimmer"
                 onClick={() => onCommand(resultToCommand(result))}
               >
                 <span className="workbench-command-badge workbench-command-badge--pharma">Препарат</span>
@@ -274,7 +274,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
               <button
                 key={result.id}
                 type="button"
-                className="workbench-command-card"
+                className="workbench-command-card shimmer"
                 onClick={() => onCommand(resultToCommand(result))}
               >
                 <span className="workbench-command-badge workbench-command-badge--scale">Шкала</span>
@@ -293,7 +293,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
               <button
                 key={command.id}
                 type="button"
-                className="workbench-command-card"
+                className="workbench-command-card shimmer"
                 onClick={() => onCommand(command)}
               >
                 <span className="workbench-command-badge">{command.badge}</span>

@@ -1204,3 +1204,43 @@ body.modal-open .mobile-bottom-bar {
   outline: 2px solid var(--worktool-gold);
   outline-offset: 3px;
 }
+
+/* Shimmer effect for workbench-command-card */
+.workbench-command-card.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(216, 184, 120, 0.08), rgba(216, 154, 167, 0.06));
+  border: 1px solid rgba(216, 184, 120, 0.22);
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.workbench-command-card.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0) 100%);
+  animation: shimmer-sweep 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.workbench-command-card.shimmer:hover {
+  box-shadow: 0 0 24px rgba(216, 154, 167, 0.28);
+  transform: translateY(-2px);
+}
+
+.workbench-command-card.shimmer > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes shimmer-sweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}

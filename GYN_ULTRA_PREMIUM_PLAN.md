@@ -6,7 +6,7 @@
 
 **Цель:** Довести до ультра-премиум уровня с premium UI/UX, AI-диагностикой (без 3D), оффлайн-режимом и production-качеством.
 
-**Последний деплой:** 14 июня 2026, коммит `0fed9dc`, CI в процессе 🔄
+**Последний деплой:** 14 июня 2026, коммит `2e0a66d`, CI в процессе 🔄
 
 ---
 
@@ -35,16 +35,15 @@
 
 ## 🚀 План улучшений (5+ фаз)
 
-### ФАЗА 1: Design System Completion (1-2 дня)
+### ФАЗА 1: Design System Completion (в процессе)
 
 **Проблема:** Цвета, spacing, elevation описаны в design-system.md, но не привязаны к реальному CSS.
 
 **Задачи:**
+- [x] Создать `src/styles/spacing.css` — система отступов под iPhone breakpoints
 - [ ] Создать `src/styles/design-tokens.css` — вынести все цвета в CSS-переменные
-- [ ] Создать `src/styles/spacing.css` — система отступов под iPhone breakpoints
 - [ ] Унифицировать градиенты: `--gradient-premium`, `--gradient-turquoise-emerald`
-- [ ] Убрать дублирование в `premium-unified.css`, `ultra-premium-v9.css`, `clinical-v1-4-skin.css`
-- [ ] Склеить в один `src/styles/clinical-premium.css`
+- [ ] Убрать дублирование в CSS файлах (сейчас 468KB total)
 - [ ] Добавить CSS Layers для isolation стилей
 
 **Файлы:**
