@@ -37,7 +37,8 @@
     "vite": "^6.3.5",
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^3.0.0",
-    "wrangler": "^4.84.1"
+    "wrangler": "^4.84.1",
+    "@lhci/cli": "^0.15.0"
   },
   "scripts": {
     "start": "vite",
@@ -80,7 +81,8 @@
     "audit:css-debt": "node scripts/css-debt-audit.mjs",
     "audit:manual:visual-checklist": "node scripts/manual-visual-checklist.mjs",
     "audit:production:freshness": "node scripts/production-freshness-audit.mjs",
-    "deploy:production": "node scripts/deploy-production-guard.mjs"
+    "deploy:production": "node scripts/deploy-production-guard.mjs",
+    "lhci": "lhci autorun --upload.target=temporary-public-storage"
   },
   "eslintConfig": {
     "extends": [
