@@ -1,0 +1,46 @@
+/* ==========================================
+   DESIGN SYSTEM: Spacing System
+   Mobile-first breakpoints + safe-area insets
+   ========================================== */
+
+/* Mobile spacing scale */
+:root {
+  --space-3xs: 4px;
+  --space-2xs: 8px;
+  --space-xs: 12px;
+  --space-sm: 16px;
+  --space-md: 22px;
+  --space-lg: 28px;
+  --space-xl: 32px;
+  --space-2xl: 42px;
+  --space-3xl: 56px;
+
+  /* Content gaps */
+  --content-gap-mobile: 22px;
+  --content-gap-tablet: 28px;
+  --content-gap-desktop: 32px;
+
+  /* Modal offsets */
+  --modal-top-offset: calc(var(--safe-top) + 24px);
+  --modal-bottom-offset: calc(var(--safe-bottom) + 16px);
+
+  /* Touch targets */
+  --touch-min: 44px;
+  --touch-icon: 40px;
+  --touch-padding: 12px;
+}
+
+/* iPhone-specific tweaks */
+@media (width <= 428px) and (hover: none) and (pointer: coarse) {
+  :root {
+    --space-md: 18px;
+    --space-lg: 24px;
+    --content-gap-mobile: 20px;
+  }
+}
+
+/* Spacing utilities */
+.stack-sm { gap: var(--space-sm); }
+.stack-md { gap: var(--space-md); }
+.stack-lg { gap: var(--space-lg); }
+.stack-xl { gap: var(--space-xl); }

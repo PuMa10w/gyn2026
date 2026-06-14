@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import './index.css';
+import './styles/spacing.css';
 import './App.css';
 import './premium-unified.css';
 import './styles/ultra-premium-v9.css';
