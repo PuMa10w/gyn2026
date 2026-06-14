@@ -7,6 +7,7 @@ import { AIClinicalAssistant } from './AIClinicalAssistant';
 import { PatientMemo } from './PatientMemo';
 import { PubMedFeed } from './PubMedFeed';
 import { isObstetricsLabel, repairText } from '../utils/textRepair';
+import { modalVariants, staggerContainer, staggerItem } from '../animations/presets';
 
 interface DiseaseModalProps {
   item: Disease;
@@ -1349,13 +1350,29 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 aria-controls={tab.id === activeTab ? panelId : undefined}
                 tabIndex={activeTab === tab.id ? 0 : -1}
               >
-                {tab.label}
+                <motion.span
+                  variants={staggerItem}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
+                  {tab.label}
+                </motion.span>
               </button>
             ))}
           </div>
 
           <div className="modal-body" id={panelId} role="tabpanel" aria-labelledby={`${titleId}-${activeTab}-tab`}>
-            {renderContent()}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                variants={modalVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                {renderContent()}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </motion.div>
       </motion.div>
