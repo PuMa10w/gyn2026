@@ -48,7 +48,6 @@ body,
 .version-checker,
 .version-checker.glass,
 .clinical-template-assistant,
-.anatomy-atlas-shell,
 .symptom-checker,
 .pubmed-feed,
 .premium-error-container,
@@ -65,7 +64,6 @@ body,
 
 .version-checker *,
 .clinical-template-assistant *,
-.anatomy-atlas-shell *,
 .symptom-checker *,
 .pubmed-feed *,
 .premium-error-container *,
@@ -231,7 +229,6 @@ body,
 .clinical-template-assistant button,
 .symptom-checker button,
 .pubmed-feed button,
-.anatomy-atlas-shell button,
 .version-checker button {
   min-height: 44px;
 }

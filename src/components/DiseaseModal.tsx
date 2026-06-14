@@ -4,8 +4,6 @@ import { gynIcons, obsIcons } from './Icons';
 import { useModalBehavior } from '../hooks/useModalBehavior';
 import type { Disease } from '../types';
 import { AIClinicalAssistant } from './AIClinicalAssistant';
-import { Organ3DViewer } from './Organ3DViewer';
-import { SymptomChecker } from './SymptomChecker';
 import { PatientMemo } from './PatientMemo';
 import { PubMedFeed } from './PubMedFeed';
 import { isObstetricsLabel, repairText } from '../utils/textRepair';
@@ -86,8 +84,6 @@ const tabs = [
   { id: 'patient-memo', label: 'Пациентке' },
   { id: 'guidelines', label: 'Источники' },
   { id: 'ai-assistant', label: 'AI помощник' },
-  { id: '3d-atlas', label: '3D атлас' },
-  { id: 'symptom-checker', label: 'AI-диагност' },
   { id: 'pubmed', label: 'PubMed' },
 ] as const;
 
@@ -1225,22 +1221,6 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
           <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
             <ClinicalToolBoundary label="AI помощник">
               <AIClinicalAssistant diseaseName={item.name} symptoms={item.symptoms} treatment={buildTreatmentSteps(item.treatment)} />
-            </ClinicalToolBoundary>
-          </motion.div>
-        );
-      case '3d-atlas':
-        return (
-          <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
-            <ClinicalToolBoundary label="3D атлас">
-              <Organ3DViewer disease={item} organType="uterus" onNavigateTab={(tab) => setActiveTab(tab)} />
-            </ClinicalToolBoundary>
-          </motion.div>
-        );
-      case 'symptom-checker':
-        return (
-          <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
-            <ClinicalToolBoundary label="AI-диагност">
-              <SymptomChecker />
             </ClinicalToolBoundary>
           </motion.div>
         );

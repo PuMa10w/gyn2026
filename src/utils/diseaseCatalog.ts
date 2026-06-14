@@ -111,13 +111,6 @@ function buildSearchableText(item: Disease) {
     ...(item.urgentPathway ?? []),
     ...(item.treatmentPathway ?? []),
   ].flatMap((entry) => [entry.title, entry.detail, entry.priority ?? '', entry.linkedTab ?? '']);
-  const atlasText = item.atlasHotspots?.flatMap((entry) => [
-    entry.label,
-    entry.organ,
-    entry.clinicalMeaning,
-    entry.risk,
-    entry.linkedTab ?? '',
-  ]) ?? [];
   const aiPromptText = item.aiPrompts
     ? Object.values(item.aiPrompts).flatMap((entry) => entry ?? [])
     : [];
@@ -155,7 +148,6 @@ function buildSearchableText(item: Disease) {
     ...(item.patientCounseling ?? []),
     ...(item.ultrasoundChecklist ?? []),
     ...pathwayText,
-    ...atlasText,
     ...aiPromptText,
     ...structuredDifferential,
     ...guidelineBasis,

@@ -50,7 +50,6 @@ body,
 .version-checker.glass,
 .clinical-tool-surface,
 .clinical-template-assistant,
-.anatomy-atlas-shell,
 .symptom-checker,
 .pubmed-feed,
 .patient-memo,
@@ -71,7 +70,6 @@ body,
 [data-theme='dark'] .version-checker.glass,
 [data-theme='dark'] .clinical-tool-surface,
 [data-theme='dark'] .clinical-template-assistant,
-[data-theme='dark'] .anatomy-atlas-shell,
 [data-theme='dark'] .symptom-checker,
 [data-theme='dark'] .pubmed-feed,
 [data-theme='dark'] .patient-memo,
@@ -94,7 +92,6 @@ body,
 .version-checker,
 .clinical-tool-surface,
 .clinical-template-assistant,
-.anatomy-atlas-shell,
 .symptom-checker,
 .pubmed-feed,
 .patient-memo {
@@ -106,7 +103,6 @@ body,
 .version-checker p,
 .clinical-tool-header p,
 .clinical-template-header p,
-.anatomy-atlas-header p,
 .clinical-tool-note,
 .clinical-template-disclaimer {
   color: var(--worktool-muted) !important;
@@ -240,7 +236,6 @@ html[data-theme='light'] .modal-content.mobile-sheet .memo-card li {
 .structured-item-title,
 .clinical-tool-header h3,
 .clinical-template-header h3,
-.anatomy-atlas-header h3,
 .pubmed-paper-main h4,
 .symptom-results h4,
 html[data-theme='dark'] .modal-content.mobile-sheet .content-card h3,
@@ -1066,18 +1061,15 @@ body:not([data-theme='dark']) .mobile-bottom-bar {
 
   .content-card-wide,
   .clinical-template-assistant,
-  .anatomy-atlas-shell,
   .symptom-checker,
   .pubmed-feed,
   .patient-memo {
     grid-column: 1 / -1 !important;
   }
 
-  .anatomy-atlas-layout {
     grid-template-columns: minmax(280px, 1fr) minmax(250px, 0.86fr) !important;
   }
 
-  .anatomy-atlas-viewport {
     min-height: 300px !important;
   }
 

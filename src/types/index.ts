@@ -208,15 +208,6 @@ export interface ClinicalPathwayStep {
   linkedTab?: string;
 }
 
-export interface DiseaseAtlasHotspotContract {
-  id: string;
-  label: string;
-  organ: string;
-  clinicalMeaning: string;
-  risk: 'routine' | 'attention' | 'urgent' | string;
-  linkedTab?: string;
-}
-
 export interface DiseaseAiPrompts {
   clinicalPearls?: string[];
   differential?: string[];
@@ -241,8 +232,6 @@ export interface Disease {
   urgentPathway?: ClinicalPathwayStep[];
   ultrasoundChecklist?: string[];
   treatmentPathway?: ClinicalPathwayStep[];
-  atlasScene?: string;
-  atlasHotspots?: DiseaseAtlasHotspotContract[];
   aiPrompts?: DiseaseAiPrompts;
   subtitle: DiseaseSubtitle;
   description: string;

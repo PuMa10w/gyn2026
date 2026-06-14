@@ -31,8 +31,6 @@ describe('clinical content enrichment', () => {
       expect(hasItems(disease.urgentPathway), disease.id).toBe(true);
       expect(hasItems(disease.treatmentPathway), disease.id).toBe(true);
       expect(hasItems(disease.ultrasoundChecklist), disease.id).toBe(true);
-      expect(disease.atlasScene, disease.id).toBeTruthy();
-      expect(hasItems(disease.atlasHotspots), disease.id).toBe(true);
       expect(disease.aiPrompts, disease.id).toBeTruthy();
     }
   });

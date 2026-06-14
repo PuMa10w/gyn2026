@@ -2,7 +2,6 @@ import type {
   ClinicalPathwayStep,
   DifferentialDiagnosisItem,
   Disease,
-  DiseaseAtlasHotspotContract,
   DiseaseClinicalSummary,
   DiseaseDiagnosticCriteria,
   DiseaseFollowUpTriggers,
@@ -193,7 +192,7 @@ const buildManagementAlgorithm = (disease: Disease): DiseaseManagementAlgorithm 
     'Сверить клиническую гипотезу с данными осмотра, визуализации и лабораторного блока.',
     'Отметить, какие утверждения требуют source-specific review перед финальным назначением.',
   ],
-  startTreatment: [firstText(disease.treatment?.firstLine, disease.treatment?.conservative, 'выбрать стартовую тактику после подтверждения диагноза')],
+  startTreatment: [firstText(disease.treatment?.firstLine, disease.treatment?.conservative, 'начать первую линию только после клинической проверки')],
   reassess: ['Оценить ответ, переносимость и изменение риска; при сомнениях пересмотреть дифференциальный диагноз.'],
   escalateWhen: ['Эскалировать при красных флагах, беременности, нарастании симптомов, подозрении на осложнение или недостаточной уверенности источника.'],
   referWhen: [
@@ -231,7 +230,7 @@ const buildUltrasound = (disease: Disease): DiseaseUltrasound => ({
   ],
   imagingTips: ['Сформулируйте клинический вопрос до исследования и проверьте, отвечает ли заключение на этот вопрос.'],
   normalValues: {},
-  pitfalls: ['Не заменять клиническое решение одной УЗИ-находкой без контекста.', 'При несоответствии УЗИ и клиники нужна повторная оценка или другой метод визуализации.'],
+  pitfalls: ['Не заменять клиническое решение одной УЗИ-находкой без контекста.', 'При несоответствии УЗИ и клиникой нужна повторная оценка или другой метод визуализации.'],
   whenMRIorCTNeeded: ['Неясная картина, подозрение на распространенный процесс, осложнение, опухоль или расхождение УЗИ с клиникой.'],
   reportingChecklist: ['локализация', 'размеры', 'структура', 'васкуляризация', 'признаки осложнений', 'сравнение с предыдущими данными', 'рекомендации по дальнейшей визуализации'],
 });
@@ -263,28 +262,6 @@ const buildPathway = (disease: Disease): ClinicalPathwayStep[] => [
     linkedTab: 'Лечение',
   },
 ];
-
-const buildHotspots = (disease: Disease): DiseaseAtlasHotspotContract[] => {
-  const obstetrics = isObstetrics(disease);
-  return [
-    {
-      id: `${disease.id}-primary-zone`,
-      label: obstetrics ? 'Материнско-плодовый контур' : 'Зона клинического интереса',
-      organ: obstetrics ? 'матка/плацента/плод' : 'матка/придатки/таз',
-      clinicalMeaning: `Связано с диагностикой и маршрутизацией при ${clean(disease.name).toLowerCase()}.`,
-      risk: 'attention',
-      linkedTab: '3D атлас',
-    },
-    {
-      id: `${disease.id}-urgent-marker`,
-      label: 'Красные флаги',
-      organ: obstetrics ? 'акушерский риск' : 'клинический риск',
-      clinicalMeaning: 'Показывает признаки, при которых нужна срочная очная оценка.',
-      risk: 'urgent',
-      linkedTab: 'Кратко',
-    },
-  ];
-};
 
 export const applyClinicalSourceOverlay = <T extends Disease>(disease: T): T => {
   const guidelineBasis = hasValue(disease.guidelineBasis) ? disease.guidelineBasis : sourceStackFor(disease);
@@ -346,8 +323,6 @@ export const applyClinicalSourceOverlay = <T extends Disease>(disease: T): T => 
         linkedTab: 'Лечение',
       },
     ],
-    atlasScene: disease.atlasScene ?? (isObstetrics(disease) ? 'pregnancy-overview' : 'pelvic-overview'),
-    atlasHotspots: disease.atlasHotspots?.length ? disease.atlasHotspots : buildHotspots(disease),
     aiPrompts: disease.aiPrompts ?? {
       clinicalPearls: clinicalSummary.clinicalPearls,
       differential: buildDifferentialDiagnosis(disease).map((item) => item.condition),

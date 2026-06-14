@@ -102,7 +102,6 @@ body,
   color: var(--brand-text);
 }
 
-:is(.navbar,.mobile-bottom-bar,.catalog-header,.catalog-controls,.premium-command-hero,.premium-card,.home-destination-card,.premium-recent-panel,.analytics-dashboard,.version-checker,.content-card,.content-card-wide,.structured-item,.quick-card,.guideline-card,.disease-card,.clinical-template-assistant,.anatomy-atlas-shell,.symptom-checker,.pubmed-feed,.medication-card,.regimen-card,.questionnaire-modal,.q-card,.q-result,.premium-error-container,.premium-recovery-card,.clinical-panel,.tool-panel,.clinical-empty-state,.clinical-error-state) {
   background: linear-gradient(145deg, var(--brand-surface), var(--brand-surface-2));
   border-color: var(--brand-border);
   color: var(--brand-text);
