@@ -82,7 +82,8 @@
     "audit:manual:visual-checklist": "node scripts/manual-visual-checklist.mjs",
     "audit:production:freshness": "node scripts/production-freshness-audit.mjs",
     "deploy:production": "node scripts/deploy-production-guard.mjs",
-    "lhci": "lhci autorun --upload.target=temporary-public-storage"
+    "lhci": "lhci autorun --upload.target=temporary-public-storage",
+    "css:report": "node scripts/css-dedup.mjs"
   },
   "eslintConfig": {
     "extends": [

@@ -6,7 +6,6 @@ import type { Disease } from '../types';
 import { AIClinicalAssistant } from './AIClinicalAssistant';
 import { PatientMemo } from './PatientMemo';
 import { PubMedFeed } from './PubMedFeed';
-import { OfflineFallback } from './OfflineFallback';
 import { isObstetricsLabel, repairText } from '../utils/textRepair';
 import { modalVariants, staggerContainer, staggerItem } from '../animations/presets';
 
