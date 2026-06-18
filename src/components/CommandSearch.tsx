@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { siteSearch, type SearchResult, type GroupedResults } from '../utils/siteSearch';
-import { repairText } from '../utils/textRepair';
 import type { CategoryId, TabType } from '../types';
 
 export type WorkbenchCommand = {
