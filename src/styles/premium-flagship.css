@@ -1618,12 +1618,12 @@ nav.navbar {
    PREMIUM GLASS 2.0 + ANIMATIONS + SKELETON
    ══════════════════════════════════════════════════════════ */
 .glass-2,
-.disease-card.glass-2,
-.catalog-shell.glass-2,
-.clinical-tool-surface.glass-2,
-.clinical-template-assistant.glass-2,
-.pubmed-feed.glass-2,
-.patient-memo.glass-2 {
+.disease-card,
+.catalog-shell,
+.clinical-tool-surface,
+.clinical-template-assistant,
+.pubmed-feed,
+.patient-memo {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(255, 248, 243, 0.68)),
     radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.18), transparent 32%),
@@ -1639,12 +1639,12 @@ nav.navbar {
 }
 
 [data-theme='dark'] .glass-2,
-[data-theme='dark'] .disease-card.glass-2,
-[data-theme='dark'] .catalog-shell.glass-2,
-[data-theme='dark'] .clinical-tool-surface.glass-2,
-[data-theme='dark'] .clinical-template-assistant.glass-2,
-[data-theme='dark'] .pubmed-feed.glass-2,
-[data-theme='dark'] .patient-memo.glass-2 {
+[data-theme='dark'] .disease-card,
+[data-theme='dark'] .catalog-shell,
+[data-theme='dark'] .clinical-tool-surface,
+[data-theme='dark'] .clinical-template-assistant,
+[data-theme='dark'] .pubmed-feed,
+[data-theme='dark'] .patient-memo {
   background:
     linear-gradient(135deg, rgba(38, 31, 42, 0.82), rgba(28, 22, 32, 0.72)),
     radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.12), transparent 32%),
