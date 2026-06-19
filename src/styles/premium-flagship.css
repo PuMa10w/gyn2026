@@ -1655,21 +1655,21 @@ nav.navbar {
 
 /* Glass 2.0 disease cards - explicit override */
 .disease-card {
-  background:
+  background-color: rgba(255, 252, 249, 0.88) !important;
+  background-image:
     linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 243, 0.72)),
     radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.18), transparent 32%),
-    radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.12), transparent 28%),
-    rgba(255, 252, 249, 0.88) !important;
+    radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.12), transparent 28%) !important;
   backdrop-filter: blur(32px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
 }
 
 [data-theme='dark'] .disease-card {
-  background:
+  background-color: rgba(22, 18, 30, 0.88) !important;
+  background-image:
     linear-gradient(135deg, rgba(38, 31, 42, 0.82), rgba(28, 22, 32, 0.72)),
     radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.12), transparent 32%),
-    radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.18), transparent 28%),
-    rgba(22, 18, 30, 0.88) !important;
+    radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.18), transparent 28%) !important;
 }
 
 /* Premium card depth */
