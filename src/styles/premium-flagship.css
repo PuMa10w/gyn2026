@@ -1004,8 +1004,21 @@ nav.navbar {
 .category-filter {
   display: flex;
   gap: var(--space-3);
-  flex-wrap: wrap;
+  overflow-x: clip;
 }
+
+.category-chips {
+  display: flex !important;
+  gap: 0.5rem !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.2rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.category-chips::-webkit-scrollbar { display: none; }
 
 .category-chip {
   display: inline-flex;
@@ -1333,8 +1346,46 @@ nav.navbar {
   padding: var(--space-4) var(--space-10);
   border-bottom: 1px solid rgba(176, 160, 204, 0.08);
   flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.modal-tabs::-webkit-scrollbar { display: none; }
+
+/* Tab buttons — premium pill style (used by DiseaseModal) */
+.tab-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: 40px;
+  padding: var(--space-3) var(--space-6) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius-full) !important;
+  background: transparent !important;
+  color: var(--am-text-tertiary) !important;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm) !important;
+  font-weight: var(--weight-medium) !important;
+  cursor: pointer;
+  white-space: nowrap !important;
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+.tab-btn:hover {
+  color: var(--am-text-secondary) !important;
+  background: rgba(176, 160, 204, 0.06) !important;
+}
+.tab-btn.active {
+  color: var(--am-brand) !important;
+  background: rgba(107, 92, 156, 0.1) !important;
+  border-color: rgba(107, 92, 156, 0.2) !important;
+  font-weight: var(--weight-semibold) !important;
 }
 
+/* Legacy class name kept for compatibility */
 .modal-tab-btn {
   display: inline-flex;
   align-items: center;
@@ -1745,15 +1796,15 @@ nav.navbar {
   .navbar-brand-copy span { display: none !important; }
   .navbar-actions { display: flex; gap: var(--space-2); }
   .navbar-action-button {
-    min-height: 28px;
-    padding: 0 var(--space-4);
-    font-size: 10px;
+    min-height: 36px;
+    padding: 0 var(--space-5);
+    font-size: var(--text-sm);
   }
   .nav-scroll { gap: var(--space-2); }
   .nav-tab { 
-    min-height: 30px;
+    min-height: 36px;
     padding: 0 var(--space-5);
-    font-size: 10px;
+    font-size: var(--text-sm);
   }
 
   .catalog-shell { padding-top: calc(var(--safe-top) + 90px); }
@@ -1774,8 +1825,9 @@ nav.navbar {
 
   .category-filter { gap: var(--space-2); }
   .category-chip { 
-    padding: var(--space-2) var(--space-4);
-    font-size: 10px;
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-sm);
+    min-height: 36px;
   }
 
   .modal-content {
@@ -1793,8 +1845,13 @@ nav.navbar {
   }
   .modal-tabs::-webkit-scrollbar { display: none; }
   .modal-tab-btn {
-    font-size: 10px;
-    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    padding: var(--space-3) var(--space-5);
+  }
+  .tab-btn {
+    font-size: var(--text-sm) !important;
+    padding: var(--space-3) var(--space-5) !important;
+    min-height: 38px !important;
   }
   .modal-body { padding: var(--space-6); }
   .modal-grid { grid-template-columns: 1fr; gap: var(--space-6); }

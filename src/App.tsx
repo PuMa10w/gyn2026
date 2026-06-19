@@ -1,12 +1,12 @@
 import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import './styles/premium-flagship.css';
-import './styles/clinical-worktool.css';
 import './styles/spacing.css';
 import './index.css';
 import './App.css';
 import './premium-unified.css';
+import './styles/clinical-worktool.css';
+import './styles/premium-flagship.css';
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import type { WorkbenchCommand } from './components/CommandSearch';
