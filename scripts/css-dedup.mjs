@@ -17,10 +17,9 @@ const cssOrder = [
   'src/index.css',
   'src/App.css',
   'src/premium-unified.css',
-  'src/styles/ultra-premium-v9.css',
   'src/styles/clinical-worktool.css',
-  'src/styles/clinical-v1-4-skin.css',
-  'src/styles/premium-flagship.css'
+  'src/styles/premium-flagship.css',
+  'src/styles/spacing.css'
 ];
 
 console.log('CSS Deduplication Report\n' + '='.repeat(50));

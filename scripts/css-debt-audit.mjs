@@ -4,14 +4,12 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const cssFiles = [
-  'src/styles/design-tokens.css',
   'src/index.css',
   'src/App.css',
   'src/premium-unified.css',
-  'src/styles/ultra-premium-v9.css',
   'src/styles/clinical-worktool.css',
-  'src/styles/v1-premium-polish.css',
-  'src/styles/clinical-v1-4-skin.css',
+  'src/styles/premium-flagship.css',
+  'src/styles/spacing.css',
 ];
 
 const budgets = {
