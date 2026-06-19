@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { siteSearch, type SearchResult, type GroupedResults } from '../utils/siteSearch';
+import { emitToast } from './ToastSystem';
+import { useVoiceInput } from '../hooks/useVoiceInput';
 import type { CategoryId, TabType } from '../types';
 
 export type WorkbenchCommand = {
@@ -71,6 +73,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
   });
   const [results, setResults] = useState<GroupedResults | null>(null);
   const [isSearching, setIsSearching] = useState(false);
+  const { listening, transcript, error, startListening, stopListening } = useVoiceInput();
 
   useEffect(() => {
     try {
@@ -84,6 +87,16 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
       // Ignore storage restrictions in private/PWA contexts.
     }
   }, [query]);
+
+  // Sync voice transcript to query
+  useEffect(() => {
+    if (transcript) {
+      setQuery(transcript);
+      if (error) {
+        emitToast(`Ошибка распознавания: ${error}`, 'error', 3000);
+      }
+    }
+  }, [transcript, error]);
 
   // Debounced search
   useEffect(() => {
@@ -177,6 +190,15 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
           enterKeyHint="search"
           placeholder="Например: O14, эндометриоз, УЗИ, фарма, EPDS..."
         />
+        <button
+          type="button"
+          className={`workbench-voice-btn ${listening ? 'listening' : ''}`}
+          onClick={listening ? stopListening : startListening}
+          aria-label={listening ? 'Остановить голосовой ввод' : 'Голосовой ввод'}
+          title={listening ? 'Остановить голосовой ввод' : 'Голосовой поиск'}
+        >
+          {listening ? '🔴' : '🎙️'}
+        </button>
         <button type="submit" className="workbench-command-submit">
           Найти
         </button>
