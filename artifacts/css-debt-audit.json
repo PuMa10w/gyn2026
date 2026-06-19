@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "generatedAt": "2026-06-19T15:36:49.416Z",
+  "generatedAt": "2026-06-19T16:22:20.090Z",
   "note": "This audit prevents CSS debt from growing while the legacy layers are gradually collapsed into tokens and primitives.",
   "budgets": {
     "totalLines": 19000,
@@ -9,7 +9,7 @@
     "mediaBlocks": 180
   },
   "totals": {
-    "lines": 17511,
+    "lines": 17515,
     "important": 2206,
     "rootBlocks": 17,
     "mediaBlocks": 78
@@ -45,7 +45,7 @@
     },
     {
       "file": "src/styles/premium-flagship.css",
-      "lines": 2152,
+      "lines": 2156,
       "important": 132,
       "rootBlocks": 1,
       "mediaBlocks": 6
