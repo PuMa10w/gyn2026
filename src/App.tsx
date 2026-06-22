@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import './styles/spacing.css';
 import './index.css';
 import './App.css';
-import './premium-unified.css';
+// import './premium-unified.css';  // REMOVED — дублировались стили из premium-flagship.css
 import './styles/clinical-worktool.css';
 import './styles/premium-flagship.css';
 import Navbar from './components/Navbar';

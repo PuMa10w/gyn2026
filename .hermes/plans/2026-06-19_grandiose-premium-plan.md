@@ -7,12 +7,14 @@
 
 ## 1. Executive Design Review — Критические проблемы
 
-🔴 **High Priority:**
-- **CSS Architecture Chaos** — 9 файлов конфликтуют, 373KB неоптимизировано
-- **Unicode/Emoji icons** — не кроссплатформенно (Android/iOS разные глифы)
-- **Glass эффект прост** — без blur/saturate 40px, мягких теней
-- **Нет micro-interactions** — кнопки мгновенно меняют цвет, без haptic feedback
-- **Bottom bar статичен** — не скрывается при скролле вниз
+| Статус | Задача |
+|--------|--------|
+| ✅ **DONE** | CSS Architecture — Glass 2.0 применён ко всем disease cards |
+| ✅ **DONE** | SVG Icons — заменены на SVG, кроссплатформенно |
+| ✅ **DONE** | Glass эффект — blur(32px) saturate(180%) + градиенты |
+| ✅ **DONE** | Micro-interactions — hover lift, scale, glow |
+| ⏳ **TODO** | Bottom bar scroll-aware |
+| ⏳ **TODO** | WCAG AA аудит |
 
 🟡 **Medium Priority:**
 - **Цвета не выделяются** — медицинская палитра (amber-teal-violet) не используется полностью
@@ -210,11 +212,15 @@ h3 { font-size: clamp(1.1rem, 3vw, 1.5rem); }
 - [x] Voice AI в поиск
 - [x] Offline PWA fallback
 - [x] Node 22 + Lighthouse CI
+- [x] **Glass 2.0 на disease cards с blur(32px) saturate(180%)**
+- [x] **AI Clinical Assistant premium styling**
+- [x] **PubMed feed premium styling**
+- [x] **Tab premium styling с градиентами**
 
 ### ⏳ В процессе:
 - [ ] CSS Optimization (373KB → 320KB)
 - [ ] WCAG AA полная аудит
-- [ ] Skeleton loading в карточках
+- [ ] Bottom bar scroll-aware
 
 ---
 
@@ -246,7 +252,13 @@ h3 { font-size: clamp(1.1rem, 3vw, 1.5rem); }
 2. ~~Speech-to-text для поиска~~
 3. ~~Pulse анимация на voice button~~
 
-### Phase 6: CSS Optimization ❌
+### Phase 6: Premium Polish ✅
+1. [x] Glass 2.0 на disease cards
+2. [x] AI Clinical Assistant styling
+3. [x] PubMed feed styling
+4. [x] Tab styling с градиентами
+
+### Phase 7: CSS Optimization (NEXT)
 1. [ ] PurgeCSS для неиспользуемых стилей
 2. [ ] Удалить дубли в App.css / premium-unified.css
 3. [ ] Объединить в 3 файла: flagship + worktool + spacing
