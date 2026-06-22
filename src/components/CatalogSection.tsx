@@ -67,8 +67,6 @@ interface CatalogSectionProps {
   emptyState: EmptyState;
 }
 
-const ITEMS_PER_PAGE = 60;
-
 const CatalogSection = React.memo(function CatalogSection({
   activeSectionMeta,
   isDataLoading,
@@ -89,28 +87,35 @@ const CatalogSection = React.memo(function CatalogSection({
   const titleId = useId();
   const sortLabelId = useId();
   const [sortMode, setSortMode] = useState<SortMode>('relevance');
-  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const [visibleCount, setVisibleCount] = useState(60);
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const animDuration = isMobile ? 0.14 : 0.22;
+  
+  // Freeze visibleCount during loading to prevent flash
+  const prevSortMode = React.useRef(sortMode);
+  const shouldApplySort = !isDataLoading;
+  const effectiveSortMode = shouldApplySort ? sortMode : prevSortMode.current;
+  prevSortMode.current = sortMode;
+  
   const sortedData = useMemo(() => {
     const entries = filteredData.map((item, index) => ({ item, index }));
 
     entries.sort((a, b) => {
-      if (sortMode === 'urgent') return riskScore(b.item) - riskScore(a.item) || a.index - b.index;
-      if (sortMode === 'reviewed') return reviewTime(b.item) - reviewTime(a.item) || a.index - b.index;
-      if (sortMode === 'source') return sourceScore(b.item) - sourceScore(a.item) || a.index - b.index;
-      if (sortMode === 'alpha') return a.item.name.localeCompare(b.item.name, 'ru') || a.index - b.index;
+      if (effectiveSortMode === 'urgent') return riskScore(b.item) - riskScore(a.item) || a.index - b.index;
+      if (effectiveSortMode === 'reviewed') return reviewTime(b.item) - reviewTime(a.item) || a.index - b.index;
+      if (effectiveSortMode === 'source') return sourceScore(b.item) - sourceScore(a.item) || a.index - b.index;
+      if (effectiveSortMode === 'alpha') return a.item.name.localeCompare(b.item.name, 'ru') || a.index - b.index;
       return a.index - b.index;
     });
 
     return entries.map((entry) => entry.item);
-  }, [filteredData, sortMode]);
+  }, [filteredData, effectiveSortMode]);
 
   const visibleItems = sortedData.slice(0, visibleCount);
   const hasMore = visibleCount < sortedData.length;
 
   const loadMore = useCallback(() => {
-    setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, sortedData.length));
+    setVisibleCount(prev => Math.min(prev + 60, sortedData.length));
   }, [sortedData.length]);
 
   // Infinite scroll handler
