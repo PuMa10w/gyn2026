@@ -1,5 +1,5 @@
 import React, { useId, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import DiseaseCard from './DiseaseCard';
