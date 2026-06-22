@@ -1,4 +1,4 @@
-import React, { useId, useMemo, useState } from 'react';
+import React, { useId, useMemo, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
@@ -67,6 +67,8 @@ interface CatalogSectionProps {
   emptyState: EmptyState;
 }
 
+const ITEMS_PER_PAGE = 60;
+
 const CatalogSection = React.memo(function CatalogSection({
   activeSectionMeta,
   isDataLoading,
@@ -87,6 +89,7 @@ const CatalogSection = React.memo(function CatalogSection({
   const titleId = useId();
   const sortLabelId = useId();
   const [sortMode, setSortMode] = useState<SortMode>('relevance');
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const animDuration = isMobile ? 0.14 : 0.22;
   const sortedData = useMemo(() => {
@@ -102,6 +105,24 @@ const CatalogSection = React.memo(function CatalogSection({
 
     return entries.map((entry) => entry.item);
   }, [filteredData, sortMode]);
+
+  const visibleItems = sortedData.slice(0, visibleCount);
+  const hasMore = visibleCount < sortedData.length;
+
+  const loadMore = useCallback(() => {
+    setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, sortedData.length));
+  }, [sortedData.length]);
+
+  // Infinite scroll handler
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (hasMore && window.innerHeight + window.scrollY >= document.body.scrollHeight - 1000) {
+        loadMore();
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore, loadMore]);
 
   return (
     <motion.section
@@ -180,7 +201,7 @@ const CatalogSection = React.memo(function CatalogSection({
 
         {!isDataLoading &&
           !error &&
-          sortedData.map((item, index) => (
+          visibleItems.map((item, index) => (
             <DiseaseCard
               key={item.id}
               item={item}
@@ -190,6 +211,10 @@ const CatalogSection = React.memo(function CatalogSection({
               onToggleFavorite={onToggleFavorite}
             />
           ))}
+
+        {!isDataLoading && !error && hasMore && (
+          <div className="pagination-sentinel" aria-hidden="true" />
+        )}
 
         {!isDataLoading && !error && sortedData.length === 0 && (
           <motion.div className="empty-state" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
