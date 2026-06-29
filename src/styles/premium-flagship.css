@@ -60,11 +60,12 @@
   --am-shadow-glow:   0 0 40px rgba(107, 92, 156, 0.16);
 
   /* ─ Light Theme Gradients ─ */
-  --am-gradient-brand: linear-gradient(135deg, #6B5C9C 0%, #8D7FBF 50%, #D4A76A 100%);
-  --am-gradient-soft:  linear-gradient(135deg, rgba(107, 92, 156, 0.04) 0%, rgba(212, 167, 106, 0.04) 100%);
-  --am-bg-hero: radial-gradient(circle at 20% 10%, rgba(107, 92, 156, 0.08), transparent 30%),
-                radial-gradient(circle at 80% 20%, rgba(212, 167, 106, 0.06), transparent 28%),
-                linear-gradient(180deg, #F5F1EB 0%, #FAF7F4 50%, #F8F5F1 100%);
+    --am-gradient-brand: linear-gradient(135deg, #6B5C9C 0%, #8D7FBF 50%, #D4A76A 100%);
+    --am-gradient-soft:  linear-gradient(135deg, rgba(107, 92, 156, 0.04) 0%, rgba(212, 167, 106, 0.04) 100%);
+    --am-modal-bg:      rgba(255, 255, 255, 0.96);
+    --am-bg-hero: radial-gradient(circle at 20% 10%, rgba(107, 92, 156, 0.08), transparent 30%),
+                  radial-gradient(circle at 80% 20%, rgba(212, 167, 106, 0.06), transparent 28%),
+                  linear-gradient(180deg, #F5F1EB 0%, #FAF7F4 50%, #F8F5F1 100%);
 
   /* ══════════════════════════════════════════════════════
      LAYERED DEPTH SYSTEM (cinematic z-layering)
@@ -182,6 +183,7 @@
   --am-bg-elevated:   #221E2D;
   --am-bg-card:       rgba(30, 26, 40, 0.92);
   --am-bg-glass:      rgba(22, 18, 30, 0.88);
+  --am-modal-bg:      rgba(22, 18, 30, 0.96);
 
   --am-text-primary:  #EDE8F5;
   --am-text-secondary: #B8B0CC;
@@ -1269,18 +1271,18 @@ nav.navbar {
 
 /* ── Favorite Button ────────────────────────────────────────── */
 .favorite-btn {
-  width: 36px !important;
-  min-width: 36px !important;
-  height: 36px !important;
-  min-height: 36px !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  flex: 0 0 36px !important;
+  flex: 0 0 44px !important;
   background: transparent !important;
   border: 1px solid var(--am-border-soft) !important;
   border-radius: var(--radius-sm) !important;
-  color: var(--am-text-tertiary) !important;
+  color: var(--am-text-secondary) !important;
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-smooth) !important;
 }
@@ -1317,10 +1319,10 @@ nav.navbar {
   max-height: min(90dvh, 920px);
   display: flex;
   flex-direction: column;
-  background: rgba(22, 18, 30, 0.94);
-  border: 1px solid rgba(176, 160, 204, 0.12);
+  background: var(--am-modal-bg);
+  border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--am-shadow-xl);
   overflow: hidden;
   animation: modalEnter 0.3s var(--ease-fast) forwards;
 }
@@ -1357,12 +1359,12 @@ nav.navbar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
-  border: 1px solid rgba(176, 160, 204, 0.1);
+  border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-full);
-  background: transparent;
+  background: var(--am-bg-card);
   color: var(--am-text-secondary);
   font-size: var(--text-xl);
   cursor: pointer;
@@ -1398,10 +1400,10 @@ nav.navbar {
   flex-shrink: 0;
   min-height: 40px;
   padding: var(--space-3) var(--space-6);
-  border: 1px solid transparent;
+  border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-full);
-  background: rgba(255, 250, 246, 0.92);
-  color: var(--am-text-primary);
+  background: var(--am-bg-card);
+  color: var(--am-text-secondary);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
@@ -1416,8 +1418,9 @@ nav.navbar {
 .tab-btn:hover {
   transform: translateY(-1px);
   box-shadow: var(--am-shadow-sm);
-  border-color: rgba(107, 92, 156, 0.18);
-  background: rgba(255, 255, 255, 0.96);
+  border-color: var(--am-border-medium);
+  background: var(--am-bg-elevated);
+  color: var(--am-text-primary);
 }
 
 .tab-btn:active {
@@ -1425,10 +1428,10 @@ nav.navbar {
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #f4c4b5, #df9aa8);
+  background: var(--am-gradient-brand);
   color: var(--am-text-inverse);
-  border-color: rgba(151, 84, 97, 0.42);
-  box-shadow: var(--am-shadow-sm), 0 0 24px rgba(232, 132, 125, 0.18);
+  border-color: transparent;
+  box-shadow: var(--am-shadow-sm), 0 0 24px rgba(107, 92, 156, 0.18);
 }
 
 /* Legacy class name kept for compatibility */
@@ -1436,10 +1439,10 @@ nav.navbar {
   display: inline-flex;
   align-items: center;
   padding: var(--space-3) var(--space-6);
-  border: 1px solid transparent;
+  border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--am-text-tertiary);
+  background: var(--am-bg-card);
+  color: var(--am-text-secondary);
   font-family: var(--font-sans);
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
@@ -1448,13 +1451,24 @@ nav.navbar {
   transition: all var(--duration-fast) var(--ease-smooth);
 }
 .modal-tab-btn:hover {
-  color: var(--am-text-secondary);
-  background: rgba(176, 160, 204, 0.04);
+  color: var(--am-text-primary);
+  background: var(--am-bg-elevated);
 }
 .modal-tab-btn[aria-selected="true"] {
-  color: var(--am-brand-light);
-  background: rgba(107, 92, 156, 0.08);
-  border-color: rgba(107, 92, 156, 0.15);
+  color: var(--am-brand);
+  background: var(--am-bg-elevated);
+  border-color: var(--am-border-medium);
+}
+
+/* Dark theme overrides for modal tabs */
+[data-theme='dark'] .modal-tab-btn {
+  background: var(--am-bg-card);
+  color: var(--am-text-secondary);
+}
+[data-theme='dark'] .modal-tab-btn[aria-selected="true"] {
+  background: rgba(107, 92, 156, 0.12);
+  color: var(--am-text-primary);
+  border-color: rgba(107, 92, 156, 0.25);
 }
 
 .modal-body {
@@ -1492,14 +1506,14 @@ nav.navbar {
 
 .content-card {
   padding: var(--space-8);
-  background: rgba(30, 26, 40, 0.6);
-  border: 1px solid rgba(176, 160, 204, 0.08);
+  background: var(--am-bg-card);
+  border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-lg);
   transition: all var(--duration-md) var(--ease-smooth);
 }
 .content-card:hover {
-  background: rgba(30, 26, 40, 0.7);
-  border-color: rgba(176, 160, 204, 0.14);
+  background: var(--am-bg-elevated);
+  border-color: var(--am-border-medium);
 }
 .content-card h3 {
   font-size: var(--text-base);
@@ -1554,8 +1568,8 @@ nav.navbar {
 
 .structured-item {
   padding: var(--space-6);
-  background: rgba(30, 26, 40, 0.4);
-  border: 1px solid rgba(176, 160, 204, 0.06);
+  background: var(--am-bg-card);
+  border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-md);
 }
 .structured-item-title {
@@ -1674,10 +1688,10 @@ main .disease-card,
 [data-theme='dark'] main .disease-card,
 [data-theme='dark'] .disease-card {
   background:
-    linear-gradient(135deg, rgba(38, 31, 42, 0.82), rgba(28, 22, 32, 0.72)),
-    radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.12), transparent 32%),
-    radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.18), transparent 28%),
-    rgba(22, 18, 30, 0.88) !important;
+    linear-gradient(135deg, rgba(16, 13, 22, 0.92), rgba(22, 18, 30, 0.88)),
+    radial-gradient(circle at 20% 0%, rgba(107, 92, 156, 0.20), transparent 32%),
+    radial-gradient(circle at 80% 20%, rgba(212, 167, 106, 0.10), transparent 28%),
+    var(--am-bg-card) !important;
 }
 
 /* Premium card depth */
@@ -2034,15 +2048,6 @@ body {
 [data-theme='light'] .modal-tab-btn[aria-selected="true"] {
   background: rgba(107, 92, 156, 0.06);
   border-color: rgba(107, 92, 156, 0.12);
-}
-[data-theme='light'] .content-card,
-[data-theme='light'] .structured-item {
-  background: var(--am-bg-card);
-  border-color: var(--am-border-soft);
-}
-[data-theme='light'] .content-card:hover {
-  background: var(--am-bg-elevated);
-  border-color: var(--am-border-medium);
 }
 [data-theme='light'] .toast-premium {
   background: var(--am-bg-card);
