@@ -120,16 +120,24 @@ const CatalogSection = React.memo(function CatalogSection({
     setVisibleCount(prev => Math.min(prev + 100, sortedData.length));
   }, [sortedData.length]);
 
-  // Оптимизированный скролл-хендлер
+  // Оптимизированный скролл-хендлер с Intersection Observer
   React.useEffect(() => {
-    const handleScroll = () => {
-      if (hasMore && window.innerHeight + window.scrollY >= document.body.scrollHeight - 800) {
-        loadMore();
-      }
-    };
-    // Passive listener для производительности
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const sentinel = document.querySelector('.pagination-sentinel');
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && hasMore) {
+            loadMore();
+          }
+        });
+      },
+      { rootMargin: '200px' } // Начинаем подгружать за 200px до появления
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, [hasMore, loadMore]);
 
   return (

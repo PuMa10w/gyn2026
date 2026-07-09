@@ -645,17 +645,38 @@ nav.navbar {
   display: flex;
   gap: var(--space-3);
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+  scroll-snap-type: x mandatory; /* Прилипание к активной вкладке */
+  padding-bottom: 2px; /* Визуальная подсказка о скролле */
 }
 .nav-scroll::-webkit-scrollbar { display: none; }
+.nav-scroll::-webkit-scrollbar-thumb { display: none; }
+
+/* Скролл-индикатор */
+.nav-scroll::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+  width: 6px;
+  height: 24px;
+  background: linear-gradient(180deg, rgba(107, 92, 156, 0.3), transparent);
+  border-radius: 3px;
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-smooth);
+}
+.nav-scroll:hover::after { opacity: 0.9; }
 
 .nav-tab,
 .nav-item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
+  min-height: 44px; /* Минимум для touch target */
   padding: 0 var(--space-7);
   border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-full);
@@ -666,6 +687,8 @@ nav.navbar {
   font-weight: var(--weight-medium);
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0; /* Не сжимается */
+  scroll-snap-align: center; /* Прилипание к центру */
   transition: all var(--duration-fast) var(--ease-fast);
 }
 .nav-tab:hover {
@@ -1146,8 +1169,8 @@ nav.navbar {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: var(--space-7);
-  content-visibility: auto;
-  contain-intrinsic-size: 2000px; /* Предсказываем высоту для плавной подгрузки */
+  /* Для динамической подгрузки используем contain-intrinsic-size вместо content-visibility */
+  contain-intrinsic-size: 2000px;
   scroll-snap-type: y proximity;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
