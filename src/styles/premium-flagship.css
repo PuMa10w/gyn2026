@@ -376,8 +376,8 @@ a:hover {
    ══════════════════════════════════════════════════════════ */
 .glass {
   background: var(--am-bg-glass) !important;
-  backdrop-filter: blur(24px) saturate(1.1) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(1.1) !important;
+  backdrop-filter: blur(40px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.8) !important;
   border: 1px solid var(--am-border-soft) !important;
   box-shadow: var(--am-shadow-sm) !important;
   transition: background var(--duration-md) var(--ease-smooth),
@@ -394,8 +394,8 @@ a:hover {
 
 .glass-panel {
   background: var(--am-bg-panel) !important;
-  backdrop-filter: blur(24px) saturate(1.1) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(1.1) !important;
+  backdrop-filter: blur(40px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.8) !important;
   border: 1px solid var(--am-border-soft) !important;
   box-shadow: var(--am-shadow-sm) !important;
 }
@@ -450,8 +450,8 @@ nav.navbar {
   z-index: var(--z-navbar) !important;
   border-radius: 20px !important;
   background: var(--am-bg-glass) !important;
-  backdrop-filter: blur(32px) saturate(1.2) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(1.2) !important;
+  backdrop-filter: blur(40px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.8) !important;
   border: 1px solid var(--am-border-soft) !important;
   box-shadow: var(--am-shadow-md) !important;
   padding: 0 !important;
