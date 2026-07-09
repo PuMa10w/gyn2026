@@ -2415,9 +2415,15 @@ body {
   .catalog-description,
   .card-desc { font-size: var(--text-sm); }
 
-  .cards-grid { grid-template-columns: 1fr; gap: var(--space-6); }
+  .cards-grid { grid-template-columns: 1fr; gap: var(--space-5); }
   .cards-virtualized { height: calc(100vh - 280px); min-height: 300px; }
-  .disease-card { min-height: 200px; }
+  .disease-card { min-height: 168px; }
+  .disease-card .card-header { padding: var(--space-5) var(--space-5) 0; }
+  .disease-card .card-body { padding: var(--space-4) var(--space-5) var(--space-5); gap: var(--space-2); }
+  .disease-card .card-title { font-size: var(--text-base); line-height: 1.25; }
+  .disease-card .card-desc,
+  .disease-card .card-description { font-size: var(--text-xs); line-height: 1.4; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+  .disease-card .clinical-labels { gap: 4px; }
 
   .search-input { min-height: 44px; font-size: var(--text-sm); }
   .search-suggestions { gap: var(--space-2); }
