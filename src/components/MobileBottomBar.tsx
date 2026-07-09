@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface NavItem {
@@ -19,11 +19,35 @@ const navItems: NavItem[] = [
 ];
 
 export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, onNavigate }) => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const scrollThreshold = 16;
+  const showThreshold = 100;
+  
+  useEffect(() => {
+    const updateVisibility = () => {
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollY;
+      
+      // Hide when scrolling down past threshold, show when scrolling up
+      if (delta > scrollThreshold && currentY > showThreshold) {
+        setIsVisible(false);
+      } else if (delta < -scrollThreshold) {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentY);
+    };
+
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    return () => window.removeEventListener('scroll', updateVisibility);
+  }, [lastScrollY]);
+
   return (
     <motion.nav
       initial={{ y: 18, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      animate={{ y: isVisible ? 0 : 100, opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
       className="mobile-bottom-bar"
       aria-label="Нижняя навигация"
     >
@@ -41,7 +65,15 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
               aria-current={isActive ? 'page' : undefined}
             >
               <span className="mobile-bottom-label">{item.label}</span>
-              {isActive ? <motion.span className="mobile-bottom-active-line" layoutId="bottomActiveLine" /> : null}
+              {isActive && (
+                <motion.span 
+                  className="mobile-bottom-active-dot" 
+                  layoutId="bottomActiveLine"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.15, ease: 'easeOut' }}
+                />
+              )}
             </motion.button>
           );
         })}
