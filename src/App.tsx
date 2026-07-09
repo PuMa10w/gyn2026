@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import './styles/design-tokens.css';  /* NEW: Single source of truth */
 import './styles/spacing.css';
 import './index.css';  /* Legacy styles - will be refactored */
 import './App.css';

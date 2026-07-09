@@ -173,6 +173,29 @@
   --color-emerald: var(--am-teal-light);
   --color-gold: var(--am-amber);
   --gradient-accent: var(--am-gradient-brand);
+  --gradient-premium: var(--am-gradient-brand);
+  --gradient-metal: linear-gradient(135deg, #B8A5D0 0%, #D4B08A 100%);
+  --gradient-silk: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(212,167,106,0.08) 50%, rgba(255,255,255,0.12) 100%);
+  --gradient-velvet: linear-gradient(160deg, rgba(107,92,156,0.05) 0%, rgba(255,255,255,0.08) 50%, rgba(107,92,156,0.07) 100%);
+  --gradient-copper: linear-gradient(135deg, #D4B08A 0%, #B8833F 40%, #D4B08A 100%);
+  --gradient-champagne: linear-gradient(135deg, #E6C999 0%, #D4A76A 50%, #E6C999 100%);
+  --gradient-turquoise-emerald: var(--am-gradient-brand);
+  --overlay-backdrop: rgba(13, 11, 18, 0.42);
+  --accent-rose: var(--am-brand);
+  --accent-rose-strong: var(--am-brand-dark);
+  --accent-champagne: var(--am-amber);
+  --accent-ink: var(--am-text-primary);
+  --accent-soft: rgba(107, 92, 156, 0.18);
+  --accent-copper: var(--am-amber-dark);
+  --accent-bronze: var(--am-amber-dark);
+  --bg-elevated: var(--am-bg-glass);
+  --bg-hero: var(--am-bg-hero);
+  --text-inverse: var(--am-text-inverse);
+  --shadow-soft: var(--am-shadow-md);
+  --shadow-hover: var(--am-shadow-lg);
+  --shadow-modal: var(--am-shadow-xl);
+  --brand-border: var(--am-brand);
+  --brand-text: var(--am-text-primary);
 }
 
 /* ── Dark Theme ──────────────────────────────────────────── */
@@ -234,6 +257,32 @@
   --border-soft: var(--am-border-soft);
   --border-strong: var(--am-border-medium);
   --gradient-accent: var(--am-gradient-brand);
+  --gradient-premium: var(--am-gradient-brand);
+  --gradient-metal: linear-gradient(135deg, #7D6B9A 0%, #B89A6E 100%);
+  --gradient-silk: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(212,167,106,0.06) 50%, rgba(255,255,255,0.08) 100%);
+  --gradient-velvet: linear-gradient(160deg, rgba(107,92,156,0.07) 0%, rgba(255,255,255,0.04) 50%, rgba(107,92,156,0.09) 100%);
+  --gradient-copper: linear-gradient(135deg, #D4A56A 0%, #C9874A 40%, #D4A56A 100%);
+  --gradient-champagne: linear-gradient(135deg, #C9A882 0%, #A88B64 50%, #C9A882 100%);
+  --gradient-turquoise-emerald: var(--am-gradient-brand);
+  --color-turquoise: var(--am-teal);
+  --color-emerald: var(--am-teal-light);
+  --color-gold: var(--am-amber);
+  --overlay-backdrop: rgba(8, 7, 11, 0.72);
+  --accent-rose: var(--am-brand-light);
+  --accent-rose-strong: var(--am-amber-light);
+  --accent-champagne: var(--am-amber);
+  --accent-ink: var(--am-text-primary);
+  --accent-soft: rgba(184, 165, 208, 0.22);
+  --accent-copper: var(--am-amber-dark);
+  --accent-bronze: var(--am-amber-dark);
+  --bg-elevated: var(--am-bg-glass);
+  --bg-hero: var(--am-bg-hero);
+  --text-inverse: var(--am-text-inverse);
+  --shadow-soft: var(--am-shadow-md);
+  --shadow-hover: var(--am-shadow-lg);
+  --shadow-modal: var(--am-shadow-xl);
+  --brand-border: var(--am-brand-light);
+  --brand-text: var(--am-text-primary);
 }
 
 /* ── Core Reset & Base ───────────────────────────────────── */
@@ -699,7 +748,7 @@ nav.navbar {
 }
 .nav-tab:active { transform: scale(0.97); }
 .nav-tab.active {
-  color: var(--am-text-inverse);
+  color: #fff;
   background: var(--am-gradient-brand);
   border-color: transparent;
 }
@@ -1079,7 +1128,7 @@ nav.navbar {
   padding: var(--space-3) var(--space-7);
   border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--am-bg-glass);
   color: var(--am-text-secondary);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
@@ -1096,8 +1145,8 @@ nav.navbar {
 .category-chip:hover {
   transform: translateY(-1px);
   box-shadow: var(--am-shadow-sm);
-  border-color: rgba(107, 92, 156, 0.18);
-  background: rgba(255, 255, 255, 0.86);
+  border-color: var(--am-border-medium);
+  background: var(--am-bg-card);
 }
 
 .category-chip:active {
@@ -1105,10 +1154,10 @@ nav.navbar {
 }
 
 .category-chip.active {
-  background: linear-gradient(135deg, #f4c4b5, #df9aa8);
-  color: var(--am-text-inverse);
-  border-color: rgba(151, 84, 97, 0.42);
-  box-shadow: var(--am-shadow-sm), 0 0 24px rgba(232, 132, 125, 0.18);
+  background: var(--am-gradient-brand);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: var(--am-shadow-sm), 0 0 24px rgba(107, 92, 156, 0.28);
 }
 .chip-count {
   display: inline-flex;
