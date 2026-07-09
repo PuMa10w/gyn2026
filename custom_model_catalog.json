@@ -1,0 +1,51 @@
+{
+  "providers": {
+    "nous": {
+      "models": [
+        {"id": "meta-llama/llama-3.1-8b-instruct:free", "description": ""},
+        {"id": "meta-llama/llama-3.1-70b-instruct:free", "description": ""},
+        {"id": "nousresearch/hermes-3-llama-3.1-405b:free", "description": ""},
+        {"id": "cohere/command-r-plus:free", "description": ""},
+        {"id": "cohere/codellama-34b-python:free", "description": ""}
+      ],
+      "metadata": {
+        "display_name": "Nous Research",
+        "note": "Default models from Nous Research"
+      }
+    },
+    "openrouter": {
+      "metadata": {
+        "display_name": "OpenRouter (free models)",
+        "note": "Curated list of reliable free models"
+      },
+      "models": [
+        {"id": "poolside/laguna-m.1:free", "description": ""},
+        {"id": "qwen/qwen3-coder:free", "description": ""},
+        {"id": "meta-llama/llama-3.3-70b-instruct:free", "description": ""},
+        {"id": "nousresearch/hermes-3-llama-3.1-405b:free", "description": ""},
+        {"id": "openai/gpt-oss-20b:free", "description": ""},
+        {"id": "google/gemma-4-26b-a4b-it:free", "description": ""},
+        {"id": "nvidia/nemotron-nano-9b-v2:free", "description": ""},
+        {"id": "nvidia/nemotron-nano-12b-v2-vl:free", "description": ""},
+        {"id": "liquid/lfm-2.5-1.2b-thinking:free", "description": ""},
+        {"id": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free", "description": ""},
+        {"id": "cohere/codellama-34b-python:free", "description": ""},
+        {"id": "mistralai/mistral-7b-instruct:free", "description": ""},
+        {"id": "zmdrummermc/phi-3-mini-4k-instruct:free", "description": ""},
+        {"id": "togethercomputer/GPT-NeoXT-Chat-7B:free", "description": ""},
+        {"id": "openchat/openchat-7b:free", "description": ""},
+        {"id": "allenai/tulu-2-dpo-7b-pythia-7b:free", "description": ""},
+        {"id": "gryphe/mythomist-7b:free", "description": ""},
+        {"id": "undi95/llama-2-7b-chat:hf", "description": ""},
+        {"id": "google/flan-t5-base:free", "description": ""},
+        {"id": "tiiuae/falcon-7b-instruct:free", "description": ""},
+        {"id": "tencent/hy3:free", "description": ""}
+      ]
+    }
+  },
+  "metadata": {
+    "source": "Combined Nous provider + curated free OpenRouter models",
+    "description": "Hermes-compatible model catalog for free OpenRouter models",
+    "updated_at": "2026-07-09T17:44:00.000Z"
+  }
+}
