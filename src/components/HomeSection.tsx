@@ -60,9 +60,14 @@ const HomeSection = React.memo(function HomeSection({
 
       <section className="premium-command-hero" aria-label="Клинический центр управления">
         <div className="premium-command-copy">
-          <PremiumBadge tone="gold">Клинический PWA</PremiumBadge>
-          <h2>Ваш клинический навигатор</h2>
-          <p>
+          <div className="hero-eyebrow-row">
+            <PremiumBadge tone="gold">Клинический PWA</PremiumBadge>
+            <span className="hero-status-dot" aria-hidden="true" />
+          </div>
+          <h2 className="hero-title">
+            Ваш <span className="gradient-text">клинический навигатор</span>
+          </h2>
+          <p className="hero-lede">
             Быстрый вход в гинекологию, акушерство, шкалы и фармакологию без визуального шума: всё собрано в спокойном
             премиальном интерфейсе для работы с телефона.
           </p>

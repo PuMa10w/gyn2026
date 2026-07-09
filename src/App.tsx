@@ -1,12 +1,12 @@
 import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import './styles/design-tokens.css';  /* NEW: Single source of truth */
 import './styles/spacing.css';
-import './index.css';
+import './index.css';  /* Legacy styles - will be refactored */
 import './App.css';
-// import './premium-unified.css';  // REMOVED — дублировались стили из premium-flagship.css
-import './styles/clinical-worktool.css';
-import './styles/premium-flagship.css';
+import './styles/premium-flagship.css';  /* MASTER CSS - LAST for cascade override */
+import './styles/premium-effects.css';  /* Ultra-premium hero/aura/mesh effects */
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import type { WorkbenchCommand } from './components/CommandSearch';
@@ -21,7 +21,7 @@ import { useCatalogData } from './hooks/useCatalogData';
 import { useTheme } from './hooks/useTheme';
 import { useFavorites } from './hooks/useFavorites';
 import { useHistory } from './hooks/useHistory';
-import { useToast } from './components/ToastSystem';
+import { useToast } from './hooks/useToast';
 import { emptyStateContent, homeActions, sectionMeta } from './config/appContent';
 import { isObstetricsLabel, repairText } from './utils/textRepair';
 import { getActiveModalName, getActiveModalCount } from './utils/modalStackController';
