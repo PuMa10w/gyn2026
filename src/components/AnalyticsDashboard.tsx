@@ -59,7 +59,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
         <div className="glass" style={{ padding: '20px', borderRadius: '16px', textAlign: 'center' }}>
-          <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#D89AA7' }}>{totalViews}</div>
+          <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#8D7FBF' }}>{totalViews}</div>
           <div style={{ fontSize: '14px', opacity: 0.7 }}>Всего просмотров</div>
         </div>
 
@@ -69,7 +69,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         </div>
 
         <div className="glass" style={{ padding: '20px', borderRadius: '16px', textAlign: 'center' }}>
-          <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#B97886' }}>
+          <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#6B5C9C' }}>
             {uniqueCodes}
           </div>
           <div style={{ fontSize: '14px', opacity: 0.7 }}>Уникальных кодов</div>
@@ -78,7 +78,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
       {topViewed.length > 0 && (
         <div className="glass" style={{ padding: '20px', borderRadius: '16px', marginBottom: '24px' }}>
-          <h4 style={{ marginTop: 0, marginBottom: '16px', color: '#B97886' }}>Топ-5 просматриваемых</h4>
+          <h4 style={{ marginTop: 0, marginBottom: '16px', color: '#6B5C9C' }}>Топ-5 просматриваемых</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {topViewed.map((item, index) => (
               <motion.div
@@ -102,7 +102,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                       width: '24px',
                       height: '24px',
                       borderRadius: '50%',
-                      background: index === 0 ? '#D89AA7' : 'rgba(255,255,255,0.1)',
+                      background: index === 0 ? '#8D7FBF' : 'rgba(255,255,255,0.1)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -123,7 +123,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                     padding: '4px 12px',
                     borderRadius: '12px',
                     fontSize: '12px',
-                    color: '#B97886',
+                    color: '#6B5C9C',
                   }}
                 >
                   {item.count} раз
@@ -135,10 +135,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       )}
 
       <div className="glass" style={{ padding: '20px', borderRadius: '16px' }}>
-        <h4 style={{ marginTop: 0, marginBottom: '16px', color: '#B97886' }}>Распределение по разделам</h4>
+        <h4 style={{ marginTop: 0, marginBottom: '16px', color: '#6B5C9C' }}>Распределение по разделам</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {categoryStats.map((stat, index) => {
-            const barColor = index === 0 ? '#D89AA7' : '#D8B878';
+            const barColor = index === 0 ? '#8D7FBF' : '#D4A76A';
 
             return (
               <div key={stat.name}>

@@ -127,13 +127,13 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({ disease, className = '
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #2b2023; background: #fffaf5; margin: 0; padding: 28px; line-height: 1.58; }
             main { max-width: 820px; margin: 0 auto; }
-            header { background: linear-gradient(135deg, #f4c4b5, #d996a2); border-radius: 24px; padding: 28px; margin-bottom: 20px; }
+            header { background: linear-gradient(135deg, #8D7FBF, #6B5C9C); border-radius: 24px; padding: 28px; margin-bottom: 20px; }
             h1 { margin: 0 0 8px; font-size: 28px; }
-            section { background: #fff; border: 1px solid rgba(185,120,134,.22); border-radius: 18px; padding: 18px; margin: 14px 0; }
-            h2 { margin: 0 0 10px; font-size: 18px; color: #8d5260; }
+            section { background: #fff; border: 1px solid rgba(107,92,156,.22); border-radius: 18px; padding: 18px; margin: 14px 0; }
+            h2 { margin: 0 0 10px; font-size: 18px; color: #6B5C9C; }
             ul { margin: 0; padding-left: 22px; }
             .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-            .card { background: #fff6ef; border-radius: 14px; padding: 14px; border: 1px solid rgba(185,120,134,.18); }
+            .card { background: #f6f3fb; border-radius: 14px; padding: 14px; border: 1px solid rgba(107,92,156,.18); }
             .warning { border-left: 5px solid #bd4053; background: #fff3f3; }
             footer { color: #67525a; font-size: 12px; margin-top: 24px; }
             button { min-height: 44px; border: 0; border-radius: 999px; padding: 0 18px; background: #2b2023; color: #fffaf5; font-weight: 700; }

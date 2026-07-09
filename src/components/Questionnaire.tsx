@@ -359,7 +359,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               className="q-progress-fill"
               style={{
                 width: `${progress}%`,
-                background: 'linear-gradient(135deg, var(--peach-coral, #E8A08C), var(--peach-rose, #D89AA7))'
+                background: 'linear-gradient(135deg, var(--am-gradient-brand, #6B5C9C), var(--am-gradient-brand, #D4A76A))'
               }}
             />
           </div>
@@ -493,7 +493,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
           <div className="q-severity-bar">
             {['normal', 'mild', 'moderate', 'severe', 'critical'].map((sev, i) => {
               const labels = ['Норма', 'Лёгкая', 'Умеренная', 'Тяжёлая', 'Критическая'];
-              const colors = ['#B9DCC7', '#F0D7A2', '#E8B48F', '#D89AA7', '#C76F7A'];
+              const colors = ['#B8A5D0', '#D4A76A', '#5FBFB9', '#8D7FBF', '#6B5C9C'];
               return (
                 <div
                   key={sev}

@@ -325,7 +325,7 @@
 }
 
 .home-destination-card.is-gynecology::before {
-  background: radial-gradient(circle, rgba(173, 119, 136, 0.48), transparent 64%);
+  background: radial-gradient(circle, rgba(107, 92, 156, 0.48), transparent 64%);
 }
 
 .home-destination-card.is-obstetrics {
@@ -2893,7 +2893,7 @@
   .App {
     --header-height: 154px;
     background:
-      radial-gradient(120% 95% at 0% 0%, rgba(148, 105, 118, 0.2), transparent 56%),
+      radial-gradient(120% 95% at 0% 0%, rgba(107, 92, 156, 0.2), transparent 56%),
       radial-gradient(110% 100% at 100% 0%, rgba(207, 176, 138, 0.16), transparent 54%),
       linear-gradient(180deg, #191317 0%, #151116 100%);
   }
@@ -4286,7 +4286,7 @@
   background: var(--bg-elevated);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  box-shadow: var(--shadow-soft), 0 0 1px rgba(168, 115, 126, 0.08);
+  box-shadow: var(--shadow-soft), 0 0 1px rgba(107, 92, 156, 0.08);
 }
 
 .navbar-inner {
@@ -4691,7 +4691,7 @@
   inset: 0;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 36%),
-    radial-gradient(circle at top right, rgba(207, 178, 150, 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(184, 165, 208, 0.08), transparent 28%),
     linear-gradient(180deg, rgba(25, 20, 24, 0.08), transparent 72%);
   pointer-events: none;
   opacity: 1;
@@ -4706,7 +4706,7 @@
   width: 48px;
   height: 48px;
   background:
-    radial-gradient(circle at 80% 20%, rgba(207, 178, 150, 0.12), transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(184, 165, 208, 0.12), transparent 50%),
     radial-gradient(circle at 60% 30%, rgba(184, 115, 51, 0.06), transparent 40%);
   pointer-events: none;
   opacity: 0.6;
@@ -4714,7 +4714,7 @@
 
 .disease-card:hover {
   border-color: var(--accent-rose);
-  box-shadow: var(--shadow-hover), 0 0 24px rgba(168, 115, 126, 0.16);
+  box-shadow: var(--shadow-hover), 0 0 24px rgba(107, 92, 156, 0.16);
   transform: translateY(-4px);
   background: var(--bg-panel-solid);
 }
@@ -4849,7 +4849,7 @@
   color: var(--accent-rose-strong);
   font-size: 0.72rem;
   font-weight: 800;
-  border: 1px solid rgba(168, 115, 126, 0.12);
+  border: 1px solid rgba(107, 92, 156, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
@@ -5045,7 +5045,7 @@
   border: 1px solid var(--border-soft);
   border-radius: 32px;
   background:
-    radial-gradient(circle at top right, rgba(207, 178, 150, 0.16), transparent 30%),
+    radial-gradient(circle at top right, rgba(184, 165, 208, 0.16), transparent 30%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 48%),
     var(--bg-panel);
   box-shadow: var(--shadow-soft);
@@ -5062,7 +5062,7 @@
   height: 200px;
   background:
     radial-gradient(circle at 70% 30%, rgba(184, 115, 51, 0.06), transparent 50%),
-    radial-gradient(circle at 30% 60%, rgba(207, 178, 150, 0.1), transparent 40%);
+    radial-gradient(circle at 30% 60%, rgba(184, 165, 208, 0.1), transparent 40%);
   pointer-events: none;
 }
 
@@ -5074,7 +5074,7 @@
   width: 160px;
   height: 160px;
   background:
-    radial-gradient(circle at 20% 80%, rgba(168, 115, 126, 0.08), transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(107, 92, 156, 0.08), transparent 50%);
   pointer-events: none;
 }
 
@@ -5161,9 +5161,9 @@
 .home-card:hover {
   transform: translateY(-6px);
   border-color: var(--accent-rose);
-  box-shadow: var(--shadow-hover), 0 0 32px rgba(168, 115, 126, 0.18);
+  box-shadow: var(--shadow-hover), 0 0 32px rgba(107, 92, 156, 0.18);
   background:
-    radial-gradient(circle at top right, rgba(168, 115, 126, 0.1), transparent 32%),
+    radial-gradient(circle at top right, rgba(107, 92, 156, 0.1), transparent 32%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 48%),
     var(--bg-panel-solid);
 }
@@ -5323,7 +5323,7 @@
   border: 1px solid var(--border-soft);
   border-radius: 34px;
   background: var(--bg-panel-solid);
-  box-shadow: var(--shadow-modal), 0 0 60px rgba(168, 115, 126, 0.08);
+  box-shadow: var(--shadow-modal), 0 0 60px rgba(107, 92, 156, 0.08);
   animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -5596,15 +5596,15 @@
 }
 
 .diagnostics-hero {
-  background: linear-gradient(180deg, rgba(168, 115, 126, 0.08), rgba(207, 178, 150, 0.08));
+  background: linear-gradient(180deg, rgba(107, 92, 156, 0.08), rgba(184, 165, 208, 0.08));
 }
 
 .quick-summary-card {
-  background: linear-gradient(145deg, rgba(208, 181, 155, 0.18), rgba(168, 115, 126, 0.07));
+  background: linear-gradient(145deg, rgba(184, 165, 208, 0.18), rgba(107, 92, 156, 0.07));
 }
 
 .overview-summary-card {
-  background: linear-gradient(145deg, rgba(207, 178, 150, 0.14), rgba(168, 115, 126, 0.08));
+  background: linear-gradient(145deg, rgba(184, 165, 208, 0.14), rgba(107, 92, 156, 0.08));
 }
 
 .overview-summary-grid {
@@ -5642,7 +5642,7 @@
 }
 
 .quick-card-pearl {
-  background: linear-gradient(145deg, rgba(207, 178, 150, 0.12), rgba(255, 255, 255, 0.05)), var(--bg-panel);
+  background: linear-gradient(145deg, rgba(184, 165, 208, 0.12), rgba(255, 255, 255, 0.05)), var(--bg-panel);
 }
 
 .diagnostics-list,
@@ -5766,7 +5766,7 @@
   height: 18px;
   border-radius: 50%;
   background: var(--gradient-accent);
-  box-shadow: 0 0 0 8px rgba(168, 115, 126, 0.12);
+  box-shadow: 0 0 0 8px rgba(107, 92, 156, 0.12);
 }
 
 .questionnaire-modal,

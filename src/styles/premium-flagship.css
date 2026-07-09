@@ -1718,7 +1718,7 @@ nav.navbar {
 .patient-memo {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(255, 248, 243, 0.68)),
-    radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.18), transparent 32%),
+    radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.18), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.12), transparent 28%),
     var(--am-bg-glass) !important;
   backdrop-filter: blur(32px) saturate(180%) !important;
@@ -1726,7 +1726,7 @@ nav.navbar {
   box-shadow:
     var(--am-shadow-lg),
     0 0 0 1px rgba(255, 255, 255, 0.42) inset,
-    0 0 60px rgba(244, 196, 181, 0.08) !important;
+    0 0 60px rgba(184, 165, 208, 0.08) !important;
   border: 1px solid rgba(255, 255, 255, 0.48) !important;
 }
 
@@ -1739,7 +1739,7 @@ nav.navbar {
 [data-theme='dark'] .patient-memo {
   background:
     linear-gradient(135deg, rgba(38, 31, 42, 0.82), rgba(28, 22, 32, 0.72)),
-    radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.12), transparent 32%),
+    radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.12), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.18), transparent 28%),
     var(--am-bg-glass) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -1751,7 +1751,7 @@ main .disease-card,
 .disease-card {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 243, 0.72)),
-    radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.18), transparent 32%),
+    radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.18), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.12), transparent 28%),
     rgba(255, 252, 249, 0.88) !important;
   background-repeat: no-repeat !important;
@@ -1794,7 +1794,7 @@ main .disease-card,
   background: linear-gradient(
     90deg,
     rgba(255, 250, 246, 0.62) 0%,
-    rgba(244, 196, 181, 0.18) 50%,
+    rgba(184, 165, 208, 0.18) 50%,
     rgba(255, 250, 246, 0.62) 100%
   );
   border-radius: var(--radius-lg);
@@ -1890,7 +1890,7 @@ main .disease-card,
 }
 
 .mobile-bottom-item.is-active {
-  background: linear-gradient(135deg, rgba(244, 196, 181, 0.22), rgba(107, 92, 156, 0.14));
+  background: linear-gradient(135deg, rgba(184, 165, 208, 0.22), rgba(107, 92, 156, 0.14));
   color: var(--am-brand);
   box-shadow: 0 0 0 1px rgba(107, 92, 156, 0.18) inset;
 }
@@ -2132,7 +2132,7 @@ body {
 [data-theme='light'] .disease-card {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 243, 0.72)),
-    radial-gradient(circle at 20% 0%, rgba(244, 196, 181, 0.18), transparent 32%),
+    radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.18), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.12), transparent 28%),
     rgba(255, 252, 249, 0.88) !important;
 }
@@ -2776,8 +2776,8 @@ body {
 }
 
 .clinical-template-button.is-active {
-  background: linear-gradient(135deg, #f4c4b5, #df9aa8) !important;
-  box-shadow: var(--am-shadow-sm), 0 0 24px rgba(232, 132, 125, 0.18) !important;
+  background: var(--am-gradient-brand) !important;
+  box-shadow: var(--am-shadow-sm), 0 0 24px rgba(107, 92, 156, 0.28) !important;
 }
 
 .clinical-template-loading {

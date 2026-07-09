@@ -27,7 +27,7 @@ const hexToRgb = (hex: string): [number, number, number] => {
 export const Particle3DBackground: React.FC<Particle3DBackgroundProps> = ({
   className = '',
   particleCount = 100,
-  color = '#D89AA7',
+  color = '#8D7FBF',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
