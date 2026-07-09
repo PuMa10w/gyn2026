@@ -1,0 +1,828 @@
+{
+  "generatedAt": "2026-06-25T11:44:15.050Z",
+  "strict": true,
+  "sections": [
+    {
+      "kind": "gynecology",
+      "prefix": "N",
+      "scannedFiles": 30,
+      "totalIcdMentions": 194,
+      "uniqueCodes": 135,
+      "existingCodes": [
+        "N30",
+        "N30.1",
+        "N32.8",
+        "N39.0",
+        "N39.3",
+        "N39.4",
+        "N60",
+        "N60.4",
+        "N61",
+        "N70",
+        "N70.0",
+        "N70.1",
+        "N70.2",
+        "N71",
+        "N71.0",
+        "N71.1",
+        "N71.8",
+        "N71.9",
+        "N72",
+        "N73",
+        "N73.0",
+        "N73.2",
+        "N73.3",
+        "N73.4",
+        "N73.6",
+        "N73.9",
+        "N74",
+        "N74.0",
+        "N74.1",
+        "N74.2",
+        "N74.9",
+        "N75",
+        "N75.0",
+        "N75.1",
+        "N75.9",
+        "N76",
+        "N76.0",
+        "N76.1",
+        "N76.9",
+        "N77",
+        "N80",
+        "N80.0",
+        "N80.1",
+        "N80.2",
+        "N80.3",
+        "N80.4",
+        "N80.5",
+        "N81",
+        "N81.1",
+        "N81.2",
+        "N81.3",
+        "N81.5",
+        "N81.6",
+        "N82",
+        "N82.1",
+        "N82.9",
+        "N83",
+        "N83.0",
+        "N83.1",
+        "N83.2",
+        "N83.3",
+        "N83.5",
+        "N84",
+        "N84.0",
+        "N84.1",
+        "N84.2",
+        "N85.0",
+        "N85.1",
+        "N85.3",
+        "N85.6",
+        "N85.8",
+        "N86",
+        "N87",
+        "N87.2",
+        "N87.3",
+        "N88.0",
+        "N88.2",
+        "N89.0",
+        "N89.1",
+        "N89.2",
+        "N89.3",
+        "N89.4",
+        "N89.7",
+        "N89.8",
+        "N89.9",
+        "N90.0",
+        "N90.1",
+        "N90.2",
+        "N90.5",
+        "N90.6",
+        "N90.7",
+        "N90.8",
+        "N90.9",
+        "N91",
+        "N91.5",
+        "N92",
+        "N92.0",
+        "N92.1",
+        "N92.2",
+        "N92.3",
+        "N92.4",
+        "N92.6",
+        "N92.8",
+        "N92.9",
+        "N93",
+        "N93.1",
+        "N93.9",
+        "N94",
+        "N94.0",
+        "N94.1",
+        "N94.2",
+        "N94.3",
+        "N94.4",
+        "N94.5",
+        "N94.8",
+        "N94.9",
+        "N95",
+        "N95.0",
+        "N95.1",
+        "N95.2",
+        "N95.3",
+        "N96",
+        "N97",
+        "N97.0",
+        "N97.1",
+        "N97.2",
+        "N97.9",
+        "N98",
+        "N98.1",
+        "N98.8",
+        "N98.9",
+        "N99.0",
+        "N99.4",
+        "N99.8",
+        "N99.9"
+      ],
+      "coverage": 100,
+      "missingClinicallyRelevant": [],
+      "duplicates": [
+        {
+          "code": "N70",
+          "count": 2,
+          "file": "src\\data\\gynChunks\\gynChunk1.js"
+        },
+        {
+          "code": "N97",
+          "count": 5,
+          "file": "src\\data\\gynChunks\\gynChunk3.js"
+        },
+        {
+          "code": "N81",
+          "count": 2,
+          "file": "src\\data\\gynChunks\\gynChunk4.js"
+        },
+        {
+          "code": "N97.1",
+          "count": 2,
+          "file": "src\\data\\gynChunks\\gynChunk4.js"
+        },
+        {
+          "code": "N80.0",
+          "count": 2,
+          "file": "src\\data\\gynChunks\\gynChunk4.js"
+        },
+        {
+          "code": "N70",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js"
+          ]
+        },
+        {
+          "code": "N93",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N85.0",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N70.0",
+          "count": 3,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk11.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N84.0",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N80.0",
+          "count": 4,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk3.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N80.3",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk11.js"
+          ]
+        },
+        {
+          "code": "N86",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N85.6",
+          "count": 3,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk17.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N83.5",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N70.1",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk1.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N81",
+          "count": 3,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk12.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N82",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk15.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N83",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk15.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N97",
+          "count": 7,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk16.js",
+            "src\\data\\gynChunks\\gynChunk2.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N96",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk18.js",
+            "src\\data\\gynChunks\\gynChunk2.js"
+          ]
+        },
+        {
+          "code": "N91",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk2.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N94.3",
+          "count": 3,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk2.js",
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N39.3",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk2.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N95.1",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk2.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N30.1",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk2.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N60",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk2.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N71.8",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N71.9",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N73.0",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N73.2",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N73.4",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N73.9",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N75.1",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N75.9",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N76.1",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N76.9",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk23.js"
+          ]
+        },
+        {
+          "code": "N92.4",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N92.6",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N92.8",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N92.9",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N93.1",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N93.9",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N94.0",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N94.2",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N94.5",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N94.9",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N97.2",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N97.9",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk22.js",
+            "src\\data\\gynChunks\\gynChunk24.js"
+          ]
+        },
+        {
+          "code": "N90.0",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk23.js",
+            "src\\data\\gynChunks\\gynChunk3.js"
+          ]
+        },
+        {
+          "code": "N90.8",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk23.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N98.1",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk24.js",
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        },
+        {
+          "code": "N97.1",
+          "count": 2,
+          "files": [
+            "src\\data\\gynChunks\\gynChunk4.js"
+          ]
+        }
+      ],
+      "priorities": []
+    },
+    {
+      "kind": "obstetrics",
+      "prefix": "O",
+      "scannedFiles": 28,
+      "totalIcdMentions": 115,
+      "uniqueCodes": 91,
+      "existingCodes": [
+        "O00",
+        "O01",
+        "O02.1",
+        "O03",
+        "O10",
+        "O11",
+        "O12",
+        "O13",
+        "O14",
+        "O14.2",
+        "O15",
+        "O20.0",
+        "O21.1",
+        "O22.3",
+        "O23",
+        "O23.0",
+        "O23.5",
+        "O24",
+        "O24.0",
+        "O24.1",
+        "O24.4",
+        "O26.4",
+        "O26.6",
+        "O26.8",
+        "O30.0",
+        "O32.1",
+        "O33",
+        "O34.2",
+        "O35",
+        "O36.0",
+        "O36.4",
+        "O36.5",
+        "O36.6",
+        "O40",
+        "O41.0",
+        "O41.1",
+        "O42",
+        "O43.0",
+        "O43.2",
+        "O43.8",
+        "O44",
+        "O44.1",
+        "O44.2",
+        "O45",
+        "O46",
+        "O47",
+        "O48",
+        "O60",
+        "O60.1",
+        "O62",
+        "O62.0",
+        "O62.3",
+        "O63",
+        "O64",
+        "O66.0",
+        "O68",
+        "O68.0",
+        "O68.2",
+        "O68.3",
+        "O69.0",
+        "O69.1",
+        "O70",
+        "O70.0",
+        "O70.1",
+        "O71.2",
+        "O72",
+        "O72.0",
+        "O72.1",
+        "O72.2",
+        "O73.0",
+        "O73.1",
+        "O74.1",
+        "O75",
+        "O80",
+        "O82",
+        "O85",
+        "O86",
+        "O86.8",
+        "O87",
+        "O88",
+        "O88.1",
+        "O90.6",
+        "O90.8",
+        "O91.2",
+        "O92",
+        "O98.6",
+        "O98.7",
+        "O98.8",
+        "O99.0",
+        "O99.2",
+        "O99.8"
+      ],
+      "coverage": 100,
+      "missingClinicallyRelevant": [],
+      "duplicates": [
+        {
+          "code": "O36.5",
+          "count": 2,
+          "file": "src\\data\\obsChunks\\obsChunk2.js"
+        },
+        {
+          "code": "O36.5",
+          "count": 2,
+          "file": "src\\data\\obsChunks\\obsChunk5.js"
+        },
+        {
+          "code": "O44",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk1.js",
+            "src\\data\\obsChunks\\obsChunk5.js"
+          ]
+        },
+        {
+          "code": "O60",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk1.js",
+            "src\\data\\obsChunks\\obsChunk5.js"
+          ]
+        },
+        {
+          "code": "O72",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk1.js",
+            "src\\data\\obsChunks\\obsChunk6.js"
+          ]
+        },
+        {
+          "code": "O45",
+          "count": 3,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk1.js",
+            "src\\data\\obsChunks\\obsChunk5.js",
+            "src\\data\\obsChunks\\obsChunk6.js"
+          ]
+        },
+        {
+          "code": "O36.5",
+          "count": 6,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk2.js",
+            "src\\data\\obsChunks\\obsChunk5.js",
+            "src\\data\\obsChunks\\obsChunk6.js",
+            "src\\data\\obsChunks\\obsChunk7.js"
+          ]
+        },
+        {
+          "code": "O42",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk2.js",
+            "src\\data\\obsChunks\\obsChunk5.js"
+          ]
+        },
+        {
+          "code": "O48",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk2.js",
+            "src\\data\\obsChunks\\obsChunk7.js"
+          ]
+        },
+        {
+          "code": "O40",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk2.js",
+            "src\\data\\obsChunks\\obsChunk5.js"
+          ]
+        },
+        {
+          "code": "O41.0",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk2.js",
+            "src\\data\\obsChunks\\obsChunk5.js"
+          ]
+        },
+        {
+          "code": "O36.0",
+          "count": 3,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk2.js",
+            "src\\data\\obsChunks\\obsChunk4.js",
+            "src\\data\\obsChunks\\obsChunk6.js"
+          ]
+        },
+        {
+          "code": "O98.8",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk3.js",
+            "src\\data\\obsChunks\\obsChunk5.js"
+          ]
+        },
+        {
+          "code": "O85",
+          "count": 3,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk3.js",
+            "src\\data\\obsChunks\\obsChunk5.js",
+            "src\\data\\obsChunks\\obsChunk6.js"
+          ]
+        },
+        {
+          "code": "O88",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk3.js",
+            "src\\data\\obsChunks\\obsChunk6.js"
+          ]
+        },
+        {
+          "code": "O99.0",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk3.js",
+            "src\\data\\obsChunks\\obsChunk7.js"
+          ]
+        },
+        {
+          "code": "O34.2",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk4.js",
+            "src\\data\\obsChunks\\obsChunk7.js"
+          ]
+        },
+        {
+          "code": "O69.0",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk4.js",
+            "src\\data\\obsChunks\\obsChunk6.js"
+          ]
+        },
+        {
+          "code": "O69.1",
+          "count": 2,
+          "files": [
+            "src\\data\\obsChunks\\obsChunk4.js",
+            "src\\data\\obsChunks\\obsChunk6.js"
+          ]
+        }
+      ],
+      "priorities": []
+    }
+  ],
+  "summary": {
+    "totalUniqueCodes": 226,
+    "totalMentions": 309,
+    "lowestCoverage": 100
+  }
+}

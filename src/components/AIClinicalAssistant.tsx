@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { repairText } from '../utils/textRepair';
-import { emitToast } from './ToastSystem';
+import { emitToast } from '../utils/toastEmitter';
 
 interface AIClinicalAssistantProps {
   diseaseName: string;

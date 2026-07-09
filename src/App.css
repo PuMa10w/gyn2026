@@ -1,7 +1,3 @@
-.App {
-  --header-height: 140px;
-}
-
 /* Premium shell refresh */
 
 .App {
@@ -2529,12 +2525,12 @@
   .App,
   .page-content {
     max-width: 100%;
-    overflow-x: clip !important;
+    overflow-x: clip ;
   }
 
   body {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-left: 0 ;
+    padding-right: 0 ;
   }
 
   .bg-effects,
@@ -2545,32 +2541,32 @@
   }
 
   .navbar {
-    left: max(0.35rem, var(--safe-left)) !important;
-    right: max(0.35rem, var(--safe-right)) !important;
-    width: auto !important;
-    max-width: none !important;
-    border-radius: 20px !important;
+    left: max(0.35rem, var(--safe-left)) ;
+    right: max(0.35rem, var(--safe-right)) ;
+    width: auto ;
+    max-width: none ;
+    border-radius: 20px ;
   }
 
   .navbar-inner {
-    padding: 0.48rem !important;
-    gap: 0.42rem !important;
+    padding: 0.48rem ;
+    gap: 0.42rem ;
   }
 
   .navbar-topline {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
+    display: grid ;
+    grid-template-columns: minmax(0, 1fr) auto ;
     grid-template-areas:
       'brand theme'
-      'actions actions' !important;
-    gap: 0.38rem !important;
-    align-items: center !important;
+      'actions actions' ;
+    gap: 0.38rem ;
+    align-items: center ;
   }
 
   .navbar-brand {
     grid-area: brand;
     min-width: 0;
-    gap: 0.45rem !important;
+    gap: 0.45rem ;
   }
 
   .navbar-brand-copy {
@@ -2578,79 +2574,79 @@
   }
 
   .navbar-brand-copy strong {
-    font-size: 0.88rem !important;
+    font-size: 0.88rem ;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .navbar-brand-copy span {
-    font-size: 0.68rem !important;
+    font-size: 0.68rem ;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .navbar-brand-mark {
-    min-width: 58px !important;
-    height: 34px !important;
-    padding: 0 0.7rem !important;
-    font-size: 0.74rem !important;
+    min-width: 58px ;
+    height: 34px ;
+    padding: 0 0.7rem ;
+    font-size: 0.74rem ;
   }
 
   .navbar-theme-toggle {
     grid-area: theme;
-    min-width: 62px !important;
-    min-height: 38px !important;
-    padding: 0.48rem 0.72rem !important;
-    font-size: 0.72rem !important;
+    min-width: 62px ;
+    min-height: 38px ;
+    padding: 0.48rem 0.72rem ;
+    font-size: 0.72rem ;
   }
 
   .navbar-actions {
     grid-area: actions;
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 0.28rem !important;
-    width: 100% !important;
+    display: grid ;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) ;
+    gap: 0.28rem ;
+    width: 100% ;
   }
 
   .navbar-actions .nav-item {
-    min-width: 0 !important;
-    min-height: 37px !important;
-    padding: 0.48rem 0.35rem !important;
-    font-size: 0.65rem !important;
-    letter-spacing: 0 !important;
+    min-width: 0 ;
+    min-height: 37px ;
+    padding: 0.48rem 0.35rem ;
+    font-size: 0.65rem ;
+    letter-spacing: 0 ;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .nav-row-primary {
-    overflow: hidden !important;
-    border-radius: 15px !important;
-    padding: 0.18rem !important;
+    overflow: hidden ;
+    border-radius: 15px ;
+    padding: 0.18rem ;
   }
 
   .nav-row-primary .nav-scroll {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 0.22rem !important;
-    min-width: 0 !important;
-    width: 100% !important;
+    display: grid ;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) ;
+    gap: 0.22rem ;
+    min-width: 0 ;
+    width: 100% ;
   }
 
   .nav-primary-item {
-    min-width: 0 !important;
-    min-height: 38px !important;
-    padding: 0.46rem 0.25rem !important;
-    font-size: 0.66rem !important;
+    min-width: 0 ;
+    min-height: 38px ;
+    padding: 0.46rem 0.25rem ;
+    font-size: 0.66rem ;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .page-content {
-    padding-top: calc(var(--safe-top) + var(--header-height) + 0.85rem) !important;
+    padding-top: calc(var(--safe-top) + var(--header-height) + 0.85rem) ;
   }
 
   .home-shell,
@@ -2664,17 +2660,17 @@
     max-width: 100%;
     margin-left: 0;
     margin-right: 0;
-    padding-left: 0.7rem !important;
-    padding-right: 0.7rem !important;
+    padding-left: 0.7rem ;
+    padding-right: 0.7rem ;
     box-sizing: border-box;
   }
 
   .home-hero-grid,
   .home-destination-grid,
   .home-support-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 0.72rem !important;
+    display: grid ;
+    grid-template-columns: 1fr ;
+    gap: 0.72rem ;
     width: 100%;
     max-width: 100%;
   }
@@ -2689,55 +2685,55 @@
   }
 
   .home-hero-main[style] {
-    transform: none !important;
+    transform: none ;
   }
 
   .home-hero {
-    min-height: 0 !important;
-    padding: 1rem !important;
-    border-radius: 26px !important;
+    min-height: 0 ;
+    padding: 1rem ;
+    border-radius: 26px ;
   }
 
   .home-hero-title {
-    max-width: 7.8em !important;
-    font-size: clamp(2.15rem, 10vw, 3.1rem) !important;
-    line-height: 0.9 !important;
+    max-width: 7.8em ;
+    font-size: clamp(2.15rem, 10vw, 3.1rem) ;
+    line-height: 0.9 ;
   }
 
   .home-hero-description {
-    max-width: 100% !important;
-    font-size: 0.95rem !important;
-    line-height: 1.55 !important;
+    max-width: 100% ;
+    font-size: 0.95rem ;
+    line-height: 1.55 ;
   }
 
   .home-hero-metrics {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 0.48rem !important;
-    margin-top: 1rem !important;
+    display: grid ;
+    grid-template-columns: 1fr ;
+    gap: 0.48rem ;
+    margin-top: 1rem ;
   }
 
   .home-metric-card {
     min-width: 0;
-    padding: 0.78rem 0.82rem !important;
-    border-radius: 18px !important;
+    padding: 0.78rem 0.82rem ;
+    border-radius: 18px ;
   }
 
   .hero-rail-card,
   .home-quick-card {
-    padding: 0.95rem !important;
-    border-radius: 22px !important;
+    padding: 0.95rem ;
+    border-radius: 22px ;
   }
 
   .home-destination-card {
-    min-height: 0 !important;
-    padding: 1.15rem !important;
-    border-radius: 24px !important;
+    min-height: 0 ;
+    padding: 1.15rem ;
+    border-radius: 24px ;
   }
 
   .home-destination-title {
-    font-size: clamp(2rem, 9vw, 2.8rem) !important;
-    line-height: 0.9 !important;
+    font-size: clamp(2rem, 9vw, 2.8rem) ;
+    line-height: 0.9 ;
   }
 
   .destination-tags {
@@ -2753,102 +2749,102 @@
   }
 
   .home-panel {
-    padding: 1rem !important;
-    border-radius: 24px !important;
+    padding: 1rem ;
+    border-radius: 24px ;
   }
 
   .home-panel-header {
-    display: grid !important;
-    gap: 0.45rem !important;
+    display: grid ;
+    gap: 0.45rem ;
   }
 
   .home-panel-title {
-    font-size: clamp(1.8rem, 8vw, 2.5rem) !important;
-    line-height: 0.95 !important;
+    font-size: clamp(1.8rem, 8vw, 2.5rem) ;
+    line-height: 0.95 ;
   }
 
   .home-quick-actions,
   .home-recent-list {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 0.55rem !important;
+    display: grid ;
+    grid-template-columns: 1fr ;
+    gap: 0.55rem ;
   }
 
   .search-input {
-    min-height: 54px !important;
-    padding-left: 1rem !important;
-    padding-right: 4.8rem !important;
-    font-size: 16px !important;
+    min-height: 54px ;
+    padding-left: 1rem ;
+    padding-right: 4.8rem ;
+    font-size: 16px ;
   }
 
   .search-clear-btn {
-    right: 3.15rem !important;
+    right: 3.15rem ;
   }
 
   .search-result-count {
-    right: 0.85rem !important;
+    right: 0.85rem ;
   }
 
   .category-filter {
-    overflow-x: clip !important;
+    overflow-x: clip ;
   }
 
   .category-chips {
-    display: flex !important;
-    gap: 0.45rem !important;
-    padding-bottom: 0.2rem !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    max-width: 100% !important;
+    display: flex ;
+    gap: 0.45rem ;
+    padding-bottom: 0.2rem ;
+    overflow-x: auto ;
+    overflow-y: hidden ;
+    max-width: 100% ;
   }
 
   .category-chip {
     flex: 0 0 auto;
     min-width: 0;
     max-width: calc(100vw - 2.2rem);
-    padding: 0.68rem 0.82rem !important;
+    padding: 0.68rem 0.82rem ;
   }
 
   .cards-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 0.62rem !important;
+    display: grid ;
+    grid-template-columns: 1fr ;
+    gap: 0.62rem ;
   }
 
   .disease-card {
-    min-height: 156px !important;
-    padding: 0.62rem 0.66rem !important;
-    border-radius: 22px !important;
+    min-height: 156px ;
+    padding: 0.62rem 0.66rem ;
+    border-radius: 22px ;
   }
 
   .card-header {
-    gap: 0.3rem 0.5rem !important;
+    gap: 0.3rem 0.5rem ;
   }
 
   .card-desc {
-    -webkit-line-clamp: 4 !important;
+    -webkit-line-clamp: 4 ;
   }
 }
 
 @media (max-width: 480px) {
   .App {
-    --header-height: 152px !important;
+    --header-height: 152px ;
   }
 
   .navbar-brand-copy span {
-    display: none !important;
+    display: none ;
   }
 
   .navbar-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) ;
   }
 
   .navbar-actions .nav-item {
-    font-size: 0.7rem !important;
+    font-size: 0.7rem ;
   }
 
   .nav-primary-item {
-    font-size: 0.63rem !important;
+    font-size: 0.63rem ;
   }
 
   .home-shell,
@@ -2857,29 +2853,29 @@
   .category-filter,
   .cards-grid,
   .site-footer {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+    padding-left: 0.5rem ;
+    padding-right: 0.5rem ;
   }
 
   .home-hero {
-    padding: 0.88rem !important;
+    padding: 0.88rem ;
   }
 
   .home-hero-title {
-    font-size: clamp(1.95rem, 10vw, 2.7rem) !important;
+    font-size: clamp(1.95rem, 10vw, 2.7rem) ;
   }
 
   .home-hero-description {
-    font-size: 0.9rem !important;
+    font-size: 0.9rem ;
   }
 
   .home-panel,
   .home-destination-card {
-    padding: 0.92rem !important;
+    padding: 0.92rem ;
   }
 
   .destination-tag {
-    font-size: 0.7rem !important;
+    font-size: 0.7rem ;
   }
 }
 
@@ -2891,7 +2887,7 @@
   .App {
     width: 100%;
     max-width: 100%;
-    overflow-x: clip !important;
+    overflow-x: clip ;
   }
 
   .App {
@@ -2903,31 +2899,31 @@
   }
 
   .navbar {
-    left: max(0.4rem, var(--safe-left)) !important;
-    right: max(0.4rem, var(--safe-right)) !important;
-    max-width: none !important;
-    border-radius: 18px !important;
+    left: max(0.4rem, var(--safe-left)) ;
+    right: max(0.4rem, var(--safe-right)) ;
+    max-width: none ;
+    border-radius: 18px ;
   }
 
   .navbar-inner {
-    padding: 0.5rem !important;
-    gap: 0.42rem !important;
+    padding: 0.5rem ;
+    gap: 0.42rem ;
   }
 
   .navbar-topline {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
+    display: grid ;
+    grid-template-columns: minmax(0, 1fr) auto ;
     grid-template-areas:
       'brand theme'
-      'actions actions' !important;
-    gap: 0.38rem 0.42rem !important;
-    align-items: center !important;
+      'actions actions' ;
+    gap: 0.38rem 0.42rem ;
+    align-items: center ;
   }
 
   .navbar-brand {
     grid-area: brand;
     min-width: 0;
-    gap: 0.5rem !important;
+    gap: 0.5rem ;
   }
 
   .navbar-brand-copy {
@@ -2942,33 +2938,33 @@
   }
 
   .navbar-brand-mark {
-    min-width: 50px !important;
-    height: 36px !important;
-    font-size: 0.76rem !important;
-    letter-spacing: 0.14em !important;
+    min-width: 50px ;
+    height: 36px ;
+    font-size: 0.76rem ;
+    letter-spacing: 0.14em ;
   }
 
   .navbar-theme-toggle {
     grid-area: theme;
-    min-width: 58px !important;
-    min-height: 44px !important;
-    padding: 0.45rem 0.65rem !important;
-    font-size: 0.68rem !important;
+    min-width: 58px ;
+    min-height: 44px ;
+    padding: 0.45rem 0.65rem ;
+    font-size: 0.68rem ;
   }
 
   .navbar-actions {
     grid-area: actions;
-    display: grid !important;
+    display: grid ;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     width: 100%;
-    gap: 0.3rem !important;
+    gap: 0.3rem ;
   }
 
   .navbar-actions .nav-item {
-    min-width: 0 !important;
-    min-height: 44px !important;
-    padding: 0.46rem 0.4rem !important;
-    font-size: 0.64rem !important;
+    min-width: 0 ;
+    min-height: 44px ;
+    padding: 0.46rem 0.4rem ;
+    font-size: 0.64rem ;
     letter-spacing: 0.01em;
     white-space: nowrap;
     overflow: hidden;
@@ -2976,33 +2972,33 @@
   }
 
   .nav-row-primary {
-    overflow: hidden !important;
-    border-radius: 12px !important;
-    padding: 0.16rem !important;
+    overflow: hidden ;
+    border-radius: 12px ;
+    padding: 0.16rem ;
   }
 
   .nav-row-primary .nav-scroll {
-    display: grid !important;
+    display: grid ;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.2rem !important;
-    min-width: 0 !important;
+    gap: 0.2rem ;
+    min-width: 0 ;
     width: 100%;
   }
 
   .nav-primary-item {
-    min-width: 0 !important;
-    min-height: 44px !important;
-    padding: 0.44rem 0.35rem !important;
-    font-size: 0.65rem !important;
+    min-width: 0 ;
+    min-height: 44px ;
+    padding: 0.44rem 0.35rem ;
+    font-size: 0.65rem ;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .page-content {
-    padding-top: calc(var(--safe-top) + var(--header-height) + 0.72rem) !important;
-    padding-bottom: calc(var(--safe-bottom) + 0.8rem) !important;
-    overflow-x: clip !important;
+    padding-top: calc(var(--safe-top) + var(--header-height) + 0.72rem) ;
+    padding-bottom: calc(var(--safe-bottom) + 0.8rem) ;
+    overflow-x: clip ;
   }
 
   .home-shell,
@@ -3018,124 +3014,124 @@
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    overflow-x: clip !important;
+    overflow-x: clip ;
   }
 
   .catalog-header,
   .search-container,
   .category-filter,
   .cards-grid {
-    padding-left: 0.6rem !important;
-    padding-right: 0.6rem !important;
+    padding-left: 0.6rem ;
+    padding-right: 0.6rem ;
   }
 
   .home-shell {
-    padding-left: 0.6rem !important;
-    padding-right: 0.6rem !important;
+    padding-left: 0.6rem ;
+    padding-right: 0.6rem ;
   }
 
   .cards-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 0.56rem !important;
-    padding-bottom: 0.9rem !important;
+    display: grid ;
+    grid-template-columns: 1fr ;
+    gap: 0.56rem ;
+    padding-bottom: 0.9rem ;
   }
 
   .disease-card {
-    min-height: 154px !important;
-    border-radius: 20px !important;
-    padding: 0.56rem 0.62rem 0.62rem !important;
+    min-height: 154px ;
+    border-radius: 20px ;
+    padding: 0.56rem 0.62rem 0.62rem ;
   }
 
   .card-header {
-    position: static !important;
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
+    position: static ;
+    display: grid ;
+    grid-template-columns: minmax(0, 1fr) auto ;
     grid-template-areas:
       'meta fav'
-      'icon fav' !important;
-    gap: 0.35rem 0.52rem !important;
+      'icon fav' ;
+    gap: 0.35rem 0.52rem ;
     align-items: start;
     margin-bottom: 0.18rem;
-    z-index: auto !important;
+    z-index: auto ;
   }
 
   .card-meta-row {
     grid-area: meta;
-    margin: 0 !important;
-    gap: 0.35rem !important;
+    margin: 0 ;
+    gap: 0.35rem ;
   }
 
   .card-subtitle {
-    font-size: 0.66rem !important;
+    font-size: 0.66rem ;
   }
 
   .card-icd-badge {
-    padding: 0.22rem 0.44rem !important;
-    font-size: 0.64rem !important;
+    padding: 0.22rem 0.44rem ;
+    font-size: 0.64rem ;
   }
 
   .favorite-btn {
     grid-area: fav;
-    width: 30px !important;
-    height: 30px !important;
-    font-size: 0.88rem !important;
+    width: 30px ;
+    height: 30px ;
+    font-size: 0.88rem ;
     align-self: start;
     justify-self: end;
   }
 
   .card-icon-wrap {
     grid-area: icon;
-    justify-content: flex-start !important;
-    padding: 0 !important;
+    justify-content: flex-start ;
+    padding: 0 ;
     margin-top: 0.02rem;
   }
 
   .card-icon {
-    width: 38px !important;
-    height: 38px !important;
-    border-radius: 12px !important;
+    width: 38px ;
+    height: 38px ;
+    border-radius: 12px ;
     background:
       radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.12), transparent 44%),
-      linear-gradient(180deg, rgba(70, 52, 59, 0.98), rgba(34, 25, 30, 1)) !important;
-    border-color: rgba(224, 196, 188, 0.28) !important;
+      linear-gradient(180deg, rgba(70, 52, 59, 0.98), rgba(34, 25, 30, 1)) ;
+    border-color: rgba(224, 196, 188, 0.28) ;
   }
 
   .card-icon::after {
-    width: 8px !important;
-    height: 8px !important;
-    opacity: 0.86 !important;
+    width: 8px ;
+    height: 8px ;
+    opacity: 0.86 ;
   }
 
   .card-icon svg {
-    width: 22px !important;
-    height: 22px !important;
+    width: 22px ;
+    height: 22px ;
   }
 
   .card-icon-art {
-    color: #f1c9c0 !important;
-    filter: brightness(1.34) contrast(1.25) saturate(1.15) !important;
+    color: #f1c9c0 ;
+    filter: brightness(1.34) contrast(1.25) saturate(1.15) ;
   }
 
   .card-body {
-    gap: 0.26rem !important;
+    gap: 0.26rem ;
   }
 
   .card-title {
-    margin: 0.08rem 0 0 !important;
-    font-size: 0.98rem !important;
-    line-height: 1.08 !important;
+    margin: 0.08rem 0 0 ;
+    font-size: 0.98rem ;
+    line-height: 1.08 ;
   }
 
   .card-desc {
-    display: -webkit-box !important;
-    -webkit-line-clamp: 3 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
-    margin-top: 0.04rem !important;
-    font-size: 0.82rem !important;
-    line-height: 1.34 !important;
-    text-align: left !important;
+    display: -webkit-box ;
+    -webkit-line-clamp: 3 ;
+    -webkit-box-orient: vertical ;
+    overflow: hidden ;
+    margin-top: 0.04rem ;
+    font-size: 0.82rem ;
+    line-height: 1.34 ;
+    text-align: left ;
   }
 }
 
@@ -3145,56 +3141,56 @@
   }
 
   .navbar {
-    left: max(0.28rem, var(--safe-left)) !important;
-    right: max(0.28rem, var(--safe-right)) !important;
+    left: max(0.28rem, var(--safe-left)) ;
+    right: max(0.28rem, var(--safe-right)) ;
   }
 
   .navbar-actions {
-    gap: 0.24rem !important;
+    gap: 0.24rem ;
   }
 
   .navbar-actions .nav-item {
-    font-size: 0.61rem !important;
-    padding: 0.43rem 0.34rem !important;
+    font-size: 0.61rem ;
+    padding: 0.43rem 0.34rem ;
   }
 
   .nav-primary-item {
-    font-size: 0.61rem !important;
+    font-size: 0.61rem ;
   }
 
   .catalog-title {
-    font-size: clamp(1.52rem, 9vw, 1.8rem) !important;
-    line-height: 1.02 !important;
+    font-size: clamp(1.52rem, 9vw, 1.8rem) ;
+    line-height: 1.02 ;
   }
 
   .catalog-description {
-    font-size: 0.82rem !important;
-    line-height: 1.38 !important;
+    font-size: 0.82rem ;
+    line-height: 1.38 ;
   }
 
   .disease-card {
-    min-height: 144px !important;
-    border-radius: 18px !important;
-    padding: 0.5rem 0.56rem 0.56rem !important;
+    min-height: 144px ;
+    border-radius: 18px ;
+    padding: 0.5rem 0.56rem 0.56rem ;
   }
 
   .card-icon {
-    width: 34px !important;
-    height: 34px !important;
+    width: 34px ;
+    height: 34px ;
   }
 
   .card-icon svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 20px ;
+    height: 20px ;
   }
 
   .card-title {
-    font-size: 0.92rem !important;
+    font-size: 0.92rem ;
   }
 
   .card-desc {
-    font-size: 0.79rem !important;
-    line-height: 1.31 !important;
+    font-size: 0.79rem ;
+    line-height: 1.31 ;
   }
 }
 

@@ -1,14 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-export interface Toast {
-  id: string;
-  message: string;
-  type?: 'success' | 'error' | 'info' | 'warning';
-  duration?: number;
-  undoAction?: () => void;
-  undoLabel?: string;
-}
+import type { Toast } from '../types';
 
 interface ToastContainerProps {
   toasts: Toast[];
@@ -133,20 +125,4 @@ const ToastItem: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({
 export const emitToast = (message: string, type: Toast['type'] = 'info', duration = 2400) => {
   const event = new CustomEvent('gyn-toast', { detail: { message, type, duration } });
   window.dispatchEvent(event);
-};
-
-// Хук для управления тостами
-export const useToast = () => {
-  const [toasts, setToasts] = useState<Toast[]>([]);
-
-  const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
-    const id = Math.random().toString(36).substr(2, 9);
-    setToasts((prev) => [...prev, { ...toast, id }]);
-  }, []);
-
-  const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  }, []);
-
-  return { toasts, addToast, removeToast };
 };

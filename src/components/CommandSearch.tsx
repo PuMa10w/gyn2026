@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { siteSearch, type SearchResult, type GroupedResults } from '../utils/siteSearch';
-import { emitToast } from './ToastSystem';
+import { emitToast } from '../utils/toastEmitter';
 import { useVoiceInput } from '../hooks/useVoiceInput';
 import type { CategoryId, TabType } from '../types';
 

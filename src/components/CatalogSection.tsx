@@ -1,5 +1,5 @@
 import React, { useId, useMemo, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import DiseaseCard from './DiseaseCard';
@@ -87,7 +87,8 @@ const CatalogSection = React.memo(function CatalogSection({
   const titleId = useId();
   const sortLabelId = useId();
   const [sortMode, setSortMode] = useState<SortMode>('relevance');
-  const [visibleCount, setVisibleCount] = useState(60);
+  // Более агрессивная подгрузка: 200 сразу (было 60), потом 100
+  const [visibleCount, setVisibleCount] = useState(200);
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const animDuration = isMobile ? 0.14 : 0.22;
   
@@ -114,18 +115,20 @@ const CatalogSection = React.memo(function CatalogSection({
   const visibleItems = sortedData.slice(0, visibleCount);
   const hasMore = visibleCount < sortedData.length;
 
+  // Инфинит-скролл с debounce для плавности
   const loadMore = useCallback(() => {
-    setVisibleCount(prev => Math.min(prev + 60, sortedData.length));
+    setVisibleCount(prev => Math.min(prev + 100, sortedData.length));
   }, [sortedData.length]);
 
-  // Infinite scroll handler
+  // Оптимизированный скролл-хендлер
   React.useEffect(() => {
     const handleScroll = () => {
-      if (hasMore && window.innerHeight + window.scrollY >= document.body.scrollHeight - 1000) {
+      if (hasMore && window.innerHeight + window.scrollY >= document.body.scrollHeight - 800) {
         loadMore();
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    // Passive listener для производительности
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [hasMore, loadMore]);
 

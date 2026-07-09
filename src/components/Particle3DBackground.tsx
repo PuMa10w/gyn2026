@@ -1,11 +1,28 @@
 import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
 
 interface Particle3DBackgroundProps {
   className?: string;
   particleCount?: number;
   color?: string;
 }
+
+interface Particle {
+  x: number;
+  y: number;
+  z: number;
+  vx: number;
+  vy: number;
+}
+
+const hexToRgb = (hex: string): [number, number, number] => {
+  const clean = hex.replace('#', '');
+  const full =
+    clean.length === 3
+      ? clean.split('').map((c) => c + c).join('')
+      : clean.padEnd(6, '0').slice(0, 6);
+  const int = parseInt(full, 16);
+  return [(int >> 16) & 255, (int >> 8) & 255, int & 255];
+};
 
 export const Particle3DBackground: React.FC<Particle3DBackgroundProps> = ({
   className = '',
@@ -17,67 +34,53 @@ export const Particle3DBackground: React.FC<Particle3DBackgroundProps> = ({
   useEffect(() => {
     const container = containerRef.current;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     if (import.meta.env.MODE === 'test') {
       return undefined;
     }
 
-    const probe = document.createElement('canvas');
-    const hasWebGl = Boolean(probe.getContext('webgl2') || probe.getContext('webgl'));
-
-    if (!container || reducedMotion || particleCount <= 0 || !hasWebGl) {
+    if (!container || reducedMotion || particleCount <= 0) {
       return undefined;
     }
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 1000);
-    let renderer: THREE.WebGLRenderer;
+    const canvas = document.createElement('canvas');
+    canvas.className = 'particle-canvas';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.display = 'block';
+    container.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
 
-    try {
-      renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: !window.matchMedia('(max-width: 768px)').matches,
-        powerPreference: 'low-power',
-      });
-    } catch {
+    if (!ctx) {
+      canvas.remove();
       return undefined;
     }
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    let width = Math.max(container.clientWidth, 1);
+    let height = Math.max(container.clientHeight, 1);
     let frameId = 0;
     let pointerX = 0;
     let pointerY = 0;
 
-    renderer.setPixelRatio(pixelRatio);
-    renderer.setClearColor(0x000000, 0);
-    renderer.domElement.className = 'particle-canvas';
-    container.appendChild(renderer.domElement);
+    const [r, g, b] = hexToRgb(color);
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const count = isMobile ? Math.min(particleCount, 40) : particleCount;
 
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-
-    for (let index = 0; index < particleCount * 3; index += 1) {
-      positions[index] = (Math.random() - 0.5) * 10;
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    const material = new THREE.PointsMaterial({
-      size: 0.028,
-      color: new THREE.Color(color),
-      transparent: true,
-      opacity: 0.42,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-    const particles = new THREE.Points(geometry, material);
-    scene.add(particles);
-    camera.position.z = 3;
+    const particles: Particle[] = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      z: Math.random() * 0.8 + 0.2,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+    }));
 
     const resize = () => {
-      const width = Math.max(container.clientWidth, 1);
-      const height = Math.max(container.clientHeight, 1);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height, false);
+      width = Math.max(container.clientWidth, 1);
+      height = Math.max(container.clientHeight, 1);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     const onPointerMove = (event: PointerEvent) => {
@@ -85,15 +88,32 @@ export const Particle3DBackground: React.FC<Particle3DBackgroundProps> = ({
       pointerY = -(event.clientY / window.innerHeight) * 2 + 1;
     };
 
-    const animate = () => {
-      particles.rotation.y += 0.00045 + pointerX * 0.00018;
-      particles.rotation.x += 0.00022 + pointerY * 0.00012;
-      renderer.render(scene, camera);
-      frameId = window.requestAnimationFrame(animate);
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+      for (const p of particles) {
+        p.x += p.vx + pointerX * 0.25 * p.z;
+        p.y += p.vy + pointerY * 0.2 * p.z;
+
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+        if (p.y < -10) p.y = height + 10;
+        if (p.y > height + 10) p.y = -10;
+
+        const rad = 1.1 + p.z * 1.8;
+        const alpha = 0.18 + p.z * 0.32;
+        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad * 4);
+        grd.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
+        grd.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, rad * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      frameId = window.requestAnimationFrame(render);
     };
 
     resize();
-    animate();
+    render();
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', onPointerMove, { passive: true });
 
@@ -101,10 +121,7 @@ export const Particle3DBackground: React.FC<Particle3DBackgroundProps> = ({
       window.cancelAnimationFrame(frameId);
       window.removeEventListener('resize', resize);
       window.removeEventListener('pointermove', onPointerMove);
-      renderer.domElement.remove();
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
+      canvas.remove();
     };
   }, [particleCount, color]);
 

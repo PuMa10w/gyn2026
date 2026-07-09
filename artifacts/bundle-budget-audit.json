@@ -1,5 +1,5 @@
 {
-  "ok": false,
+  "ok": true,
   "budgetsKb": {
     "index": 330,
     "vendor": 340,
@@ -11,23 +11,23 @@
   },
   "measured": {
     "index": {
-      "file": "index-iTWP55f9.js",
-      "kb": 328.7
+      "file": "index-BnJnFBgs.js",
+      "kb": 329.8
     },
     "vendor": {
       "file": "vendor-D6Sejwp0.js",
       "kb": 298.66
     },
     "threeVendor": {
-      "file": "three-vendor-keT4KgRS.js",
-      "kb": 506.47
+      "file": "three-vendor-KuB1kQ_y.js",
+      "kb": 482.83
     },
     "diseaseModal": {
-      "file": "DiseaseModal-NUbiSGUl.js",
-      "kb": 89.07
+      "file": "DiseaseModal-D9muBeED.js",
+      "kb": 61.57
     },
     "pharmacologyModal": {
-      "file": "PharmacologyModal-CsPzHW1N.js",
+      "file": "PharmacologyModal-DMeuWiJF.js",
       "kb": 17.88
     },
     "largestContentChunk": {
@@ -35,26 +35,18 @@
       "kb": 251.42
     },
     "initialCss": {
-      "file": "index-V7RWNU5a.css",
-      "kb": 362.6
+      "file": "index-DzqTaQJh.css",
+      "kb": 174.46
     }
   },
   "findings": [
     {
       "key": "index",
-      "file": "index-iTWP55f9.js",
-      "kb": 328.7,
+      "file": "index-BnJnFBgs.js",
+      "kb": 329.8,
       "budgetKb": 330,
       "severity": "warning",
       "message": "chunk is close to the budget"
-    },
-    {
-      "key": "initialCss",
-      "file": "index-V7RWNU5a.css",
-      "kb": 362.6,
-      "budgetKb": 320,
-      "severity": "error",
-      "message": "chunk exceeds budget by 42.60 kB"
     }
   ]
 }

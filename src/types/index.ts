@@ -466,3 +466,12 @@ export interface RegimenData {
 }
 
 export type PharmaItem = Medication | Regimen | RegimenData;
+
+export interface Toast {
+  id: string;
+  message: string;
+  type?: 'success' | 'error' | 'info' | 'warning';
+  duration?: number;
+  undoAction?: () => void;
+  undoLabel?: string;
+}

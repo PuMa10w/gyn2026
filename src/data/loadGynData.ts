@@ -25,7 +25,6 @@ const gynChunkLoaders = [
   () => import('./gynChunks/gynChunk21'),
   () => import('./gynChunks/gynChunk22'),
   () => import('./gynChunks/gynChunk23'),
-  () => import('./gynChunks/gynChunk24'),
   // ICD-10 stub chunks (auto-generated)
   () => import('./gynChunks/gynChunk25'),
   () => import('./gynChunks/gynChunk26'),

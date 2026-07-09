@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "generatedAt": "2026-06-19T16:22:20.090Z",
+  "generatedAt": "2026-06-29T12:18:26.464Z",
   "note": "This audit prevents CSS debt from growing while the legacy layers are gradually collapsed into tokens and primitives.",
   "budgets": {
     "totalLines": 19000,
@@ -9,10 +9,10 @@
     "mediaBlocks": 180
   },
   "totals": {
-    "lines": 17515,
-    "important": 2206,
-    "rootBlocks": 17,
-    "mediaBlocks": 78
+    "lines": 16916,
+    "important": 1864,
+    "rootBlocks": 15,
+    "mediaBlocks": 73
   },
   "files": [
     {
@@ -25,7 +25,7 @@
     {
       "file": "src/App.css",
       "lines": 7949,
-      "important": 231,
+      "important": 0,
       "rootBlocks": 0,
       "mediaBlocks": 34
     },
@@ -37,16 +37,9 @@
       "mediaBlocks": 26
     },
     {
-      "file": "src/styles/clinical-worktool.css",
-      "lines": 1334,
-      "important": 154,
-      "rootBlocks": 2,
-      "mediaBlocks": 5
-    },
-    {
       "file": "src/styles/premium-flagship.css",
-      "lines": 2156,
-      "important": 132,
+      "lines": 2891,
+      "important": 175,
       "rootBlocks": 1,
       "mediaBlocks": 6
     },
