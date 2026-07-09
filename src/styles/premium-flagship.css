@@ -40,15 +40,15 @@
 
   /* ─ Light Theme Text ─ */
   --am-text-primary:  #2D2A3D;
-  --am-text-secondary: #6B6578;
-  --am-text-tertiary: #9B94A8;
+  --am-text-secondary: #554E60;   /* Улучшенный контраст на светлом фоне */
+  --am-text-tertiary: #7A7185;     /* Более читаемая нейтральная */
   --am-text-inverse:  #FFFDF9;
   --am-text-link:     #6B5C9C;
 
   /* ─ Light Theme Borders ─ */
-  --am-border-soft:   rgba(74, 56, 63, 0.08);
-  --am-border-medium: rgba(74, 56, 63, 0.14);
-  --am-border-strong: rgba(74, 56, 63, 0.2);
+  --am-border-soft:   rgba(74, 56, 63, 0.12);   /* Более заметные на светлом фоне */
+  --am-border-medium: rgba(74, 56, 63, 0.22);
+  --am-border-strong: rgba(74, 56, 63, 0.35);
 
   /* ─ Premium Shadows — Layered Depth System ─ */
   --am-shadow-xs:     0 1px 2px rgba(45, 42, 61, 0.04);
@@ -178,36 +178,37 @@
 /* ── Dark Theme ──────────────────────────────────────────── */
 
 [data-theme='dark'] {
-  --am-bg-base:       #131016;
-  --am-bg-subtle:     #1A1721;
-  --am-bg-elevated:   #221E2D;
-  --am-bg-card:       rgba(30, 26, 40, 0.92);
-  --am-bg-glass:      rgba(22, 18, 30, 0.88);
-  --am-modal-bg:      rgba(22, 18, 30, 0.96);
+  --am-bg-base:       #0D0B12;
+  --am-bg-subtle:     #15121D;
+  --am-bg-elevated:   #1E1928;
+  --am-bg-card:       rgba(22, 18, 30, 0.94);
+  --am-bg-glass:      rgba(14, 12, 24, 0.88);
+  --am-modal-bg:      rgba(14, 12, 24, 0.96);
 
-  --am-text-primary:  #EDE8F5;
-  --am-text-secondary: #B8B0CC;
-  --am-text-tertiary: #8073A0;
-  --am-text-inverse:  #131016;
-  --am-text-link:     #A08FD0;
+  --am-text-primary:  #F0E8F5;
+  --am-text-secondary: #C4BCE1;   /* Более читаемый текст в темной теме */
+  --am-text-tertiary: #9A94A8;
+  --am-text-inverse:  #0D0B12;
+  --am-text-link:     #B8A5D0;
 
-  --am-border-soft:   rgba(176, 160, 204, 0.08);
-  --am-border-medium: rgba(176, 160, 204, 0.16);
-  --am-border-strong: rgba(176, 160, 204, 0.24);
+  --am-border-soft:   rgba(176, 160, 204, 0.12);   /* Более заметные границы */
+  --am-border-medium: rgba(176, 160, 204, 0.22);
+  --am-border-strong: rgba(176, 160, 204, 0.35);
 
-  --am-shadow-xs:     0 1px 2px rgba(0, 0, 0, 0.24);
-  --am-shadow-sm:     0 2px 8px rgba(0, 0, 0, 0.28);
-  --am-shadow-md:     0 8px 24px rgba(0, 0, 0, 0.32);
-  --am-shadow-lg:     0 16px 48px rgba(0, 0, 0, 0.36);
-  --am-shadow-xl:     0 24px 80px rgba(0, 0, 0, 0.42);
-  --am-shadow-2xl:    0 32px 120px rgba(0, 0, 0, 0.5);
-  --am-shadow-glow:   0 0 40px rgba(107, 92, 156, 0.28);
+  /* Тени с более мягким градиентом для темной темы */
+  --am-shadow-xs:     0 1px 2px rgba(0, 0, 0, 0.32);
+  --am-shadow-sm:     0 2px 8px rgba(0, 0, 0, 0.36);
+  --am-shadow-md:     0 8px 24px rgba(0, 0, 0, 0.4);
+  --am-shadow-lg:     0 16px 48px rgba(0, 0, 0, 0.48);
+  --am-shadow-xl:     0 24px 80px rgba(0, 0, 0, 0.52);
+  --am-shadow-2xl:    0 32px 120px rgba(0, 0, 0, 0.58);
+  --am-shadow-glow:   0 0 40px rgba(107, 92, 156, 0.35);
 
-  --am-gradient-brand: linear-gradient(135deg, #7B6CAB 0%, #9D8FD0 50%, #D4A76A 100%);
-  --am-gradient-soft:  linear-gradient(135deg, rgba(107, 92, 156, 0.08) 0%, rgba(212, 167, 106, 0.06) 100%);
-  --am-bg-hero: radial-gradient(circle at 20% 10%, rgba(107, 92, 156, 0.15), transparent 30%),
-                radial-gradient(circle at 80% 20%, rgba(212, 167, 106, 0.08), transparent 28%),
-                linear-gradient(180deg, #100D16 0%, #131016 50%, #151119 100%);
+  --am-gradient-brand: linear-gradient(135deg, #8A7BC8 0%, #B8A5D0 50%, #D4B08A 100%);
+  --am-gradient-soft:  linear-gradient(135deg, rgba(107, 92, 156, 0.12) 0%, rgba(212, 167, 106, 0.1) 100%);
+  --am-bg-hero: radial-gradient(circle at 20% 10%, rgba(107, 92, 156, 0.18), transparent 30%),
+                radial-gradient(circle at 80% 20%, rgba(212, 167, 106, 0.12), transparent 28%),
+                linear-gradient(180deg, #0A080F 0%, #0D0B12 50%, #110E16 100%);
 
   /* Legacy overrides */
   --ui-bg: var(--am-bg-base);
@@ -1259,7 +1260,7 @@ nav.navbar {
   display: inline-flex;
   align-items: center;
   padding: var(--space-1) var(--space-4);
-  background: rgba(107, 92, 156, 0.06);
+  background: var(--am-gradient-soft);
   border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
