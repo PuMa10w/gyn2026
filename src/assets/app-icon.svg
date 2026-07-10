@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- GYN Premium App Icon — iPhone optimized с анимированными точками -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <!-- Gradient: Deep Amethyst → Amber Gold → Coral -->
+    <linearGradient id="gradPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#6B5C9C"/>
+      <stop offset="45%" stopColor="#D4A76A"/>
+      <stop offset="100%" stopColor="#E8847D"/>
+    </linearGradient>
+    
+    <!-- Inner gradient for depth -->
+    <radialGradient id="gradInner" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stopColor="rgba(255,255,255,0.3)"/>
+      <stop offset="100%" stopColor="rgba(0,0,0,0.4)"/>
+    </radialGradient>
+    
+    <!-- Glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="24" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Sparkle filter -->
+    <filter id="sparkle">
+      <feGaussianBlur stdDeviation="2" result="blurred"/>
+      <feMerge>
+        <feMergeNode in="blurred"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Subtle inner shadow -->
+    <filter id="innerShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feOffset result="offOut" in="SourceAlpha" dx="0" dy="0"/>
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10"/>
+      <feComposite in="blurOut" in2="SourceAlpha" operator="out"/>
+      <feFlood floodColor="rgba(0,0,0,0.25)"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+    
+    <!-- Pulse animation -->
+    <animateTransform 
+      attributeName="transform"
+      type="scale"
+      dur="2s"
+      repeatCount="indefinite"
+      values="1;1.05;1"
+      keyTimes="0;0.5;1"
+    />
+  </defs>
+  
+  <!-- Background circle with gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#gradPrimary)"/>
+  
+  <!-- Outer ring with subtle texture -->
+  <circle cx="512" cy="512" r="460" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="2"/>
+  
+  <!-- Stylized uterus + ovary silhouette -->
+  <g filter="url(#glow)" opacity="0.95">
+    <!-- Uterus body -->
+    <path d="M512,320 
+             C420,320 380,400 380,480 
+             C380,560 420,620 512,620 
+             C604,620 644,560 644,480 
+             C644,400 604,320 512,320 Z" 
+          fill="rgba(255,255,255,0.18)" 
+          stroke="rgba(255,255,255,0.3)" 
+          strokeWidth="3"/>
+    
+    <!-- Ovary (left) -->
+    <circle cx="420" cy="420" r="28" fill="rgba(255,255,255,0.25)"/>
+    <circle cx="420" cy="415" r="8" fill="rgba(255,255,255,0.6)"/>
+    
+    <!-- Ovary (right) -->
+    <circle cx="604" cy="420" r="28" fill="rgba(255,255,255,0.25)"/>
+    <circle cx="604" cy="415" r="8" fill="rgba(255,255,255,0.6)"/>
+    
+    <!-- Internal structure lines -->
+    <path d="M512,380 L512,460" stroke="rgba(255,255,255,0.4)" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M480,420 L544,420" stroke="rgba(255,255,255,0.3)" strokeWidth="2" strokeLinecap="round"/>
+  </g>
+  
+  <!-- Premium highlight overlay -->
+  <path d="M320,320 Q512,200 704,320" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="8" opacity="0.7"/>
+  
+  <!-- Animated sparkles — точки которые живут -->
+  <circle cx="380" cy="380" r="3.5" fill="rgba(255,255,255,0.7)" filter="url(#sparkle)">
+    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.8s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="2;4;2" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="644" cy="380" r="2.5" fill="rgba(255,255,255,0.6)" filter="url(#sparkle)">
+    <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2.2s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="1.5;3;1.5" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="512" cy="580" r="3" fill="rgba(255,255,255,0.65)" filter="url(#sparkle)">
+    <animate attributeName="opacity" values="0.2;0.75;0.2" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+    <animate attributeName="r" values="2;3.5;2" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+  </circle>
+  
+  <!-- Густые точки в центре для рханья -->
+  <g opacity="0.9">
+    <circle cx="512" cy="512" r="4" fill="rgba(255,255,255,0.8)">
+      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="508" cy="508" r="3" fill="rgba(255,255,255,0.9)">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.3s" repeatCount="indefinite" begin="0.1s"/>
+    </circle>
+    <circle cx="516" cy="516" r="2.5" fill="rgba(255,255,255,0.95)">
+      <animate attributeName="opacity" values="0.2;0.7;0.2" dur="1.7s" repeatCount="indefinite" begin="0.2s"/>
+    </circle>
+  </g>
+  
+  <!-- Inner shadow for depth -->
+  <circle cx="512" cy="512" r="420" fill="url(#innerShadow)" opacity="0.3"/>
+</svg>

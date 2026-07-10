@@ -1,1 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FFF1E8"/><stop offset="0.48" stop-color="#EBCDBA"/><stop offset="1" stop-color="#B97886"/></linearGradient><linearGradient id="mark" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#2B2023"/><stop offset="0.62" stop-color="#5C3941"/><stop offset="1" stop-color="#B97886"/></linearGradient></defs><rect width="512" height="512" rx="120" fill="url(#bg)"/><rect x="56" y="64" width="400" height="384" rx="96" fill="url(#mark)" stroke="#D8B878" stroke-width="8"/><text x="256" y="290" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="142" font-weight="900" fill="#FFF8F1" letter-spacing="-10">GYN</text><path d="M170 344 C205 382 307 382 342 344" fill="none" stroke="#D8B878" stroke-width="14" stroke-linecap="round" opacity="0.9"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- GYN PWA Favicon — с живыми точками -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="faviconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#6B5C9C"/>
+      <stop offset="100%" stopColor="#D4A76A"/>
+    </linearGradient>
+    <filter id="sparkle">
+      <feGaussianBlur stdDeviation="1.5" result="blurred"/>
+      <feMerge><feMergeNode in="blurred"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="32" cy="32" r="28" fill="url(#faviconGrad)"/>
+  <g opacity="0.9">
+    <circle cx="32" cy="32" r="4" fill="rgba(255,255,255,0.8)">
+      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="28" cy="28" r="2.5" fill="rgba(255,255,255,0.9)">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="36" cy="36" r="2" fill="rgba(255,255,255,0.95)">
+      <animate attributeName="opacity" values="0.2;0.7;0.2" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <path d="M32,18 
+           C24,18 20,26 20,34 
+           C20,42 24,50 32,50 
+           C40,50 44,42 44,34 
+           C44,26 40,18 32,18 Z" 
+        fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5"/>
+  <circle cx="26" cy="34" r="4" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="38" cy="34" r="4" fill="rgba(255,255,255,0.4)"/>
+  <path d="M32,24 L32,38" stroke="rgba(255,255,255,0.6)" strokeWidth="1" strokeLinecap="round"/>
+</svg>

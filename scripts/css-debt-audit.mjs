@@ -6,8 +6,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const cssFiles = [
   'src/index.css',
   'src/App.css',
-  'src/premium-unified.css',
-  'src/styles/clinical-worktool.css',
   'src/styles/premium-flagship.css',
   'src/styles/spacing.css',
 ];

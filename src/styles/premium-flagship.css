@@ -15,21 +15,21 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
 
-  /* ─ Brand Palette: Deep Amethyst + Amber Gold ─ */
-  --am-brand:         #6B5C9C;  /* Primary brand — deep amethyst */
-  --am-brand-light:   #8D7FBF;  /* Hover / light accent */
-  --am-brand-dark:    #4A3B7C;  /* Active / pressed */
-  --am-amber:         #D4A76A;  /* Warm accent — amber gold */
-  --am-amber-light:   #E6C999;  /* Hover amber */
-  --am-amber-dark:    #B8833F;  /* Active amber */
-  --am-teal:          #3A9D9D;  /* Clinical precision accent */
-  --am-teal-light:    #5FBFB9;
-  --am-teal-dark:     #297B7B;
-  --am-coral:         #E8847D;  /* Warmth / urgency accent */
-  --am-coral-light:   #F0A39E;
-  --am-green:         #6DC89A;  /* Success */
-  --am-red:           #E07065;  /* Danger / error */
-  --am-yellow:        #D8B06A;  /* Warning */
+  /* ─ Brand Palette: Deep Amethyst + Amber Gold (high-contrast) ─ */
+  --am-brand:         #5B3E8F;  /* Primary brand — saturated deep amethyst */
+  --am-brand-light:   #7C63C4;  /* Hover / light accent */
+  --am-brand-dark:    #432C6E;  /* Active / pressed */
+  --am-amber:         #936318;  /* Warm accent — saturated amber gold (darkened for AA text contrast) */
+  --am-amber-light:   #E0B25A;  /* Hover amber */
+  --am-amber-dark:    #855B16;  /* Active amber / text-on-light */
+  --am-teal:          #1F9C97;  /* Clinical precision accent */
+  --am-teal-light:    #46BDB4;
+  --am-teal-dark:     #14716E;
+  --am-coral:         #E8655B;  /* Warmth / urgency accent */
+  --am-coral-light:   #F0897F;
+  --am-green:         #3FAE77;  /* Success */
+  --am-red:           #E04F42;  /* Danger / error */
+  --am-yellow:        #C8902F;  /* Warning */
 
   /* ─ Light Theme Surface ─ */
   --am-bg-base:       #FAF7F4;
@@ -39,16 +39,16 @@
   --am-bg-glass:      rgba(255, 252, 249, 0.88);
 
   /* ─ Light Theme Text ─ */
-  --am-text-primary:  #2D2A3D;
-  --am-text-secondary: #554E60;   /* Улучшенный контраст на светлом фоне */
-  --am-text-tertiary: #7A7185;     /* Более читаемая нейтральная */
+  --am-text-primary:  #1E1733;  /* Deep near-black amethyst for max legibility */
+  --am-text-secondary: #3C3550;
+  --am-text-tertiary: #574E6B;
   --am-text-inverse:  #FFFDF9;
-  --am-text-link:     #6B5C9C;
+  --am-text-link:     #5B3E8F;
 
   /* ─ Light Theme Borders ─ */
-  --am-border-soft:   rgba(74, 56, 63, 0.12);   /* Более заметные на светлом фоне */
-  --am-border-medium: rgba(74, 56, 63, 0.22);
-  --am-border-strong: rgba(74, 56, 63, 0.35);
+  --am-border-soft:   rgba(45, 32, 61, 0.14);
+  --am-border-medium: rgba(45, 32, 61, 0.26);
+  --am-border-strong: rgba(45, 32, 61, 0.4);
 
   /* ─ Premium Shadows — Layered Depth System ─ */
   --am-shadow-xs:     0 1px 2px rgba(45, 42, 61, 0.04);
@@ -60,7 +60,7 @@
   --am-shadow-glow:   0 0 40px rgba(107, 92, 156, 0.16);
 
   /* ─ Light Theme Gradients ─ */
-  --am-gradient-brand: linear-gradient(135deg, #6B5C9C 0%, #8D7FBF 50%, #D4A76A 100%);
+  --am-gradient-brand: linear-gradient(135deg, #5B3E8F 0%, #7C63C4 50%, #C8902F 100%);
   --am-gradient-soft:  linear-gradient(135deg, rgba(107, 92, 156, 0.04) 0%, rgba(212, 167, 106, 0.04) 100%);
   --am-modal-bg:      rgba(255, 255, 255, 0.96);
   --am-bg-hero: radial-gradient(circle at 20% 10%, rgba(107, 92, 156, 0.08), transparent 30%),
@@ -201,37 +201,37 @@
 /* ── Dark Theme ──────────────────────────────────────────── */
 
 [data-theme='dark'] {
-  --am-bg-base:       #0D0B12;
-  --am-bg-subtle:     #15121D;
-  --am-bg-elevated:   #1E1928;
-  --am-bg-card:       rgba(22, 18, 30, 0.94);
-  --am-bg-glass:      rgba(14, 12, 24, 0.88);
-  --am-modal-bg:      rgba(14, 12, 24, 0.96);
+  --am-bg-base:       #0F0B18;
+  --am-bg-subtle:     #181324;
+  --am-bg-elevated:   #221B33;
+  --am-bg-card:       rgba(30, 24, 44, 0.95);
+  --am-bg-glass:      rgba(18, 14, 28, 0.9);
+  --am-modal-bg:      rgba(18, 14, 28, 0.97);
 
-  --am-text-primary:  #F0E8F5;
-  --am-text-secondary: #C4BCE1;   /* Более читаемый текст в темной теме */
-  --am-text-tertiary: #9A94A8;
+  --am-text-primary:  #F4EEFB;
+  --am-text-secondary: #CFC6EC;
+  --am-text-tertiary: #ACA3C4;
   --am-text-inverse:  #0D0B12;
-  --am-text-link:     #B8A5D0;
+  --am-text-link:     #B49BE0;
 
-  --am-border-soft:   rgba(176, 160, 204, 0.12);   /* Более заметные границы */
-  --am-border-medium: rgba(176, 160, 204, 0.22);
-  --am-border-strong: rgba(176, 160, 204, 0.35);
+  --am-border-soft:   rgba(91, 62, 143, 0.28);   /* Dark amethyst subtle */
+    --am-border-medium: rgba(91, 62, 143, 0.42);
+    --am-border-strong: rgba(91, 62, 143, 0.58);
 
-  /* Тени с более мягким градиентом для темной темы */
-  --am-shadow-xs:     0 1px 2px rgba(0, 0, 0, 0.32);
-  --am-shadow-sm:     0 2px 8px rgba(0, 0, 0, 0.36);
-  --am-shadow-md:     0 8px 24px rgba(0, 0, 0, 0.4);
-  --am-shadow-lg:     0 16px 48px rgba(0, 0, 0, 0.48);
-  --am-shadow-xl:     0 24px 80px rgba(0, 0, 0, 0.52);
-  --am-shadow-2xl:    0 32px 120px rgba(0, 0, 0, 0.58);
-  --am-shadow-glow:   0 0 40px rgba(107, 92, 156, 0.35);
+    /* Тени с мягким glow для темной темы */
+    --am-shadow-xs:     0 1px 2px rgba(0, 0, 0, 0.4);
+    --am-shadow-sm:     0 2px 8px rgba(0, 0, 0, 0.45);
+    --am-shadow-md:     0 8px 24px rgba(0, 0, 0, 0.5);
+    --am-shadow-lg:     0 16px 48px rgba(0, 0, 0, 0.55);
+    --am-shadow-xl:     0 24px 80px rgba(0, 0, 0, 0.6);
+    --am-shadow-2xl:    0 32px 120px rgba(0, 0, 0, 0.65);
+    --am-shadow-glow:   0 0 40px rgba(91, 62, 143, 0.38);
 
-  --am-gradient-brand: linear-gradient(135deg, #8A7BC8 0%, #B8A5D0 50%, #D4B08A 100%);
-  --am-gradient-soft:  linear-gradient(135deg, rgba(107, 92, 156, 0.12) 0%, rgba(212, 167, 106, 0.1) 100%);
-  --am-bg-hero: radial-gradient(circle at 20% 10%, rgba(107, 92, 156, 0.18), transparent 30%),
-                radial-gradient(circle at 80% 20%, rgba(212, 167, 106, 0.12), transparent 28%),
-                linear-gradient(180deg, #0A080F 0%, #0D0B12 50%, #110E16 100%);
+    --am-gradient-brand: linear-gradient(135deg, #5B3E8F 0%, #7C63C4 50%, #C8902F 100%);
+    --am-gradient-soft:  linear-gradient(135deg, rgba(91, 62, 143, 0.1) 0%, rgba(200, 144, 47, 0.08) 100%);
+    --am-bg-hero: radial-gradient(circle at 20% 10%, rgba(91, 62, 143, 0.18), transparent 30%),
+                  radial-gradient(circle at 80% 20%, rgba(200, 144, 47, 0.12), transparent 28%),
+                  linear-gradient(180deg, #0F0B18 0%, #181324 50%, #221B33 100%);
 
   /* Legacy overrides */
   --ui-bg: var(--am-bg-base);
@@ -2575,6 +2575,7 @@ body {
   background: var(--am-bg-card);
   border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-lg);
+  max-width: 100%;
 }
 .q-card h3 {
   color: var(--am-text-primary);
@@ -3099,11 +3100,119 @@ nav.navbar {
     padding-left: calc(var(--safe-left) + var(--space-4));
     padding-right: calc(var(--safe-right) + var(--space-4));
   }
-  
+
   .navbar {
     left: 50% !important;
     transform: translateX(-50%) !important;
     padding-left: calc(var(--safe-left) + var(--space-6)) !important;
     padding-right: calc(var(--safe-right) + var(--space-6)) !important;
   }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CLINICAL TIMELINE CARD — Premium vertical route
+   Previously unstyled (.clinical-timeline-card inherited base card only)
+   ════════════════════════════════════════════════════════════════ */
+.clinical-timeline-card {
+  position: relative;
+  border: 1px solid var(--am-border-soft);
+  background:
+    linear-gradient(145deg, rgba(184, 165, 208, 0.12), rgba(212, 184, 120, 0.05)),
+    var(--am-bg-card);
+  box-shadow: var(--am-shadow-md);
+  overflow: hidden;
+}
+
+.clinical-timeline-card .quick-summary-eyebrow {
+  color: var(--am-brand-light);
+  margin-bottom: 1rem;
+}
+
+.clinical-timeline {
+  display: grid;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.clinical-timeline > article {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  grid-template-areas:
+    "idx head"
+    "idx body";
+  column-gap: 0.85rem;
+  padding: 0.55rem 0;
+}
+
+/* Connecting spine */
+.clinical-timeline > article::before {
+  content: '';
+  position: absolute;
+  left: 1.12rem;
+  top: 2.4rem;
+  bottom: -0.5rem;
+  width: 2px;
+  background: linear-gradient(180deg, var(--am-brand), var(--am-amber));
+  opacity: 0.35;
+  border-radius: 2px;
+}
+
+.clinical-timeline > article:last-child::before {
+  display: none;
+}
+
+.clinical-timeline > article > span {
+  grid-area: idx;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--am-text-inverse);
+  background: var(--am-gradient-brand);
+  box-shadow: 0 4px 12px rgba(91, 62, 143, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.clinical-timeline > article > strong {
+  grid-area: head;
+  align-self: center;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--am-text-primary);
+  line-height: 1.2;
+}
+
+.clinical-timeline > article > ul,
+.clinical-timeline > article > p,
+.clinical-timeline > article > div {
+  grid-area: body;
+  margin: 0.15rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--am-text-secondary);
+}
+
+.clinical-timeline > article > ul > li {
+  position: relative;
+  padding-left: 0.9rem;
+}
+
+.clinical-timeline > article > ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--am-amber);
 }

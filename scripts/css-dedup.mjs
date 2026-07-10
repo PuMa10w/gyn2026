@@ -16,8 +16,6 @@ const srcDir = join(__dirname, '..', 'src');
 const cssOrder = [
   'src/index.css',
   'src/App.css',
-  'src/premium-unified.css',
-  'src/styles/clinical-worktool.css',
   'src/styles/premium-flagship.css',
   'src/styles/spacing.css'
 ];

@@ -25,13 +25,14 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'logo192.png', 'logo512.png'],
+      includeAssets: ['favicon.svg', 'favicon.ico', 'logo192.png', 'logo512.png', 'apple-touch-icon.png', 'splash-750x1334.png', 'splash-1125x2436.png', 'splash-1242x2208.png'],
       manifest: {
-        name: 'GYN Clinical - клинический справочник',
+        name: 'GYN Clinical — клинический справочник',
         short_name: 'GYN',
         description: 'Профессиональный клинический справочник по гинекологии и акушерству',
-        theme_color: '#8d616c',
-        background_color: '#fdf2f5',
+        theme_color: '#6B5C9C',
+        background_color: '#FAF7F4',
+        color: '#6B5C9C',
         display: 'standalone',
         orientation: 'portrait-primary',
         scope: '.',
@@ -40,6 +41,12 @@ export default defineConfig({
         categories: ['medical', 'health', 'fitness'],
         lang: 'ru',
         icons: [
+          {
+            src: 'favicon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any',
+          },
           {
             src: 'favicon.ico',
             sizes: '64x64 32x32 24x24 16x16',
@@ -54,6 +61,12 @@ export default defineConfig({
           {
             src: 'logo512.png',
             sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
+          {
+            src: 'apple-touch-icon.png',
+            sizes: '180x180',
             type: 'image/png',
             purpose: 'any maskable',
           },

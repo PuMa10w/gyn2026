@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "generatedAt": "2026-06-25T10:18:57.183Z",
+  "generatedAt": "2026-07-09T09:03:47.386Z",
   "note": "This report separates raw chunk coverage from conservative source-aware editorial overlay coverage. Runtime enrichment remains a safety net, not a substitute for verified clinical source review.",
   "essentialThreshold": 80,
   "ratchetBaselines": {
@@ -10,22 +10,22 @@
     "sourceAwareTop150Complete": 150
   },
   "totals": {
-    "allDiseases": 1533,
+    "allDiseases": 1528,
     "prioritySample": 150
   },
   "essentialCoverage": {
-    "total": 1533,
+    "total": 1528,
     "fields": {
       "clinicalSummary": {
         "present": 1261,
-        "percent": 82
+        "percent": 83
       },
       "diagnostics": {
-        "present": 1526,
+        "present": 1521,
         "percent": 100
       },
       "treatment": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "definition": {
@@ -33,18 +33,18 @@
         "percent": 98
       },
       "symptoms": {
-        "present": 1521,
+        "present": 1518,
         "percent": 99
       }
     },
     "complete": 1261
   },
   "premiumCoverage": {
-    "total": 1533,
+    "total": 1528,
     "fields": {
       "clinicalSummary": {
         "present": 1261,
-        "percent": 82
+        "percent": 83
       },
       "diagnosticCriteria": {
         "present": 42,
@@ -59,12 +59,12 @@
         "percent": 1
       },
       "treatment": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "ultrasound": {
         "present": 1249,
-        "percent": 81
+        "percent": 82
       },
       "followUpTriggers": {
         "present": 21,
@@ -86,65 +86,65 @@
     "complete": 3
   },
   "sourceAwareCoverage": {
-    "total": 1533,
+    "total": 1528,
     "fields": {
       "clinicalSummary": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "diagnosticCriteria": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "differentialDiagnosis": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "managementAlgorithm": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "treatment": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "ultrasound": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "followUpTriggers": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "patientCounseling": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "guidelineBasis": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       },
       "lastReviewed": {
-        "present": 1533,
+        "present": 1528,
         "percent": 100
       }
     },
-    "complete": 1533
+    "complete": 1528
   },
   "priorityTop150": {
     "total": 150,
     "fields": {
       "clinicalSummary": {
-        "present": 129,
-        "percent": 86
+        "present": 130,
+        "percent": 87
       },
       "diagnosticCriteria": {
-        "present": 31,
+        "present": 32,
         "percent": 21
       },
       "differentialDiagnosis": {
-        "present": 30,
-        "percent": 20
+        "present": 31,
+        "percent": 21
       },
       "managementAlgorithm": {
         "present": 20,
@@ -155,20 +155,20 @@
         "percent": 100
       },
       "ultrasound": {
-        "present": 116,
-        "percent": 77
+        "present": 117,
+        "percent": 78
       },
       "followUpTriggers": {
         "present": 20,
         "percent": 13
       },
       "patientCounseling": {
-        "present": 127,
+        "present": 128,
         "percent": 85
       },
       "guidelineBasis": {
-        "present": 30,
-        "percent": 20
+        "present": 31,
+        "percent": 21
       },
       "lastReviewed": {
         "present": 14,
@@ -188,14 +188,14 @@
         "sourceAwareComplete": 112
       },
       "urgent": {
-        "total": 20,
+        "total": 19,
         "rawComplete": 0,
-        "sourceAwareComplete": 20
+        "sourceAwareComplete": 19
       },
       "infection": {
-        "total": 4,
+        "total": 5,
         "rawComplete": 0,
-        "sourceAwareComplete": 4
+        "sourceAwareComplete": 5
       },
       "reproductive-endocrine": {
         "total": 4,
@@ -1107,24 +1107,6 @@
         ]
       },
       {
-        "id": "other-menstrual-disorders-2",
-        "name": "Другие нарушения менструации (метроррагия, посткоитальное кровотечение, ювенильные кровотечения)",
-        "icd": "N92.4-N92.6, N92.8-N92.9",
-        "cluster": "urgent",
-        "priorityScore": 7,
-        "missing": [
-          "clinicalSummary",
-          "diagnosticCriteria",
-          "differentialDiagnosis",
-          "managementAlgorithm",
-          "ultrasound",
-          "followUpTriggers",
-          "patientCounseling",
-          "guidelineBasis",
-          "lastReviewed"
-        ]
-      },
-      {
         "id": "placenta-previa",
         "name": "Предлежание плаценты",
         "icd": "O44",
@@ -1570,6 +1552,21 @@
         "id": "stub-o15-8",
         "name": "Беременность с гипертензией",
         "icd": "O15.8",
+        "cluster": "obstetrics",
+        "priorityScore": 7,
+        "missing": [
+          "diagnosticCriteria",
+          "differentialDiagnosis",
+          "managementAlgorithm",
+          "followUpTriggers",
+          "guidelineBasis",
+          "lastReviewed"
+        ]
+      },
+      {
+        "id": "stub-o15-9",
+        "name": "Беременность с гипертензией",
+        "icd": "O15.9",
         "cluster": "obstetrics",
         "priorityScore": 7,
         "missing": [
@@ -2035,14 +2032,14 @@
         "sourceAwareComplete": 112
       },
       "urgent": {
-        "total": 20,
-        "rawComplete": 20,
-        "sourceAwareComplete": 20
+        "total": 19,
+        "rawComplete": 19,
+        "sourceAwareComplete": 19
       },
       "infection": {
-        "total": 4,
-        "rawComplete": 4,
-        "sourceAwareComplete": 4
+        "total": 5,
+        "rawComplete": 5,
+        "sourceAwareComplete": 5
       },
       "reproductive-endocrine": {
         "total": 4,

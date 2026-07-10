@@ -1,5 +1,6 @@
 import { enrichDiseases } from '../utils/enrichDiseases';
 import type { Disease } from '../types';
+import { dedupeByContent } from './dedupeDiseases';
 
 const gynChunkLoaders = [
   () => import('./gynChunks/gynChunk1'),
@@ -32,6 +33,7 @@ const gynChunkLoaders = [
   () => import('./gynChunks/gynChunk28'),
   () => import('./gynChunks/gynChunk29'),
   () => import('./gynChunks/gynChunk30'),
+  () => import('./gynChunks/gynChunk31'),
 ];
 
 function scopeDiseaseIds(diseases: Disease[], scope: 'gyn'): Disease[] {
@@ -56,5 +58,5 @@ function scopeDiseaseIds(diseases: Disease[], scope: 'gyn'): Disease[] {
 
 export async function loadGynData(): Promise<Disease[]> {
   const chunks = await Promise.all(gynChunkLoaders.map((loadChunk) => loadChunk()));
-  return scopeDiseaseIds(enrichDiseases(chunks.flatMap((chunk) => chunk.default as Disease[])), 'gyn');
+  return scopeDiseaseIds(enrichDiseases(dedupeByContent(chunks.flatMap((chunk) => chunk.default as Disease[]))), 'gyn');
 }

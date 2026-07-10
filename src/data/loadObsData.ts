@@ -1,5 +1,6 @@
 import { enrichDiseases } from '../utils/enrichDiseases';
 import type { Disease } from '../types';
+import { dedupeByContent } from './dedupeDiseases';
 
 const obsChunkLoaders = [
   () => import('./obsChunks/obsChunk1'),
@@ -55,5 +56,5 @@ function scopeDiseaseIds(diseases: Disease[], scope: 'obs'): Disease[] {
 
 export async function loadObsData(): Promise<Disease[]> {
   const chunks = await Promise.all(obsChunkLoaders.map((loadChunk) => loadChunk()));
-  return scopeDiseaseIds(enrichDiseases(chunks.flatMap((chunk) => chunk.default as Disease[])), 'obs');
+  return scopeDiseaseIds(enrichDiseases(dedupeByContent(chunks.flatMap((chunk) => chunk.default as Disease[]))), 'obs');
 }

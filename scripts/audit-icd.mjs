@@ -7,8 +7,9 @@ const root = path.resolve(__dirname, '..');
 const strict = process.argv.includes('--strict');
 
 const chunkDirs = [
-  { kind: 'gynecology', prefix: 'N', dir: path.join(root, 'src', 'data', 'gynChunks') },
-  { kind: 'obstetrics', prefix: 'O', dir: path.join(root, 'src', 'data', 'obsChunks') },
+  { kind: 'gynecology', prefixes: ['N'], dir: path.join(root, 'src', 'data', 'gynChunks') },
+  { kind: 'obstetrics', prefixes: ['O'], dir: path.join(root, 'src', 'data', 'obsChunks') },
+  { kind: 'oncology', prefixes: ['C', 'D'], dir: path.join(root, 'src', 'data', 'gynChunks') },
 ];
 
 const clinicallyRelevant = {
@@ -25,9 +26,15 @@ const clinicallyRelevant = {
     'O73', 'O74', 'O75', 'O80', 'O82', 'O85', 'O86', 'O87', 'O88', 'O90',
     'O91', 'O92', 'O98', 'O99',
   ],
+  oncology: [
+    'C50', 'C51', 'C52', 'C53', 'C54', 'C55', 'C56', 'C57', 'C58',
+    'C76', 'C77', 'C78', 'C79', 'C80',
+    'D05', 'D06', 'D07', 'D25', 'D26', 'D27', 'D28', 'D39',
+    'D06.0', 'D06.1', 'D06.9', 'D07.0', 'D07.1', 'D07.2', 'D07.3',
+  ],
 };
 
-const icdPattern = /\bicd\s*:\s*(['"`])([^'"`]+)\1/g;
+const icdPattern = /["']?icd["']?\s*:\s*(['"`])([^'"`]+)\1/g;
 const codePattern = /\b([A-Z][0-9]{2}(?:\.[0-9A-Z]+)?)\b/g;
 
 function walk(dir) {
@@ -43,7 +50,7 @@ function normalizeCode(raw) {
   return String(raw).trim().toUpperCase();
 }
 
-function extractCodesFromFile(file, prefix) {
+function extractCodesFromFile(file, prefixes) {
   const text = fs.readFileSync(file, 'utf8');
   const entries = [];
   const duplicatesInFile = new Map();
@@ -53,7 +60,7 @@ function extractCodesFromFile(file, prefix) {
     const raw = match[2];
     const codes = [...raw.matchAll(codePattern)]
       .map((codeMatch) => normalizeCode(codeMatch[1]))
-      .filter((code) => code.startsWith(prefix));
+      .filter((code) => prefixes.some((p) => code.startsWith(p)));
 
     for (const code of codes) {
       entries.push({ code, raw, file: path.relative(root, file), index: match.index });
@@ -69,13 +76,13 @@ function extractCodesFromFile(file, prefix) {
   };
 }
 
-function auditDir({ kind, prefix, dir }) {
+function auditDir({ kind, prefixes, dir }) {
   const files = walk(dir);
   const entries = [];
   const duplicates = [];
 
   for (const file of files) {
-    const result = extractCodesFromFile(file, prefix);
+    const result = extractCodesFromFile(file, prefixes);
     entries.push(...result.entries);
     duplicates.push(...result.duplicates);
   }
@@ -89,7 +96,15 @@ function auditDir({ kind, prefix, dir }) {
   const existingCodes = [...byCode.keys()].sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
   const expected = clinicallyRelevant[kind];
   const missingClinicallyRelevant = expected.filter((code) => {
-    return !existingCodes.some((existing) => existing === code || existing.startsWith(`${code}.`));
+    const exactOrSub = existingCodes.some((existing) => existing === code || existing.startsWith(`${code}.`));
+    if (exactOrSub) return false;
+    // Для онкологии уточняющие подкоды (D06.0/.1/.9, D07.0-.3) покрываются базовой карточкой (D06/D07),
+    // так как предрак шейки/других органов описан единой карточкой, а не отдельными подкарточками.
+    if (kind === 'oncology') {
+      const baseCovered = existingCodes.some((existing) => code.startsWith(`${existing}.`));
+      return !baseCovered;
+    }
+    return true;
   });
 
   const crossFileDuplicates = [...byCode.entries()]
@@ -106,7 +121,7 @@ function auditDir({ kind, prefix, dir }) {
 
   return {
     kind,
-    prefix,
+    prefix: prefixes,
     scannedFiles: files.length,
     totalIcdMentions: entries.length,
     uniqueCodes: existingCodes.length,
@@ -116,7 +131,7 @@ function auditDir({ kind, prefix, dir }) {
     duplicates: [...duplicates, ...crossFileDuplicates],
     priorities: missingClinicallyRelevant.slice(0, 20).map((code) => ({
       code,
-      priority: code.startsWith('O') || ['N80', 'N83', 'N92', 'N93', 'N94', 'N97'].includes(code) ? 'high' : 'medium',
+      priority: kind === 'oncology' || code.startsWith('O') || ['N80', 'N83', 'N92', 'N93', 'N94', 'N97'].includes(code) ? 'high' : 'medium',
       action: 'Добавить source-aware карточку или подтвердить, что код намеренно не входит в клиническую базу.',
     })),
   };
