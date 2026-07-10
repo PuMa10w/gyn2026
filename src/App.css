@@ -5612,7 +5612,13 @@
 }
 
 .overview-summary-card {
-  background: linear-gradient(145deg, rgba(184, 165, 208, 0.14), rgba(107, 92, 156, 0.08));
+  /* Solid light surface (keeps contrast audit honest — it can't
+     read background-image, only background-color). */
+  background-color: var(--am-bg-card);
+  background-image: linear-gradient(145deg, rgba(184, 165, 208, 0.14), rgba(107, 92, 156, 0.08));
+}
+.quick-summary-eyebrow {
+  color: var(--am-amber-dark);
 }
 
 .overview-summary-grid {

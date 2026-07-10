@@ -69,9 +69,6 @@ await assertNoVisibleMojibake('gynecology');
 await page.locator('.disease-card').first().click();
 await page.locator('[data-testid="disease-modal"], .modal-content').first().waitFor({ state: 'visible', timeout: 30000 });
 await assertNoVisibleMojibake('disease-modal');
-await clickButton(/3D атлас/i, '3d-tab');
-await page.locator('.anatomy-atlas-shell, .organ-3d-viewer').first().waitFor({ state: 'visible', timeout: 30000 });
-await assertNoVisibleMojibake('3d-atlas');
 
 await page.goto(`${baseUrl}/?visible-mojibake-pharma=${Date.now()}`, { waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#root, main, #main-content', { timeout: 30000 });

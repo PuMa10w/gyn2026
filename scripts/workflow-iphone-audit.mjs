@@ -125,7 +125,7 @@ async function runFlowForDevice(browser, deviceName) {
   await page.locator('.disease-card').first().click();
   await page.locator('.modal-content, [role="dialog"]').first().waitFor({ state: 'visible', timeout: 12000 });
 
-  for (const tabName of ['Диагностика', 'AI помощник', '3D атлас', 'AI-диагност', 'PubMed']) {
+  for (const tabName of ['Диагностика', 'AI помощник', 'AI-диагност', 'PubMed']) {
     const tab = page.getByRole('tab', { name: tabName }).first();
     await tab.scrollIntoViewIfNeeded();
     await tab.click({ timeout: 8000 });

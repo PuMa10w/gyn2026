@@ -23,24 +23,47 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
   const [lastScrollY, setLastScrollY] = useState(0);
   const scrollThreshold = 16;
   const showThreshold = 100;
-  
+  const rafRef = React.useRef<number | null>(null);
+
   useEffect(() => {
     const updateVisibility = () => {
       const currentY = window.scrollY;
       const delta = currentY - lastScrollY;
-      
+
       // Hide when scrolling down past threshold, show when scrolling up
       if (delta > scrollThreshold && currentY > showThreshold) {
         setIsVisible(false);
       } else if (delta < -scrollThreshold) {
         setIsVisible(true);
       }
-      
+
       setLastScrollY(currentY);
+
+      // Throttle the scroll handler to one update per animation frame
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null;
+      });
     };
 
-    window.addEventListener('scroll', updateVisibility, { passive: true });
-    return () => window.removeEventListener('scroll', updateVisibility);
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        rafRef.current = requestAnimationFrame(() => {
+          updateVisibility();
+          ticking = false;
+        });
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
   }, [lastScrollY]);
 
   return (

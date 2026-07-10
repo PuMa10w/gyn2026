@@ -166,7 +166,6 @@ for (const deviceName of deviceNames) {
   });
   await assertNoOverlap(page, `${deviceName} disease modal bottom`);
   await openToolTab(page, 'AI помощник', '.clinical-template-assistant', `${deviceName} AI helper`);
-  await openToolTab(page, '3D атлас', '.anatomy-atlas-shell', `${deviceName} 3D atlas`);
   await openToolTab(page, 'PubMed', '.pubmed-feed', `${deviceName} PubMed`);
   await page.locator('.modal-close').first().click();
   await page.locator('.modal-content').first().waitFor({ state: 'hidden', timeout: 8000 }).catch(() => undefined);

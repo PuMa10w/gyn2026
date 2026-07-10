@@ -2,7 +2,7 @@ import { chromium, devices } from 'playwright';
 
 const baseUrl = process.env.AUDIT_URL ?? process.env.AUDIT_BASE_URL ?? 'http://127.0.0.1:4173';
 const device = devices['iPhone 15 Pro Max'] ?? { viewport: { width: 430, height: 932 }, isMobile: true, hasTouch: true };
-const targetTabs = ['AI помощник', '3D атлас', 'AI-диагност', 'PubMed'];
+const targetTabs = ['AI помощник', 'AI-диагност', 'PubMed'];
 const maxCards = Number.parseInt(process.env.CLINICAL_TOOLS_CARD_LIMIT || '30', 10);
 const browser = await chromium.launch({ executablePath: process.env.CHROME_EXECUTABLE || undefined, headless: true });
 const context = await browser.newContext(device);

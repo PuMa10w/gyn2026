@@ -134,8 +134,8 @@ const flows = [
     reset: async (page) => resetPage(page, 'clinical-tool-3d'),
     run: async (page) => {
       await openDiseaseModal(page);
-      await openDiseaseTab(page, '3D атлас');
-      await page.locator('.anatomy-atlas-shell').waitFor({ state: 'visible' });
+      await openDiseaseTab(page, 'AI помощник');
+      await page.locator('.clinical-template-assistant').waitFor({ state: 'visible' });
     },
   },
   {

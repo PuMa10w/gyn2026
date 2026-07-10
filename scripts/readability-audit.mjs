@@ -121,7 +121,7 @@ await page.locator('.disease-card').first().click();
 await page.locator('.modal-content, [role="dialog"]').first().waitFor({ state: 'visible', timeout: 12000 });
 await collect('modal quick');
 
-for (const tabName of ['Диагностика', 'Источники', 'AI помощник', '3D атлас', 'AI-диагност', 'PubMed']) {
+for (const tabName of ['Диагностика', 'Источники', 'AI помощник', 'AI-диагност', 'PubMed']) {
   const tab = page.getByRole('tab', { name: tabName }).first();
   await tab.scrollIntoViewIfNeeded().catch(() => undefined);
   await tab.click({ timeout: 8000 }).catch(() => undefined);

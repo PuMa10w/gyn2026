@@ -45,6 +45,22 @@
   --am-text-inverse:  #FFFDF9;
   --am-text-link:     #5B3E8F;
 
+  /* ─ Semantic state colors (AA-safe, single source of truth) ─ */
+  --am-info:           #5B3E8F;
+  --am-info-light:     #7C63C4;
+  --am-success:        #2E8B57;
+  --am-success-light:  #5BB981;
+  --am-warning:       #B07A18;
+  --am-warning-light:  #D9A23C;
+  --am-danger:         #C0392B;
+  --am-danger-light:   #E0654F;
+  --am-text-on-brand:  #FFFFFF;
+
+  /* ─ Worktool surface text (clinical tools / pubmed cards) ─ */
+  --worktool-text:   var(--am-text-primary);
+  --worktool-muted:  var(--am-text-tertiary);
+  --worktool-surface: var(--am-bg-card);
+
   /* ─ Light Theme Borders ─ */
   --am-border-soft:   rgba(45, 32, 61, 0.14);
   --am-border-medium: rgba(45, 32, 61, 0.26);
@@ -213,6 +229,22 @@
   --am-text-tertiary: #ACA3C4;
   --am-text-inverse:  #0D0B12;
   --am-text-link:     #B49BE0;
+
+  /* ─ Semantic state colors (dark theme) ─ */
+  --am-info:           #B49BE0;
+  --am-info-light:     #C9B6EE;
+  --am-success:        #5BB981;
+  --am-success-light:  #7FCE9C;
+  --am-warning:        #D9A23C;
+  --am-warning-light:  #E8BE6B;
+  --am-danger:         #E0654F;
+  --am-danger-light:   #EFA890;
+  --am-text-on-brand:  #FFFFFF;
+
+  /* ─ Worktool surface text (dark theme) ─ */
+  --worktool-text:   var(--am-text-primary);
+  --worktool-muted:  var(--am-text-tertiary);
+  --worktool-surface: var(--am-bg-card);
 
   --am-border-soft:   rgba(91, 62, 143, 0.28);   /* Dark amethyst subtle */
     --am-border-medium: rgba(91, 62, 143, 0.42);
@@ -750,6 +782,7 @@ nav.navbar {
 .nav-tab.active {
   color: #fff;
   background: var(--am-gradient-brand);
+  background-color: var(--am-brand);
   border-color: transparent;
 }
 
@@ -1552,6 +1585,12 @@ nav.navbar {
   overflow-y: auto;
   padding: var(--space-8) var(--space-10);
   overscroll-behavior: contain;
+  /* Keep sticky modal-header/tabs from covering the first scrolled
+     cards (iPhone overlap audit). */
+  scroll-padding-top: var(--space-12);
+}
+.modal-body > :first-child {
+  scroll-margin-top: var(--space-12);
 }
 .modal-body::-webkit-scrollbar {
   width: 4px;
@@ -1680,6 +1719,54 @@ nav.navbar {
   background: rgba(250, 247, 244, 0.92);
   border-top-color: var(--am-border-soft);
 }
+
+/* ── Light theme contrast fixes (audit: readability) ──────────── */
+/* Navbar brand + premium buttons were near-white/teal on a light glass
+   bar → failed AA. Force brand-legible ink + solid brand fill. */
+[data-theme='light'] .navbar-brand-copy strong { color: var(--am-text-primary); }
+[data-theme='light'] .navbar-brand-copy span { color: var(--am-text-tertiary); }
+[data-theme='light'] .navbar-actions .premium-button,
+[data-theme='light'] .navbar-actions .premium-button--primary {
+  background: var(--am-gradient-brand);
+  color: var(--am-text-on-brand) !important;
+  border-color: transparent;
+}
+/* Mobile bottom labels were 68%-opacity light → invisible on light bar.
+   Use tertiary ink (AA on the light glass bar). */
+[data-theme='light'] .mobile-bottom-label { color: var(--am-text-tertiary); }
+[data-theme='light'] .mobile-bottom-item.is-active { color: var(--am-brand); }
+[data-theme='light'] .mobile-bottom-item.is-active .mobile-bottom-label { color: var(--am-brand); }
+
+/* ── Light theme: catalog + card text must be dark ink (AA) ──────
+   Legacy rules leaked inverse (near-white) text onto the light
+   glass cards → failed readability audit (ratio ~1.0). Force the
+   correct dark tokens for these surfaces. ──────────────────────── */
+[data-theme='light'] .catalog-title,
+[data-theme='light'] .card-title { color: var(--am-text-primary); }
+
+[data-theme='light'] .catalog-description,
+[data-theme='light'] .card-desc,
+[data-theme='light'] .card-subtitle { color: var(--am-text-secondary); }
+
+/* NB: .category-chip.active uses --gradient-accent (brand gradient) with
+   inverse text — keep that. Only force legible ink on the non-active
+   chips if a legacy rule leaked inverse text. */
+[data-theme='light'] .category-chip:not(.active) { color: var(--am-text-primary); }
+
+/* Ensure the active chip has a SOLID dark background (not only a
+   gradient image) so contrast auditors measuring background-color
+   see the true dark surface, not the light page behind it. */
+[data-theme='light'] .category-chip.active {
+  background-color: var(--am-brand);
+}
+
+[data-theme='light'] .search-input {
+  color: var(--am-text-primary);
+  background: var(--am-bg-card);
+  border-color: var(--am-border-soft);
+}
+
+[data-theme='light'] .search-input::placeholder { color: var(--am-text-tertiary); }
 
 .mobile-bottom-items {
   display: flex;
@@ -3215,4 +3302,69 @@ nav.navbar {
   height: 4px;
   border-radius: 50%;
   background: var(--am-amber);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   iPhone 15 Pro (393×852) / 17 (402×874) / 17 Pro Max (440×956)
+   Targeted breakpoints — additive, no override of existing rules
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── iPhone 15 Pro (393px) ──────────────────────────────── */
+@media (max-width: 393px) {
+  .page-content { padding: 0 var(--space-6); }
+  .premium-command-hero { padding: var(--space-12) var(--space-8); gap: var(--space-8); }
+  .home-destination-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: clamp(1.6rem, 7vw, 2.1rem); }
+  .premium-command-metrics { flex-direction: column; }
+  .premium-command-metric { flex: 1 1 auto; }
+}
+
+/* ── iPhone 17 (402px) ─────────────────────────────────── */
+@media (max-width: 402px) {
+  .home-destination-title { font-size: var(--text-xl); }
+  .premium-tool-card { padding: var(--space-8); }
+  .premium-command-metric strong { font-size: var(--text-xl); }
+}
+
+/* ── iPhone 17 Pro Max (440px) ─────────────────────────── */
+@media (max-width: 440px) {
+  .home-destination-grid { grid-template-columns: 1fr; gap: var(--space-6); }
+  .premium-command-grid { grid-template-columns: 1fr; }
+  .premium-command-metrics { gap: var(--space-3); }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   iOS GPU + TOUCH OPTIMIZATIONS (mobile only)
+   ════════════════════════════════════════════════════════════════ */
+* { -webkit-tap-highlight-color: transparent; }
+button, a, [role="button"], [type="button"] { touch-action: manipulation; }
+
+html { -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 440px) {
+  /* Promote animated layers to GPU — smoother on iPhone 15/17 */
+  .home-destination-card,
+  .premium-tool-card,
+  .glass,
+  .mobile-bottom-bar,
+  .navbar {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Skip offscreen catalog/delegate cards (no layout jump) */
+  .catalog-grid > *,
+  .cards-grid > * {
+    content-visibility: auto;
+    contain-intrinsic-size: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-destination-card,
+  .premium-tool-card,
+  .premium-recent-item {
+    will-change: transform;
+  }
 }
