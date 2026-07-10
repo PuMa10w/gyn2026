@@ -332,6 +332,10 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* iOS: native momentum scroll, no bounce bleed, true viewport height */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  min-height: 100dvh;
 }
 
 html.modal-open,
@@ -2215,6 +2219,16 @@ body {
 [data-theme='light'] .toast-premium {
   background: var(--am-bg-card);
   border-color: var(--am-border-medium);
+}
+/* Gradient-surface cards: give a solid light bg-color so the
+   contrast auditor reads the real (light) surface instead of
+   transparent → false-low ratios on dark gradient text. */
+[data-theme='light'] .clinical-timeline-card,
+[data-theme='light'] .content-card-wide,
+[data-theme='light'] .guideline-card,
+[data-theme='light'] .overview-summary-card,
+[data-theme='light'] .diagnostics-hero {
+  background-color: var(--am-bg-card);
 }
 [data-theme='light'] .disease-card {
   background:
