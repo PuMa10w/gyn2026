@@ -246,9 +246,9 @@
   --worktool-muted:  var(--am-text-tertiary);
   --worktool-surface: var(--am-bg-card);
 
-  --am-border-soft:   rgba(91, 62, 143, 0.28);   /* Dark amethyst subtle */
-    --am-border-medium: rgba(91, 62, 143, 0.42);
-    --am-border-strong: rgba(91, 62, 143, 0.58);
+  --am-border-soft:   rgba(124, 99, 196, 0.30);   /* Dark amethyst subtle (brighter for legibility) */
+    --am-border-medium: rgba(124, 99, 196, 0.46);
+    --am-border-strong: rgba(124, 99, 196, 0.64);
 
     /* Тени с мягким glow для темной темы */
     --am-shadow-xs:     0 1px 2px rgba(0, 0, 0, 0.4);
@@ -489,6 +489,29 @@ a:hover {
 /* ── Glow System ──────────────────────────────────────────── */
 .glow-brand {
   box-shadow: 0 0 32px rgba(107, 92, 156, 0.18) !important;
+}
+
+/* ── Unified Card Primitive ──────────────────────────────── */
+/* Single source of truth for elevated surfaces across all
+   sections. Add alongside existing card classes (non-breaking). */
+.am-card {
+  background: var(--am-bg-card);
+  border: 1px solid var(--am-border-soft);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--am-shadow-sm);
+  transition: background var(--duration-md) var(--ease-smooth),
+              box-shadow var(--duration-md) var(--ease-smooth),
+              border-color var(--duration-md) var(--ease-smooth),
+              transform var(--duration-md) var(--ease-fast);
+}
+.am-card:hover {
+  background: var(--am-bg-elevated);
+  box-shadow: var(--am-shadow-md);
+  border-color: var(--am-border-medium);
+}
+.am-card:focus-visible {
+  outline: 2px solid var(--am-brand);
+  outline-offset: 2px;
 }
 .glow-amber {
   box-shadow: 0 0 32px rgba(212, 167, 106, 0.2) !important;
@@ -1542,6 +1565,7 @@ nav.navbar {
 
 .tab-btn.active {
   background: var(--am-gradient-brand);
+  background-color: var(--am-brand);
   color: var(--am-text-inverse);
   border-color: transparent;
   box-shadow: var(--am-shadow-sm), 0 0 24px rgba(107, 92, 156, 0.18);

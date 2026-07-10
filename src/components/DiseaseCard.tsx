@@ -64,7 +64,7 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
 
   return (
     <motion.article
-      className="disease-card magnetic"
+      className="disease-card magnetic am-card"
       custom={index}
       initial="hidden"
       animate="visible"

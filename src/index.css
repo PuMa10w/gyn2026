@@ -533,8 +533,8 @@ h5 {
   z-index: 50;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
-  background: rgba(28, 28, 30, 0.7);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--am-bg-glass);
+  border-top: 1px solid var(--am-border-soft);
   padding-bottom: var(--safe-bottom);
 }
 
@@ -553,7 +553,7 @@ h5 {
   appearance: none;
   border: 0;
   background: transparent;
-  color: rgba(245, 245, 247, 0.68);
+  color: var(--am-text-tertiary);
   display: flex;
   flex: 1 1 0;
   min-width: 0;
