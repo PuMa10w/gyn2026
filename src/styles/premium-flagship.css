@@ -203,15 +203,25 @@
   --accent-ink: var(--am-text-primary);
   --accent-soft: rgba(107, 92, 156, 0.18);
   --accent-copper: var(--am-amber-dark);
-  --accent-bronze: var(--am-amber-dark);
-  --bg-elevated: var(--am-bg-glass);
-  --bg-hero: var(--am-bg-hero);
-  --text-inverse: var(--am-text-inverse);
-  --shadow-soft: var(--am-shadow-md);
-  --shadow-hover: var(--am-shadow-lg);
-  --shadow-modal: var(--am-shadow-xl);
-  --brand-border: var(--am-brand);
-  --brand-text: var(--am-text-primary);
+    --accent-bronze: var(--am-amber-dark);
+
+    /* ─ Premium Surface Layers ─ */
+    --am-no-ui: #F9F7F4;        /* Ultra-subtle background for empty states */
+    --am-surface-2: #F2EEE8;    /* Second layer surface, cards in cards */
+    --am-muted: #E8E4E0;        /* Muted UI elements, disabled states */
+
+    /* ─ Muted Accent Variants (for secondary badges, borders) ─ */
+    --am-teal-muted: #1F9C97CC;  /* 80% opacity teal for subtle accents */
+    --am-amber-muted: #936318CC; /* 80% opacity amber for secondary */
+
+    --bg-elevated: var(--am-bg-glass);
+    --bg-hero: var(--am-bg-hero);
+    --text-inverse: var(--am-text-inverse);
+    --shadow-soft: var(--am-shadow-md);
+    --shadow-hover: var(--am-shadow-lg);
+    --shadow-modal: var(--am-shadow-xl);
+    --brand-border: var(--am-brand);
+    --brand-text: var(--am-text-primary);
 }
 
 /* ── Dark Theme ──────────────────────────────────────────── */
@@ -239,9 +249,18 @@
   --am-warning-light:  #E8BE6B;
   --am-danger:         #E0654F;
   --am-danger-light:   #EFA890;
-  --am-text-on-brand:  #FFFFFF;
+    --am-text-on-brand:  #FFFFFF;
 
-  /* ─ Worktool surface text (dark theme) ─ */
+    /* ─ Premium Surface Layers (dark) ─ */
+    --am-no-ui: #181324;        /* Ultra-subtle dark background */
+    --am-surface-2: #221B33;    /* Second layer surface */
+    --am-muted: #423B52;        /* Muted UI elements */
+
+    /* ─ Muted Accent Variants (dark theme) ─ */
+    --am-teal-muted: #1F9C9799;  /* 60% opacity teal for subtle accents */
+    --am-amber-muted: #93631899; /* 60% opacity amber for secondary */
+
+    /* ─ Worktool surface text (dark theme) ─ */
   --worktool-text:   var(--am-text-primary);
   --worktool-muted:  var(--am-text-tertiary);
   --worktool-surface: var(--am-bg-card);
@@ -2583,7 +2602,10 @@ body {
   /* Clear the fixed MobileBottomBar (72px) inside the scroll area
      so the last block stays tappable — applied to .modal-body,
      not .modal-content, to avoid fighting the sticky tabs/quick-strip */
-  .modal-body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important; }
+     .modal-body {
+       padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+       scroll-padding-top: calc(var(--space-8) + 60px); /* ~136px: header + quick-strip + tabs */
+     }
   .modal-header { padding: var(--space-6) var(--space-6) var(--space-4); }
   .modal-tabs {
     padding: var(--space-3) var(--space-6);
@@ -3432,17 +3454,75 @@ html { -webkit-overflow-scrolling: touch; }
   }
 
   /* WCAG AA: no visible body/secondary text below 12px on phones */
-  .card-desc, .card-subtitle, .card-icd-badge,
-  .content-card p, .structured-item p, .pubmed-abstract,
-  .modal-body p, .guideline-card p, .quick-summary-eyebrow {
-    font-size: max(12px, var(--text-sm)) !important;
+    .card-desc, .card-subtitle, .card-icd-badge,
+    .content-card p, .structured-item p, .pubmed-abstract,
+    .modal-body p, .modal-body .card-desc, .guideline-card p, .quick-summary-eyebrow {
+      font-size: max(12px, var(--text-sm)) !important;
+    }
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .home-destination-card,
-  .premium-tool-card,
-  .premium-recent-item {
-    will-change: transform;
+  /* ── GPU Acceleration & Spring Animations ─────────────────────── */
+  @media (prefers-reduced-motion: no-preference) {
+    .premium-button, .premium-tool-card, .home-destination-card,
+    .premium-recent-item, .tab-btn, .category-chip,
+    .guide-line, .modal-quick-strip, .modal-tabs,
+    .destination-tag, .card-subtitle, .card-icd-badge,
+    .clinical-template-button, .pharma-tab, .q-btn,
+    .search-clear-btn, .favorite-btn, .hero-btn {
+      will-change: transform;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      transition: transform var(--duration-fast) cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Spring hover/tap effects */
+    .premium-button:hover, .premium-tool-card:hover,
+    .home-destination-card:hover, .category-chip:hover {
+      transform: translateY(-2px);
+    }
+
+    .premium-button:active, .premium-tool-card:active {
+      transform: scale(0.97);
+    }
   }
+
+  /* ── Hero Aura Glow ─────────────────────────────────────────── */
+  .premium-command-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-2xl);
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(ellipse at 50% 30%, rgba(107, 92, 156, 0.12), transparent 60%);
+    animation: aura-drift 8s ease-in-out infinite alternate;
+  }
+  @keyframes aura-drift {
+    0% { transform: translateZ(0) scale(1); opacity: 0.8; }
+    50% { transform: translateZ(0) scale(1.02); opacity: 0.95; }
+    100% { transform: translateZ(0) scale(1.05); opacity: 0.9; }
+  }
+
+  /* ── Home Card Glow (premium) ───────────────────────────────────── */
+  .home-destination-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(45deg, transparent, rgba(107,92,156,0.1), transparent);
+    opacity: 0;
+    transition: opacity var(--duration-md) var(--ease-smooth);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .home-destination-card:hover::after { opacity: 0.6; }
+
+  /* ── Final mobile polish ───────────────────────────────────── */
+@media (max-width: 440px) {
+  .destination-tag { font-size: 12px !important; }
+  .mobile-bottom-label { font-size: 12px !important; }
+  .destination-kicker { font-size: 12px !important; }
+  .navbar-brand-copy span { font-size: 12px !important; }
 }
