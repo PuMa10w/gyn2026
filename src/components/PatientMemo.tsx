@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import type { Disease } from '../types';
 import { repairText } from '../utils/textRepair';
@@ -169,7 +169,7 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({ disease, className = '
   };
 
   return (
-    <motion.section
+    <m.section
       className={`patient-memo clinical-tool-surface ${className}`}
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
@@ -214,6 +214,6 @@ export const PatientMemo: React.FC<PatientMemoProps> = ({ disease, className = '
       <p className="clinical-tool-note">
         Памятка информационная: итоговую тактику, дозировки и сроки контроля определяет специалист.
       </p>
-    </motion.section>
+    </m.section>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import type { Toast } from '../types';
 
 interface ToastContainerProps {
@@ -68,7 +68,7 @@ const ToastItem: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({
   const style = typeStyles[toast.type || 'info'];
 
   return (
-    <motion.div
+    <m.div
       initial={{ x: 400, opacity: 0, scale: 0.9 }}
       animate={{ x: 0, opacity: 1, scale: 1 }}
       exit={{ x: 400, opacity: 0, scale: 0.9 }}
@@ -111,13 +111,13 @@ const ToastItem: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({
         </button>
       </div>
       {/* Progress bar */}
-      <motion.div
+      <m.div
         className="toast-progress absolute bottom-0 left-0 h-1 bg-[var(--color-turquoise)]"
         initial={{ width: '100%' }}
         animate={{ width: '0%' }}
         transition={{ duration: duration / 1000, ease: 'linear' }}
       />
-    </motion.div>
+    </m.div>
   );
 };
 

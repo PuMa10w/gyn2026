@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 
 interface VoiceNoteRecorderProps {
@@ -88,7 +88,7 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
   }
 
   return (
-    <motion.div
+    <m.div
       className={`voice-recorder glass ${className}`}
       style={{
         padding: '20px',
@@ -100,7 +100,7 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
       animate={{ opacity: 1, y: 0 }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-        <motion.div
+        <m.div
           animate={isListening ? { scale: [1, 1.2, 1] } : { scale: 1 }}
           transition={{ repeat: isListening ? Infinity : 0, duration: 1.5 }}
           style={{
@@ -137,7 +137,7 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
       </div>
 
       {transcript && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           style={{
@@ -150,19 +150,19 @@ export const VoiceNoteRecorder: React.FC<VoiceNoteRecorderProps> = ({
           }}
         >
           <p style={{ margin: 0, fontSize: '14px', lineHeight: 1.5 }}>{transcript}</p>
-        </motion.div>
+        </m.div>
       )}
 
       {isListening && (
-        <motion.p
+        <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ repeat: Infinity, duration: 2 }}
           style={{ fontSize: '12px', opacity: 0.6, textAlign: 'center', marginTop: '12px' }}
         >
           🎙️ Слушаю... Говорите!
-        </motion.p>
+        </m.p>
       )}
-    </motion.div>
+    </m.div>
   );
 };

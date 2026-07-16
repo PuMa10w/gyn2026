@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import { clinicalSourceStack } from '../config/clinicalSourceStack';
 
@@ -175,7 +175,7 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
     : currentVersion;
 
   return (
-    <motion.section
+    <m.section
       className={`version-checker glass ${className}`}
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
@@ -240,7 +240,7 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
       )}
 
       {isUpdateAvailable && latestVersion && (
-        <motion.div
+        <m.div
           className="version-update-card"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -262,7 +262,7 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
           </div>
 
           {showChangelog && (
-            <motion.ul
+            <m.ul
               className="version-changelog"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -270,9 +270,9 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
               {latestVersion.changelog.map((item) => (
                 <li key={item}>{item}</li>
               ))}
-            </motion.ul>
+            </m.ul>
           )}
-        </motion.div>
+        </m.div>
       )}
 
       {updateState === 'updated' && latestVersion && (
@@ -286,6 +286,6 @@ export const VersionChecker: React.FC<VersionCheckerProps> = ({
           Не удалось обновить кэш автоматически. Проверьте сеть и нажмите «Проверить» ещё раз.
         </div>
       )}
-    </motion.section>
+    </m.section>
   );
 };

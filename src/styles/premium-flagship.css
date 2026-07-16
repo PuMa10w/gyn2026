@@ -96,21 +96,24 @@
   --z-spinner:    1200;
   --z-tooltip:    1300;
 
-  /* ─ Typography — Premium Medical Scale (fluid) ─ */
+  /* ─ Typography — Premium Medical Scale (fluid clamp) ─
+     Fluid between 360px (min) and 1280px (max) viewport so type scales
+     smoothly on tablets without breakpoints. Min values keep mobile legibility
+     (12px floor preserved). */
   --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
   --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
   --font-mono:  'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
 
-  --text-xs:    0.75rem;     /* 12px — minimum readable */
-  --text-sm:    0.8125rem;   /* 13px — mobile body */
-  --text-base:  0.9375rem;   /* 15px — comfortable reading */
-  --text-md:    1rem;        /* 16px — standard */
-  --text-lg:    1.125rem;    /* 18px — section headers */
-  --text-xl:    1.375rem;    /* 22px — card titles */
-  --text-2xl:   1.625rem;    /* 26px — page titles */
-  --text-3xl:   2rem;        /* 32px — hero */
-  --text-4xl:   2.5rem;      /* 40px — display */
-  --text-5xl:   3.5rem;      /* 56px — grand hero */
+  --text-xs:    clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);    /* 12 → 13px */
+  --text-sm:    clamp(0.8125rem, 0.78rem + 0.18vw, 0.9375rem);  /* 13 → 15px */
+  --text-base:  clamp(0.9375rem, 0.9rem + 0.2vw, 1rem);         /* 15 → 16px */
+  --text-md:    1rem;        /* 16px — standard anchor */
+  --text-lg:    clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);      /* 18 → 20px */
+  --text-xl:    clamp(1.375rem, 1.25rem + 0.7vw, 1.5rem);       /* 22 → 24px */
+  --text-2xl:   clamp(1.625rem, 1.45rem + 0.9vw, 1.875rem);     /* 26 → 30px */
+  --text-3xl:   clamp(2rem, 1.7rem + 1.5vw, 2.5rem);            /* 32 → 40px */
+  --text-4xl:   clamp(2.5rem, 2.1rem + 2vw, 3rem);              /* 40 → 48px */
+  --text-5xl:   clamp(3.5rem, 2.8rem + 3.5vw, 4.5rem);          /* 56 → 72px */
 
   --leading-tight:    1.15;
   --leading-normal:   1.45;
@@ -234,11 +237,16 @@
   --am-bg-glass:      rgba(18, 14, 28, 0.9);
   --am-modal-bg:      rgba(18, 14, 28, 0.97);
 
+  /* Brand lifted for AA contrast on dark elevated surfaces (was #5B3E8F = 1.99:1) */
+  --am-brand:         #9B85D6;  /* Primary brand — light amethyst for dark bg */
+  --am-brand-light:   #B7A4E8;  /* Hover / light accent */
+  --am-brand-dark:    #7C63C4;  /* Active / pressed */
+
   --am-text-primary:  #F4EEFB;
   --am-text-secondary: #CFC6EC;
   --am-text-tertiary: #ACA3C4;
   --am-text-inverse:  #0D0B12;
-  --am-text-link:     #B49BE0;
+
 
   /* ─ Semantic state colors (dark theme) ─ */
   --am-info:           #B49BE0;
@@ -250,6 +258,7 @@
   --am-danger:         #E0654F;
   --am-danger-light:   #EFA890;
     --am-text-on-brand:  #FFFFFF;
+  --am-text-link:     #B49BE0;
 
     /* ─ Premium Surface Layers (dark) ─ */
     --am-no-ui: #181324;        /* Ultra-subtle dark background */
@@ -456,10 +465,10 @@ a:hover {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
   }
 }
 
@@ -480,34 +489,34 @@ a:hover {
    GLASS & SURFACE SYSTEM (premium layered depth)
    ══════════════════════════════════════════════════════════ */
 .glass {
-  background: var(--am-bg-glass) !important;
-  backdrop-filter: blur(40px) saturate(1.8) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(1.8) !important;
-  border: 1px solid var(--am-border-soft) !important;
-  box-shadow: var(--am-shadow-sm) !important;
+  background: var(--am-bg-glass);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  border: 1px solid var(--am-border-soft);
+  box-shadow: var(--am-shadow-sm);
   transition: background var(--duration-md) var(--ease-smooth),
               box-shadow var(--duration-md) var(--ease-smooth),
               border-color var(--duration-md) var(--ease-smooth),
-              transform var(--duration-md) var(--ease-fast) !important;
+              transform var(--duration-md) var(--ease-fast);
 }
 
 .glass:hover {
-  background: var(--am-bg-card) !important;
-  box-shadow: var(--am-shadow-md) !important;
-  border-color: var(--am-border-medium) !important;
+  background: var(--am-bg-card);
+  box-shadow: var(--am-shadow-md);
+  border-color: var(--am-border-medium);
 }
 
 .glass-panel {
-  background: var(--am-bg-panel) !important;
-  backdrop-filter: blur(40px) saturate(1.8) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(1.8) !important;
-  border: 1px solid var(--am-border-soft) !important;
-  box-shadow: var(--am-shadow-sm) !important;
+  background: var(--am-bg-panel);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  border: 1px solid var(--am-border-soft);
+  box-shadow: var(--am-shadow-sm);
 }
 
 /* ── Glow System ──────────────────────────────────────────── */
 .glow-brand {
-  box-shadow: 0 0 32px rgba(107, 92, 156, 0.18) !important;
+  box-shadow: 0 0 32px rgba(107, 92, 156, 0.18);
 }
 
 /* ── Unified Card Primitive ──────────────────────────────── */
@@ -533,18 +542,18 @@ a:hover {
   outline-offset: 2px;
 }
 .glow-amber {
-  box-shadow: 0 0 32px rgba(212, 167, 106, 0.2) !important;
+  box-shadow: 0 0 32px rgba(212, 167, 106, 0.2);
 }
 .glow-teal {
-  box-shadow: 0 0 32px rgba(58, 157, 157, 0.18) !important;
+  box-shadow: 0 0 32px rgba(58, 157, 157, 0.18);
 }
 
 /* ── Gradient Text ──────────────────────────────────────────── */
 .gradient-text {
   background: var(--am-gradient-brand);
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -570,29 +579,29 @@ a:hover {
 .navbar,
 .glass.navbar,
 nav.navbar {
-  position: fixed !important;
-  top: max(var(--safe-top), 12px) !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: min(calc(100% - var(--space-8)), 1160px) !important;
-  z-index: var(--z-navbar) !important;
-  border-radius: 20px !important;
-  background: var(--am-bg-glass) !important;
-  backdrop-filter: blur(40px) saturate(1.8) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(1.8) !important;
-  border: 1px solid var(--am-border-soft) !important;
-  box-shadow: var(--am-shadow-md) !important;
-  padding: 0 !important;
+  position: fixed;
+  top: max(var(--safe-top), 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100% - var(--space-8)), 1160px);
+  z-index: var(--z-navbar);
+  border-radius: 20px;
+  background: var(--am-bg-glass);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  border: 1px solid var(--am-border-soft);
+  box-shadow: var(--am-shadow-md);
+  padding: 0;
   transition: background var(--duration-md) var(--ease-smooth),
               box-shadow var(--duration-md) var(--ease-smooth),
-              border-color var(--duration-md) var(--ease-smooth) !important;
+              border-color var(--duration-md) var(--ease-smooth);
 }
 
 .navbar-inner {
   display: flex;
   flex-direction: column;
-  gap: 0 !important;
-  padding: var(--space-5) var(--space-7) !important;
+  gap: 0;
+  padding: var(--space-5) var(--space-7);
 }
 
 .navbar-topline {
@@ -624,11 +633,11 @@ nav.navbar {
   min-width: 44px;
   height: 30px;
   padding: 0 var(--space-5);
-  background: var(--am-gradient-brand) !important;
-  border: none !important;
-  border-radius: var(--radius-sm) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  background: var(--am-gradient-brand);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
   font-family: var(--font-display);
   font-weight: var(--weight-heavy);
   font-size: var(--text-xs);
@@ -845,14 +854,14 @@ nav.navbar {
   justify-content: center;
   gap: var(--space-4);
   border: 1px solid var(--am-border-soft);
-  border-radius: var(--radius-md) !important;
+  border-radius: var(--radius-md);
   overflow: hidden;
   font-family: var(--font-sans);
   font-weight: var(--weight-medium);
   line-height: 1.1;
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-fast);
-  text-decoration: none !important;
+  text-decoration: none;
 }
 .premium-button:active { transform: scale(0.97); }
 
@@ -882,48 +891,48 @@ nav.navbar {
 }
 
 .premium-button--primary {
-  background: var(--am-gradient-brand) !important;
-  border-color: transparent !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 4px 16px rgba(107, 92, 156, 0.25) !important;
+  background: var(--am-gradient-brand);
+  border-color: transparent;
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(107, 92, 156, 0.25);
 }
 .premium-button--primary:hover {
-  box-shadow: 0 6px 24px rgba(107, 92, 156, 0.35) !important;
+  box-shadow: 0 6px 24px rgba(107, 92, 156, 0.35);
   transform: translateY(-1px);
 }
 
 .premium-button--secondary {
-  background: rgba(107, 92, 156, 0.08) !important;
-  border-color: rgba(107, 92, 156, 0.2) !important;
-  color: var(--am-brand) !important;
+  background: rgba(107, 92, 156, 0.08);
+  border-color: rgba(107, 92, 156, 0.2);
+  color: var(--am-brand);
 }
 .premium-button--secondary:hover {
-  background: rgba(107, 92, 156, 0.12) !important;
+  background: rgba(107, 92, 156, 0.12);
 }
 
 .premium-button--ghost {
-  background: transparent !important;
-  border-color: var(--am-border-soft) !important;
-  color: var(--am-text-secondary) !important;
+  background: transparent;
+  border-color: var(--am-border-soft);
+  color: var(--am-text-secondary);
 }
 .premium-button--ghost:hover {
-  background: rgba(107, 92, 156, 0.04) !important;
-  color: var(--am-text-primary) !important;
+  background: rgba(107, 92, 156, 0.04);
+  color: var(--am-text-primary);
 }
 
 .premium-button--danger {
-  background: rgba(224, 112, 101, 0.1) !important;
-  border-color: rgba(224, 112, 101, 0.2) !important;
-  color: var(--am-red) !important;
+  background: rgba(224, 112, 101, 0.1);
+  border-color: rgba(224, 112, 101, 0.2);
+  color: var(--am-red);
 }
 .premium-button--danger:hover {
-  background: rgba(224, 112, 101, 0.15) !important;
+  background: rgba(224, 112, 101, 0.15);
 }
 
 .premium-button:disabled {
-  opacity: 0.45 !important;
-  cursor: not-allowed !important;
-  transform: none !important;
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .premium-button-shimmer {
@@ -959,23 +968,23 @@ nav.navbar {
 .home-destination-card {
   position: relative;
   min-height: 280px;
-  padding: var(--space-12) !important;
-  background: var(--am-bg-card) !important;
-  border: 1px solid var(--am-border-soft) !important;
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--am-shadow-sm) !important;
+  padding: var(--space-12);
+  background: var(--am-bg-card);
+  border: 1px solid var(--am-border-soft);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--am-shadow-sm);
   overflow: hidden;
   cursor: pointer;
-  transition: all var(--duration-md) var(--ease-fast) !important;
+  transition: all var(--duration-md) var(--ease-fast);
 }
 .home-destination-card:hover {
   transform: translateY(-3px);
-  box-shadow: var(--am-shadow-lg) !important;
-  border-color: var(--am-border-medium) !important;
+  box-shadow: var(--am-shadow-lg);
+  border-color: var(--am-border-medium);
 }
 .home-destination-card:active {
   transform: translateY(-1px);
-  box-shadow: var(--am-shadow-md) !important;
+  box-shadow: var(--am-shadow-md);
 }
 
 .destination-kicker {
@@ -1080,7 +1089,7 @@ nav.navbar {
     linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 252, 249, 0.86)),
     var(--am-bg-glass);
   border: 1px solid var(--am-border-soft);
-  border-radius: var(--radius-lg) !important;
+  border-radius: var(--radius-lg);
   color: var(--am-text-primary);
   font-family: var(--font-sans);
   font-size: var(--text-base);
@@ -1188,10 +1197,10 @@ nav.navbar {
 }
 
 .category-chips {
-  display: flex !important;
-  gap: 0.5rem !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 0.2rem;
@@ -1310,19 +1319,19 @@ nav.navbar {
   min-height: 240px;
   display: flex;
   flex-direction: column;
-  background: var(--am-bg-card) !important;
-  border: 1px solid var(--am-border-soft) !important;
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--am-shadow-xs) !important;
+  background: var(--am-bg-card);
+  border: 1px solid var(--am-border-soft);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--am-shadow-xs);
   overflow: hidden;
   cursor: pointer;
-  transition: all var(--duration-md) var(--ease-fast) !important;
+  transition: all var(--duration-md) var(--ease-fast);
 }
 
 .disease-card:hover {
   transform: translateY(-3px);
-  box-shadow: var(--am-shadow-md) !important;
-  border-color: var(--am-border-medium) !important;
+  box-shadow: var(--am-shadow-md);
+  border-color: var(--am-border-medium);
 }
 
 .disease-card:active {
@@ -1330,13 +1339,13 @@ nav.navbar {
 }
 
 .disease-card-action {
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 2 !important;
-  width: 100% !important;
-  height: 100% !important;
-  border: 0 !important;
-  background: transparent !important;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
   cursor: pointer;
 }
 
@@ -1369,9 +1378,9 @@ nav.navbar {
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-md) !important;
-  background: rgba(107, 92, 156, 0.08) !important;
-  border: 1px solid rgba(107, 92, 156, 0.14) !important;
+  border-radius: var(--radius-md);
+  background: rgba(107, 92, 156, 0.08);
+  border: 1px solid rgba(107, 92, 156, 0.14);
   flex-shrink: 0;
 }
 
@@ -1435,31 +1444,31 @@ nav.navbar {
 
 /* ── Favorite Button ────────────────────────────────────────── */
 .favorite-btn {
-  width: 44px !important;
-  min-width: 44px !important;
-  height: 44px !important;
-  min-height: 44px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex: 0 0 44px !important;
-  background: transparent !important;
-  border: 1px solid var(--am-border-soft) !important;
-  border-radius: var(--radius-sm) !important;
-  color: var(--am-text-secondary) !important;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44px;
+  background: transparent;
+  border: 1px solid var(--am-border-soft);
+  border-radius: var(--radius-sm);
+  color: var(--am-text-secondary);
   cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-smooth) !important;
+  transition: all var(--duration-fast) var(--ease-smooth);
 }
 .favorite-btn:hover {
-  background: rgba(232, 132, 125, 0.06) !important;
-  color: var(--am-coral) !important;
-  border-color: rgba(232, 132, 125, 0.2) !important;
+  background: rgba(232, 132, 125, 0.06);
+  color: var(--am-coral);
+  border-color: rgba(232, 132, 125, 0.2);
 }
 .favorite-btn:active { transform: scale(0.93); }
 .favorite-btn.is-favorite {
-  color: var(--am-coral) !important;
-  border-color: rgba(232, 132, 125, 0.3) !important;
-  background: rgba(232, 132, 125, 0.08) !important;
+  color: var(--am-coral);
+  border-color: rgba(232, 132, 125, 0.3);
+  background: rgba(232, 132, 125, 0.08);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1472,7 +1481,7 @@ nav.navbar {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(5, 4, 8, 0.55) !important;
+  background: rgba(5, 4, 8, 0.55);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   padding: var(--space-8);
@@ -1754,11 +1763,11 @@ nav.navbar {
    MOBILE BOTTOM BAR
    ══════════════════════════════════════════════════════════ */
 .mobile-bottom-bar {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: var(--z-mobile-bar) !important;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-mobile-bar);
   background: rgba(22, 18, 30, 0.92);
   backdrop-filter: blur(24px) saturate(1.2);
   -webkit-backdrop-filter: blur(24px) saturate(1.2);
@@ -1784,7 +1793,7 @@ nav.navbar {
 [data-theme='light'] .navbar-actions .premium-button,
 [data-theme='light'] .navbar-actions .premium-button--primary {
   background: var(--am-gradient-brand);
-  color: var(--am-text-on-brand) !important;
+  color: var(--am-text-on-brand);
   border-color: transparent;
 }
 /* Mobile bottom labels were 68%-opacity light → invisible on light bar.
@@ -1863,14 +1872,14 @@ nav.navbar {
     linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(255, 248, 243, 0.68)),
     radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.18), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.12), transparent 28%),
-    var(--am-bg-glass) !important;
-  backdrop-filter: blur(32px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
+    var(--am-bg-glass);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
   box-shadow:
     var(--am-shadow-lg),
     0 0 0 1px rgba(255, 255, 255, 0.42) inset,
-    0 0 60px rgba(184, 165, 208, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.48) !important;
+    0 0 60px rgba(184, 165, 208, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.48);
 }
 
 [data-theme='dark'] .glass-2,
@@ -1884,8 +1893,8 @@ nav.navbar {
     linear-gradient(135deg, rgba(38, 31, 42, 0.82), rgba(28, 22, 32, 0.72)),
     radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.12), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.18), transparent 28%),
-    var(--am-bg-glass) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    var(--am-bg-glass);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Glass 2.0 disease cards - explicit override */
@@ -1896,11 +1905,11 @@ main .disease-card,
     linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 243, 0.72)),
     radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.18), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.12), transparent 28%),
-    rgba(255, 252, 249, 0.88) !important;
-  background-repeat: no-repeat !important;
-  background-position: center center !important;
-  backdrop-filter: blur(32px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
+    rgba(255, 252, 249, 0.88);
+  background-repeat: no-repeat;
+  background-position: center center;
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
 }
 
 [data-theme='dark'] .App .disease-card,
@@ -1910,7 +1919,7 @@ main .disease-card,
     linear-gradient(135deg, rgba(16, 13, 22, 0.92), rgba(22, 18, 30, 0.88)),
     radial-gradient(circle at 20% 0%, rgba(107, 92, 156, 0.20), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(212, 167, 106, 0.10), transparent 28%),
-    var(--am-bg-card) !important;
+    var(--am-bg-card);
 }
 
 /* Premium card depth */
@@ -2287,7 +2296,7 @@ body {
     linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 243, 0.72)),
     radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.18), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.12), transparent 28%),
-    rgba(255, 252, 249, 0.88) !important;
+    rgba(255, 252, 249, 0.88);
 }
 
 /* ── Workbench Command Search ───────────────────────────────── */
@@ -2540,12 +2549,12 @@ body {
   .page-content { padding: 0 var(--space-6); }
 
   .navbar {
-    width: calc(100% - var(--space-6)) !important;
-    top: max(var(--safe-top), 8px) !important;
-    border-radius: 16px !important;
+    width: calc(100% - var(--space-6));
+    top: max(var(--safe-top), 8px);
+    border-radius: 16px;
   }
-  .navbar-inner { padding: var(--space-4) var(--space-5) !important; }
-  .navbar-brand-copy span { display: none !important; }
+  .navbar-inner { padding: var(--space-4) var(--space-5); }
+  .navbar-brand-copy span { display: none; }
   .navbar-actions { display: flex; gap: var(--space-2); }
   .navbar-action-button {
     min-height: 44px;
@@ -2562,7 +2571,7 @@ body {
   .catalog-shell { padding-top: calc(var(--safe-top) + 90px); }
 
   .home-destination-grid { grid-template-columns: 1fr; gap: var(--space-6); }
-  .home-destination-card { min-height: auto; padding: var(--space-8) !important; }
+  .home-destination-card { min-height: auto; padding: var(--space-8); }
   .home-destination-title { font-size: var(--text-2xl); }
   .home-destination-description,
   .catalog-description,
@@ -2571,7 +2580,7 @@ body {
   .cards-grid { grid-template-columns: 1fr; gap: var(--space-5); }
   /* Clear the fixed MobileBottomBar (72px) — no last card hidden under it */
   .cards-grid,
-  .catalog-shell { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 16px) !important; }
+  .catalog-shell { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 16px); }
   .cards-virtualized { height: calc(100vh - 280px); min-height: 300px; }
   .disease-card { min-height: 168px; }
   .disease-card .card-header { padding: var(--space-5) var(--space-5) 0; }
@@ -2595,7 +2604,7 @@ body {
   .modal-content {
     width: 100vw;
     /* Fit the viewport above the home indicator / bottom bar */
-    max-height: calc(100dvh - env(safe-area-inset-bottom, 0px)) !important;
+    max-height: calc(100dvh - env(safe-area-inset-bottom, 0px));
     border-radius: 0;
     border: none;
   }
@@ -2603,7 +2612,7 @@ body {
      so the last block stays tappable — applied to .modal-body,
      not .modal-content, to avoid fighting the sticky tabs/quick-strip */
      .modal-body {
-       padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+       padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
        scroll-padding-top: calc(var(--space-8) + 60px); /* ~136px: header + quick-strip + tabs */
      }
   .modal-header { padding: var(--space-6) var(--space-6) var(--space-4); }
@@ -2629,7 +2638,7 @@ body {
      static so they scroll with content (no overlap, audit-clean) */
   .modal-quick-strip,
   .modal-tabs,
-  .modal-header { position: static !important; }
+  .modal-header { position: static; }
   .modal-grid { grid-template-columns: 1fr; gap: var(--space-6); }
 
   .content-card { padding: var(--space-6); }
@@ -2649,7 +2658,7 @@ body {
 
 /* ── Large phone (iPhone 17 Pro Max 440px) — 2-col catalog ── */
 @media (min-width: 430px) and (max-width: 480px) {
-  .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: var(--space-4); }
+  .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
   .disease-card { min-height: 150px; }
 }
 
@@ -2657,7 +2666,7 @@ body {
 @media (max-width: 430px) and (max-height: 932px) {
   @supports (padding: env(safe-area-inset-top)) and (env(safe-area-inset-top) > 30px) {
     .navbar {
-      top: max(env(safe-area-inset-top), 14px) !important;
+      top: max(env(safe-area-inset-top), 14px);
     }
     .page-content {
       padding-top: calc(var(--safe-top) + var(--space-4));
@@ -2906,12 +2915,12 @@ body {
 
 /* ── AI Clinical Assistant Premium ───────────────────────── */
 .clinical-template-assistant {
-  padding: var(--space-8) !important;
-  border-radius: var(--radius-2xl) !important;
-  background: linear-gradient(135deg, rgba(255, 250, 246, 0.98), rgba(246, 226, 212, 0.94)), var(--worktool-surface) !important;
-  box-shadow: var(--am-shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.4) inset !important;
-  backdrop-filter: blur(24px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  padding: var(--space-8);
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(135deg, rgba(255, 250, 246, 0.98), rgba(246, 226, 212, 0.94)), var(--worktool-surface);
+  box-shadow: var(--am-shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
 }
 
 .clinical-template-header {
@@ -2940,11 +2949,11 @@ body {
 }
 
 .clinical-template-button {
-  min-height: 44px !important;
-  padding: var(--space-3) var(--space-5) !important;
-  border-radius: var(--radius-full) !important;
-  font-size: var(--text-sm) !important;
-  font-weight: var(--weight-semibold) !important;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
   line-height: 1.2;
   transition: all var(--duration-fast) var(--ease-smooth);
 }
@@ -2959,8 +2968,8 @@ body {
 }
 
 .clinical-template-button.is-active {
-  background: var(--am-gradient-brand) !important;
-  box-shadow: var(--am-shadow-sm), 0 0 24px rgba(107, 92, 156, 0.28) !important;
+  background: var(--am-gradient-brand);
+  box-shadow: var(--am-shadow-sm), 0 0 24px rgba(107, 92, 156, 0.28);
 }
 
 .clinical-template-loading {
@@ -2996,7 +3005,7 @@ body {
   margin: 0;
   padding: 0;
   background: transparent;
-  color: var(--worktool-text) !important;
+  color: var(--worktool-text);
 }
 
 .clinical-template-copy {
@@ -3005,7 +3014,7 @@ body {
   padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-full);
   background: linear-gradient(135deg, var(--am-teal), #5FBCB7);
-  color: var(--am-text-inverse) !important;
+  color: var(--am-text-inverse);
   font-weight: var(--weight-semibold);
   transition: all var(--duration-fast) var(--ease-smooth);
 }
@@ -3021,13 +3030,13 @@ body {
   background: rgba(255, 255, 255, 0.58);
   border: 1px dashed rgba(151, 84, 97, 0.24);
   text-align: center;
-  color: var(--worktool-muted) !important;
+  color: var(--worktool-muted);
   font-size: var(--text-sm);
   line-height: 1.5;
 }
 
 .clinical-template-disclaimer {
-  font-size: var(--text-xs) !important;
+  font-size: var(--text-xs);
   line-height: 1.45;
   padding: var(--space-4);
   border-radius: var(--radius-lg);
@@ -3037,12 +3046,12 @@ body {
 
 /* ── PubMed Feed Premium ──────────────────────────────────── */
 .pubmed-feed {
-  padding: var(--space-6) !important;
-  border-radius: var(--radius-2xl) !important;
-  background: linear-gradient(135deg, rgba(255, 250, 246, 0.98), rgba(246, 226, 212, 0.94)), var(--worktool-surface) !important;
-  box-shadow: var(--am-shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.4) inset !important;
-  backdrop-filter: blur(24px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  padding: var(--space-6);
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(135deg, rgba(255, 250, 246, 0.98), rgba(246, 226, 212, 0.94)), var(--worktool-surface);
+  box-shadow: var(--am-shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
 }
 
 .pubmed-feed .clinical-tool-header {
@@ -3050,10 +3059,10 @@ body {
 }
 
 .pubmed-paper-card {
-  padding: var(--space-5) !important;
-  border-radius: var(--radius-xl) !important;
-  background: rgba(255, 255, 255, 0.72) !important;
-  border: 1px solid rgba(151, 84, 97, 0.14) !important;
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(151, 84, 97, 0.14);
   box-shadow: var(--am-shadow-xs);
   transition: all var(--duration-fast) var(--ease-smooth);
 }
@@ -3061,7 +3070,7 @@ body {
 .pubmed-paper-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--am-shadow-md);
-  border-color: rgba(151, 84, 97, 0.28) !important;
+  border-color: rgba(151, 84, 97, 0.28);
 }
 
 .pubmed-paper-main {
@@ -3074,14 +3083,14 @@ body {
   font-weight: var(--weight-bold);
   line-height: 1.35;
   margin: 0 0 var(--space-2);
-  color: var(--worktool-text) !important;
+  color: var(--worktool-text);
 }
 
 .pubmed-paper-main span,
 .pubmed-paper-main small {
   font-size: var(--text-xs);
   line-height: 1.45;
-  color: var(--worktool-muted) !important;
+  color: var(--worktool-muted);
 }
 
 .pubmed-paper-actions {
@@ -3270,8 +3279,8 @@ body {
 .navbar,
 .glass.navbar,
 nav.navbar {
-  top: var(--di-top) !important;
-  padding-top: calc(var(--di-height) + var(--space-5)) !important;
+  top: var(--di-top);
+  padding-top: calc(var(--di-height) + var(--space-5));
 }
 
 /* Safe area padding for mobile */
@@ -3282,10 +3291,10 @@ nav.navbar {
   }
 
   .navbar {
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    padding-left: calc(var(--safe-left) + var(--space-6)) !important;
-    padding-right: calc(var(--safe-right) + var(--space-6)) !important;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-left: calc(var(--safe-left) + var(--space-6));
+    padding-right: calc(var(--safe-right) + var(--space-6));
   }
 }
 
@@ -3457,7 +3466,7 @@ html { -webkit-overflow-scrolling: touch; }
     .card-desc, .card-subtitle, .card-icd-badge,
     .content-card p, .structured-item p, .pubmed-abstract,
     .modal-body p, .modal-body .card-desc, .guideline-card p, .quick-summary-eyebrow {
-      font-size: max(12px, var(--text-sm)) !important;
+      font-size: max(12px, var(--text-sm));
     }
   }
 
@@ -3521,8 +3530,8 @@ html { -webkit-overflow-scrolling: touch; }
 
   /* ── Final mobile polish ───────────────────────────────────── */
 @media (max-width: 440px) {
-  .destination-tag { font-size: 12px !important; }
-  .mobile-bottom-label { font-size: 12px !important; }
-  .destination-kicker { font-size: 12px !important; }
-  .navbar-brand-copy span { font-size: 12px !important; }
+  .destination-tag { font-size: 12px; }
+  .mobile-bottom-label { font-size: 12px; }
+  .destination-kicker { font-size: 12px; }
+  .navbar-brand-copy span { font-size: 12px; }
 }

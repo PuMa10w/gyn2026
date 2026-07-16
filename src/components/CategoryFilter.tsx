@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import type { CategoryId } from '../types';
 
 const categories: Array<{ id: CategoryId; label: string; accent: string }> = [
@@ -25,7 +25,7 @@ const CategoryFilter = React.memo(function CategoryFilter({
   visibleCategories,
 }: CategoryFilterProps) {
   return (
-    <motion.div
+    <m.div
       className="category-filter"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -35,7 +35,7 @@ const CategoryFilter = React.memo(function CategoryFilter({
         {categories
           .filter((category) => visibleCategories.includes(category.id))
           .map((category) => (
-            <motion.button
+            <m.button
               key={category.id}
               type="button"
               className={`category-chip ${activeCategory === category.id ? 'active' : ''}`}
@@ -49,10 +49,10 @@ const CategoryFilter = React.memo(function CategoryFilter({
               </span>
               <span className="chip-label">{category.label}</span>
               {category.id !== 'all' && <span className="chip-count">{categoryCounts[category.id]}</span>}
-            </motion.button>
+            </m.button>
           ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 });
 

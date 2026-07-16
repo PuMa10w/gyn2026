@@ -13,13 +13,6 @@ const PremiumIcon: React.FC<PremiumIconProps> = ({
   className = '',
   'aria-label': ariaLabel,
 }) => {
-  const gradients = {
-    gyn: 'linear-gradient(135deg, #6B5C9C 0%, #8D7FBF 50%, #D4A76A 100%)',
-    ob: 'linear-gradient(135deg, #D4A76A 0%, #E6C999 50%, #F5A623 100%)',
-    oncology: 'linear-gradient(135deg, #E07065 0%, #F5A623 50%, #D4A76A 100%)',
-    general: 'linear-gradient(135deg, #6B5C9C 0%, #8D7FBF 50%, #D4A76A 100%)',
-  };
-
   const colors = {
     gyn: '#6B5C9C',
     ob: '#D4A76A',
@@ -52,7 +45,7 @@ const PremiumIcon: React.FC<PremiumIconProps> = ({
       </defs>
       
       {/* Background circle */}
-      <circle cx="30" cy="30" r="24" fill="url(#grad-premium)" />
+      <circle cx="30" cy="30" r="24" fill={`url(#grad-${variant})`} />
       
       {/* Stylized uterus/organ silhouette */}
       <g filter="url(#glow-premium)" opacity="0.9">

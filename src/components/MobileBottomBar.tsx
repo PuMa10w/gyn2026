@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 interface NavItem {
   path: string;
@@ -67,7 +67,7 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
   }, [lastScrollY]);
 
   return (
-    <motion.nav
+    <m.nav
       initial={{ y: 18, opacity: 0 }}
       animate={{ y: isVisible ? 0 : 100, opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
@@ -78,7 +78,7 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
         {navItems.map((item) => {
           const isActive = currentPath === item.path;
           return (
-            <motion.button
+            <m.button
               key={item.path}
               type="button"
               onClick={() => onNavigate(item.path)}
@@ -89,7 +89,7 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
             >
               <span className="mobile-bottom-label">{item.label}</span>
               {isActive && (
-                <motion.span 
+                <m.span 
                   className="mobile-bottom-active-dot" 
                   layoutId="bottomActiveLine"
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -97,10 +97,10 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ currentPath, o
                   transition={{ duration: 0.15, ease: 'easeOut' }}
                 />
               )}
-            </motion.button>
+            </m.button>
           );
         })}
       </div>
-    </motion.nav>
+    </m.nav>
   );
 };

@@ -28,8 +28,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     
-    <!-- Preload critical assets -->
-    <link rel="preload" href="/src/styles/premium-flagship.css" as="style" />
+    <!-- Preload LCP font (heading family) so the hero title paints without delay.
+         Body font uses display=swap and renders immediately with a fallback. -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800&display=swap"
+    />
     
     <meta name="description" content="GYN — премиальный клинический PWA по гинекологии и акушерству с iPhone-first оптимизацией." />
     <title>GYN — клинический PWA</title>

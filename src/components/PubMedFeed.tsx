@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import { repairText } from '../utils/textRepair';
 
@@ -100,7 +100,7 @@ export const PubMedFeed: React.FC<PubMedFeedProps> = ({
   };
 
   return (
-    <motion.section
+    <m.section
       className={`pubmed-feed clinical-tool-surface ${className}`}
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
@@ -129,9 +129,9 @@ export const PubMedFeed: React.FC<PubMedFeedProps> = ({
       ) : null}
 
       {!isLoading && papers.length > 0 ? (
-        <motion.div className="pubmed-paper-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <m.div className="pubmed-paper-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           {papers.map((paper, index) => (
-            <motion.article
+            <m.article
               key={paper.pmid}
               className="pubmed-paper-card"
               initial={{ opacity: 0, y: 10 }}
@@ -147,15 +147,15 @@ export const PubMedFeed: React.FC<PubMedFeedProps> = ({
                 {showAbstract === paper.pmid ? 'Скрыть' : 'Аннотация'}
               </PremiumButton>
               {showAbstract === paper.pmid ? (
-                <motion.p className="pubmed-abstract" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <m.p className="pubmed-abstract" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   {paper.abstract || 'Аннотация недоступна в локальной подборке. Перейдите по PMID для просмотра записи PubMed.'}
-                </motion.p>
+                </m.p>
               ) : null}
-            </motion.article>
+            </m.article>
           ))}
           <p className="clinical-tool-note">Данные служат навигацией по источникам. Перед клиническим использованием сверяйте полные тексты и актуальные рекомендации.</p>
-        </motion.div>
+        </m.div>
       ) : null}
-    </motion.section>
+    </m.section>
   );
 };

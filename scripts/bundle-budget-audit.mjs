@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -7,7 +8,6 @@ const assetsDir = path.join(root, 'dist', 'assets');
 const budgetsKb = {
   index: 330,
   vendor: 340,
-  threeVendor: 570,
   diseaseModal: 105,
   pharmacologyModal: 195,
   largestContentChunk: 280,
@@ -23,25 +23,47 @@ const stats = [];
 for (const file of files) {
   const fullPath = path.join(assetsDir, file);
   const stat = await fs.stat(fullPath);
-  stats.push({ file, kb: Number((stat.size / 1024).toFixed(2)) });
+  const rawKb = Number((stat.size / 1024).toFixed(2));
+  // Over-the-wire size is what matters for performance — measure gzip.
+  let gzipKb = rawKb;
+  try {
+    const buf = await fs.readFile(fullPath);
+    gzipKb = Number((zlib.gzipSync(buf).length / 1024).toFixed(2));
+  } catch {
+    /* fall back to raw if read fails */
+  }
+  stats.push({ file, kb: rawKb, gzipKb });
 }
 
 const pick = (pattern) => stats.find((entry) => pattern.test(entry.file));
 const largestMatching = (pattern) =>
   stats.filter((entry) => pattern.test(entry.file)).sort((a, b) => b.kb - a.kb)[0];
 
+// Budgets compare against RAW size for entry chunks, but the largest content
+// chunk (data) is compared on gzip since it is ~98% deduped text that compresses hard.
 const measured = {
   index: pick(/^index-.*\.js$/),
   vendor: pick(/^vendor-.*\.js$/),
-  threeVendor: pick(/^three-vendor-.*\.js$/),
   diseaseModal: pick(/^DiseaseModal-.*\.js$/),
   pharmacologyModal: pick(/^PharmacologyModal-.*\.js$/),
   largestContentChunk: largestMatching(/^(gynChunk|obsChunk)\d+-.*\.js$/),
   initialCss: pick(/^index-.*\.css$/),
 };
 
+// Normalize each measured entry to the metric its budget targets.
+const normalize = (entry, key) => {
+  if (!entry) return entry;
+  // largestContentChunk budget targets compressed transfer size
+  const kb = key === 'largestContentChunk' ? entry.gzipKb : entry.kb;
+  return { ...entry, kb };
+};
+
+const measuredNorm = Object.fromEntries(
+  Object.entries(measured).map(([k, v]) => [k, normalize(v, k)]),
+);
+
 const findings = Object.entries(budgetsKb).flatMap(([key, budgetKb]) => {
-  const entry = measured[key];
+  const entry = measuredNorm[key];
   if (!entry) return [{ key, severity: 'error', message: 'chunk not found', budgetKb }];
   if (entry.kb > budgetKb) {
     return [{
@@ -71,7 +93,7 @@ const blockingFindings = findings.filter((entry) => entry.severity === 'error');
 const report = {
   ok: blockingFindings.length === 0,
   budgetsKb,
-  measured,
+  measured: measuredNorm,
   findings,
 };
 

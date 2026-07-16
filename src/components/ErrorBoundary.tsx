@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -93,7 +93,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
           : 'Попробовать снова';
 
       return (
-        <motion.div
+        <m.div
           className="error-container premium-error-container"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -114,7 +114,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
               </details>
             )}
           </section>
-        </motion.div>
+        </m.div>
       );
     }
 

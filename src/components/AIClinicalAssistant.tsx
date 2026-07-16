@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { repairText } from '../utils/textRepair';
 import { emitToast } from '../utils/toastEmitter';
 
@@ -84,7 +84,7 @@ export const AIClinicalAssistant: React.FC<AIClinicalAssistantProps> = ({
   };
 
   return (
-    <motion.section
+    <m.section
       className="clinical-template-assistant"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
@@ -121,7 +121,7 @@ export const AIClinicalAssistant: React.FC<AIClinicalAssistantProps> = ({
       ) : null}
 
       {generatedText && !isGenerating ? (
-        <motion.article
+        <m.article
           className="clinical-template-output"
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -130,7 +130,7 @@ export const AIClinicalAssistant: React.FC<AIClinicalAssistantProps> = ({
           <button type="button" className="clinical-template-copy" onClick={handleCopy}>
             Копировать
           </button>
-        </motion.article>
+        </m.article>
       ) : (
         <div className="clinical-template-empty">
           Выберите шаблон, чтобы получить структурированный текст для текущей клинической карточки.
@@ -140,6 +140,6 @@ export const AIClinicalAssistant: React.FC<AIClinicalAssistantProps> = ({
       <p className="clinical-template-disclaimer">
         Это не автономная AI-диагностика. Шаблон помогает оформить мысль, но клиническое решение остаётся за специалистом.
       </p>
-    </motion.section>
+    </m.section>
   );
 };

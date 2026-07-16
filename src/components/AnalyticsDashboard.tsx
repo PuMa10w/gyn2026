@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useHistory } from '../hooks/useHistory';
 import { useFavorites } from '../hooks/useFavorites';
 import { repairText } from '../utils/textRepair';
@@ -46,7 +46,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   const uniqueCodes = new Set(history.map((item) => item.id)).size;
 
   return (
-    <motion.div
+    <m.div
       className={`analytics-dashboard ${className}`}
       style={{ width: '100%' }}
       initial={{ opacity: 0, y: 20 }}
@@ -81,7 +81,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <h4 style={{ marginTop: 0, marginBottom: '16px', color: '#6B5C9C' }}>Топ-5 просматриваемых</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {topViewed.map((item, index) => (
-              <motion.div
+              <m.div
                 key={item.icd}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -128,7 +128,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 >
                   {item.count} раз
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
@@ -157,7 +157,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                     overflow: 'hidden',
                   }}
                 >
-                  <motion.div
+                  <m.div
                     initial={{ width: 0 }}
                     animate={{ width: `${stat.percentage}%` }}
                     transition={{ duration: 1, delay: index * 0.2 }}
@@ -178,6 +178,6 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </p>
         )}
       </div>
-    </motion.div>
+    </m.div>
   );
 };

@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { MotionConfig } from 'framer-motion';
+import { LazyMotion, MotionConfig } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 import App from './App';
+
+// P0.3: load the full motion feature set lazily so it is code-split out of the
+// initial bundle. `m` components used across the app render once features arrive.
+const loadFeatures = () => import('framer-motion').then((mod) => mod.domMax);
 
 const rootElement = document.getElementById('root');
 
@@ -63,9 +67,11 @@ resetReviewCaches().then((isReloading) => {
   root.render(
     <React.StrictMode>
       <HelmetProvider>
-        <MotionConfig reducedMotion="user">
-          <App />
-        </MotionConfig>
+        <LazyMotion features={loadFeatures}>
+          <MotionConfig reducedMotion="user">
+            <App />
+          </MotionConfig>
+        </LazyMotion>
       </HelmetProvider>
     </React.StrictMode>
   );

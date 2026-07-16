@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import type { ThemeMode } from '../hooks/useTheme';
 import type { TabType } from '../types';
 
@@ -38,7 +38,7 @@ const Navbar = React.memo(function Navbar({
   };
 
   return (
-    <motion.nav
+    <m.nav
       className="navbar glass"
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -102,7 +102,7 @@ const Navbar = React.memo(function Navbar({
 
           <AnimatePresence>
             {isMenuOpen ? (
-              <motion.div
+              <m.div
                 className="navbar-overflow-menu"
                 initial={{ opacity: 0, y: -6, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -118,7 +118,7 @@ const Navbar = React.memo(function Navbar({
                 <button type="button" role="menuitem" onClick={() => runMenuAction(onHistoryToggle)}>
                   {showHistory ? 'Скрыть историю' : 'История'}
                 </button>
-              </motion.div>
+              </m.div>
             ) : null}
           </AnimatePresence>
         </div>
@@ -131,7 +131,7 @@ const Navbar = React.memo(function Navbar({
           </div>
         </div>
       </div>
-    </motion.nav>
+    </m.nav>
   );
 });
 

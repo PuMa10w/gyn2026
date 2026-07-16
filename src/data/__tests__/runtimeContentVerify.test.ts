@@ -11,16 +11,29 @@ describe('runtime content', () => {
     const stubCount = all.filter((d) => STUB.some((s) => JSON.stringify(d).includes(s))).length;
     console.log(`TOTAL: ${all.length}, STUB: ${stubCount} (${(stubCount / all.length * 100).toFixed(1)}%)`);
     expect(all.length).toBeGreaterThan(1400);
-    expect(stubCount).toBeLessThan(all.length); // дедуп сработал
+    expect(stubCount).toBe(0); // дедуп сработал, заглушек нет
   });
 
-  it('fetal-growth-restriction / pcos / uterine-fibroids present as real cards', async () => {
+  it('provides real clinical cards for key conditions', async () => {
     const [gyn, obs] = await Promise.all([loadGynData(), loadObsData()]);
     const all = [...gyn, ...obs];
     const ids = all.map((d) => String(d.id).replace(/__[a-z]+$/, ''));
-    for (const target of ['fetal-growth-restriction', 'pcos', 'uterine-fibroids', 'abnormal-uterine-bleeding', 'menopausal-hormone-therapy', 'contraception']) {
-      const found = ids.some((i) => i.includes(target.split('-')[0]));
-      console.log(target, found ? 'present' : 'MISSING');
-    }
+    const icds = all.map((d) => String(d.icd).toUpperCase());
+
+    // AUB / abnormal uterine bleeding представлена карточками по ICD N92/N93 и slug
+    expect(icds.some((x) => x.startsWith('N92'))).toBe(true);
+    expect(icds.some((x) => x.startsWith('N93'))).toBe(true);
+    expect(ids).toContain('aub');
+    expect(ids).toContain('menorrhagia');
+
+    // СПКЯ (PCOS, E28.2) присутствует как карточка
+    expect(icds).toContain('E28.2');
+    expect(all.some((d) => String(d.icd).toUpperCase() === 'E28.2' && /СПКЯ/i.test(String(d.name)))).toBe(true);
+
+    // Контрольные разделы, которые должны быть в каталоге
+    expect(ids).toContain('menopausal-syndrome');
+    expect(ids).toContain('contraception-overview');
+    expect(ids).toContain('fibroids');
+    expect(ids).toContain('fgr');
   });
 });

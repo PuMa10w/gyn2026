@@ -1,5 +1,5 @@
 import React, { useId } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import CommandSearch, { type WorkbenchCommand } from './CommandSearch';
 import { PremiumBadge, PremiumCard } from './PremiumPrimitives';
 import type { HistoryItem } from '../hooks/useHistory';
@@ -48,9 +48,9 @@ const HomeSection = React.memo(function HomeSection({
   const toolActions = actions.slice(2);
 
   return (
-    <motion.section
+    <m.section
       className="home-shell"
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 1, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.24, ease: 'easeOut' }}
@@ -98,7 +98,7 @@ const HomeSection = React.memo(function HomeSection({
           const tags = isGynecology ? sectionNotes.gynecology : sectionNotes.obstetrics;
 
           return (
-            <motion.button
+            <m.button
               key={item.title}
               type="button"
               className={`home-destination-card ${isGynecology ? 'is-gynecology' : 'is-obstetrics'}`}
@@ -121,7 +121,7 @@ const HomeSection = React.memo(function HomeSection({
                 </div>
                 <span className="destination-arrow" aria-hidden="true">→</span>
               </div>
-            </motion.button>
+            </m.button>
           );
         })}
       </section>
@@ -165,7 +165,7 @@ const HomeSection = React.memo(function HomeSection({
           </div>
         </section>
       ) : null}
-    </motion.section>
+    </m.section>
   );
 });
 

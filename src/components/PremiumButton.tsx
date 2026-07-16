@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useReducedMotion, m } from 'framer-motion';
 
-type MotionButtonProps = React.ComponentPropsWithoutRef<typeof motion.button>;
+type MotionButtonProps = React.ComponentPropsWithoutRef<typeof m.button>;
 
 interface PremiumButtonProps extends Omit<MotionButtonProps, 'children'> {
   children: React.ReactNode;
@@ -46,7 +46,7 @@ export const PremiumButton = forwardRef<HTMLButtonElement, PremiumButtonProps>((
   };
 
   return (
-    <motion.button
+    <m.button
       ref={buttonRef}
       className={`premium-button premium-button--${variant} premium-button--${size} ${className}`}
       type={type}
@@ -70,7 +70,7 @@ export const PremiumButton = forwardRef<HTMLButtonElement, PremiumButtonProps>((
       whileTap={{ scale: canUsePointerMotion && !prefersReducedMotion ? 0.97 : 1 }}
     >
       {shimmer && !prefersReducedMotion && (
-        <motion.div
+        <m.div
           className="premium-button-shimmer"
           initial={{ x: '-100%' }}
           animate={{ x: '100%' }}
@@ -82,7 +82,7 @@ export const PremiumButton = forwardRef<HTMLButtonElement, PremiumButtonProps>((
         />
       )}
       <span className="premium-button-content">{children}</span>
-    </motion.button>
+    </m.button>
   );
 });
 

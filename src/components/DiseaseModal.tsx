@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useState, useCallback, useRef } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { gynIcons, obsIcons } from './Icons';
 import { useModalBehavior } from '../hooks/useModalBehavior';
 import type { Disease } from '../types';
@@ -309,7 +309,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
             ) : null}
 
             {hasAnyValues([item.treatment.conservative, item.treatment.surgical, item.treatment.firstLine]) && (item.icd?.includes('N70') || item.icd?.includes('N92')) && (
-              <motion.div 
+              <m.div 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 style={{
@@ -322,7 +322,7 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 }}
               >
                 Протокол лечения может устареть. Рекомендуется свериться с актуальными клиническими рекомендациями.
-              </motion.div>
+              </m.div>
             )}
 
             <section className="content-card content-card-wide">
@@ -1219,25 +1219,25 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
         );
       case 'ai-assistant':
         return (
-          <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
+          <m.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
             <ClinicalToolBoundary label="AI помощник">
               <AIClinicalAssistant diseaseName={item.name} symptoms={item.symptoms} treatment={buildTreatmentSteps(item.treatment)} />
             </ClinicalToolBoundary>
-          </motion.div>
+          </m.div>
         );
       case 'patient-memo':
         return (
-          <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
+          <m.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
             <PatientMemo disease={item} />
-          </motion.div>
+          </m.div>
         );
       case 'pubmed':
         return (
-          <motion.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
+          <m.div className="tab-content modal-grid" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
             <ClinicalToolBoundary label="PubMed">
               <PubMedFeed diseaseName={item.name} />
             </ClinicalToolBoundary>
-          </motion.div>
+          </m.div>
         );
       default:
         return null;
@@ -1246,14 +1246,14 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         className="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
-        <motion.div
+        <m.div
           ref={modalRef}
           className={`modal-content ${isMobile ? 'mobile-sheet' : ''}`}
           data-testid="disease-modal"
@@ -1350,20 +1350,20 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 aria-controls={tab.id === activeTab ? panelId : undefined}
                 tabIndex={activeTab === tab.id ? 0 : -1}
               >
-                <motion.span
+                <m.span
                   variants={staggerItem}
                   whileHover="hover"
                   whileTap="tap"
                 >
                   {tab.label}
-                </motion.span>
+                </m.span>
               </button>
             ))}
           </div>
 
           <div className="modal-body" id={panelId} role="tabpanel" aria-labelledby={`${titleId}-${activeTab}-tab`}>
             <AnimatePresence mode="wait">
-              <motion.div
+              <m.div
                 key={activeTab}
                 variants={modalVariants}
                 initial="hidden"
@@ -1371,11 +1371,11 @@ const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
                 exit="exit"
               >
                 {renderContent()}
-              </motion.div>
+              </m.div>
             </AnimatePresence>
           </div>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </AnimatePresence>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useMemo, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import { useModalBehavior } from '../hooks/useModalBehavior';
 import { commonRegimens, drugInteractions, medications } from '../data/pharmacology';
@@ -195,14 +195,14 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         className="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
-        <motion.div
+        <m.div
           className={`modal-content pharmacology-modal ${isMobile ? 'mobile-sheet' : ''}`}
           initial={isMobile ? { y: '100%' } : { scale: 0.96, opacity: 0 }}
           animate={isMobile ? { y: 0 } : { scale: 1, opacity: 1 }}
@@ -336,7 +336,7 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
               ) : (
               <div className="medications-grid">
                 {filteredMeds.map((med) => (
-                  <motion.article
+                  <m.article
                     key={med.id}
                     className="medication-card"
                     whileHover={isMobile ? undefined : { y: -2 }}
@@ -359,7 +359,7 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
                     </div>
 
                     {selectedMed?.id === med.id && (
-                      <motion.div
+                      <m.div
                         id={`med-details-${med.id}`}
                         className="med-details"
                         initial={{ opacity: 0, height: 0 }}
@@ -472,17 +472,17 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
                             ))}
                           </div>
                         ) : null}
-                      </motion.div>
+                      </m.div>
                     )}
-                  </motion.article>
+                  </m.article>
                 ))}
 
                 {filteredMeds.length === 0 && (
-                  <motion.div className="catalog-status pharmacology-empty" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                  <m.div className="catalog-status pharmacology-empty" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
                     <span className="catalog-status-eyebrow">Поиск</span>
                     <h2>Ничего не найдено</h2>
                     <p>Попробуйте изменить запрос по названию препарата, английскому имени или категории.</p>
-                  </motion.div>
+                  </m.div>
                 )}
               </div>
               )}
@@ -572,11 +572,11 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
                 })}
 
                 {filteredInteractions.length === 0 && (
-                  <motion.div className="catalog-status pharmacology-empty" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                  <m.div className="catalog-status pharmacology-empty" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
                     <span className="catalog-status-eyebrow">Взаимодействия</span>
                     <h2>Совпадений не найдено</h2>
                     <p>Попробуйте изменить запрос по препарату, риску или клиническому эффекту.</p>
-                  </motion.div>
+                  </m.div>
                 )}
               </div>
             </div>
@@ -586,7 +586,7 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
             <div className="pharma-content" id={`${titleId}-regimens-panel`} role="tabpanel" aria-labelledby={`${titleId}-regimens-tab`}>
               <div className="regimens-list">
                 {regimenEntries.map((regimen) => (
-                  <motion.div key={regimen.id} className="regimen-card" whileHover={isMobile ? undefined : { y: -2 }}>
+                  <m.div key={regimen.id} className="regimen-card" whileHover={isMobile ? undefined : { y: -2 }}>
                     <div className="regimen-card-header">
                       <h3 className="regimen-title">{text(regimen.name)}</h3>
                       <div className="regimen-steps-count">{regimen.steps.length} шага</div>
@@ -610,13 +610,13 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
                         ))}
                       </tbody>
                     </table>
-                  </motion.div>
+                  </m.div>
                 ))}
               </div>
             </div>
           )}
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </AnimatePresence>
   );
 };

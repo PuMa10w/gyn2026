@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { gynIcons, obsIcons } from './Icons';
 import { PremiumBadge } from './PremiumPrimitives';
 import type { Disease } from '../types';
@@ -63,7 +63,7 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
   };
 
   return (
-    <motion.article
+    <m.article
       className="disease-card magnetic am-card"
       custom={index}
       initial="hidden"
@@ -110,7 +110,7 @@ const DiseaseCard = React.memo(function DiseaseCard({ item, onClick, index, isFa
           {item.lastReviewed ? <PremiumBadge tone="neutral">Обновлено {formatReviewed(item.lastReviewed)}</PremiumBadge> : null}
         </div>
       </div>
-    </motion.article>
+    </m.article>
   );
 });
 

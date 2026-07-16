@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { PremiumButton } from './PremiumButton';
 import { questionnaires } from '../data/questionnaires';
 import { useModalBehavior } from '../hooks/useModalBehavior';
@@ -196,14 +196,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
   if (!selectedQ) {
     return (
-      <motion.div
+      <m.div
         className="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
-        <motion.div
+        <m.div
           className={`modal-content questionnaire-modal ${isMobile ? 'mobile-sheet' : ''}`}
           initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
           animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
@@ -236,7 +236,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
           <div className="q-list">
             {questionnaires.map((q, index) => (
-              <motion.article
+              <m.article
                 key={q.id}
                 className="q-card glass"
                 style={{
@@ -268,7 +268,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
                     {q.clinicalPurpose?.screening?.[0] ?? 'Клиническая шкала для структурированной оценки симптомов.'}
                   </div>
                 </div>
-              </motion.article>
+              </m.article>
             ))}
           </div>
 
@@ -301,22 +301,22 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               <p className="q-history-empty">История пока пустая. После первого прохождения результаты появятся здесь.</p>
             )}
           </div>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     );
   }
 
   if (!result) {
     const progress = (Object.keys(answers).length / selectedQ.questions.length) * 100;
     return (
-      <motion.div
+      <m.div
         className="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
-        <motion.div
+        <m.div
           className={`modal-content questionnaire-modal ${isMobile ? 'mobile-sheet' : ''}`}
           initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
           animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
@@ -395,7 +395,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
 
           <div className="q-options" id={optionsId} role="radiogroup" aria-labelledby={questionId}>
             {selectedQ.options.map((opt, i) => (
-              <motion.button
+              <m.button
                 key={i}
                 type="button"
                 className={`q-option ${answers[currentStep] === i ? 'selected' : ''}`}
@@ -413,7 +413,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
                 tabIndex={answers[currentStep] === i || (answers[currentStep] === undefined && i === 0) ? 0 : -1}
               >
                 {opt}
-              </motion.button>
+              </m.button>
             ))}
           </div>
 
@@ -438,20 +438,20 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
               {currentStep === selectedQ.questions.length - 1 ? 'Получить результат →' : 'Далее →'}
             </PremiumButton>
           </div>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     );
   }
 
   return (
-    <motion.div
+    <m.div
       className="modal-overlay"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
     >
-      <motion.div
+      <m.div
         className={`modal-content questionnaire-modal ${isMobile ? 'mobile-sheet' : ''}`}
         initial={isMobile ? { y: '100%' } : { scale: 0.9, y: 50 }}
         animate={isMobile ? { y: 0 } : { scale: 1, y: 0 }}
@@ -589,8 +589,8 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
             </PremiumButton>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 };
 

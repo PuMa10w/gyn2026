@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 interface AudioVisualizerProps {
   isPlaying?: boolean;
@@ -122,7 +122,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   }, [isPlaying, audioUrl, isInitialized, initAudio, drawVisualizer]);
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       className={`relative rounded-2xl overflow-hidden glass ${className}`}
@@ -140,7 +140,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
           <p className="text-sm text-gray-400">Нажмите Play для визуализации</p>
         </div>
       )}
-    </motion.div>
+    </m.div>
   );
 };
 

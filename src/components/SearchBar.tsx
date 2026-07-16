@@ -1,5 +1,5 @@
 import React, { useId, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -34,7 +34,7 @@ const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, res
   }, [trimmedTerm]);
 
   return (
-    <motion.form
+    <m.form
       className="search-container"
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, res
           spellCheck={false}
         />
         {searchTerm && (
-          <motion.button
+          <m.button
             type="button"
             className="search-clear-btn"
             initial={{ scale: 0 }}
@@ -71,17 +71,17 @@ const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, res
             title="Очистить поиск"
           >
             ×
-          </motion.button>
+          </m.button>
         )}
         {typeof resultCount === 'number' && (
-          <motion.span
+          <m.span
             className="search-result-count"
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             aria-label={`Найдено результатов: ${resultCount}`}
           >
             {resultCount}
-          </motion.span>
+          </m.span>
         )}
       </div>
 
@@ -100,7 +100,7 @@ const SearchBar = React.memo(function SearchBar({ searchTerm, setSearchTerm, res
           ))}
         </div>
       )}
-    </motion.form>
+    </m.form>
   );
 });
 

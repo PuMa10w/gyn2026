@@ -1,5 +1,5 @@
 import React, { useId, useMemo, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import DiseaseCard from './DiseaseCard';
@@ -141,7 +141,7 @@ const CatalogSection = React.memo(function CatalogSection({
   }, [hasMore, loadMore]);
 
   return (
-    <motion.section
+    <m.section
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
@@ -190,23 +190,23 @@ const CatalogSection = React.memo(function CatalogSection({
 
       <section aria-live="polite" className="cards-grid">
         {error && (
-          <motion.div className="catalog-status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+          <m.div className="catalog-status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
             <span className="catalog-status-eyebrow">Ошибка загрузки</span>
             <h2>Раздел временно недоступен</h2>
             <p>{error}</p>
             <button type="button" className="q-btn q-btn-primary" onClick={onRetry}>
               Повторить загрузку
             </button>
-          </motion.div>
+          </m.div>
         )}
 
         {isDataLoading && (
           <>
-            <motion.div className="catalog-status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+            <m.div className="catalog-status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
               <span className="catalog-status-eyebrow">Загрузка</span>
               <h2>{activeSectionMeta.loadingTitle}</h2>
               <p>Подготавливаем карточки и клинические блоки. При первом открытии это может занять несколько секунд.</p>
-            </motion.div>
+            </m.div>
             <div className="skeleton-grid">
               {Array.from({ length: 8 }).map((_, index) => (
                 <div key={index} className="skeleton-card" />
@@ -233,7 +233,7 @@ const CatalogSection = React.memo(function CatalogSection({
         )}
 
         {!isDataLoading && !error && sortedData.length === 0 && (
-          <motion.div className="empty-state" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
+          <m.div className="empty-state" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
             <span className="empty-eyebrow">{emptyState.eyebrow}</span>
             <h3>{emptyState.title}</h3>
             <p>{emptyState.description}</p>
@@ -256,10 +256,10 @@ const CatalogSection = React.memo(function CatalogSection({
               <li>Ищите по симптому: боль, кровотечение, зуд, беременность.</li>
               <li>Можно использовать русское или латинское название.</li>
             </ul>
-          </motion.div>
+          </m.div>
         )}
       </section>
-    </motion.section>
+    </m.section>
   );
 });
 

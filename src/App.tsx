@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, useReducedMotion, m } from 'framer-motion';
 import './styles/spacing.css';
 import './index.css';  /* Legacy styles - will be refactored */
 import './App.css';
@@ -66,8 +66,8 @@ const getIdVariants = (id: string) => {
 };
 
 const LoadingSpinner = ({ prefersReducedMotion }: { prefersReducedMotion: boolean }) => (
-  <motion.div className="loading-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <motion.div
+  <m.div className="loading-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <m.div
       className="loading-spinner"
       animate={prefersReducedMotion ? undefined : { rotate: 360 }}
       transition={prefersReducedMotion ? undefined : { repeat: Infinity, duration: 1.2, ease: 'linear' }}
@@ -75,8 +75,8 @@ const LoadingSpinner = ({ prefersReducedMotion }: { prefersReducedMotion: boolea
       role="status"
     >
       <span className="spinner-core" />
-    </motion.div>
-  </motion.div>
+    </m.div>
+  </m.div>
 );
 
 const resetViewportScroll = () => {
@@ -103,6 +103,9 @@ function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [showPharmacology, setShowPharmacology] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  // P0.1: ambient effects (particles/aura/blobs) are decorative and compete with LCP
+  // on the main thread — mount them only after the first paint settles (idle callback).
+  const [showAmbientEffects, setShowAmbientEffects] = useState(false);
   const [isOnline, setIsOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
   const [isMobileViewport, setIsMobileViewport] = useState(() =>
     typeof window === 'undefined'
@@ -198,9 +201,31 @@ function App() {
     const updateViewport = () => setIsMobileViewport(mediaQuery.matches);
     updateViewport();
     mediaQuery.addEventListener('change', updateViewport);
-
     return () => mediaQuery.removeEventListener('change', updateViewport);
   }, []);
+
+  // P0.1: defer decorative ambient effects until after the first paint so they
+  // never block LCP. Fall back to a short timeout if requestIdleCallback is absent.
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      // Respect reduced-motion: skip animated ambient layer entirely.
+      return;
+    }
+    let idleId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const activate = () => setShowAmbientEffects(true);
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(activate, { timeout: 1200 });
+    } else {
+      timeoutId = setTimeout(activate, 600);
+    }
+    return () => {
+      if (idleId !== undefined && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [prefersReducedMotion]);
 
   useLayoutEffect(() => {
     settleViewportScroll();
@@ -400,14 +425,14 @@ function App() {
           Перейти к основному содержанию
         </a>
 
-        {/* 3D Particle Background (Wow-effect) */}
-        {!isMobileViewport ? (
+        {/* 3D Particle Background (Wow-effect) — P0.1: deferred until after LCP */}
+        {showAmbientEffects && !isMobileViewport ? (
           <Suspense fallback={null}>
             <Particle3DBackground particleCount={prefersReducedMotion ? 0 : 80} color="#8D7FBF" />
           </Suspense>
         ) : null}
 
-        <BackgroundEffects />
+        {showAmbientEffects ? <BackgroundEffects /> : null}
 
         <Navbar
           activeTab={activeTab}
@@ -469,13 +494,13 @@ function App() {
             </section>
           )}
 
-          <motion.section
+          <m.section
             initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, ease: 'easeOut' }}
           >
             <AnalyticsDashboard />
-          </motion.section>
+          </m.section>
 
           <footer className="site-footer">
             <p>© Puma10w • Премиальный медицинский справочник</p>
@@ -515,7 +540,7 @@ function App() {
         </Suspense>
 
         {showScrollTop && !showHome && (
-          <motion.button
+          <m.button
             className="scroll-top-btn glass glow-turquoise"
             onClick={scrollToTop}
             initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.9 }}
@@ -527,7 +552,7 @@ function App() {
             title="Наверх"
           >
             ↑
-          </motion.button>
+          </m.button>
         )}
       </div>
     </ErrorBoundary>

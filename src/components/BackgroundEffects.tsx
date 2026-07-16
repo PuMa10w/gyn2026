@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const particleColors = ['#e05a78', '#9b59b6', '#d4a017', '#fce4ec', '#e8d5f5'];
 
@@ -43,7 +43,7 @@ const BackgroundEffects: React.FC = () => {
   return (
     <div className="bg-effects">
       <div className="blob blob-1">
-        <motion.div
+        <m.div
           animate={{
             scale: [1, 1.2, 1],
             rotate: [0, 90, 0],
@@ -53,7 +53,7 @@ const BackgroundEffects: React.FC = () => {
         />
       </div>
       <div className="blob blob-2">
-        <motion.div
+        <m.div
           animate={{
             scale: [1.2, 1, 1.2],
             rotate: [0, -60, 0],
@@ -63,7 +63,7 @@ const BackgroundEffects: React.FC = () => {
         />
       </div>
       <div className="blob blob-3">
-        <motion.div
+        <m.div
           animate={{
             scale: [1, 1.15, 1],
             x: [0, 50, 0],
@@ -76,7 +76,7 @@ const BackgroundEffects: React.FC = () => {
 
       <div className="particles">
         {particleConfig.map((particle) => (
-          <motion.div
+          <m.div
             key={particle.key}
             className="particle"
             style={{
@@ -104,7 +104,7 @@ const BackgroundEffects: React.FC = () => {
 
       <div className="sparkles">
         {sparkleConfig.map((sparkle) => (
-          <motion.div
+          <m.div
             key={sparkle.key}
             className="sparkle"
             style={{

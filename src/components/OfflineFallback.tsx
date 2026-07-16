@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { emitToast } from './ToastSystem';
 
 interface OfflineFallbackProps {
@@ -31,7 +31,7 @@ export const OfflineFallback: React.FC<OfflineFallbackProps> = ({ onRetry }) => 
   if (isOnline) return null;
 
   return (
-    <motion.div
+    <m.div
       className="offline-fallback"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -53,7 +53,7 @@ export const OfflineFallback: React.FC<OfflineFallbackProps> = ({ onRetry }) => 
           Обновить
         </button>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

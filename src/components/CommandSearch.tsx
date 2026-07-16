@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { siteSearch, type SearchResult, type GroupedResults } from '../utils/siteSearch';
 import { emitToast } from '../utils/toastEmitter';
 import { useVoiceInput } from '../hooks/useVoiceInput';
@@ -161,7 +161,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
   );
 
   return (
-    <motion.section
+    <m.section
       className="workbench-command"
       aria-labelledby={`${inputId}-title`}
       initial={{ opacity: 0, y: 10 }}
@@ -325,7 +325,7 @@ export const CommandSearch: React.FC<CommandSearchProps> = ({ onCommand }) => {
           </div>
         )}
       </div>
-    </motion.section>
+    </m.section>
   );
 };
 
