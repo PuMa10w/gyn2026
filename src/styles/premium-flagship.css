@@ -1604,6 +1604,45 @@ button, a, [role="button"], .tab-btn, .category-chip,
 }
 .modal-close:active { transform: scale(0.92); }
 
+/* ── Native iPhone bottom-sheet ───────────────────────────── */
+@media (max-width: 480px) {
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+    background: rgba(5, 4, 8, 0.5);
+  }
+  .modal-content {
+    width: 100%;
+    max-width: 100%;
+    max-height: 94dvh;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    border-bottom: none;
+    padding-bottom: calc(var(--safe-bottom) + var(--space-8));
+    padding-top: var(--space-10);
+    animation: sheetUp 0.34s var(--ease-spring) forwards;
+  }
+  .modal-content::before {
+    content: "";
+    position: absolute;
+    top: var(--space-4);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--am-border-medium);
+  }
+  .modal-header {
+    padding-top: var(--space-6);
+    position: relative;
+  }
+}
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+
 .modal-tabs {
   display: flex;
   gap: var(--space-2);
