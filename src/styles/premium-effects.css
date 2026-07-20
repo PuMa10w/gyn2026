@@ -71,6 +71,31 @@
   opacity: 1;
 }
 
+/* ── Gradient hairline border for all premium cards ─────────── */
+.premium-card, .disease-card, .clinical-card, .am-card, .tool-panel {
+  position: relative;
+  isolation: isolate;
+}
+.premium-card::after, .disease-card::after, .clinical-card::after, .am-card::after, .tool-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(107, 92, 156, 0.35), rgba(212, 167, 106, 0.18) 45%, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--duration-md) var(--ease-smooth);
+  pointer-events: none;
+  z-index: 1;
+}
+.premium-card:active::after, .disease-card:active::after,
+.clinical-card:active::after, .am-card:active::after, .tool-panel:active::after {
+  opacity: 0.85;
+}
+
 /* ── Primary (gynecology) card: warm amber glow on hover ─────────── */
 .home-destination-card.is-gynecology:hover {
   border-color: rgba(212, 167, 106, 0.4) !important;
