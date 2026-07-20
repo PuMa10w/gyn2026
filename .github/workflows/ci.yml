@@ -72,9 +72,37 @@ jobs:
           name: dist
           path: dist
 
-  lighthouse:
+  quality-gates:
     runs-on: ubuntu-latest
     needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Content quality gate (no synthetic stubs)
+        run: npm run audit:content:gate
+
+      - name: Bundle budget gate
+        run: npm run audit:bundle:budget
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: quality-gates
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

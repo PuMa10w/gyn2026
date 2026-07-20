@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import purgecss from '@fullhuman/postcss-purgecss';
 
 const packageJson = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 
@@ -92,6 +93,86 @@ export default defineConfig({
         '.ts': 'tsx',
       },
       target: 'esnext',
+    },
+  },
+  css: {
+    postcss: {
+      plugins: [
+        purgecss({
+          content: [
+            './index.html',
+            './src/**/*.{ts,tsx,js,jsx}',
+          ],
+          safelist: {
+            // Статические селекторы, которые purgecss может недоучесть
+            standard: [
+              /^risk-flag--/,
+              /^severity-bar--/,
+              /^color-/,
+              /^status-dot--/,
+              /^status-eyebrow--/,
+              /^icd-badge--/,
+              /^theme-color--/,
+              /^interaction-/,
+              /^is-/,
+              /^active$/,
+              /^mobile-sheet$/,
+              /^is-mobile$/,
+              /^is-gynecology$/,
+              /^is-obstetrics$/,
+              /^is-none$/,
+              /^is-favorite$/,
+              /^is-active$/,
+              /^is-collapsed$/,
+              /^listening$/,
+            ],
+            // Динамические модификаторы вида prefix--{var}, собранные из кода.
+            // Без этого purgecss вырезает нужные классы карточек/панелей/бейджей.
+            greedy: [
+              /clinical-badge--/,
+              /clinical-card--/,
+              /clinical-panel--/,
+              /premium-badge--/,
+              /premium-button--/,
+              /premium-card--/,
+              /risk-flag--/,
+              /source-badge--/,
+              /tool-panel--/,
+              /workbench-command-badge--/,
+              /severity-bar--/,
+              /status-dot--/,
+              /status-eyebrow--/,
+              /icd-badge--/,
+              /theme-color--/,
+              /interaction-/,
+              /-active$/,
+              /-mobile$/,
+              /-favorite$/,
+              /-collapsed$/,
+              /-gynecology$/,
+              /-obstetrics$/,
+              /-none$/,
+              /-high$/,
+              /-critical$/,
+              /-moderate$/,
+              /-low$/,
+              /-emerald$/,
+              /-gold$/,
+              /-turquoise$/,
+              /-rose$/,
+              /-danger$/,
+              /-warning$/,
+              /-success$/,
+              /-accent$/,
+              /-neutral$/,
+              /-default$/,
+            ],
+          },
+          variables: true,
+          keyframes: true,
+          fontFace: true,
+        }),
+      ],
     },
   },
   server: {

@@ -3,15 +3,19 @@ import { loadGynData } from '../loadGynData';
 import { loadObsData } from '../loadObsData';
 
 const STUB = ['Требуется уточнение', 'Данные отсутствуют', 'Клиническое описание для'];
+const TMPL_NAME = /^(Заболевание|Болезнь|Болезни)/;
 
 describe('runtime content', () => {
   it('loads gyn + obs with dedup and reports stub ratio', async () => {
     const [gyn, obs] = await Promise.all([loadGynData(), loadObsData()]);
     const all = [...gyn, ...obs];
-    const stubCount = all.filter((d) => STUB.some((s) => JSON.stringify(d).includes(s))).length;
+    const stubCount = all.filter(
+      (d) => STUB.some((s) => JSON.stringify(d).includes(s)) || TMPL_NAME.test(String(d.name)),
+    ).length;
     console.log(`TOTAL: ${all.length}, STUB: ${stubCount} (${(stubCount / all.length * 100).toFixed(1)}%)`);
-    expect(all.length).toBeGreaterThan(1400);
-    expect(stubCount).toBe(0); // дедуп сработал, заглушек нет
+    // После очистки стабов и дедупа ICD-иерархии остаются только реальные карточки.
+    expect(all.length).toBeGreaterThan(300);
+    expect(stubCount).toBe(0); // ни дедуп-маркеров, ни шаблонных имён
   });
 
   it('provides real clinical cards for key conditions', async () => {

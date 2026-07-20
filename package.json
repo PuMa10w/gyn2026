@@ -75,6 +75,7 @@
     "audit:css-debt": "node scripts/css-debt-audit.mjs",
     "audit:manual:visual-checklist": "node scripts/manual-visual-checklist.mjs",
     "audit:production:freshness": "node scripts/production-freshness-audit.mjs",
+    "audit:content:gate": "node scripts/ci-content-gate.mjs",
     "deploy:production": "node scripts/deploy-production-guard.mjs",
     "lhci": "lhci autorun --upload.target=temporary-public-storage",
     "css:report": "node scripts/css-dedup.mjs"

@@ -36,16 +36,41 @@ function contentWeight(disease: Disease): number {
   return weight;
 }
 
-// Дедупликация по (icd + subtitle + нормализованное имя): оставляем карточку
-// с бóльшим объёмом реального контента (верифицированная побеждает стаб).
+// Дедупликация в три этапа (каждый оставляет карточку с бóльшим объёмом
+// реального контента — верифицированная побеждает стаб/авто-ген):
+// 1) по id (источник уникален) — защита от битых повторов внутри чанка;
+// 2) по (icd + subtitle + норм. имя) — клинические дубли с одним icd;
+// 3) по (subtitle + норм. имя) — схлопывает иерархию ICD-10 (родительский код
+//    N80 + подкоды N80.x показывались как одинаковые карточки «Эндометриоз»).
 export function dedupeByContent(diseases: Disease[]): Disease[] {
-  const best = new Map<string, Disease>();
+  // Этап 1: по id
+  const byId = new Map<string, Disease>();
   for (const disease of diseases) {
-    const key = `${String(disease.icd).toUpperCase()}__${disease.subtitle}__${String(disease.name).toLowerCase().trim()}`;
-    const existing = best.get(key);
+    const id = String(disease.id);
+    const existing = byId.get(id);
     if (!existing || contentWeight(disease) > contentWeight(existing)) {
-      best.set(key, disease);
+      byId.set(id, disease);
     }
   }
-  return [...best.values()];
+
+  // Этап 2: по клиническому ключу (icd + subtitle + имя)
+  const byClinical = new Map<string, Disease>();
+  for (const disease of byId.values()) {
+    const key = `${String(disease.icd).toUpperCase()}__${disease.subtitle}__${String(disease.name).toLowerCase().trim()}`;
+    const existing = byClinical.get(key);
+    if (!existing || contentWeight(disease) > contentWeight(existing)) {
+      byClinical.set(key, disease);
+    }
+  }
+
+  // Этап 3: по (subtitle + имя) — убирает дубли-подкоды одной нозологии
+  const byName = new Map<string, Disease>();
+  for (const disease of byClinical.values()) {
+    const key = `${disease.subtitle}__${String(disease.name).toLowerCase().trim()}`;
+    const existing = byName.get(key);
+    if (!existing || contentWeight(disease) > contentWeight(existing)) {
+      byName.set(key, disease);
+    }
+  }
+  return [...byName.values()];
 }
