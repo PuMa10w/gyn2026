@@ -740,7 +740,7 @@ nav.navbar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 32px;
+  min-height: 44px;
   padding: 0 var(--space-5);
   border: 1px solid var(--am-border-soft);
   border-radius: var(--radius-sm);
@@ -906,7 +906,9 @@ nav.navbar {
 }
 
 /* ── Touch targets (Apple HIG: min 44×44px on iPhone) ───── */
-button, a, [role="button"], .tab-btn, .category-chip,
+/* NOTE: exclude card-buttons (.home-destination-card etc) — they are large
+   surfaces, not small controls. Only target compact interactive elements. */
+a, [role="button"], .tab-btn, .category-chip,
 .favorite-btn, .source-badge, .clinical-badge, .nav-item,
 .card-action, .modal-close, .guideline-card a {
   min-height: var(--touch-min);

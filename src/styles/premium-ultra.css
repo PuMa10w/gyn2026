@@ -1,0 +1,360 @@
+/* ═══════════════════════════════════════════════════════════════
+   PREMIUM ULTRA — 2025→2026 editorial / material polish layer
+   Loaded ABOVE premium-typography via @layer premium, so it wins
+   without raising specificity. 100% additive: it only adds depth,
+   motion hooks, refined type rhythm, touch floors and delight details.
+   It never removes or overrides an existing rule unintentionally —
+   where it refines a surface it re-declares the SAME token-based values
+   plus the new enhancement.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* New ultra tokens (additive) */
+  --am-grain-opacity: 0.035;
+  --am-ring-glow: 0 0 0 1px var(--am-champagne-soft), 0 0 22px -4px rgba(231, 201, 160, 0.45);
+  --am-progress: linear-gradient(90deg, var(--am-brand-light), var(--am-champagne) 55%, var(--am-amber-light));
+  --am-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --am-focus-ring: 0 0 0 2px var(--am-champagne), 0 0 0 5px rgba(231, 201, 160, 0.28);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   1. MATERIAL DEPTH — grain + dual aurora + cut-from-glass edge
+   ───────────────────────────────────────────────────────────── */
+
+/* Living mesh: add a third, slower champagne blob for material depth */
+.bg-mesh::before {
+  box-shadow: 0 0 120px 40px rgba(124, 99, 196, 0.22);
+}
+.bg-mesh::after {
+  box-shadow: 0 0 120px 40px rgba(231, 201, 160, 0.18);
+}
+/* Third aurora layer via a dedicated pseudo on the app root wrapper */
+.App::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38vmax 38vmax at 78% 92%, rgba(124, 99, 196, 0.10), transparent 60%),
+    radial-gradient(30vmax 30vmax at 12% 60%, rgba(231, 201, 160, 0.08), transparent 60%);
+  opacity: 0.9;
+  will-change: transform;
+  animation: ultra-aurora 38s ease-in-out infinite alternate;
+}
+@keyframes ultra-aurora {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-4vmax, -3vmax, 0) scale(1.08); }
+}
+
+/* Fine grain overlay — gives surfaces a printed, material quality */
+.App::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--am-grain-opacity);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Cut-from-glass edge: hairline outer ring + inner bottom shadow */
+.premium-card,
+.disease-card,
+.clinical-card,
+.am-card,
+.tool-panel,
+.home-destination-card,
+.premium-tool-card,
+.premium-command-metric,
+.medication-card,
+.q-card,
+.regimen-card {
+  border-radius: var(--radius-xl, 22px);
+  box-shadow:
+    var(--am-shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(20, 12, 30, 0.04);
+}
+
+/* Gradient hairline border (champagne → brand) on premium cards.
+   Uses a masked pseudo so the border itself is a gradient. */
+.home-destination-card,
+.premium-tool-card,
+.disease-card {
+  position: relative;
+}
+.home-destination-card::before,
+.premium-tool-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(231, 201, 160, 0.55), rgba(124, 99, 196, 0.18) 45%, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+  transition: opacity var(--duration-md) var(--ease-smooth);
+  pointer-events: none;
+}
+.home-destination-card:hover::before,
+.premium-tool-card:hover::before,
+.disease-card:hover::after {
+  opacity: 0.95;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. TYPOGRAPHY — editorial display rhythm
+   ───────────────────────────────────────────────────────────── */
+
+h1, h2 {
+  font-variation-settings: 'opsz' 72;
+  letter-spacing: -0.03em;
+}
+.hero-title {
+  font-variation-settings: 'opsz' 72;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+/* Eyebrow gets a champagne tick before the label */
+.hero-eyebrow-row .premium-badge,
+.catalog-eyebrow,
+.workbench-eyebrow,
+.destination-kicker,
+.quick-summary-eyebrow,
+.clinical-panel-eyebrow,
+.tool-panel-eyebrow {
+  position: relative;
+}
+/* More rhythm between eyebrow and title */
+.catalog-header { gap: var(--space-4); }
+.catalog-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  color: var(--am-text-tertiary);
+}
+.catalog-eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gradient-champagne-2);
+}
+
+/* Tabular numerals everywhere a count/metric/ICD appears */
+.chip-count,
+.search-result-count,
+.destination-index,
+.card-icd-badge,
+.category-count,
+.premium-command-metric strong {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+
+/* Long-form modal reading measure + softer leading */
+.modal-body,
+.disease-modal-body,
+.clinical-panel,
+.structured-item,
+.guideline-card,
+.content-card p {
+  max-width: 64ch;
+}
+.modal-body p,
+.disease-modal-body p,
+.clinical-panel p,
+.structured-item p,
+.content-card p {
+  line-height: 1.7;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. TOUCH FLOORS — Apple HIG 44px (visual stays compact)
+   ───────────────────────────────────────────────────────────── */
+
+/* Desktop navbar actions: bump hit-area to 44 without bloating look */
+.navbar-action-button {
+  min-height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+/* Sort chips: currently 17px tall — fails HIG. Lift to 44 hit area. */
+.catalog-sort-chip {
+  min-height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+}
+/* Brand hit area */
+.navbar-brand {
+  min-height: 44px;
+  padding: 4px 6px;
+}
+/* Bottom bar tap zone */
+.mobile-bottom-item {
+  min-height: 44px;
+}
+
+/* Unstyled clinical action inside modal header — make it a proper tap target */
+.modal-clinical-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--am-border-soft);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--am-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-smooth),
+              color var(--duration-fast) var(--ease-smooth),
+              border-color var(--duration-fast) var(--ease-smooth);
+}
+.modal-clinical-action:hover {
+  background: rgba(107, 92, 156, 0.06);
+  color: var(--am-text-primary);
+  border-color: var(--am-border-medium);
+}
+.modal-clinical-action:active { transform: scale(0.97); }
+/* Source/guideline badges (EAU/ACOG/WHO) keep small LOOK but get 44 hit */
+.source-badge,
+.inline-guideline-badge,
+.guideline-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. DELIGHT — focus rings, selection, scrollbar, theme xfade,
+      empty-state glow, softened shimmer
+   ───────────────────────────────────────────────────────────── */
+
+/* Refined focus ring (keyboard) */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: var(--am-focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* Selection inside inputs */
+input::selection,
+textarea::selection {
+  background: rgba(231, 201, 160, 0.32);
+}
+
+/* Premium thin scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 99, 196, 0.35) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(124, 99, 196, 0.45), rgba(231, 201, 160, 0.35));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(124, 99, 196, 0.65), rgba(231, 201, 160, 0.5));
+  background-clip: padding-box;
+}
+
+/* Theme cross-fade (light ↔ dark) */
+html {
+  transition: background-color 240ms var(--ease-smooth), color 240ms var(--ease-smooth);
+}
+
+/* Softened, slower shimmer for command cards (premium loading) */
+.workbench-command-card.shimmer {
+  background-size: 220% 100%;
+  animation: ultra-shimmer 2.2s linear infinite;
+}
+@keyframes ultra-shimmer {
+  0%   { background-position: 220% 0; }
+  100% { background-position: -220% 0; }
+}
+
+/* Empty-state: soft radial glow + gentle float */
+.empty-state,
+.catalog-status,
+.clinical-empty-state,
+.pharma-empty-state {
+  position: relative;
+}
+.empty-state::before,
+.catalog-status::before {
+  content: '';
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 99, 196, 0.18), transparent 65%);
+  filter: blur(8px);
+  pointer-events: none;
+  animation: ultra-float 6s ease-in-out infinite alternate;
+}
+@keyframes ultra-float {
+  from { transform: translateX(-50%) translateY(0); }
+  to   { transform: translateX(-50%) translateY(-10px); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. SCROLL PROGRESS RAIL (companion of AdditiveNavbarMotion)
+   ───────────────────────────────────────────────────────────── */
+.gyn-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: var(--am-progress);
+  z-index: calc(var(--z-navbar) + 1);
+  box-shadow: 0 0 12px rgba(231, 201, 160, 0.5);
+  pointer-events: none;
+  transition: opacity 240ms var(--ease-smooth);
+}
+
+/* Navbar "scrolled" state: tighter, deeper glass (toggled by effect) */
+.navbar.is-scrolled {
+  border-radius: 16px;
+  box-shadow: var(--am-shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. REDUCED MOTION — disable all additive motion, keep static depth
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .App::before,
+  .empty-state::before,
+  .catalog-status::before,
+  .bg-mesh::before,
+  .bg-mesh::after {
+    animation: none !important;
+  }
+  .workbench-command-card.shimmer { animation: none; }
+  .gyn-scroll-progress { display: none; }
+  html { transition: none; }
+}

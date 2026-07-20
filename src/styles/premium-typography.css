@@ -1,0 +1,451 @@
+/* ═══════════════════════════════════════════════════════════════
+   PREMIUM TYPOGRAPHY & GLASS-MICA LAYER (2025–2026 trends)
+   Loaded ABOVE premium-flagship via @layer premium so it wins
+   without raising specificity. Pure additive upgrades — no
+   overrides of existing component rules beyond what is intended.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Variable-font axes already requested in index.html.
+     - Inter: opsz 6..72, wght 300..800
+     - Space Grotesk: wght 400..700 */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+
+  /* Tertiary accent: champagne / rose-gold for premium highlights */
+  --am-champagne: #E7C9A0;
+  --am-champagne-soft: rgba(231, 201, 160, 0.16);
+  --am-rose-gold: #E2A9A0;
+  --gradient-champagne-2: linear-gradient(135deg, #E7C9A0 0%, #E2A9A0 50%, #C9A6E0 100%);
+}
+
+/* ── Typographic rhythm: balance headings, pretty paragraphs ── */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  font-optical-sizing: auto;
+  font-variation-settings: 'opsz' 32;
+}
+
+p, li, blockquote, .card-desc, .modal-body p, .structured-item p {
+  text-wrap: pretty;
+}
+
+/* Tabular numerals for metrics & counters so digits align */
+.premium-command-metric strong,
+.catalog-sort-chip,
+.category-count,
+.destination-index,
+[class*='count'],
+[class*='Count'] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+
+/* Better Cyrillic & Latin shaping for Inter */
+body,
+input,
+button,
+.card-title,
+.hero-title,
+.catalog-title {
+  font-feature-settings: 'cv05' 1, 'cv11' 1, 'ss01' 1, 'liga' 1, 'calt' 1;
+}
+
+/* Long-form readability inside clinical modal */
+.modal-body,
+.disease-modal-body,
+.clinical-panel,
+.structured-item,
+.guideline-card {
+  max-width: 68ch;
+}
+
+.modal-body p,
+.disease-modal-body p,
+.clinical-panel p,
+.structured-item p {
+  line-height: 1.65;
+}
+
+/* ── Glass-mica surface: v2 glassmorphism ── */
+.premium-card,
+.disease-card,
+.clinical-card,
+.am-card,
+.tool-panel,
+.home-destination-card,
+.premium-tool-card,
+.premium-command-metric {
+  /* soft frosted glass with inner light + hairline border */
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--am-border-soft);
+  box-shadow:
+    var(--am-shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 24px rgba(255, 255, 255, 0.02);
+}
+
+[data-theme='dark'] .premium-card,
+[data-theme='dark'] .disease-card,
+[data-theme='dark'] .clinical-card,
+[data-theme='dark'] .am-card,
+[data-theme='dark'] .tool-panel,
+[data-theme='dark'] .home-destination-card,
+[data-theme='dark'] .premium-tool-card,
+[data-theme='dark'] .premium-command-metric {
+  border-color: var(--am-border-soft);
+  box-shadow:
+    var(--am-shadow-md),
+    0 0 40px rgba(124, 99, 196, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Champagne hairline accent on hover for premium cards */
+.home-destination-card:hover,
+.premium-tool-card:hover,
+.disease-card:hover {
+  border-color: var(--am-champagne-soft);
+}
+
+/* ── Living mesh/aurora hero background (reduced-motion safe) ── */
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-mesh::before,
+.bg-mesh::after {
+  content: '';
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.bg-mesh::before {
+  top: -10vmax;
+  left: -8vmax;
+  background: radial-gradient(circle at 30% 30%, rgba(124, 99, 196, 0.55), transparent 60%);
+  animation: mesh-drift-1 26s ease-in-out infinite alternate;
+}
+
+.bg-mesh::after {
+  bottom: -12vmax;
+  right: -10vmax;
+  background: radial-gradient(circle at 70% 70%, rgba(231, 201, 160, 0.45), transparent 60%);
+  animation: mesh-drift-2 32s ease-in-out infinite alternate;
+}
+
+@keyframes mesh-drift-1 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(8vmax, 6vmax, 0) scale(1.15); }
+}
+
+@keyframes mesh-drift-2 {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to   { transform: translate3d(-7vmax, -5vmax, 0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-effects::before,
+  .bg-effects::after {
+    animation: none;
+  }
+}
+
+/* ── Micro-interaction: spring lift + glow on interactive cards ── */
+.home-destination-card,
+.premium-tool-card {
+  transition:
+    transform var(--duration-md) var(--ease-spring),
+    box-shadow var(--duration-md) var(--ease-smooth),
+    border-color var(--duration-md) var(--ease-smooth);
+}
+
+.home-destination-card:hover,
+.premium-tool-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    var(--am-shadow-lg),
+    0 0 48px -8px rgba(231, 201, 160, 0.28);
+}
+
+/* Gradient text shimmer for hero headline accent */
+.gradient-text {
+  background: linear-gradient(110deg, var(--am-brand-light), var(--am-champagne) 55%, var(--am-brand-light));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: text-shimmer 8s linear infinite;
+}
+
+@keyframes text-shimmer {
+  to { background-position: 200% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-text { animation: none; }
+}
+
+/* Selection uses champagne tint for premium feel */
+::selection {
+  background: rgba(231, 201, 160, 0.28);
+  color: var(--am-text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BENTO UPGRADE — Home destination + tool tiles (premium layer)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Large accent icon on each destination tile */
+.destination-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(56px, 7vw, 84px);
+  height: clamp(56px, 7vw, 84px);
+  border-radius: 22px;
+  background: linear-gradient(150deg, rgba(124, 99, 196, 0.22), rgba(231, 201, 160, 0.18));
+  border: 1px solid var(--am-champagne-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 8px 24px rgba(91, 62, 143, 0.18);
+  margin-bottom: 0.4rem;
+}
+
+.destination-icon svg {
+  width: 60%;
+  height: 60%;
+}
+
+.home-destination-card.is-gynecology .destination-icon {
+  background: linear-gradient(150deg, rgba(124, 99, 196, 0.28), rgba(124, 99, 196, 0.08));
+}
+
+.home-destination-card.is-obstetrics .destination-icon {
+  background: linear-gradient(150deg, rgba(231, 201, 160, 0.3), rgba(231, 201, 160, 0.08));
+}
+
+/* Bento layout: asymmetric, roomy tiles on desktop */
+@media (min-width: 1080px) {
+  .home-destination-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 1.5rem;
+  }
+
+  .home-destination-card {
+    min-height: 360px;
+    padding: 2rem 2.1rem;
+  }
+
+  .home-destination-title {
+    font-size: clamp(2.6rem, 4.4vw, 4rem);
+  }
+}
+
+/* Tool tile accent icon */
+.tool-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  margin-bottom: 0.75rem;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--am-champagne);
+  background: var(--am-champagne-soft);
+  border: 1px solid var(--am-champagne-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Bento rhythm for the tools row */
+@media (min-width: 760px) {
+  .premium-command-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CATALOG DISEASE CARDS — ultra-premium polish (premium layer)
+   ═══════════════════════════════════════════════════════════════ */
+
+.disease-card {
+  transition:
+    transform var(--duration-md) var(--ease-spring),
+    box-shadow var(--duration-md) var(--ease-smooth),
+    border-color var(--duration-md) var(--ease-smooth);
+}
+
+.disease-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--am-champagne-soft);
+  box-shadow:
+    var(--am-shadow-lg),
+    0 0 44px -10px rgba(231, 201, 160, 0.3);
+}
+
+/* Larger accent icon with soft gradient ring */
+.card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background:
+    linear-gradient(150deg, rgba(124, 99, 196, 0.18), rgba(231, 201, 160, 0.14));
+  border: 1px solid var(--am-champagne-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.card-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.card-desc {
+  line-height: 1.52;
+  color: var(--am-text-tertiary);
+}
+
+.card-title {
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+/* Gradient hairline accent on top edge of card */
+.disease-card::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  border-radius: 26px 26px 0 0;
+  background: linear-gradient(90deg, transparent, var(--am-champagne), var(--am-brand-light), transparent);
+  opacity: 0;
+  transition: opacity var(--duration-md) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.disease-card:hover::after {
+  opacity: 0.9;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DISEASE MODAL — clinical cockpit polish (premium layer)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Accent ring on modal header icon */
+.modal-icon-wrapper {
+  background:
+    linear-gradient(150deg, rgba(124, 99, 196, 0.22), rgba(231, 201, 160, 0.16));
+  border: 1px solid var(--am-champagne-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  letter-spacing: -0.02em;
+}
+
+/* Sticky tab bar: stronger glass + gradient active tab */
+.modal-tabs {
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid var(--am-border-soft);
+  background: var(--am-bg-glass);
+}
+
+.tab-btn {
+  position: relative;
+  font-weight: var(--weight-medium);
+  color: var(--am-text-secondary);
+  transition: color var(--duration-fast) var(--ease-smooth);
+}
+
+.tab-btn.is-active {
+  color: var(--am-text-primary);
+}
+
+.tab-btn.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  bottom: -0.1rem;
+  height: 2.5px;
+  border-radius: 999px;
+  background: var(--gradient-champagne-2);
+  box-shadow: 0 0 12px rgba(231, 201, 160, 0.5);
+}
+
+/* Clinical panels: card-style with accent left border for hierarchy */
+.clinical-panel,
+.structured-item {
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--am-border-soft);
+  border-left: 3px solid var(--am-champagne);
+  background: var(--am-bg-card);
+  box-shadow: var(--am-shadow-sm);
+}
+
+.tab-content h3 {
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PHARMACOLOGY + QUESTIONNAIRES — cards polish (premium layer)
+   ═══════════════════════════════════════════════════════════════ */
+
+.medication-card,
+.q-card,
+.regimen-card,
+.interaction-card,
+.q-history-item,
+.q-answer-row {
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--am-border-soft);
+  box-shadow:
+    var(--am-shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition:
+    transform var(--duration-md) var(--ease-spring),
+    box-shadow var(--duration-md) var(--ease-smooth),
+    border-color var(--duration-md) var(--ease-smooth);
+}
+
+.medication-card:hover,
+.q-card:hover,
+.regimen-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--am-champagne-soft);
+  box-shadow:
+    var(--am-shadow-md),
+    0 0 36px -12px rgba(231, 201, 160, 0.28);
+}
+
+/* Accent left border for clinical hierarchy (pharma/questionnaire blocks) */
+.medication-card,
+.q-card,
+.structured-item {
+  border-left: 3px solid var(--am-champagne);
+}
+
+.q-answer-row.is-correct,
+.q-answer-row.is-selected {
+  border-color: var(--am-champagne);
+  box-shadow: 0 0 0 1px var(--am-champagne-soft), var(--am-shadow-sm);
+}

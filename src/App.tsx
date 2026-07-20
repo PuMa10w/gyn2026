@@ -6,11 +6,10 @@ import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import type { WorkbenchCommand } from './components/CommandSearch';
 import CatalogSection from './components/CatalogSection';
-import BackgroundEffects from './components/BackgroundEffects';
 import ErrorBoundary from './components/ErrorBoundary';
 import ModalErrorBoundary from './components/ModalErrorBoundary';
-import { AnalyticsDashboard } from './components/AnalyticsDashboard';
 import { VersionChecker } from './components/VersionChecker';
+import { AdditiveNavbarMotion } from './components/AdditiveNavbarMotion';
 import { useDebounce } from './hooks/useDebounce';
 import { useCatalogData } from './hooks/useCatalogData';
 import { useTheme } from './hooks/useTheme';
@@ -54,6 +53,8 @@ const PharmacologyModal = lazy(() =>
 const MobileBottomBar = lazy(() => import('./components/MobileBottomBar').then(m => ({ default: m.MobileBottomBar })));
 const Particle3DBackground = lazy(() => import('./components/Particle3DBackground').then(m => ({ default: m.Particle3DBackground })));
 const ToastContainer = lazy(() => import('./components/ToastSystem').then(m => ({ default: m.ToastContainer })));
+const BackgroundEffectsLazy = lazy(() => import('./components/BackgroundEffects').then(m => ({ default: m.default })));
+const AnalyticsDashboardLazy = lazy(() => import('./components/AnalyticsDashboard').then(m => ({ default: m.AnalyticsDashboard })));
 
 const getIdVariants = (id: string) => {
   const trimmedId = id.trim();
@@ -422,6 +423,8 @@ function App() {
           Перейти к основному содержанию
         </a>
 
+        <AdditiveNavbarMotion />
+
         {/* 3D Particle Background (Wow-effect) — P0.1: deferred until after LCP */}
         {showAmbientEffects && !isMobileViewport ? (
           <Suspense fallback={null}>
@@ -429,7 +432,14 @@ function App() {
           </Suspense>
         ) : null}
 
-        {showAmbientEffects ? <BackgroundEffects /> : null}
+        {showAmbientEffects ? (
+          <Suspense fallback={null}>
+            <BackgroundEffectsLazy />
+          </Suspense>
+        ) : null}
+
+        {/* Living mesh/aurora glow behind content (reduced-motion safe) */}
+        <div className="bg-mesh" aria-hidden="true" />
 
         <Navbar
           activeTab={activeTab}
@@ -496,7 +506,9 @@ function App() {
             animate={{ opacity: 1 }}
             transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, ease: 'easeOut' }}
           >
-            <AnalyticsDashboard />
+            <Suspense fallback={null}>
+              <AnalyticsDashboardLazy />
+            </Suspense>
           </m.section>
 
           <footer className="site-footer">
