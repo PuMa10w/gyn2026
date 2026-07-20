@@ -877,6 +877,27 @@ nav.navbar {
   border-color: var(--am-success);
 }
 
+/* ── Touch targets (Apple HIG: min 44×44px on iPhone) ───── */
+button, a, [role="button"], .tab-btn, .category-chip,
+.favorite-btn, .source-badge, .clinical-badge, .nav-item,
+.card-action, .modal-close, .guideline-card a {
+  min-height: var(--touch-min);
+  min-width: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-6);
+  box-sizing: border-box;
+}
+/* Compact badges (guideline sources) — 32px compromise, still tappable */
+.source-badge, .guideline-card a, .clinical-badge {
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  line-height: 1.2;
+  font-size: var(--text-xs);
+}
+
 .premium-button,
 [class*="premium-button"] {
   position: relative;
