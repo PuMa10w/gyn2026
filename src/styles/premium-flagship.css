@@ -415,7 +415,20 @@ h5 { font-size: var(--text-lg); }
 p, li {
   line-height: var(--leading-relaxed);
   color: var(--am-text-secondary);
+  margin-bottom: var(--space-6);
+  letter-spacing: 0.01em;
 }
+
+.card-desc, .card-subtitle, .modal-body p,
+.structured-item p, .pubmed-abstract, .guideline-card p {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--am-text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+h1, h2, h3 { letter-spacing: -0.02em; }
+h4, h5, h6 { letter-spacing: -0.01em; }
 
 small {
   font-size: var(--text-sm);
