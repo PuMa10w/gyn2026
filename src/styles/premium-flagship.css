@@ -345,6 +345,21 @@
   --brand-text: var(--am-text-primary);
 }
 
+/* ── Dark theme: premium glow & visible borders ─────────── */
+[data-theme='dark'] .premium-card,
+[data-theme='dark'] .disease-card,
+[data-theme='dark'] .clinical-card,
+[data-theme='dark'] .am-card,
+[data-theme='dark'] .tool-panel {
+  box-shadow: var(--am-shadow-md), 0 0 40px rgba(124, 99, 196, 0.12);
+}
+[data-theme='dark'] .home-destination-card.is-gynecology:hover {
+  box-shadow: var(--am-shadow-lg), 0 0 48px -8px rgba(212, 167, 106, 0.28);
+}
+[data-theme='dark'] .home-destination-card.is-obstetrics:hover {
+  box-shadow: var(--am-shadow-lg), 0 0 48px -8px rgba(107, 92, 156, 0.3);
+}
+
 /* ── Core Reset & Base ───────────────────────────────────── */
 *,
 *::before,
