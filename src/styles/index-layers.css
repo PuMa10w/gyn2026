@@ -1,0 +1,13 @@
+/* Cascade layers: legacy styles (index.css, App.css, spacing.css) sit BELOW
+   premium styles (premium-flagship, premium-effects) regardless of selector
+   specificity. This resolves the "broken styles" conflict where legacy
+   composite selectors (e.g. .home-destination-card.is-gynecology) overrode
+   the premium design system. */
+
+@layer legacy, premium;
+
+@import '../index.css' layer(legacy);
+@import '../App.css' layer(legacy);
+@import './spacing.css' layer(legacy);
+@import './premium-flagship.css' layer(premium);
+@import './premium-effects.css' layer(premium);

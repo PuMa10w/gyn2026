@@ -844,6 +844,39 @@ nav.navbar {
 /* ══════════════════════════════════════════════════════════
    BUTTON SYSTEM
    ══════════════════════════════════════════════════════════ */
+/* ── Premium Card primitive (base styling) ─────────────────── */
+.premium-card {
+  position: relative;
+  display: block;
+  background: var(--am-bg-card);
+  border: 1px solid var(--am-border-soft);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--am-shadow-sm);
+  color: var(--am-text-primary);
+  padding: var(--space-10);
+  transition: background var(--duration-md) var(--ease-smooth),
+              border-color var(--duration-md) var(--ease-smooth),
+              box-shadow var(--duration-md) var(--ease-smooth),
+              transform var(--duration-md) var(--ease-fast);
+}
+.premium-card--default { --card-accent: var(--am-brand); }
+.premium-card--accent {
+  background: var(--am-bg-glass);
+  border-color: var(--am-brand-light);
+}
+.premium-card--warning {
+  background: color-mix(in srgb, var(--am-warning) 10%, var(--am-bg-card));
+  border-color: var(--am-warning);
+}
+.premium-card--danger {
+  background: color-mix(in srgb, var(--am-danger) 10%, var(--am-bg-card));
+  border-color: var(--am-danger);
+}
+.premium-card--success {
+  background: color-mix(in srgb, var(--am-success) 10%, var(--am-bg-card));
+  border-color: var(--am-success);
+}
+
 .premium-button,
 [class*="premium-button"] {
   position: relative;
@@ -1879,7 +1912,7 @@ nav.navbar {
     var(--am-shadow-lg),
     0 0 0 1px rgba(255, 255, 255, 0.42) inset,
     0 0 60px rgba(184, 165, 208, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.48);
+  border: 1px solid var(--am-border-soft);
 }
 
 [data-theme='dark'] .glass-2,
@@ -1894,7 +1927,7 @@ nav.navbar {
     radial-gradient(circle at 20% 0%, rgba(184, 165, 208, 0.12), transparent 32%),
     radial-gradient(circle at 80% 20%, rgba(107, 92, 156, 0.18), transparent 28%),
     var(--am-bg-glass);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--am-border-medium);
 }
 
 /* Glass 2.0 disease cards - explicit override */

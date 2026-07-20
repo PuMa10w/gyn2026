@@ -1,11 +1,7 @@
 import React, { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence, useReducedMotion, m } from 'framer-motion';
-import './styles/spacing.css';
-import './index.css';  /* Legacy styles - will be refactored */
-import './App.css';
-import './styles/premium-flagship.css';  /* MASTER CSS - LAST for cascade override */
-import './styles/premium-effects.css';  /* Ultra-premium hero/aura/mesh effects */
+import './styles/index-layers.css';  /* cascade layers: legacy < premium (incl. spacing) */
 import Navbar from './components/Navbar';
 import HomeSection from './components/HomeSection';
 import type { WorkbenchCommand } from './components/CommandSearch';
