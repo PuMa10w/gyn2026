@@ -4,7 +4,7 @@
    composite selectors (e.g. .home-destination-card.is-gynecology) overrode
    the premium design system. */
 
-@layer legacy, premium;
+@layer legacy, premium, mega;
 
 @import '../index.css' layer(legacy);
 @import '../App.css' layer(legacy);
@@ -13,3 +13,4 @@
 @import './premium-effects.css' layer(premium);
 @import './premium-typography.css' layer(premium);
 @import './premium-ultra.css' layer(premium);
+@import './mega-premium-2026.css' layer(mega);
