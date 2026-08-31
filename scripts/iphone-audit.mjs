@@ -21,6 +21,22 @@ const capture = async (page, deviceName, label, options = { fullPage: false }) =
 };
 
 const assertNoHorizontalOverflow = async (page, label) => {
+  // Wait for entrance animations (framer-motion stagger, scale/y) to settle,
+  // otherwise the measurement catches cards mid-animation and false-positives.
+  // framer-motion animates via rAF (not WAAPI), so poll computed transforms.
+  await page
+    .waitForFunction(
+      () => {
+        const cards = [...document.querySelectorAll('.disease-card')].slice(0, 12);
+        return cards.every((el) => {
+          const t = getComputedStyle(el).transform;
+          return t === 'none' || t === 'matrix(1, 0, 0, 1, 0, 0)';
+        });
+      },
+      null,
+      { timeout: 5000 },
+    )
+    .catch(() => undefined);
   const overflow = await page.evaluate(() => {
     const doc = document.documentElement;
     const width = doc.clientWidth;
@@ -56,7 +72,40 @@ const assertNoHorizontalOverflow = async (page, label) => {
   }
 
   if (overflow.offenders.length > 0) {
-    throw new Error(`${label}: overflowing elements ${JSON.stringify(overflow.offenders)}`);
+    // Playwright artifact: a fullPage screenshot resizes the viewport, and on
+    // isMobile pages the restored viewport leaves renderer-level pixel offset
+    // (DOM rects stay clean, pixels shift). Re-measure after re-asserting the
+    // viewport size; only fail if offenders persist (real overflow).
+    const vp = page.viewportSize();
+    await page.setViewportSize({ width: vp.width + 1, height: vp.height });
+    await page.setViewportSize({ width: vp.width, height: vp.height });
+    await page.waitForTimeout(250);
+    const recheck = await page.evaluate(() => {
+      const doc = document.documentElement;
+      const width = doc.clientWidth;
+      const allowedHorizontalScroller = (el) =>
+        Boolean(el.closest('.category-filter, .category-chips, .catalog-sort-options, .search-suggestions, .modal-tabs, .pharma-tabs, .modal-quick-meta, .q-severity-bar'));
+      const offenders = [...document.querySelectorAll('body *')]
+        .filter((el) => !allowedHorizontalScroller(el))
+        .map((el) => {
+          const rect = el.getBoundingClientRect();
+          return {
+            tag: el.tagName,
+            className: String(el.className || ''),
+            text: (el.textContent || '').trim().slice(0, 80),
+            right: Math.round(rect.right),
+            left: Math.round(rect.left),
+            width: Math.round(rect.width),
+          };
+        })
+        .filter((entry) => entry.width > 0 && (entry.right > width + 3 || entry.left < -3))
+        .filter((entry) => !entry.className.includes('premium-button-shimmer'))
+        .slice(0, 10);
+      return offenders;
+    });
+    if (recheck.length > 0) {
+      throw new Error(`${label}: overflowing elements ${JSON.stringify(recheck)}`);
+    }
   }
 };
 

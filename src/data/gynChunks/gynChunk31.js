@@ -241,7 +241,7 @@ const chunk = [
       { organization: "NCCN", title: "Occult primary (CUP) guidelines", documentType: "Guideline", scope: "Алгоритм поиска первоисточника при неясном первичном очаге.", status: "latest available active guideline", usedFor: ["diagnosis", "treatment"] }
     ],
     diagnosticCriteria: {
-      clinical: ["Тазовая злокачественная опухоль без明确ного первичного органа."],
+      clinical: ["Тазовая злокачественная опухоль без ясного первичного органа."],
       laboratory: ["ИГХ — основа дифференциальной диагностики.", "Онкомаркеры по профилю."],
       imaging: ["ПЭТ-КТ — поиск первоисточника."],
       diagnosisConfirmedWhen: ["Гистология подтверждает ЗНО, первоисточник не найден после полного обследования."],

@@ -3413,9 +3413,14 @@ nav.navbar {
     padding-right: calc(var(--safe-right) + var(--space-4));
   }
 
-  .navbar {
-    left: 50%;
-    transform: translateX(-50%);
+  nav.navbar,
+  .glass.navbar {
+    left: 0.75rem;
+    right: 0.75rem;
+    /* framer-motion sets inline transform on m.nav — neutralize it so the
+       navbar stays pinned to the safe-area edges instead of drifting off-screen. */
+    transform: none !important;
+    max-width: calc(100% - 1.5rem);
     padding-left: calc(var(--safe-left) + var(--space-6));
     padding-right: calc(var(--safe-right) + var(--space-6));
   }
@@ -3556,6 +3561,16 @@ nav.navbar {
   .home-destination-grid { grid-template-columns: 1fr; gap: var(--space-6); }
   .premium-command-grid { grid-template-columns: 1fr; }
   .premium-command-metrics { gap: var(--space-3); }
+
+  /* P0: navbar overflow on iPhone — collapse utility actions (Шкалы/Фарма/Избранное/История)
+     into the overflow menu. MobileBottomBar covers tab navigation (Главная/Гин/Акуш);
+     Шкалы/Фарма/Избранное/История remain reachable via the ⋯ hamburger. */
+  .navbar-actions {
+    display: none !important;
+  }
+  .navbar-brand-copy span {
+    display: none !important;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════════
