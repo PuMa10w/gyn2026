@@ -896,7 +896,10 @@
 
   .modal-content {
     border-radius: 22px 22px 0 0;
-    max-height: 94dvh;
+    /* Full-height iOS sheet: with max-height 94dvh the flex-end overlay left a
+       40px gap above the sheet (audit: "modal does not start from top"). */
+    max-height: 100dvh;
+    height: 100dvh;
     padding-bottom: calc(var(--safe-bottom) + var(--space-8));
   }
 

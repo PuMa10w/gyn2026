@@ -609,9 +609,15 @@ a:hover {
 nav.navbar {
   position: fixed;
   top: max(var(--safe-top), 12px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(calc(100% - var(--space-8)), 1160px);
+  /* framer-motion sets an inline transform on m.nav (enter animation), which
+     overrides translateX(-50%) centering and leaves left:50% in effect — the
+     navbar drifts off-screen. Pin to both edges instead of centering. */
+  left: var(--space-4);
+  right: var(--space-4);
+  transform: none !important;
+  width: auto;
+  max-width: 1160px;
+  margin-inline: auto;
   z-index: var(--z-navbar);
   border-radius: 20px;
   background: var(--am-bg-glass);
@@ -3284,14 +3290,19 @@ body {
 .mobile-bottom-bar {
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(100%, 1200px);
+  /* framer-motion drives translateY on this element (scroll hide/show);
+     a CSS translateX(-50%) centering would be overridden by that inline
+     transform and leave left:50% in effect — pin to edges instead. */
+  left: 0;
+  right: 0;
+  width: auto;
+  max-width: 1200px;
+  margin-inline: auto;
   background: var(--am-bg-glass);
   backdrop-filter: blur(40px) saturate(1.8);
   -webkit-backdrop-filter: blur(40px) saturate(1.8);
   border-top: 1px solid var(--am-border-medium);
-  box-shadow: 
+  box-shadow:
     0 -4px 24px rgba(45, 42, 61, 0.12),
     0 2px 8px rgba(45, 42, 61, 0.08);
   border-radius: 20px 20px 0 0;

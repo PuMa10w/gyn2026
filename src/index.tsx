@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { LazyMotion, MotionConfig } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async';
-import './index.css';
+// NOTE: index.css is imported INSIDE index-layers.css as layer(legacy).
+// A direct import here would emit it unlayered, and unlayered rules
+// beat every @layer regardless of specificity (broke .premium-button--sm).
+import './styles/index-layers.css';
 import App from './App';
 
 // P0.3: load the full motion feature set lazily so it is code-split out of the

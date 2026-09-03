@@ -157,7 +157,11 @@ function renderSafeTreatmentEntry(entry: string) {
 
 const DiseaseModal = ({ item, onClose }: DiseaseModalProps) => {
   const [activeTab, setActiveTab] = useState<ModalTab>('quick');
-  const [isMobile, setIsMobile] = useState(false);
+  // Lazy init — see PharmacologyModal.tsx: `initial` is captured on first render,
+  // a `false` start animates the desktop spring that never settles on mobile.
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
+  );
   const [isQuickStripExpanded, setIsQuickStripExpanded] = useState(false);
   const [touchStart, setTouchStart] = useState<{ x: number; y: number; time: number } | null>(null);
   const titleId = useId();

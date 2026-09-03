@@ -48,7 +48,55 @@ const normalize = (value: string): string =>
     .replace(/\s+/g, ' ')
     .trim();
 
-// ───── Synonyms / fuzzy map ─────
+// ───── Latin → Cyrillic transliteration (mioma → миома) ─────
+// Users type Russian disease names on a latin keyboard; map latin chars to
+// their Cyrillic counterparts so «mioma» matches «миома».
+const LATIN_TO_CYR: Record<string, string> = {
+  a: 'а', b: 'б', v: 'в', g: 'г', d: 'д', e: 'е', yo: 'ё', zh: 'ж', z: 'з',
+  i: 'и', y: 'й', k: 'к', l: 'л', m: 'м', n: 'н', o: 'о', p: 'п', r: 'р',
+  s: 'с', t: 'т', u: 'у', f: 'ф', h: 'х', ts: 'ц', ch: 'ч', sh: 'ш',
+  shch: 'щ', yu: 'ю', ya: 'я',
+};
+
+function transliterateLatinToCyrillic(word: string): string {
+  if (!/[a-z]/.test(word)) return word;
+  // greedy longest-match over multi-char digraphs first
+  const out: string[] = [];
+  let i = 0;
+  const digraphs = ['shch', 'yo', 'zh', 'ts', 'ch', 'sh', 'yu', 'ya'];
+  while (i < word.length) {
+    const three = word.slice(i, i + 4);
+    if (digraphs.includes(three)) { out.push(LATIN_TO_CYR[three]); i += 4; continue; }
+    const two = word.slice(i, i + 2);
+    if (LATIN_TO_CYR[two] !== undefined) {
+      out.push(LATIN_TO_CYR[two]);
+      i += 2;
+      continue;
+    }
+    const one = word[i];
+    out.push(LATIN_TO_CYR[one] ?? one);
+    i += 1;
+  }
+  return out.join('');
+}
+
+// ───── Simple fuzzy: subsequence-with-typos match (endometrio → эндометриоз) ─────
+// A term "fuzzily matches" a word if it is a prefix of it (typing ahead),
+// or its Levenshtein distance to a same-length prefix is 1.
+function fuzzyMatch(term: string, word: string): boolean {
+  if (word.startsWith(term)) return true;
+  if (term.length < 4 || word.length < term.length) return false;
+  // allow one substitution/mostly-typed-ahead prefix (lenient prefix)
+  const prefix = word.slice(0, term.length);
+  let mismatches = 0;
+  for (let i = 0; i < term.length; i += 1) {
+    if (term[i] !== prefix[i]) {
+      mismatches += 1;
+      if (mismatches > 1) return false;
+    }
+  }
+  return true;
+}
 
 const SYNONYMS: Record<string, string[]> = {
   миома: ['лейомиома', 'фиброма', 'd25'],
@@ -81,6 +129,7 @@ const SYNONYMS: Record<string, string[]> = {
 function scoreSearch(terms: string[], haystack: string): number {
   let score = 0;
   const normalHaystack = normalize(haystack);
+  const haystackWords = normalHaystack.split(' ');
 
   for (const term of terms) {
     if (normalHaystack.includes(term)) {
@@ -88,14 +137,31 @@ function scoreSearch(terms: string[], haystack: string): number {
       score += 10;
       // Boost for short terms that match early (likely ICD code or exact name)
       if (term.length <= 5 && normalHaystack.startsWith(term)) score += 5;
-    } else {
-      // Check synonyms
-      for (const [key, values] of Object.entries(SYNONYMS)) {
-        if (key.includes(term) || term.includes(key)) {
-          if (values.some((v) => normalHaystack.includes(normalize(v)))) {
-            score += 5;
-            break;
-          }
+      continue;
+    }
+
+    // Latin keyboard layout: «mioma» typed on latin keys → «миома»
+    const translit = transliterateLatinToCyrillic(term);
+    if (translit !== term && normalHaystack.includes(translit)) {
+      score += 8;
+      continue;
+    }
+
+    // Typo-tolerant prefix match (typing ahead: «endometrio» → «эндометриоз»)
+    const fuzzyHit = translit === term
+      ? haystackWords.some((w) => fuzzyMatch(term, w))
+      : haystackWords.some((w) => fuzzyMatch(translit, w));
+    if (fuzzyHit) {
+      score += 6;
+      continue;
+    }
+
+    // Check synonyms
+    for (const [key, values] of Object.entries(SYNONYMS)) {
+      if (key.includes(term) || term.includes(key)) {
+        if (values.some((v) => normalHaystack.includes(normalize(v)))) {
+          score += 5;
+          break;
         }
       }
     }

@@ -96,7 +96,13 @@ const PharmacologyModalContent: React.FC<PharmacologyModalProps> = ({ onClose })
   const secondDrugId = useId();
   const subtitleId = useId();
   const { modalRef, closeButtonRef, handleModalKeyDown } = useModalBehavior(onClose);
-  const [isMobile, setIsMobile] = useState(false);
+  // Lazy init: `initial` is captured on FIRST render, before any useEffect runs.
+  // Starting from `false` makes framer-motion animate the desktop variant
+  // (scale/opacity spring that never settles on mobile viewports), leaving the
+  // modal translucent (opacity ~0.2-0.3) — verified on iPhone profiles.
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
+  );
   const [activeTab, setActiveTab] = useState<'medications' | 'interactions' | 'regimens'>('medications');
   const [selectedMed, setSelectedMed] = useState<Medication | null>(null);
   const [searchTerm, setSearchTerm] = useState('');

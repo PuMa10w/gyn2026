@@ -46,6 +46,7 @@ const assertNoHorizontalOverflow = async (page, label) => {
       .filter((el) => !allowedHorizontalScroller(el))
       .map((el) => {
         const rect = el.getBoundingClientRect();
+        const vh = window.innerHeight;
         return {
           tag: el.tagName,
           className: String(el.className || ''),
@@ -53,10 +54,16 @@ const assertNoHorizontalOverflow = async (page, label) => {
           right: Math.round(rect.right),
           left: Math.round(rect.left),
           width: Math.round(rect.width),
+          intersectsViewport: rect.bottom > 0 && rect.top < vh,
         };
       })
       .filter((entry) => entry.width > 0 && (entry.right > width + 3 || entry.left < -3))
       .filter((entry) => !entry.className.includes('premium-button-shimmer'))
+      // content-visibility:auto cards below the fold have placeholder rects
+      // (contain-intrinsic-size estimation) until scrolled into view — their
+      // geometry is fictional, not a real overflow. Keep only offenders that
+      // actually intersect the viewport; scroll-driven checks cover the rest.
+      .filter((entry) => entry.intersectsViewport)
       .slice(0, 10);
 
     return {
@@ -89,6 +96,7 @@ const assertNoHorizontalOverflow = async (page, label) => {
         .filter((el) => !allowedHorizontalScroller(el))
         .map((el) => {
           const rect = el.getBoundingClientRect();
+          const vh = window.innerHeight;
           return {
             tag: el.tagName,
             className: String(el.className || ''),
@@ -96,10 +104,12 @@ const assertNoHorizontalOverflow = async (page, label) => {
             right: Math.round(rect.right),
             left: Math.round(rect.left),
             width: Math.round(rect.width),
+            intersectsViewport: rect.bottom > 0 && rect.top < vh,
           };
         })
         .filter((entry) => entry.width > 0 && (entry.right > width + 3 || entry.left < -3))
         .filter((entry) => !entry.className.includes('premium-button-shimmer'))
+        .filter((entry) => entry.intersectsViewport)
         .slice(0, 10);
       return offenders;
     });
@@ -370,7 +380,11 @@ for (const deviceName of deviceNames) {
   await page.locator('.pharmacology-modal .search-input').first().fill('прогестерон');
   await page.locator('.medication-card').first().click();
   await page.locator('.med-details').first().waitFor({ state: 'visible', timeout: 8000 });
+  // detail panel pushes tabs out of view; scroll them into view so the click
+  // is not intercepted by the sticky header (Playwright retries then times out)
+  await page.getByRole('tab', { name: 'Взаимодействия' }).scrollIntoViewIfNeeded();
   await page.getByRole('tab', { name: 'Взаимодействия' }).click();
+  await page.getByRole('tab', { name: 'Схемы' }).scrollIntoViewIfNeeded();
   await page.getByRole('tab', { name: 'Схемы' }).click();
   await capture(page, deviceName, 'pharmacology');
   await assertNoHorizontalOverflow(page, `${deviceName} pharmacology`);

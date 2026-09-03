@@ -1,0 +1,58 @@
+/* ════════════════════════════════════════════════════════════════
+   IPHONE 15 PRO DESIGN POLISH — audit-driven additive layer
+   Lives in mega layer (highest cascade priority).
+   Every rule is additive elevation; no relayout of locked contracts.
+   ════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Apple HIG: interactive targets ≥44px. Audit found 40px tabs/chips/buttons
+     and a 32px toast close — lift them all. */
+  .tab-btn,
+  .category-chip,
+  .premium-button--sm,
+  .premium-button--ghost,
+  .premium-button--secondary,
+  .premium-button--primary,
+  .pharma-tab {
+    min-height: 44px;
+  }
+
+  .toast-close-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* VersionChecker action buttons render at 40px height */
+  .version-ready-state .premium-button,
+  .version-update-card .premium-button,
+  .version-checker .premium-button {
+    min-height: 44px;
+  }
+
+  /* sort chips: 44px height reached, but width can drop to 27px ('А-Я') */
+  .catalog-sort-chip {
+    min-width: 44px;
+  }
+}
+
+/* ── polish: pharma tabs never hide under the sticky header ──
+   .modal-content is the vertical scroller and .modal-header (pharma-header-v7)
+   is sticky top:0. Programmatic scrollIntoView parks the pharma tabs flush
+   with the container top, where the opaque header covers their upper half —
+   on iPhone users cannot tap the covered part. Stick the tab bar under the
+   header (same pattern as .modal-tabs in disease modal) and give the tabs
+   a scroll margin matching the header height (~85px + breathing room). */
+@media (max-width: 768px) {
+  .pharmacology-modal .pharma-tabs {
+    /* height:100dvh on the flex modal squeezes the tab bar to 0 — lock it.
+       Sticky under the header would be nicer, but framer-motion leaves a
+       transform on .modal-content which breaks sticky inside it. */
+    flex-shrink: 0;
+    background: var(--bg-panel-solid);
+    scroll-margin-top: 96px;
+  }
+
+  .pharmacology-modal .pharma-tab {
+    scroll-margin-top: 96px;
+  }
+}

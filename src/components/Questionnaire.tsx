@@ -60,7 +60,11 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onClose }) => {
   const questionId = useId();
   const optionsId = useId();
   const { modalRef, closeButtonRef, handleModalKeyDown } = useModalBehavior(onClose);
-  const [isMobile, setIsMobile] = useState(false);
+  // Lazy init — see PharmacologyModal.tsx: `initial` is captured on first render,
+  // a `false` start animates the desktop spring that never settles on mobile.
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
+  );
   const [selectedQ, setSelectedQ] = useState<QuestionnaireData | null>(null);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [currentStep, setCurrentStep] = useState(0);
